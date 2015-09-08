@@ -122,3 +122,39 @@
 >![image](images/JxbLovelyLogin.gif)
 
 -
+
+#Button
+---
+###[RadioButton](https://github.com/onegray/RadioButton-ios)`Objective-c`
+##### CocoaPods
+
+	pod 'RadioButton'
+	
+>*Pretty simple class that extends standard UIButton functionality. Default and selected states can be configured for every button.*
+
+>![image](images/RadioButton-1.gif)
+
+>![image](images/RadioButton-2.gif)
+
+Alternatively group the buttons using single line of code:
+
+	radio1.groupButtons = @[radio1, radio2, radio3];
+
+
+Select any button, and all other button in the same group become deselected automatically:
+
+	radio2.selected = YES; // radio1 and radio3 become deselected
+
+
+Any button from the group knows which one is selected:
+
+	RadioButton* r1 = radio1.selectedButton;
+	RadioButton* r2 = radio2.selectedButton;
+	RadioButton* r3 = radio3.selectedButton;
+	NSAssert (r1==r2 && r2==r3, @"Must be equal");
+
+And a helpful method to select button by tag:
+
+	[radio1 setSelectedWithTag:kTagRadio3];
+
+
