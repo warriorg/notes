@@ -157,4 +157,13 @@ And a helpful method to select button by tag:
 
 	[radio1 setSelectedWithTag:kTagRadio3];
 
+#Text
+###[cbpowell/MarqueeLabel](https://github.com/cbpowell/MarqueeLabel)`Objective-c`
+>*实现跑马灯效果
+>
+>MarqueeLabel is a UILabel subclass adds a scrolling marquee effect when the text of the label outgrows the available width. The label scrolling direction and speed/rate can be specified as well. All standard UILabel properties (where it makes sense) are available in MarqueeLabel and it behaves just like a UILabel.*
+>![image](images/MarqueeLabel.gif)
 
+```Objective-C
+MarqueeLabel *scrollyLabel = [[MarqueeLabel alloc] initWithFrame:labelCGRectFrame duration:8.0 andFadeLength:10.0f];
+```
