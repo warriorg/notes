@@ -97,6 +97,40 @@
 
 -
 
+###[RSKImageCropper](https://github.com/ruslanskorb/RSKImageCropper)
+
+>RSKImageCropper通过剪切图片作为头像。通过移动图片，剪切圆形框所显示的部分。
+>![image](images/RSKImageCropper.png)
+
+-
+
+###[ImagePickerSheetController](https://github.com/larcus94/ImagePickerSheetController)`swift`
+
+>ImagePickerSheetController is similar to UIAlertController in its usage.
+
+>![image](images/ImagePickerSheetController.gif)
+
+```swift
+let controller = ImagePickerSheetController(mediaType: .ImageAndVideo)
+controller.addAction(ImagePickerAction(title: NSLocalizedString("Take Photo Or Video", comment: "Action Title"), secondaryTitle: NSLocalizedString("Add comment", comment: "Action Title"), handler: { _ in
+    presentImagePickerController(.Camera)
+}, secondaryHandler: { _, numberOfPhotos in
+    println("Comment \(numberOfPhotos) photos")
+}))
+controller.addAction(ImagePickerAction(title: NSLocalizedString("Photo Library", comment: "Action Title"), secondaryTitle: { NSString.localizedStringWithFormat(NSLocalizedString("ImagePickerSheet.button1.Send %lu Photo", comment: "Action Title"), $0) as String}, handler: { _ in
+    presentImagePickerController(.PhotoLibrary)
+}, secondaryHandler: { _, numberOfPhotos in
+    println("Send \(controller.selectedImageAssets)")
+}))
+controller.addAction(ImagePickerAction(title: NSLocalizedString("Cancel", comment: "Action Title"), style: .Cancel, handler: { _ in
+    println("Cancelled")
+}))
+
+presentViewController(controller, animated: true, completion: nil)
+```
+-
+
+
 #Calendar
 ---
 ###[PDTSimpleCalendar](https://github.com/jivesoftware/PDTSimpleCalendar)
