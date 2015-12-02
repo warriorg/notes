@@ -14,3 +14,8 @@
 >```
 >git push origin <tag_name> 
 >```
+
+修改最后一次提交的注释
+>```bash
+git commit --amend 
+```

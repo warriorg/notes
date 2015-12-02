@@ -1,3 +1,39 @@
+* SDWebImage：图片加载
+* TTTAttributedLabel：富文本的label，可点击链接
+* RegexKitLite：正则表达式
+* hpple：html解析
+* MBProgressHUD：hud提示框
+* ODRefreshControl：下拉刷新
+* TPKeyboardAvoiding：有文字输入时，能根据键盘是否弹出来调整自身显示内容的位置
+* JDStatusBarNotification：状态栏提示框
+* BlocksKit：block工具包。将很多需要用delegate实现的方法整合成了block的形式
+* ReactiveCocoa：基于响应式编程思想的oc实践（是个好东西呢）
+
+#TabBar
+---
+###[RDVTabBarController](https://github.com/robbdimitrov/RDVTabBarController)
+>Highly customizable tabBar and tabBarController for iOS
+
+>![image](images/RDVTabBarController.png)
+
+```objective-c
+UIViewController *firstViewController = [[RDVFirstViewController alloc] init];
+UIViewController *firstNavigationController = [[UINavigationController alloc] initWithRootViewController:firstViewController];
+
+UIViewController *secondViewController = [[RDVSecondViewController alloc] init];
+UIViewController *secondNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+
+UIViewController *thirdViewController = [[RDVThirdViewController alloc] init];
+UIViewController *thirdNavigationController = [[UINavigationController alloc] initWithRootViewController:thirdViewController];
+
+RDVTabBarController *tabBarController = [[RDVTabBarController alloc] init];
+[tabBarController setViewControllers:@[firstNavigationController, secondNavigationController,thirdNavigationController]];
+
+self.viewController = tabBarController;
+
+```
+
+
 #Message Alert
 ---
 ###[TSMessages](https://github.com/KrauseFx/TSMessages)
@@ -45,6 +81,12 @@
 >*仿微信支付密码输入框*
 
 >![image](images/DemoInPutPasswordView.gif)
+
+-
+
+###[BEMCheckBox](https://github.com/Boris-Em/BEMCheckBox)
+
+>![image](images/BEMCheckBox.gif)
 
 -
 
@@ -130,6 +172,33 @@ presentViewController(controller, animated: true, completion: nil)
 ```
 -
 
+###[SDCycleScrollView](https://github.com/gsdios/SDCycleScrollView)
+>无限循环自动图片轮播器
+
+>![image](images/SDCycleScrollView-1.gif)
+>
+>![image](images/SDCycleScrollView-2.gif)
+
+```objective-c
+// 网络加载图片的轮播器
+ cycleScrollView.imageURLStringsGroup = imagesURLStrings;
+
+ // 本地加载图片的轮播器
+ SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame: imagesGroup:图片数组];
+ 
+```
+>现已支持cocoapods导入：pod 'SDCycleScrollView','~> 1.3'
+
+>如需更详细的设置，参考如下：
+
+>cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight; // 设置pageControl居右，默认居中
+
+>cycleScrollView.titlesGroup = 标题数组（数组元素个数必须和图片数组元素个数保持一致）; // 如果设置title数组，则会在图片下面添加标题
+
+>cycleScrollView.delegate = ; // 如需监听图片点击，请设置代理，实现代理方法
+
+>cycleScrollView.autoScrollTimeInterval = ;// 自定义轮播时间间隔
+
 
 #Calendar
 ---
@@ -201,3 +270,8 @@ And a helpful method to select button by tag:
 ```Objective-C
 MarqueeLabel *scrollyLabel = [[MarqueeLabel alloc] initWithFrame:labelCGRectFrame duration:8.0 andFadeLength:10.0f];
 ```
+
+###[Instructions](https://github.com/ephread/Instructions)
+>Create walkthroughs and coach mark tours in a simple way.<br/>
+>专门帮助开发者简化引导教程实现的框架，它以比较灵活的方式用标准的 Cocoa 设计思想来实现了简化引导界面的制作
+>![image](images/Instructions.gif)
