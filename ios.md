@@ -90,6 +90,20 @@ self.viewController = tabBarController;
 
 -
 
+#Segment
+---
+###[ARSegmentPager](https://github.com/AugustRush/ARSegmentPager)
+
+>![image](images/ARSegmentPager_1.png)
+
+>![image](images/ARSegmentPager_2.png)
+
+>![image](images/ARSegmentPager_3.gif)
+
+>![image](images/ARSegmentPager_4.gif)
+
+-
+
 #UITableView
 ---
 ###[DZNEmptyDataSet](https://github.com/dzenbot/DZNEmptyDataSet)
