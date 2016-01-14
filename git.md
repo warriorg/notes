@@ -1,3 +1,13 @@
+导出不带版本的代码
+
+```bash
+git archive master | bzip2 >source-tree.tar.bz2
+#ZIP archive:
+git archive --format zip --output /full/path/to/zipfile.zip master 
+#tag
+git archive v1.0 gzip > source-tree.tgz 
+```
+
 迁出远程分支
 
 >```bash
@@ -17,6 +27,11 @@
 
 git如何删除本地所有未提交的更改（都可以使用
 >```bash
+>git reset
+>git checkout .
+>git clean -fdx
+>```	
+>```bash
 > git checkout -- . #这条命令不会删除新增的文件
 > git checkout -f #这条命令不会删除新增的文件
 > git stash #新加的文件还在，但所有的修改都会抹去
@@ -35,9 +50,6 @@ git commit --amend
 
 取消已经暂存的文件。即，撤销先前"git add"的操作
 `git reset HEAD <file>...`
-
-修改最后一次提交。用于修改上一次的提交信息，或漏提交文件等情况。
-`git commit --amend`
 
 回退所有内容到上一个版本 
 `git reset HEAD^`

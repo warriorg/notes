@@ -16,6 +16,16 @@ $ docker ps -a # Lists all containers
 # Commit your container to a new named image
 $ docker commit <container> <some_name>
 ```
+
+##Delete all containers
+```bash
+docker rm $(docker ps -a -q)
+```
+##Delete all images
+```bash
+docker rmi $(docker images -q)
+```
+
 ## Other command
 * `docker ps` - Lists containers.
 * `docker logs` - Shows us the standard output of a container.
@@ -107,4 +117,4 @@ CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 $ docker-machine stop default
 $ docker images -q | xargs docker rmi
 $ docker-machine start default
-```d
+```
