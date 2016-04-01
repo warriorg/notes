@@ -1,9 +1,28 @@
+##问题
+Cannot connect to the Docker daemon. Is the docker daemon running on this host?
+>*重启*
 
-
-##进入容器shell
+##常用命令
 ```bash
-docker run -i -t tomcat /bin/bash
+#运行一个容器
+docker run -i -t tomcat /bin/bash   
+
+#容器命名
+docker run --name bob_the_container -i -t ubuntu /bin/bash
+
+#重启已经停止的容器
+docker start bob_the_container
+
+#附着到已启动的容器上
+docker attach bob_the_container
+
 ```
+
+
+
+
+
+
 
 ##Listing containers
 ``` bash
@@ -30,6 +49,31 @@ docker rmi $(docker images -q)
 * `docker ps` - Lists containers.
 * `docker logs` - Shows us the standard output of a container.
 * `docker stop` - Stops running containers.
+
+##Dockerfile
+1. Docker从基础镜像运行一个容器
+2. 执行一条指令，对容器修改
+3. 执行类似docker commit的操作，提交一个新的镜像
+4. Docker再基于刚提交的镜像运行一个新容器
+5. 执行Dockerfile中的下一条指令，知道所有指令都执行完成
+
+>docker build 执行时, Dockerfile 中的所有指令都被执行并且提交，并且在该命令成功结束后返回一个新镜像。
+
+###Dockerfile指令
+
+
+##在一台主机上测试Consul集群
+```bash
+$ docker run -d --name node1 -h node1 progrium/consul -server -bootstrap-expect 3
+$ JOIN_IP="$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' node1)"
+$ docker run -d --name node2 -h node2 progrium/consul -server -join $JOIN_IP
+$ docker run -d --name node3 -h node3 progrium/consul -server -join $JOIN_IP
+
+#没有暴露出任何一个端口用以访问这个集群，但是我们可以使用第四个agent节点以client的模式（不是用 -server参数）。
+#这意味着他不参与选举但是可以和集群交互。（译注: 参与选举说的应该是选举leader的时候， 他没有话语权）
+#而且这个client模式的agent也不需要磁盘做持久化。（译注：就是一个交互的通道）
+$ docker run -d -p 8400:8400 -p 8500:8500 -p 8600:53/udp -h node4 progrium/consul -join $JOIN_IP
+```
 
 ##ubuntu 上安装 Java8
 ```base

@@ -24,5 +24,9 @@ Tab Bar Iconm | up to 30 x 30 pts (transparent PNGs)
 Text Field | 31 pts
 
 
+###最新Android & IOS设计尺寸规范
+![image](images/app_design_2016.jpg)
+
+
 
 I

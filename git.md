@@ -1,6 +1,42 @@
+git 切换远程代码库
+>```bash
+git remote rm origin #方法1
+git remote set-url origin URL  #方法2
+.git/config	#方法3
+```
+
+创建库
+>```bash
+touch README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/warriorg/Estates.git
+git push -u origin master
+```
+
+git 分支
+>```bash
+git checkout -b iss53
+git push origin test:test  #提交本地test分支作为远程的test分支
+```
+
+关闭分支
+>```bash
+git checkout master
+git merge <branch-name>
+git branch -d <branch-name>
+```
+
+删除不在git管理下的文件
+>```bash
+git clean -nd #测试删除
+git clean -fd #真实删除
+```
+
 导出不带版本的代码
 
-```bash
+>```bash
 git archive master | bzip2 >source-tree.tar.bz2
 #ZIP archive:
 git archive --format zip --output /full/path/to/zipfile.zip master 
@@ -47,6 +83,13 @@ git commit --amend
 >```bash 
 >git checkout -- <file>
 >```
+
+解决冲突
+
+>```bash
+git mergetool -t diffmerge .
+```
+>安装diffmerge `osx`==brew cask install diffmerge==
 
 取消已经暂存的文件。即，撤销先前"git add"的操作
 `git reset HEAD <file>...`

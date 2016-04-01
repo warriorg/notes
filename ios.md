@@ -45,6 +45,10 @@ self.viewController = tabBarController;
 
 -
 
+###[WaveLoadingView](https://github.com/liuzhiyi1992/WaveLoadingView)
+>波浪进度指示器
+>![image](images/WaveLoadingView.gif)
+
 
 #UITextField
 ----
@@ -119,7 +123,7 @@ self.viewController = tabBarController;
 -
 
 ##UITableViewCell
--
+
 ###[MGSwipeTableCell](https://github.com/MortimerGoro/MGSwipeTableCell)
 >*这是另一个常见于很多应用中的UI组件，苹果应该考虑在标准的iOS SDK中加入一些类似的内容。Swipeable表格cell是这个pod的最佳描述，也是最好的。*
 
@@ -137,6 +141,12 @@ self.viewController = tabBarController;
 >![image](images/UIView-FDCollapsibleConstraints-2.gif)
 
 -
+
+###[Greedo Layout](https://github.com/500px/greedo-layout-for-ios)
+>*Full aspect ratio grid layout for iOS*
+>
+
+>![image](images/greedo-layout-for-ios.png)
 
 #Image
 ----
