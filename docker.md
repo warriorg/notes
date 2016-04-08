@@ -6,6 +6,7 @@ Cannot connect to the Docker daemon. Is the docker daemon running on this host?
 ```bash
 #运行一个容器
 docker run -i -t tomcat /bin/bash   
+#docker run -d  -p 7001:6379 redis  
 
 #容器命名
 docker run --name bob_the_container -i -t ubuntu /bin/bash
