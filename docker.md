@@ -17,6 +17,12 @@ docker start bob_the_container
 #附着到已启动的容器上
 docker attach bob_the_container
 
+#删除Images
+docker rmi imageid
+#删除提示 must be force时
+docker rmi -f imageid
+
+
 ```
 
 
