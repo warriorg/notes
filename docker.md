@@ -2,6 +2,9 @@
 Cannot connect to the Docker daemon. Is the docker daemon running on this host?
 >*重启*
 
+在命令行直接启动
+>`bash /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh`
+
 ##常用命令
 ```bash
 #运行一个容器
@@ -21,7 +24,6 @@ docker attach bob_the_container
 docker rmi imageid
 #删除提示 must be force时
 docker rmi -f imageid
-
 
 ```
 
