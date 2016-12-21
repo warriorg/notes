@@ -1,3 +1,8 @@
+ELK(ElasticSearch, Logstash, Kibana)日志分析
+
+###[Couchbase](http://www.couchbase.com/)
+
+
 ###[Thrift](https://thrift.apache.org/)###
 >The Apache Thrift software framework, for scalable cross-language services development, combines a software stack with a code generation engine to build services that work efficiently and seamlessly between C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, OCaml and Delphi and other languages.
 
@@ -35,3 +40,30 @@ Vanilla JS	——世界上最轻量的JavaScript框架
 >Negroni is an idiomatic approach to web middleware in Go. It is tiny, non-intrusive, and encourages use of `net/http` Handlers.
 
 >If you like the idea of [Martini](https://github.com/codegangsta/negroni), but you think it contains too much magic, then Negroni is a great fit.
+
+
+#网站
+SSH [沃通](https://www.wosign.com/)
+
+#mac
+[Karabiner](https://pqrs.org/osx/karabiner/)
+>*键盘映射工具*
+
+=====
+
+###播放器
+[VLC](http://www.videolan.org/vlc/index.html)
+
+###电子书
+[calibre](http://calibre-ebook.com/)
+> 处理成kindle可以阅读的书
+
+###项目管理工具
+[trello](https://trello.com/)
+>多人协作工具
+
+图标管理工具
+
+Iconjar
+
+Lingo

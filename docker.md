@@ -4,6 +4,27 @@ Cannot connect to the Docker daemon. Is the docker daemon running on this host?
 
 在命令行直接启动
 >`bash /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh`
+>
+
+## 改变docker存储位置
+You can change Docker's storage base directory (where container and images go) using the -g option when starting the Docker daemon.
+
+* Ubuntu/Debian: edit your /etc/default/docker file with the -g option: DOCKER_OPTS="-dns 8.8.8.8 -dns 8.8.4.4 -g /mnt"
+
+* Fedora/Centos: edit /etc/sysconfig/docker, and add the -g option in the other_args variable: ex. other_args="-g /var/lib/testdir". If there's more than one option, make sure you enclose them in " ". After a restart, (service docker restart) Docker should use the new directory.
+
+Using a symlink is another method to change image storage.
+
+*Caution - These steps depend on your current /var/lib/docker being an actual directory (not a symlink to another location).*
+
+1. Stop docker: `service docker stop`. Verify no docker process is running ps faux
+2. Double check docker really isn't running. Take a look at the current docker directory: `ls /var/lib/docker/`
+3. Make a backup - `tar -zcC /var/lib docker > /mnt/pd0/var_lib_docker-backup-$(date +%s).tar.gz`
+4. Move the /var/lib/docker directory to your new partition: `mv /var/lib/docker /mnt/pd0/docker`
+5. Make a symlink: `ln -s /mnt/pd0/docker /var/lib/docker`
+6. Take a peek at the directory structure to make sure it looks like it did before the mv: `ls /var/lib/docker/` (note the trailing slash to resolve the symlink)
+7. Start docker back up `service docker start`
+8. restart your containers
 
 ##常用命令
 ```bash
@@ -20,10 +41,16 @@ docker start bob_the_container
 #附着到已启动的容器上
 docker attach bob_the_container
 
+#进入容器
+docker exec -it redmine bash
+
 #删除Images
 docker rmi imageid
 #删除提示 must be force时
 docker rmi -f imageid
+
+#列出最新的1000条日志
+docker logs --tail 1000 ihome-tomcat
 
 ```
 
