@@ -54,6 +54,10 @@ docker logs --tail 1000 ihome-tomcat
 
 ```
 
+##参数
+```bash
+-m 限制内存
+```
 
 
 

@@ -1,3 +1,6 @@
+###Elasticsearch 
+搜索服务器
+
 ELK(ElasticSearch, Logstash, Kibana)日志分析
 
 ###[Couchbase](http://www.couchbase.com/)
@@ -62,8 +65,15 @@ SSH [沃通](https://www.wosign.com/)
 [trello](https://trello.com/)
 >多人协作工具
 
+[zeplin](https://zeplin.io/)
+>前端与设计协同工作专用工具
+>
+
 图标管理工具
 
 Iconjar
 
 Lingo
+
+###网盘
+>seafile
