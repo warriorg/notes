@@ -7,6 +7,8 @@ mongodump -h dbhost -d dbname -o dbdirectory
 
 ```bash
 mongorestore -h dbhost -d dbname --directoryperdb dbdirectory
+
+mongorestore -d dbname dbdirectory
 ```
 
 ###删除数据库

@@ -1,4 +1,14 @@
 ##Sizes of iPhone UI Elements
+
+
+Some Height
+
+Item | Normal Height | iPhone X Height
+---|---|----
+UINavigationBar|	64	| 88 (96 large title)
+UIStatusBar	| 20 | 44
+UITabBar |	49	| 83
+
 1080 标注 转  
 >1242/1080 = 1.15 </br>
 >750/1080 = 0.69

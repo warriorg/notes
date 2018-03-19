@@ -9,6 +9,11 @@ deactivate #退出虚拟环境
 
 ```
 
+### linux install package
+```bash
+python3.6 -m pip install
+```
+
 ### requirements.txt
 ```bash
 pip freeze > requirements.txt   	#生成requirements.txt

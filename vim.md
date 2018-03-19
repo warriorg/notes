@@ -75,8 +75,5 @@ $ 跳转至行尾
 ```
 
 
-
-
-
 [NERDTree](https://github.com/scrooloose/nerdtree)
 >==m 显示文件系统菜单==
