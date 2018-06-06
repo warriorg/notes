@@ -8,6 +8,11 @@
 sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist   
 ```
 
+### 开启 系统偏好设置 -> 安全性与隐私 ->  任何来源
+```bash
+sudo spctl --master-disable
+```
+
 
 ###快速升级
 ```bash

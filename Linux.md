@@ -138,6 +138,13 @@ SELINUX=enforcing	#开启
 SELINUX=disabled    #关闭
 ```
 
+### Ubuntu
+
+```
+update-manager # 升级系统 图形界面
+sudo do-release-upgrade  # 升级系统
+```
+
 
 ###Centos
 ```

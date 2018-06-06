@@ -94,6 +94,13 @@ git commit --amend
 >```bash
 git mergetool -t diffmerge .
 ```
+
+Submodule	
+		
+```bash
+git submodule foreach git pull  #更新所有submodule
+```
+
 >安装diffmerge `osx`==brew cask install diffmerge==
 
 取消已经暂存的文件。即，撤销先前"git add"的操作
@@ -114,7 +121,34 @@ git mergetool -t diffmerge .
 回退到某个版本  
 `git reset 057d `
 
+
+
 回退到上一次提交的状态，按照某一次的commit完全反向的进行一次commit.(代码回滚到上个版本，并提交git)
 >```bash
 git revert HEAD
+```
+
+解决git目录过大
+
+```base
+git gc --prune=now  #运行 gc ，生成 pack 文件 --prune=now 表示对之前的所有提交做修剪，有的时候仅仅 gc 一下.git 文件就会小很多
+git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -3    #找出最大的三个文件 
+git rev-list --objects --all | grep c43a8da		#查看那些大文件究竟是谁（c43a8da 是上面大文件的hash码）
+git filter-branch --force --index-filter "git rm --cached --ignore-unmatch 'data/bigfile'"  --prune-empty --tag-name-filter cat -- --all  #移除对该文件的引用（也就是 data/bigfile）
+
+#进行 repack 
+git for-each-ref --format='delete %(refname)' refs/original | git update-ref --stdin
+git reflog expire --expire=now --all
+git gc --prune=now
+
+git count-objects -v   #查看 pack 的空间使用情况
+```
+
+方法二2
+
+```bash
+git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -5 | awk '{print$1}')" > large-files.txt
+cat large-files.txt| awk '{print $2}' | tr '\n' ' '  >  large-files-inline.txt
+git filter-branch -f --prune-empty --index-filter "git rm -rf --cached --ignore-unmatch `cat large-files-inline.txt`" --tag-name-filter cat -- --all
+git push origin --force --all
 ```
