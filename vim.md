@@ -32,7 +32,12 @@ f 表示“到...位置上”（forward）
 删除文本直到字符“x”（包括字符“x”）: （delete forward x） dfx  
 修改三个单词：（change three words） c3w  
 
-
+### HEX编辑
+```bash
+# Open the file in Vim.
+:% ! xxd   # Run the command
+:% ! xxd -r # Save
+```
 
 Replace
 
@@ -77,3 +82,7 @@ $ 跳转至行尾
 
 [NERDTree](https://github.com/scrooloose/nerdtree)
 >==m 显示文件系统菜单==
+
+```bash 
+:w !sudo tee %   # 强行保存文件
+```

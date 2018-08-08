@@ -98,6 +98,15 @@ IdentityFile ~/.ssh/some_rsa
 
 ssh root@114.55.148.240
 ```
+
+### grep			
+```base
+$grep -5 'parttern' inputfile #打印匹配行的前后5行
+$grep -C 5 'parttern' inputfile #打印匹配行的前后5行
+$grep -A 5 'parttern' inputfile #打印匹配行的后5行
+$grep -B 5 'parttern' inputfile #打印匹配行的前5行
+```
+
 #### 更改目录权限(不包含文件)
 `find Folder -type d -exec chmod 0777 {} +`
 
@@ -136,6 +145,12 @@ setenforce 1 			#设置SELinux 成为enforcing模式
 ```base
 SELINUX=enforcing	#开启
 SELINUX=disabled    #关闭
+```
+
+###查找被占用的端口					
+```bash
+lsof -i:8700 或者 lsof -i | grep 8700
+
 ```
 
 ### Ubuntu
