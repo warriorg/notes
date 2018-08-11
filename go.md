@@ -136,7 +136,7 @@ unbuffered := make(chan int)    //无缓冲通道
 buffered := make(chan int, 10)
 ```
 
-* 无缓冲的通道 在接受钱没有能力保存任何值的通道	   
+* 无缓冲的通道 在接收前没有能力保存任何值的通道	   
 * 
 
 
