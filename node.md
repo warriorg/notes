@@ -1,3 +1,8 @@
+安装        
+```bash
+brew install node  #macos 下安装
+```
+
 更换NPM镜像
 
 ```bash
