@@ -21,7 +21,7 @@ output {
 
 配置spring boot的日志到logstash
 
-```bash 
+```bash
 input {
   stdin{}
   tcp {

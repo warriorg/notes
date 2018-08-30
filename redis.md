@@ -73,3 +73,8 @@ zrangebyscore key min max [WITHSCORES] [LIMIT offset count]
 # 如果给定成员存在于有序集合，那么移除这个成员
 zrem key member [member ...]
 ```
+
+###持久化	
+
+1. 快照 (snapshotting)
+2. 追加文件 (append-only file, AOF)
