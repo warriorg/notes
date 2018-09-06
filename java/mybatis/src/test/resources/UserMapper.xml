@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：作用是为了分类管理映射文件中的MappedStatement对象 -->
+<mapper namespace="test">
+	<!-- id：指定MappedStatement对象的唯一标识 -->
+	<!-- 对象参数绑定：使用的是OGNL -->
+	<select id="findUserById" parameterType="int" resultType="me.warriorg.mybatis.po.User" >
+		SELECT id FROM user WHERE id = #{id}
+	</select>
+</mapper>

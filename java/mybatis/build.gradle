@@ -1,0 +1,16 @@
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile 'org.mybatis:mybatis:3.4.6'
+    compile 'mysql:mysql-connector-java:8.0.12'
+    compile 'org.projectlombok:lombok:1.18.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.0'
+}
