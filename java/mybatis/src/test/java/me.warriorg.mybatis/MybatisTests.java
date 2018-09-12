@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class MybatisTests {
 	
@@ -40,7 +42,7 @@ public class MybatisTests {
 		//参数1：statement的id值（可以不加namespace）：namespace+"."+statementID
 		//参数2：唯一入参
 		User user = sqlSession.selectOne("test.findUserById", 1);
-		
+
 		System.out.println(user);
 		//释放资源
 		sqlSession.close();

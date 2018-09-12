@@ -1,5 +1,6 @@
 
 apply plugin: 'java'
+apply plugin: 'idea'
 
 repositories {
     mavenCentral()
@@ -8,9 +9,13 @@ repositories {
 sourceCompatibility = JavaVersion.VERSION_1_10
 targetCompatibility = JavaVersion.VERSION_1_10
 
+ext {
+    springVersion = '5.0.9.RELEASE'
+}
+
 dependencies {
-    compile 'org.mybatis:mybatis:3.4.6'
-    compile 'mysql:mysql-connector-java:8.0.12'
+    compile 'org.springframework:spring-core:5.0.9.RELEASE'
+    compile 'org.springframework:spring-context:5.0.9.RELEASE'
     compile 'org.projectlombok:lombok:1.18.2'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.0'
 }
