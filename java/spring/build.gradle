@@ -16,6 +16,7 @@ ext {
 dependencies {
     compile 'org.springframework:spring-core:5.0.9.RELEASE'
     compile 'org.springframework:spring-context:5.0.9.RELEASE'
+    compile 'org.springframework:spring-beans:5.0.9.RELEASE'
     compile 'org.projectlombok:lombok:1.18.2'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.0'
 }
