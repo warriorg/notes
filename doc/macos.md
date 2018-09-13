@@ -1,3 +1,17 @@
+##brew
+
+本地安装包
+
+```bash
+brew --cache 
+# 输出本地缓存 一般位置 ~/Library/Caches/Homebrew
+# 将下载下来文件mv到缓存路径 download目录
+# 重命名成没有下载下来的文件名 xxx--gradle-4.10-all.zip
+brew upgrade gradle
+
+```
+
+
 ###host file path
 
 /private/etc/hosts
