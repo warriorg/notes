@@ -1,16 +1,12 @@
 package me.warriorg.design.creational.singleton;
 
-public class Singleton {
+public final class Singleton {
 
-    private static Singleton instance;
+    private static final Singleton INSTANCE = new Singleton();
 
-    private Singleton() {
-    }
+    private Singleton() {}
 
     public static Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
+        return INSTANCE;
     }
 }
