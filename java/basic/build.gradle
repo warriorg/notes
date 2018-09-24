@@ -1,0 +1,16 @@
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_10
+targetCompatibility = JavaVersion.VERSION_1_10
+
+
+dependencies {
+    compile 'org.projectlombok:lombok:1.18.2'
+    Compile 'org.junit.jupiter:junit-jupiter-api:5.3.0'
+}
