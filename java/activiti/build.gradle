@@ -11,6 +11,13 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    activitiVersion = "5.22.0"
+}
+
 dependencies {
+//    compile 'org.activiti:activiti-spring-boot-starter'
+//    compile 'com.h2database:h2'
+    compile 'org.activiti:activiti-engine:$activitiVersion'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

@@ -42,3 +42,10 @@ wakeonlan 00:11:32:49:00:FB
 
 ### 显示所有隐藏文件
 `Command+Shift+.`
+
+### 重装vscode
+```bash
+rm -rf ~/.vscode
+rm -rf ~/Library/Application Support/Code
+```
+
