@@ -6,11 +6,27 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_10
-targetCompatibility = JavaVersion.VERSION_1_10
+sourceCompatibility = 11.0
+targetCompatibility = 11.0
 
+ext {
+    postgresqlVersion = "42.2.5"
+    lombokVersion = "1.18.2"
+    slf4jVersion = "1.7.25"
+    logbackVersion = "1.2.3"
+    gsonVersion = "2.8.5"
+    h2Version = "1.4.197"
+}
 
 dependencies {
-    compile 'org.projectlombok:lombok:1.18.2'
-    Compile 'org.junit.jupiter:junit-jupiter-api:5.3.0'
+    // 数据库测试
+    compile "com.h2database:h2:$h2Version"
+
+    // 日志部分
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "ch.qos.logback:logback-core:$logbackVersion"
+    compile "ch.qos.logback:logback-classic:$logbackVersion"
+
+    compile "com.google.code.gson:gson:$gsonVersion"
+    compile "org.projectlombok:lombok:$lombokVersion"
 }

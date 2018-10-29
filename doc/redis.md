@@ -1,11 +1,11 @@
-#osx 下安装
+## osx 下安装
 ```bash
 brew install redis
 brew services start redis
 redis-cli #进去cli客户端
 ```
 
-# 命令工具
+## 命令工具
 
 * redis-server	服务端
 * redis-cli    客户端
@@ -13,9 +13,9 @@ redis-cli #进去cli客户端
 
 
 
-#Redis的数据结构
+## Redis的数据结构
 
-## 1. STRING
+### 1. STRING
 > 可以是字符串、整数或者浮点数          
 > 对整个字符串的其中一部分执行操作，对整数和浮点数执行自增(increment)或者自减(decrement)操作
 > 
@@ -36,7 +36,7 @@ OK
 
 
 
-## 2. LIST
+### 2. LIST
 
 > 一个链表，链表上的每个节点都包含一个字符串    
 > 从链表的两端推入或者弹出元素；根据偏移量对链表进行修剪(trim)；读取单个或者多个元素；根据值查找或者移除元素
@@ -54,7 +54,7 @@ lpop key
 
 
 
-## 3. SET
+### 3. SET
 
 > 包含字符串的无序收集器，并且被包含的每一个字符串都是独一无二， 各不相同           
 > 添加、获取、移除单个元素；检查一个元素是否存在于集合中；计算交集、并集、差集；从集合里面随机获取元素
@@ -69,7 +69,7 @@ sismember key member
 #如果给定的元素存在于集合中，那么移除这个元素
 srem key member [member ...]
 ```
-## 4. HASH
+### 4. HASH
 > 包含键值对的无序散列表            
 > 添加、获取、移除单个键值对；获取所有的键值对
 > 
@@ -83,7 +83,7 @@ hgetall key
 #如果给定键值存在于散列里面，那么移除这个键
 hdel key field [field ...]
 ```
-## 5. ZSET (有序集合)
+### 5. ZSET (有序集合)
 > 字符串成员与浮点数分值之间的有序映射，元素的排列顺序由分值的大小决定      
 > 添加、获取、删除单个元素；根据分值范围(range)或者成员来获取元素
 > 
@@ -98,17 +98,23 @@ zrangebyscore key min max [WITHSCORES] [LIMIT offset count]
 zrem key member [member ...]
 ```
 
-## 6. Other 命令
+### 6. Other 命令
 1. expirs. (有效期)
 
-# 事务
+## 事务
 
 
 
-# 持久化	
+## 持久化	
 
 1. 快照 (snapshotting)
 2. 追加文件 (append-only file, AOF)
+
+
+
+## 集群
+
+
 
 # 补充
 redis 集群服务器推荐3主3从

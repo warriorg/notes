@@ -13,11 +13,17 @@ repositories {
 
 ext {
     activitiVersion = "5.22.0"
+    h2Version = "1.4.197"
+    slf4jVersion = "1.7.25"
+    logbackVersion = "1.2.3"
 }
 
 dependencies {
-//    compile 'org.activiti:activiti-spring-boot-starter'
-//    compile 'com.h2database:h2'
-    compile 'org.activiti:activiti-engine:$activitiVersion'
+    compile "com.h2database:h2:$h2Version"
+    compile "org.activiti:activiti-engine:$activitiVersion"
+
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "ch.qos.logback:logback-core:$logbackVersion"
+    compile "ch.qos.logback:logback-classic:$logbackVersion"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
