@@ -4,6 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace：作用是为了分类管理映射文件中的MappedStatement对象 -->
 <mapper namespace="me.warriorg.mybatis.dao.AuthorMapper">
+
+    <!--
+    #{} 创建 PreparedStatement 参数并安全地设置参数（就像使用 ? 一样）。这样做更安全，更迅速，通常也是首选做法
+    ${} 插入一个不转义的字符串 接受用户的输入，并将其用于语句中的参数是不安全的，会导致潜在的 SQL 注入攻击
+    -->
+
     <!--
     cache – 给定命名空间的缓存配置。
     cache-ref – 其他命名空间缓存配置的引用。
@@ -15,8 +21,45 @@
     select – 映射查询语句
     -->
 
-    <resultMap id="author" type="me.warriorg.mybatis.dao.AuthorMapper">
-
+    <!-- 子标签
+    constructor - 用于在实例化类时，注入结果到构造方法中
+        idArg - ID 参数;标记出作为 ID 的结果可以帮助提高整体性能
+        arg - 将被注入到构造方法的一个普通结果
+    id – 一个 ID 结果;标记出作为 ID 的结果可以帮助提高整体性能
+    result – 注入到字段或 JavaBean 属性的普通结果
+    association – 一个复杂类型的关联;许多结果将包装成这种类型
+        嵌套结果映射 – 关联可以指定为一个 resultMap 元素，或者引用一个
+    collection – 一个复杂类型的集合
+        嵌套结果映射 – 集合可以指定为一个 resultMap 元素，或者引用一个
+    discriminator – 使用结果值来决定使用哪个 resultMap
+        case – 基于某些值的结果映射
+            嵌套结果映射 – 一个 case 也是一个映射它本身的结果,因此可以包含很多相 同的元素，或者它可以参照一个外部的 resultMap。
+    -->
+    <!-- 属性
+    id: 当前命名空间中的一个唯一标识，用于标识一个result map.
+    type: 类的完全限定名, 或者一个类型别名 (内置的别名可以参考上面的表格).
+    autoMapping: 如果设置这个属性，MyBatis将会为这个ResultMap开启或者关闭自动映射。这个属性会覆盖全局的属性 autoMappingBehavior。默认值为：unset。
+    -->
+    <resultMap id="authorMap" type="me.warriorg.mybatis.domain.Author">
+        <!--
+        id 和 result 都将一个列的值映射到一个简单数据类型(字符串,整型,双精度浮点数,日期等)的属性或字段。
+        id 表示的结果将是对象的标识属性，这会在比较对象实例时用到。 这样可以提高整体的性能，尤其是缓存和嵌套结果映射(也就是联合映射)的时候。
+        -->
+        <!--
+        property: 映射到列结果的字段或属性。如果用来匹配的 JavaBeans 存在给定名字的属性，那么它将会被使用。
+            否则 MyBatis 将会寻找给定名称 property 的字段。 无论是哪一种情形，你都可以使用通常的点式分隔形式进行复杂属性导航。
+            比如,你可以这样映射一些简单的东西: “username” ,或者映射到一些复杂的东西: “address.street.number” 。
+        column: 数据库中的列名,或者是列的别名。一般情况下，这和 传递给 resultSet.getString(columnName) 方法的参数一样。
+        javaType: 一个 Java 类的完全限定名,或一个类型别名(参考上面内建类型别名 的列表) 。
+            如果你映射到一个 JavaBean, MyBatis 通常可以断定类型。 然而,如果你映射到的是 HashMap,那么你应该明确地指定 javaType 来保证期望的行为。
+        jdbcType: JDBC 类型，所支持的 JDBC 类型参见这个表格之后的“支持的 JDBC 类型”。
+            只需要在可能执行插入、更新和删除的允许空值的列上指定 JDBC 类型。这是 JDBC 的要求而非 MyBatis 的要求。
+            如果你直接面向 JDBC 编程,你需要对可能为 null 的值指定这个类型。
+        typeHandler: 我们在前面讨论过的默认类型处理器。使用这个属性,你可以覆盖默 认的类型处理器。这个属性值是一个类型处理 器实现类的完全限定名，或者是类型别名。
+        -->
+        <id property="id" column="id" javaType="String" jdbcType="VARCHAR"></id>
+        <result property="name" column="name"></result>
+        <result property="email" column="email"></result>
     </resultMap>
 
     <sql id="authorColumn"> ${alias}.id,${alias}.name,${alias}.email</sql>
@@ -43,6 +86,10 @@
     </select>
 
     <select id="findAll" resultType="me.warriorg.mybatis.domain.Author">
+        select * FROM author
+    </select>
+
+    <select id="findAllResultMap" resultMap="authorMap">
         select * FROM author
     </select>
 

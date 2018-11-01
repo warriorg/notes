@@ -52,6 +52,20 @@ public class MybatisTests {
     }
 
     @Test
+    public void findAllResultMap() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Set<Author> authors = authorMapper.findAllResultMap();
+            logger.debug("测试查询 返回 数据列表: {}", authors);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    @Test
     public void findByIdTest() {
         SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
         try {

@@ -17,6 +17,12 @@ public interface AuthorMapper {
 
     /***
      *
+     * @return
+     */
+    Set<Author> findAllResultMap();
+
+    /***
+     *
      * @param id
      * @return
      */
