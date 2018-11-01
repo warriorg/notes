@@ -1,51 +1,140 @@
 package me.warriorg.mybatis;
 
-import me.warriorg.mybatis.po.User;
-import org.apache.ibatis.io.Resources;
+import me.warriorg.mybatis.dao.AuthorMapper;
+import me.warriorg.mybatis.domain.Author;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.lang.invoke.MethodHandles;
+import java.util.Set;
+import java.util.UUID;
 
 
 public class MybatisTests {
-	
-	private static SqlSessionFactory sqlSessionFactory;
+    private final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	/**
-	 * @Before注解的方法会在@Test注解的方法之前执行
-	 * 
-	 * @throws Exception
-	 */
-	@BeforeAll
-	static void init() throws Exception {
-		//指定全局配置文件路径
-		String resource = "SqlMapperConfig.xml";
-		//加载资源文件（全局配置文件和映射文件）
-		InputStream inputStream = Resources.getResourceAsStream(resource);
-		//还有构建者模式，去创建SqlSessionFactory对象
-		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream );
-		//设计模式分三类23种：创建型（5）、结构型（7）、行为型（11）
-	}
+    /***
+     * 制造测试数据
+     */
+    @Test
+    public void setupData() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Author author = new Author();
+            author.setId("1");
+            author.setName("云飞");
+            author.setEmail("xx@126.com");
+            authorMapper.insertAuthor(author);
+            sqlSession.commit();
 
-	@Test
-	public void testFindUserById() {
-		//由SqlSessionFactory工厂去创建SqlSession（会话）
-		SqlSession sqlSession = sqlSessionFactory.openSession();
-		
-		//调用sqlsession接口，去实现数据库的增删改查操作
-		//参数1：statement的id值（可以不加namespace）：namespace+"."+statementID
-		//参数2：唯一入参
-		User user = sqlSession.selectOne("test.findUserById", 1);
+        } finally {
+            sqlSession.close();
+        }
 
-		System.out.println(user);
-		//释放资源
-		sqlSession.close();
-	}
+    }
+
+    @Test
+    public void findAllTest() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Set<Author> authors = authorMapper.findAll();
+            logger.debug("测试查询 返回 数据列表: {}", authors);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    @Test
+    public void findByIdTest() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Author author = authorMapper.findById("1");
+            logger.debug("测试查询 返回 数据列表: {}", author);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    @Test
+    public void insertAuthorTest() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Author author = new Author();
+            author.setId(UUID.randomUUID().toString());
+            author.setName("云飞");
+            author.setEmail("xx@126.com");
+            int result = authorMapper.insertAuthor(author);
+            sqlSession.commit();
+            logger.debug("测试插入 返回受影响的条数: {}", result);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    @Test
+    public void insertAuthorNullIdTest() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Author author = new Author();
+            author.setName("云飞");
+            author.setEmail("xx@126.com");
+            int result = authorMapper.insertAuthorNullId(author);
+            sqlSession.commit();
+            Assertions.assertNotNull(author.getId());
+            logger.debug("测试插入 返回受影响的条数: {}, 插入的对象：{}", result, author);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    @Test
+    public void updateAuthorById() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Author author = new Author();
+            author.setId("1");
+            author.setName("张五");
+            author.setEmail("xx@126.com");
+            int result = authorMapper.updateAuthorById(author);
+            sqlSession.commit();
+            logger.debug("测试更新 返回受影响的条数: {}", result);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    @Test
+    public void deleteAuthorById() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            int result = authorMapper.deleteAuthorById("1");
+            sqlSession.commit();
+            logger.debug("测试删除 返回受影响的条数: {}", result);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
 
 }

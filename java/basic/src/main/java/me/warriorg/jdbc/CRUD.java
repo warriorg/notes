@@ -1,6 +1,5 @@
 package me.warriorg.jdbc;
 
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,14 +36,14 @@ public class CRUD {
     private Connection getConnection() throws SQLException {
         Properties props = new Properties();
         props.setProperty("user", dbUsername);
-        props.setProperty("password",dbPassword);
+        props.setProperty("password", dbPassword);
         return DriverManager.getConnection(dbURL, props);
     }
 
-    private void createTable () {
-        try(Connection conn = getConnection()) {
+    private void createTable() {
+        try (Connection conn = getConnection()) {
             logger.debug("数据库连接状态： {}", conn);
-            try(Statement statement = conn.createStatement()) {
+            try (Statement statement = conn.createStatement()) {
                 statement.execute(tableSql);
                 logger.debug("数据库创建表成功");
             }
@@ -56,7 +55,7 @@ public class CRUD {
     private void select() {
         String sql = "SELECT * FROM Users";
 
-        try(Connection conn = getConnection()) {
+        try (Connection conn = getConnection()) {
             Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet result = statement.executeQuery(sql);
 
@@ -67,7 +66,7 @@ public class CRUD {
             }
             logger.debug("获取{}数据总数：{}", result.getMetaData().getTableName(1), rowcount);
 
-            while (result.next()){
+            while (result.next()) {
                 String id = result.getString("id");
                 String account = result.getString(2);
                 String password = result.getString(3);
@@ -90,9 +89,9 @@ public class CRUD {
 
     private void insert() {
         String sql = "INSERT INTO Users (id, account, password, name, create_date, disable) VALUES (?, ?, ?, ?, ?, ?)";
-        try(Connection conn = getConnection()) {
+        try (Connection conn = getConnection()) {
             logger.debug("数据库连接状态： {}", conn);
-            try(PreparedStatement statement = conn.prepareStatement(sql)) {
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
                 statement.setObject(1, UUID.randomUUID().toString());
                 statement.setObject(2, "admin");
                 statement.setObject(3, "123456");
@@ -111,9 +110,9 @@ public class CRUD {
 
     private void update() {
         String sql = "UPDATE Users SET name = ? WHERE account = ?";
-        try(Connection conn = getConnection()) {
+        try (Connection conn = getConnection()) {
             logger.debug("数据库连接状态： {}", conn);
-            try(PreparedStatement statement = conn.prepareStatement(sql)) {
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
                 statement.setObject(1, "不想当管理");
                 statement.setObject(2, "admin");
                 int rowsInserted = statement.executeUpdate();
@@ -129,9 +128,9 @@ public class CRUD {
     private void delete() {
         String sql = "DELETE FROM Users WHERE account=?";
 
-        try(Connection conn = getConnection()) {
+        try (Connection conn = getConnection()) {
             logger.debug("数据库连接状态： {}", conn);
-            try(PreparedStatement statement = conn.prepareStatement(sql)) {
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
                 statement.setObject(1, "admin");
                 int rowsInserted = statement.executeUpdate();
                 if (rowsInserted > 0) {

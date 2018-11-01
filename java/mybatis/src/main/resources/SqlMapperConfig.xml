@@ -21,7 +21,25 @@
             </dataSource>
         </environment>
     </environments>
+
+    <!--
+
+    -->
     <mappers>
-        <mapper resource="UserMapper.xml"></mapper>
+        <!--
+        mapper的三个属性
+        resource: 使用相对于类路径的资源引用
+        url: 使用完全限定资源定位符（URL）
+        class: 使用映射器接口实现类的完全限定类名
+        对于每个mapper元素只能指定一个
+        -->
+        <!--  -->
+        <mapper resource="mybatis/AuthorMapper.xml"></mapper>
+        <!--<mapper url="file:///var/mappers/AuthorMapper.xml"/>-->
+        <!--<mapper class="org.mybatis.builder.AuthorMapper"/>-->
+
+        <!-- 将包内的映射器接口实现全部注册为映射器 -->
+        <!--<package name="me.warriorg.mybatis.dao"/>-->
     </mappers>
+
 </configuration>
