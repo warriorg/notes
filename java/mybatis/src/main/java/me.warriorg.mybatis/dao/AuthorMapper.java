@@ -22,6 +22,12 @@ public interface AuthorMapper {
     Set<Author> findAllResultMap();
 
     /***
+     * 级连查询
+     * @return
+     */
+    Set<Author> findAuthorBlog();
+
+    /***
      *
      * @param id
      * @return

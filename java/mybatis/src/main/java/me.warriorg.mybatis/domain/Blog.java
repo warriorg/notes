@@ -13,7 +13,8 @@ public class Blog implements Serializable {
     private int id;
     private String title;
     private String content;
-    private Date date;
+    private Date createDt;
+    private String authorId;
 
     private Author author;
 }

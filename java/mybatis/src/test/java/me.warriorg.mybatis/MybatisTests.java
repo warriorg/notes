@@ -66,6 +66,20 @@ public class MybatisTests {
     }
 
     @Test
+    public void findAuthorBlogTest() {
+        SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+        try {
+            AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            Set<Author> authors = authorMapper.findAuthorBlog();
+            logger.debug("测试查询 返回 数据列表: {}", authors);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    @Test
     public void findByIdTest() {
         SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
         try {
@@ -78,6 +92,8 @@ public class MybatisTests {
             }
         }
     }
+
+
 
     @Test
     public void insertAuthorTest() {

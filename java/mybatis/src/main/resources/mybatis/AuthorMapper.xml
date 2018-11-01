@@ -62,6 +62,11 @@
         <result property="email" column="email"></result>
     </resultMap>
 
+    <resultMap id="blogResult" type="me.warriorg.mybatis.domain.Author">
+        <!-- ofType 这个属性用来区分 JavaBean(或字段)属性类型和集合包含的类型来说是很重要的 -->
+        <collection property="blogs" javaType="ArrayList" column="author_id" ofType="blog" select="selectAuthorForBlog"/>
+    </resultMap>
+
     <sql id="authorColumn"> ${alias}.id,${alias}.name,${alias}.email</sql>
 
     <!--
@@ -91,6 +96,14 @@
 
     <select id="findAllResultMap" resultMap="authorMap">
         select * FROM author
+    </select>
+
+    <select id="findAuthorBlog" resultMap="blogResult">
+        select * from author
+    </select>
+
+    <select id="selectAuthorForBlog" resultType="me.warriorg.mybatis.domain.Blog">
+        select * from blog where author_id = #{id}
     </select>
 
     <!--

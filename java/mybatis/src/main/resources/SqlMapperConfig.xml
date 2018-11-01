@@ -35,6 +35,7 @@
         -->
         <!--  -->
         <mapper resource="mybatis/AuthorMapper.xml"></mapper>
+        <mapper resource="mybatis/BlogMapper.xml"></mapper>
         <!--<mapper url="file:///var/mappers/AuthorMapper.xml"/>-->
         <!--<mapper class="org.mybatis.builder.AuthorMapper"/>-->
 
