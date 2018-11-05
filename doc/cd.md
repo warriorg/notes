@@ -36,7 +36,7 @@ mv /var/jenkins_home/workspace/ihome/ihome-api/build/libs/ihome-1.0.war  /usr/to
 配置git hooks ( post-receive)
 
 ```bash
-curl -s --user admin:wmwlap http://114.55.148.240:3080/job/ihome/build?token=d370ad64e14c578c90c20e136cdbb7b4
+curl -s --user admin:wmwlap http://jenkinsServer/job/ihome/build?token=d370ad64e14c578c90c20e136cdbb7b4
 ```
 
 改造本地java项目
