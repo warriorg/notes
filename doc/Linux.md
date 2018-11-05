@@ -9,6 +9,10 @@ userdel 删除用户
 adduser apple
 useradd -g group apple #新建用户添加到组
 passwd apple # 修改密码
+
+cat /etc/passwd # 查看所有用户
+cat /etc/group # 查看所有组
+w  # 查看活跃用户
 ```
 
 组
@@ -138,7 +142,7 @@ sestatus -v 			#如果SELinux status参数为enabled即为开启状态
 getenforce          	#也可以用这个命令检查 Permissive 零时关闭
 setenforce 0       		#设置SELinux 成为permissive模式 零时关闭
 setenforce 1 			#设置SELinux 成为enforcing模式
-```			
+```
 永久关闭    
 `修改/etc/selinux/config 文件`   
 
@@ -176,7 +180,7 @@ systemctl restart iptables.service #重启防火墙使配置生效
 
 ###时间
 设置时区 
-	  
+​	  
 ```bash
 data -R  # 查看当前设置
 sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata

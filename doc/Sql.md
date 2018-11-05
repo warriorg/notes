@@ -1,3 +1,5 @@
+## MSSQL
+
 ```sql
 -- 创建表
 CREATE TABLE PROPERTY_PATROL (
@@ -19,4 +21,11 @@ CREATE TABLE PROPERTY_PATROL (
 )
 go
 ```
+
+## MySql
+
+### 性能优化 
+
+#### explain 查询计划
+
 
