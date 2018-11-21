@@ -10,7 +10,30 @@ redis-cli #进去cli客户端
 * redis-server	服务端
 * redis-cli    客户端
 
+### redis.conf
+```
+requirepass 123456  # 开启密码验证
+```
 
+### 常用命令
+```bash
+redis-cli -h host -p port -a password   # 连接指定服务器的数据库
+redis-cli -a 123456  # 登录验证
+
+config set requirepass 123456   # 设置密码
+
+auth 123456     # 登录验证
+
+info Keyspace 	#列出数据库
+KEYS pattern 	# 列出所有KEYS
+keys *       	# 列出所有KEYS
+flushdb     	# 清空当前数据库中的所有 key
+flushall    	# 清空所有数据的所有key
+dbsize 		 	# 数据库的 key 数量
+ping 		 	# 检测 redis 服务是否启动
+
+
+```
 
 
 ## Redis的数据结构

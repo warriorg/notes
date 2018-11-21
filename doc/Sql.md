@@ -24,8 +24,35 @@ go
 
 ## MySql
 
+> 尚硅谷的mysql确实讲的不错
+
+mysql 配置文件`my.cnf`
+```bash
+
+```
+
+> 1. 一主多存
+> 2. 一从一主
+
 ### 性能优化 
+
+#### 思路
+
+* 使用慢查询功能
+
+* explain命令查看有问题的SQL的执行计划
+
+* 使用show profile[s]产看有问题的SQL的性能使用情况
+
+
+全值匹配我最爱，最左前缀要准守 带头大哥不能少，中间兄弟不能断 索引列上少计算，范围之后全失效 like百分写最右，覆盖索引不写星 空值少用还有or，字符类型需匹配
 
 #### explain 查询计划
 
 
+
+show global status like 'innodb_buffer_pool_pages_%'
+
+
+
+mysql proxy 读写分离

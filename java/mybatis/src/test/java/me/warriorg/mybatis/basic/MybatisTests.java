@@ -1,7 +1,7 @@
-package me.warriorg.mybatis;
+package me.warriorg.mybatis.basic;
 
-import me.warriorg.mybatis.dao.AuthorMapper;
-import me.warriorg.mybatis.domain.Author;
+import me.warriorg.mybatis.basic.dao.AuthorMapper;
+import me.warriorg.mybatis.basic.domain.Author;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,8 +22,12 @@ public class MybatisTests {
     @Test
     public void setupData() {
         SqlSession sqlSession = MybatisUtils.getSqlSessionFactory().openSession();
+
         try {
             AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
+            // 创建数据库表
+//            authorMapper.createTable();
+
             Author author = new Author();
             author.setId("1");
             author.setName("云飞");
@@ -92,7 +96,6 @@ public class MybatisTests {
             }
         }
     }
-
 
 
     @Test

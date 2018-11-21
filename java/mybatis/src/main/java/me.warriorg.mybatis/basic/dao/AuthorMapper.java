@@ -1,6 +1,7 @@
-package me.warriorg.mybatis.dao;
+package me.warriorg.mybatis.basic.dao;
 
-import me.warriorg.mybatis.domain.Author;
+
+import me.warriorg.mybatis.basic.domain.Author;
 
 import java.util.Set;
 
@@ -8,6 +9,8 @@ import java.util.Set;
  * @author warrior
  */
 public interface AuthorMapper {
+
+    void createTable();
 
     /***
      *
@@ -35,7 +38,6 @@ public interface AuthorMapper {
     Author findById(String id);
 
     /**
-     *
      * @param author
      * @return
      */

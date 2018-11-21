@@ -40,7 +40,7 @@
         <!--<mapper class="org.mybatis.builder.AuthorMapper"/>-->
 
         <!-- 将包内的映射器接口实现全部注册为映射器 -->
-        <!--<package name="me.warriorg.mybatis.dao"/>-->
+        <!--<package name="me.warriorg.mybatis.basicc.dao"/>-->
     </mappers>
 
 </configuration>

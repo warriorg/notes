@@ -11,6 +11,20 @@
 * FileSystemXmlapplicationcontext：从文件系统下的一个或多个XML配置文件中加载上下文定义。 
 * XmlWebApplicationContext：从Web应用下的一个或多个XML配置文件中加载上下文定义。
 
+## Web MVC
+### DispatcherServlet
+#### interception
+
+所有HandlerMapping注解的方法都支持拦截器，当想要将特定的功能应用到特定的请求(例如检查主体)时，这些拦截器非常有用。拦截器必须实现 org.springframework.web.HandlerInterceptor
+
+* preHandle(..):  在处理程序执行之前
+
+  > 方法返回一个布尔值。可以使用此方法中断或继续执行
+
+* postHandle(..):  在处理程序执行之后
+
+* afterCompletion(..): 请求完成之后
+
 ## AOP(Aspect-Oriented Programming)
 #### AOP concepts
 * *Aspect*： 指的是横切多个类的一种模块。在Spring中，切面用的就是普通的类（xml或者带@Aspect注解配置）
@@ -104,3 +118,61 @@ bean(*Service) //Spring bean上的任何连接点(仅在Spring AOP中执行方�
 
 #### Declaring advice
 
+建议与切入点表达式相关联，并在切入点匹配的方法执行之前，之后或周围运行。 切入点表达式可以是对命名切入点的简单引用，也可以是在适当位置声明的切入点表达式。
+
+
+
+## Spring Boot
+
+[Manual](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/)
+
+### Spring Boot Actuator
+
+[Manual](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready)
+
+使用HTTP或JMX端点来管理和监视应用程序、审计、健康
+
+#### Endpoints
+
+* `auditevents` 公开当前应用程序的审计事件信息。
+
+* `beans` 显示应用程序中所有Spring bean的完整列表
+
+* `caches` Exposes available caches.
+
+* `conditionklkls` Shows the conditions that were evaluated on configuration and auto-configuration classes and the reasons why they did or did not match.
+
+* `configprops` 显示@ConfigurationProperties完整目录
+
+* `env` Exposes properties from Spring’s `ConfigurableEnvironment`.
+
+* `flyway`
+
+* `health`
+
+* `httptrace`
+
+* `info`
+
+* `integrationgraph`
+
+* `loggers`
+
+* `metrics`
+
+* `mappings`
+
+* `scheduledtasks`
+
+* `sessions`
+
+* `shutdown`
+
+* `threaddump`
+
+Spring MVC, Spring WebFlux, or Jersey 
+
+* `heapdump`
+* `jolokia`
+* `logfile`
+* `prometheus`

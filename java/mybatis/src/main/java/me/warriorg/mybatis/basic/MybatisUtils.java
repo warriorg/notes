@@ -1,4 +1,4 @@
-package me.warriorg.mybatis;
+package me.warriorg.mybatis.basic;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;

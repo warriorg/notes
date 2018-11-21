@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace：作用是为了分类管理映射文件中的MappedStatement对象 -->
-<mapper namespace="me.warriorg.mybatis.dao.AuthorMapper">
+<mapper namespace="me.warriorg.mybatis.basic.dao.AuthorMapper">
 
     <!--
     #{} 创建 PreparedStatement 参数并安全地设置参数（就像使用 ? 一样）。这样做更安全，更迅速，通常也是首选做法
@@ -40,7 +40,7 @@
     type: 类的完全限定名, 或者一个类型别名 (内置的别名可以参考上面的表格).
     autoMapping: 如果设置这个属性，MyBatis将会为这个ResultMap开启或者关闭自动映射。这个属性会覆盖全局的属性 autoMappingBehavior。默认值为：unset。
     -->
-    <resultMap id="authorMap" type="me.warriorg.mybatis.domain.Author">
+    <resultMap id="authorMap" type="me.warriorg.mybatis.basic.domain.Author">
         <!--
         id 和 result 都将一个列的值映射到一个简单数据类型(字符串,整型,双精度浮点数,日期等)的属性或字段。
         id 表示的结果将是对象的标识属性，这会在比较对象实例时用到。 这样可以提高整体的性能，尤其是缓存和嵌套结果映射(也就是联合映射)的时候。
@@ -62,7 +62,7 @@
         <result property="email" column="email"></result>
     </resultMap>
 
-    <resultMap id="blogResult" type="me.warriorg.mybatis.domain.Author">
+    <resultMap id="blogResult" type="me.warriorg.mybatis.basic.domain.Author">
         <!-- ofType 这个属性用来区分 JavaBean(或字段)属性类型和集合包含的类型来说是很重要的 -->
         <collection property="blogs" javaType="ArrayList" column="author_id" ofType="blog" select="selectAuthorForBlog"/>
     </resultMap>
@@ -84,13 +84,13 @@
     resultOrdered: 这个设置仅针对嵌套结果 select 语句适用：如果为 true，就是假设包含了嵌套结果集或是分组了，这样的话当返回一个主结果行的时候，就不会发生有对前面结果集的引用的情况。这就使得在获取嵌套的结果集的时候不至于导致内存不够用。默认值：false。
     resultSets: 这个设置仅对多结果集的情况适用，它将列出语句执行后返回的结果集并每个结果集给一个名称，名称是逗号分隔的。
     -->
-    <select id="findById" parameterType="string" resultType="me.warriorg.mybatis.domain.Author" >
+    <select id="findById" parameterType="string" resultType="me.warriorg.mybatis.basic.domain.Author" >
         SELECT
         <include refid="authorColumn"><property name="alias" value="t1"></property></include>
         FROM author t1 WHERE t1.id = #{id}
     </select>
 
-    <select id="findAll" resultType="me.warriorg.mybatis.domain.Author">
+    <select id="findAll" resultType="me.warriorg.mybatis.basic.domain.Author">
         select * FROM author
     </select>
 
@@ -102,7 +102,7 @@
         select * from author
     </select>
 
-    <select id="selectAuthorForBlog" resultType="me.warriorg.mybatis.domain.Blog">
+    <select id="selectAuthorForBlog" resultType="me.warriorg.mybatis.basic.domain.Blog">
         select * from blog where author_id = #{id}
     </select>
 
@@ -118,11 +118,11 @@
     databaseId: 如果配置了 databaseIdProvider，MyBatis 会加载所有的不带 databaseId 或匹配当前 databaseId 的语句；如果带或者不带的语句都有，则不带的会被忽略。
     -->
     <!-- insert – 映射插入语句 -->
-    <insert id="insertAuthor" parameterType="me.warriorg.mybatis.domain.Author">
+    <insert id="insertAuthor" parameterType="me.warriorg.mybatis.basic.domain.Author">
         insert into Author (id, name, email) values (#{id}, #{name}, #{email})
     </insert>
 
-    <insert id="insertAuthorNullId" parameterType="me.warriorg.mybatis.domain.Author">
+    <insert id="insertAuthorNullId" parameterType="me.warriorg.mybatis.basic.domain.Author">
         <!--
         keyProperty: selectKey 语句结果应该被设置的目标属性。如果希望得到多个生成的列，也可以是逗号分隔的属性名称列表。
         keyColumn: 匹配属性的返回结果集中的列名称。如果希望得到多个生成的列，也可以是逗号分隔的属性名称列表。
@@ -136,8 +136,16 @@
         insert into Author (id, name, email) values (#{id}, #{name}, #{email})
     </insert>
 
+    <update id="createTable">
+        CREATE TABLE AUTHOR(
+            ID NVARCHAR primary key,
+            NAME NVARCHAR,
+            EMAIL NVARCHAR
+        )
+    </update>
+
     <!--update – 映射更新语句-->
-    <update id="updateAuthorById" parameterType="me.warriorg.mybatis.domain.Author">
+    <update id="updateAuthorById" parameterType="me.warriorg.mybatis.basic.domain.Author">
         update Author set name = #{name}, email = #{email} where id = #{id}
     </update>
 

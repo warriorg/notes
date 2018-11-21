@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace：作用是为了分类管理映射文件中的MappedStatement对象 -->
-<mapper namespace="me.warriorg.mybatis.dao.BlogMapper">
-    <resultMap id="blog" type="me.warriorg.mybatis.domain.Blog">
+<mapper namespace="me.warriorg.mybatis.basic.dao.BlogMapper">
+    <resultMap id="blog" type="me.warriorg.mybatis.basic.domain.Blog">
         <id property="id" column="id"></id>
         <result property="title" column="title"></result>
         <result property="content" column="content"></result>

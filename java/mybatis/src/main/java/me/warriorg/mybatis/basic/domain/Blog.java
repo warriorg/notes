@@ -1,4 +1,4 @@
-package me.warriorg.mybatis.domain;
+package me.warriorg.mybatis.basic.domain;
 
 import lombok.Getter;
 import lombok.Setter;
