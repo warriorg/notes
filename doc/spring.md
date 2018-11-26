@@ -176,3 +176,113 @@ Spring MVC, Spring WebFlux, or Jersey
 * `jolokia`
 * `logfile`
 * `prometheus`
+
+### Spring Security
+
+- security.basic.authorize-mode 要使用权限控制模式.
+- security.basic.enabled 是否开启基本的鉴权，默认为true
+- security.basic.path 需要鉴权的path，多个的话以逗号分隔，默认为[/**]
+- security.basic.realm HTTP basic realm 的名字，默认为Spring
+- security.enable-csrf 是否开启cross-site request forgery校验，默认为false.
+- security.filter-order Security filter chain的order，默认为0
+- security.headers.cache 是否开启http头部的cache控制，默认为false.
+- security.headers.content-type 是否开启X-Content-Type-Options头部，默认为false.
+- security.headers.frame 是否开启X-Frame-Options头部，默认为false.
+- security.headers.hsts 指定HTTP Strict Transport Security (HSTS)模式(none, domain, all).
+- security.headers.xss 是否开启cross-site scripting (XSS) 保护，默认为false.
+- security.ignored 指定不鉴权的路径，多个的话以逗号分隔.
+- security.oauth2.client.access-token-uri 指定获取access token的URI.
+- security.oauth2.client.access-token-validity-seconds 指定access token失效时长.
+- security.oauth2.client.additional-information.[key] 设定要添加的额外信息.
+- security.oauth2.client.authentication-scheme 指定传输不记名令牌(bearer token)的方式(form, header, none,query)，默认为header
+- security.oauth2.client.authorities 指定授予客户端的权限.
+- security.oauth2.client.authorized-grant-types 指定客户端允许的grant types.
+- security.oauth2.client.auto-approve-scopes 对客户端自动授权的scope.
+- security.oauth2.client.client-authentication-scheme 传输authentication credentials的方式(form, header, none, query)，默认为header方式
+- security.oauth2.client.client-id 指定OAuth2 client ID.
+- security.oauth2.client.client-secret 指定OAuth2 client secret. 默认是一个随机的secret.
+- security.oauth2.client.grant-type 指定获取资源的access token的授权类型.
+- security.oauth2.client.id 指定应用的client ID.
+- security.oauth2.client.pre-established-redirect-uri 服务端pre-established的跳转URI.
+- security.oauth2.client.refresh-token-validity-seconds 指定refresh token的有效期.
+- security.oauth2.client.registered-redirect-uri 指定客户端跳转URI，多个以逗号分隔.
+- security.oauth2.client.resource-ids 指定客户端相关的资源id，多个以逗号分隔.
+- security.oauth2.client.scope client的scope
+- security.oauth2.client.token-name 指定token的名称
+- security.oauth2.client.use-current-uri 是否优先使用请求中URI，再使用pre-established的跳转URI. 默认为true
+- security.oauth2.client.user-authorization-uri 用户跳转去获取access token的URI.
+- security.oauth2.resource.id 指定resource的唯一标识.
+- security.oauth2.resource.jwt.key-uri JWT token的URI. 当key为公钥时，或者value不指定时指定.
+- security.oauth2.resource.jwt.key-value JWT token验证的value. 可以是对称加密或者PEMencoded RSA公钥. 可以使用URI作为value.
+- security.oauth2.resource.prefer-token-info 是否使用token info，默认为true
+- security.oauth2.resource.service-id 指定service ID，默认为resource.
+- security.oauth2.resource.token-info-uri token解码的URI.
+- security.oauth2.resource.token-type 指定当使用userInfoUri时，发送的token类型.
+- security.oauth2.resource.user-info-uri 指定user info的URI
+- security.oauth2.sso.filter-order 如果没有显示提供WebSecurityConfigurerAdapter时指定的Filter order.
+- security.oauth2.sso.login-path 跳转到SSO的登录路径默认为/login.
+- security.require-ssl 是否对所有请求开启SSL，默认为false.
+- security.sessions 指定Session的创建策略(always, never, if_required, stateless).
+- security.user.name 指定默认的用户名，默认为user.
+- security.user.password 默认的用户密码.
+- security.user.role 默认用户的授权角色.
+
+## Spring Microservices IN ACTION
+
+* YAML （Yet another Markup Language) 
+
+----
+* bootstrap.yml 包含服务的应用程序名称、应用程序profile和连接到Spring Cloud Config 服务器的URI
+* application.yml 本地服务的其他配置信息，不保存在Spring Cloud Config中
+
+-----
+
+* @Component、@Service、@Repository 注解标签来标注一个类
+* @Configuration 标注一个类，为想要构建的Spring Bean定义一个构造器方法并添加@Bean注解
+* @SpringBootApplication 标记项目引导类和配置类，然后开始自动扫描Java路径上的所有类
+* @RequestMapping 要公开的HTTP端点
+* @RefreshScope 重新加载应用程序配置中的自定义Spring属性。Spring Data使用的数据库配置等不会被重新加载。需要执行刷新，访问 [post] http://<yourserver>:8080/refresh
+*  @EnableEurekaServer 启用Eureka服务器
+
+### 2
+#### 2.3 用Spring boot 和 Java构建微服务
+
+
+
+### 第3章  配置服务器控制配置
+* EnableConfigServer 使服务成为Spring Cloud Config 服务
+#### 3.1 管理配置
+1. 分离
+2. 抽象
+3. 集中
+4. 稳定
+
+### 第4章 服务发现
+#### 4.1 我的服务在哪里
+非云服务的缺点
+* 单点故障
+* 有限的水平可伸缩性
+* 静态管理
+* 复杂
+
+#### 4.2 云中的服务发现
+* 高可用
+* 点对点
+* 负载均衡
+* 有弹性
+* 容错
+
+##### 4.2.1 服务发现架构
+* 服务注册
+* 服务地址的客户端查找
+* 信息共享
+* 健康监测
+
+
+* Spring Cloud配置服务器允许使用环境特定值创建应用程序属性
+* Spring 使用 Spring profile 来启动服务，以确定要从Spring Cloud Config服务检索哪些环境属性。
+* Spring Cloud 配置服务可以使用基于文件或基于Git的应用程序撇脂存储库来存储应用程序属性
+* Spring Cloud配置服务允许使用对称加密和非对称加密对敏感属性文件进行加密。
+
+
+

@@ -1,0 +1,19 @@
+digraph sql{
+    fontsize = 10
+    node [fontname = "Verdana", fontsize = 10, color="skyblue", shape="record"];
+    sql [label="select * from T where ID = 10" comment="注释"]
+    subgraph cluster0 {
+        label = "server 层";
+        conn [label="连接器\n管理连接，权限验证"]
+        cache [label="缓存\n命中直接返回结果"]
+        analyzer [label="分析器\n词法分析，语法分析"]
+        optimizer [label="优化器\n执行计划生成，索引选择"]
+        actuator [label="执行器\n操作引擎，返回结果"]
+    }
+    engine [label="存储引擎"]
+    
+    sql -> conn -> {cache, analyzer}
+    analyzer -> optimizer -> actuator
+    
+    actuator -> engine:w [label="是否又对表有权限"]
+}

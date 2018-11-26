@@ -1,0 +1,20 @@
+digraph Class{
+    rankdir=BT; // 箭头从下到上
+    // 默认方形
+    node [shape = "record", fontname = "Consolas"]
+    // 默认空箭头
+    edge [arrowhead = "empty", fontname = "Consolas"]
+
+    // + 公有 - 私有 # 保护 ~ 包级(默认) \l左对齐换行
+    people [label = "{people
+    | +name: String\l
+    -age: int\l
+    | +getAge(): int\l}"]
+    // o- 表示接口
+    study [label = "{o- study}"]
+
+    // 继承 extends
+    student -> people
+    // 实现 implements
+    student -> study [style="dashed"]
+}

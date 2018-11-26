@@ -1,0 +1,33 @@
+digraph G {
+  pad=1;
+  //dpi=400;
+
+  launch [label="Activity\nLaunched" color=blue];
+  onCreate [label="onCreate()" shape=box];
+  onStart [label="onStart()" shape=box];
+  onRestart [label="onRestart()" shape=box];
+  onResume [label="onResume()" shape=box];
+  killed [label="App process killed" color=orange];
+  running [label="Activity\nRunning" color=green fillcolor=green];
+  onPause [label="onPause()" shape=box];
+  onStop [label="onStop()" shape=box];
+  onDestroy [label="onDestroy()" shape=box];
+  shutdown [label="App shutdown" color=orange];
+
+  launch -> onCreate;
+  onCreate:s -> onStart:n [weight=3];
+  onStart -> onResume [weight=9];
+  onRestart:w -> onStart:e;
+  onResume -> running [weight=7];
+  running -> onPause [label="Another activity\ncomes foreground" weight=7];
+  onPause -> onStop [weight=3];
+  onStop:e -> onRestart:s [label="User navigates to the activity"];
+  onPause -> onResume:e [label="User returns to activity"];
+  onPause:w -> killed:s [label="App with high priority need memory" constraint=false];
+  killed:n -> onCreate:w [label="User navigates to the activity" rankdir=RL];
+  onStop -> onDestroy;
+  onDestroy -> shutdown;
+
+  {rank=same; killed running; rankdir=RL};
+  {rank=same; onStart onRestart; rankdir=LR};
+}

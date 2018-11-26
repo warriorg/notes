@@ -52,6 +52,12 @@ git push origin --tags  # 推送标签
 
 ```
 
+## Submodule		
+```bash
+git submodule add 
+git submodule foreach git pull  #更新所有submodule
+```
+
 
 git 切换远程代码库
 
@@ -155,11 +161,7 @@ git如何删除本地所有未提交的更改（都可以使用
 git mergetool -t diffmerge .
 ```
 
-Submodule	
-​		
-```bash
-git submodule foreach git pull  #更新所有submodule
-```
+
 
 >安装diffmerge `osx`==brew cask install diffmerge==
 
