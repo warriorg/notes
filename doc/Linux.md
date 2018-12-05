@@ -29,12 +29,27 @@
 
 ## 常用命令
 
+### uname 
+显示内核信息
 ```bash
 uname -a   # 显示内核信息
 ```
 
+### uptime 系统平均负载
+系统总共运行了多长时间和系统的平均负载
+```bash
+~# uptime
+13:49:31 up 188 days,  4:27,  1 users,  load average: 0.01, 0.03, 0.00
+
+13:49:31             # 系统当前时间
+up 188 days,  4:27   # 主机已运行时间,时间越大，说明你的机器越稳定。
+1 users               # 用户连接数，是总连接数而不是用户数
+load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5，15分钟的系统平均负载, 如果是1 的话，说明在1核CPU上，使用率是100%， 在2核心CPU上，50%！
+
+```
 
 ## 用户设置
+
 adduser： 会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
 
 useradd：需要使用参数选项指定上述基本设置，如果不使用任何参数，则创建的用户无密码、无主目录、没有指定shell版本。
@@ -143,7 +158,37 @@ IdentityFile ~/.ssh/some_rsa
 ssh root@114.55.148.240
 ```
 
+ssh 登录脚本
+
+```bash
+#!/usr/bin/expect -f 
+# expect是一个基于Tcl的用于自动交互操作的工具语言，它适合用来编写需要交互的自动化脚本
+
+set host ip	
+set port 28916
+set user root
+set password password
+set timeout -1
+
+# spawn用来启动一个新的进程
+spawn ssh $user@$host -p $port
+# expect用来等待期望的字符串, 可以是正则表达式
+# expect会一直等待下去，除非收到的字符串与预期的格式匹配，或者到了超期时间
+expect "*password:*"
+
+# 用来发送一个字符串
+send "$password\r"
+# 等待接受文件结束符
+expect eof
+
+```
+
+
+
+
+
 ### grep			
+
 ```base
 $grep -5 'parttern' inputfile #打印匹配行的前后5行
 $grep -C 5 'parttern' inputfile #打印匹配行的前后5行
@@ -220,7 +265,6 @@ systemctl restart iptables.service #重启防火墙使配置生效
 
 ###时间
 设置时区 
-​	  
 ```bash
 data -R  # 查看当前设置
 sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata

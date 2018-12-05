@@ -27,8 +27,13 @@ auth 123456     # 登录验证
 info Keyspace 	#列出数据库
 KEYS pattern 	# 列出所有KEYS
 keys *       	# 列出所有KEYS
+
+expire key seconds #设置超时时间
+ttl key 		# 返回具有超时的键的剩余生存时间。
+
 flushdb     	# 清空当前数据库中的所有 key
 flushall    	# 清空所有数据的所有key
+
 dbsize 		 	# 数据库的 key 数量
 ping 		 	# 检测 redis 服务是否启动
 

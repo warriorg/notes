@@ -1,0 +1,25 @@
+@startuml
+title 登录验证
+
+database Redis
+
+== 登录验证 ==
+WEB -> API: 登录请求， 用户名密码
+API -> PMS: 验证
+API <-- PMS: 验证完成, 返回GUID
+API -> Cache: 缓存信息
+
+participant Redis
+
+API -> Redis: 如果开启,向redis存储数据
+WEB <-- API: 返回登录信息 access_token(guid)
+
+== 访问后台接口 ==
+WEB -> API: SET HTTP HEADER "Authorization: Bearer access_token"
+API -> Cache: 从缓存读取，验证
+API <-- Cache: 返回
+API -> Redis: 如果开启，Cache没有从redis读取
+API <-- Redis: 返回
+API -> API: 验证有效
+WEB <-- API: 失败，http code 401
+@enduml
