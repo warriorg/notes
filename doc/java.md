@@ -1,7 +1,12 @@
-
-
+###jar
+```bash
+jar xvf test.jar 			# 解压到当前目录
+jar cvf filename.jar a.class b.class    #压缩指定文件
+jar cvf weibosdkcore.jar *  #全部压缩
+```
 
 ## Test
+
 ###java run single unit testing
 ```base
 gradle test -Dtest.single=PropertyBillServiceTest

@@ -79,6 +79,10 @@ nC-T 返回跳转 n 次
 $ 跳转至行尾  
 ```
 
+```
+xp                       # 交换前后两个字符的位置
+ddp                      # 上下两行的位置交换
+```
 
 [NERDTree](https://github.com/scrooloose/nerdtree)
 >==m 显示文件系统菜单==

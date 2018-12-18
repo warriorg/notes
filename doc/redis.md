@@ -1,9 +1,41 @@
-## osx 下安装
+## 安装
+### osx
 ```bash
 brew install redis
 brew services start redis
-redis-cli #进去cli客户端
+redis-cli 							#进去cli客户端
 ```
+### Centos 
+```bash
+wget http://download.redis.io/releases/redis-5.0.2.tar.gz
+tar zxf redis-5.0.2.tar.gz
+make PREFIX=/usr/local/redis install
+ln -s /usr/local/redis/bin/redis-cli /usr/local/bin/redis-cli   # 建立软连接
+```
+
+解决错误
+
+```bash
+make
+cd src && make all
+make[1]: Entering directory `/usr/local/redis-5.0.2/src'
+    CC adlist.o
+In file included from adlist.c:34:0:
+zmalloc.h:50:31: fatal error: jemalloc/jemalloc.h: No such file or directory
+ #include <jemalloc/jemalloc.h>
+                               ^
+compilation terminated.
+make[1]: *** [adlist.o] Error 1
+make[1]: Leaving directory `/usr/local/redis-5.0-rc3/src'
+make: *** [all] Error 2
+```
+
+最后解决方案如下：
+```bash
+cd deps
+make hiredis lua jemalloc linenoise
+```
+
 
 ## 命令工具
 

@@ -87,24 +87,62 @@ Release版本与Snapshot版本的区分：
 > maven-dependency-plugin
 
 * [dependency:analyze](https://maven.apache.org/plugins/maven-dependency-plugin/analyze-mojo.html) 分析项目的依赖关系，确定哪些是:声明并使用，声明未使用，未声明并使用，
+
 * [dependency:analyze-dep-mgt](https://maven.apache.org/plugins/maven-dependency-plugin/analyze-dep-mgt-mojo.html) analyzes your projects dependencies and lists mismatches between resolved dependencies and those listed in your dependencyManagement section.
+
 * [dependency:analyze-only](https://maven.apache.org/plugins/maven-dependency-plugin/analyze-only-mojo.html) is the same as analyze, but is meant to be bound in a pom. It does not fork the build and execute test-compile.
+
 * [dependency:analyze-report](https://maven.apache.org/plugins/maven-dependency-plugin/analyze-report-mojo.html) analyzes the dependencies of this project and produces a report that summarises which are: used and declared; used and undeclared; unused and declared.
+
 * [dependency:analyze-duplicate](https://maven.apache.org/plugins/maven-dependency-plugin/analyze-duplicate-mojo.html) analyzes the `<dependencies/>` and `<dependencyManagement/>` tags in the pom.xml and determines the duplicate declared dependencies.
+
 * [dependency:build-classpath](https://maven.apache.org/plugins/maven-dependency-plugin/build-classpath-mojo.html) tells Maven to output the path of the dependencies from the local repository in a classpath format to be used in java -cp. The classpath file may also be attached and installed/deployed along with the main artifact.
+
 * [dependency:copy](https://maven.apache.org/plugins/maven-dependency-plugin/copy-mojo.html) takes a list of artifacts defined in the plugin configuration section and copies them to a specified location, renaming them or stripping the version if desired. This goal can resolve the artifacts from remote repositories if they don't exist in either the local repository or the reactor.
+
 * [dependency:copy-dependencies](https://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html) takes the list of project direct dependencies and optionally transitive dependencies and copies them to a specified location, stripping the version if desired. This goal can also be run from the command line.
+
 * [dependency:display-ancestors](https://maven.apache.org/plugins/maven-dependency-plugin/display-ancestors-mojo.html) displays all ancestor POMs of the project. This may be useful in a continuous integration system where you want to know all parent poms of the project. This goal can also be run from the command line.
+
 * [dependency:get](https://maven.apache.org/plugins/maven-dependency-plugin/get-mojo.html) resolves a single artifact, eventually transitively, from a specified remote repository.
+
 * [dependency:go-offline](https://maven.apache.org/plugins/maven-dependency-plugin/go-offline-mojo.html) tells Maven to resolve everything this project is dependent on (dependencies, plugins, reports) in preparation for going offline.
+
 * [dependency:list](https://maven.apache.org/plugins/maven-dependency-plugin/list-mojo.html) alias for resolve that lists the dependencies for this project.
+
 * [dependency:list-repositories](https://maven.apache.org/plugins/maven-dependency-plugin/list-repositories-mojo.html) displays all project dependencies and then lists the repositories used.
+
 * [dependency:properties](https://maven.apache.org/plugins/maven-dependency-plugin/properties-mojo.html) set a property for each project dependency containing the to the artifact on the file system.
+
 * [dependency:purge-local-repository](https://maven.apache.org/plugins/maven-dependency-plugin/purge-local-repository-mojo.html) tells Maven to clear dependency artifact files out of the local repository, and optionally re-resolve them.
+
 * [dependency:resolve](https://maven.apache.org/plugins/maven-dependency-plugin/resolve-mojo.html) tells Maven to resolve all dependencies and displays the version. **JAVA 9 NOTE:** *will display the module name when running with Java 9.*
+
 * [dependency:resolve-plugins](https://maven.apache.org/plugins/maven-dependency-plugin/resolve-plugins-mojo.html) 解析插件及其依赖关系。
+
 * [dependency:sources](https://maven.apache.org/plugins/maven-dependency-plugin/sources-mojo.html) 解析所有依赖项及其源附件，并显示版本。
+
 * [dependency:tree](https://maven.apache.org/plugins/maven-dependency-plugin/tree-mojo.html) 显示此项目的依赖关系树
+
 * [dependency:unpack](https://maven.apache.org/plugins/maven-dependency-plugin/unpack-mojo.html) like copy but unpacks.
+
 * [dependency:unpack-dependencies](https://maven.apache.org/plugins/maven-dependency-plugin/unpack-dependencies-mojo.html) like copy-dependencies but unpacks.
+
+
+### 其它
+#### 安装包到本地仓库
+```bash
+mvn install:install-file -Dfile=/filePath/ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.1.0 -Dpackaging=jar
+```
+#### 打包跳过单元测试
+1. package
+```bash
+mvn package -Dmaven.test.skip=true
+```
+2. pom.xml
+```xml
+<properties>
+	<maven.test.skip>true</maven.test.skip>
+</properties>
+```
 

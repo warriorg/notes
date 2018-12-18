@@ -62,7 +62,7 @@ Created topic "test".
 #查看创建的topic
  $ bin/kafka-topics.sh --list --zookeeper localhost:2181                                                                                              [14:44:34]
 test
-```	
+```
 
 Send some messages
 
