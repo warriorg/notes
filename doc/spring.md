@@ -1,4 +1,9 @@
+
+
+
+
 ### 控制反转（Inversion of Control，IoC）
+
 * 常见另一种叫法**依赖注入（Dependency Injection，DI）**, 还有一种叫法**依赖查找(Dependency Lookup)** 对象在被创建的时候，由IoC容器注入，对象的创建的控制权由IoC容器负责
 
 * Class A中用到了Class B的对象b，一般情况下，需要在A的代码中显式的new一个B的对象。		
@@ -283,6 +288,4 @@ Spring MVC, Spring WebFlux, or Jersey
 * Spring 使用 Spring profile 来启动服务，以确定要从Spring Cloud Config服务检索哪些环境属性。
 * Spring Cloud 配置服务可以使用基于文件或基于Git的应用程序撇脂存储库来存储应用程序属性
 * Spring Cloud配置服务允许使用对称加密和非对称加密对敏感属性文件进行加密。
-
-
 

@@ -1,4 +1,4 @@
-* **CPU上下文切换**
+* CPU上下文切换
   先把前一个任务的CPU上下文（也就是CPU寄存器和程序计数器)保存起来，然后加载新任务的上下文到这些寄存器和程序计数器，最后在跳转到程序计数器所指的新位置，运行新任务。
   1. 进程上下文切换
   2. 线程上下文切换
@@ -39,10 +39,18 @@
 
 ## 常用命令
 
+### crontab 
+定时任务
+
 ### uname 
 显示内核信息
 ```bash
 uname -a   # 显示内核信息
+
+# 适用于所有的linux，包括Redhat、SuSE、Debian、Centos等发行版。
+lsb_release -a  
+# RedHat,CentOS
+cat /etc/redhat-release
 ```
 
 ### uptime 系统平均负载
@@ -82,6 +90,38 @@ ln -s abc cde 	# 建立abc 的软连接
 ln abc cde 		# 建立abc的硬连接，
 ```
 
+### perf 
+
+分析cpu性能问题
+
+```bash
+$ perf top
+Samples: 833  of event 'cpu-clock', Event count (approx.): 97742399
+Overhead  Shared Object       Symbol
+   7.28%  perf                [.] 0x00000000001f78a4
+   4.72%  [kernel]            [k] vsnprintf
+   4.32%  [kernel]            [k] module_get_kallsym
+   3.65%  [kernel]            [k] _raw_spin_unlock_irqrestore
+...
+
+```
+
+* **Overhead** 是该符号的性能事件在所有的采样中的比例，用百分比来表示。
+
+* **Shared** 是该函数或指令所在的动态共享对象，如内核、进程名、动态连结库名、内核模块名等。
+* **Object** 动态共享对象的类型。比如[.] 表示用户空间的可执行程序、或者动态连结库，而[k]在表示内核空间。
+* **Symbol** 符号名，也就是函数名。当函数名未知时， 用十六进制的地址来表示。
+
+```bash
+$ perf record # 按 Ctrl+C 终止采样
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.452 MB perf.data (6093 samples) ]
+
+$ perf report # 展示类似于 perf top 的报告
+```
+
+> perf top 和 perf record 加上 -g 参数，开启调用关系的采样，方便我们根据调用链来分析性能问题
+
 ### vmstat
 
 vmstat工具的使用是通过两个数字参数来完成的，第一个参数是采样的时间间隔数，单位是秒，第二个参数是采样的次数
@@ -96,37 +136,37 @@ $ vmstat 1
 $ vmstat 5 2
 ```
 
-**r** 表示运行队列(就是说多少个进程真的分配到CPU)，我测试的服务器目前CPU比较空闲，没什么程序在跑，当这个值超过了CPU数目，就会出现CPU瓶颈了。这个也和top的负载有关系，一般负载超过了3就比较高，超过了5就高，超过了10就不正常了，服务器的状态很危险。top的负载类似每秒的运行队列。如果运行队列过大，表示你的CPU很繁忙，一般会造成CPU使用率很高。
+* **r** 表示运行队列(就是说多少个进程真的分配到CPU)，我测试的服务器目前CPU比较空闲，没什么程序在跑，当这个值超过了CPU数目，就会出现CPU瓶颈了。这个也和top的负载有关系，一般负载超过了3就比较高，超过了5就高，超过了10就不正常了，服务器的状态很危险。top的负载类似每秒的运行队列。如果运行队列过大，表示你的CPU很繁忙，一般会造成CPU使用率很高。
 
-**b** 表示阻塞的进程,这个不多说，进程阻塞。
+* **b** 表示阻塞的进程,这个不多说，进程阻塞。
 
-**swpd** 虚拟内存已使用的大小，如果大于0，表示你的机器物理内存不足了，如果不是程序内存泄露的原因，那么你该升级内存了或者把耗内存的任务迁移到其他机器。
+* **swpd** 虚拟内存已使用的大小，如果大于0，表示你的机器物理内存不足了，如果不是程序内存泄露的原因，那么你该升级内存了或者把耗内存的任务迁移到其他机器。
 
-**free**   空闲的物理内存的大小，我的机器内存总共8G，剩余3415M。
+* **free**   空闲的物理内存的大小，我的机器内存总共8G，剩余3415M。
 
-**buff**   Linux/Unix系统是用来存储，目录里面有什么内容，权限等的缓存，我本机大概占用300多M
+* **buff**   Linux/Unix系统是用来存储，目录里面有什么内容，权限等的缓存，我本机大概占用300多M
 
-**cache** cache直接用来记忆我们打开的文件,给文件做缓冲，我本机大概占用300多M(这里是Linux/Unix的聪明之处，把空闲的物理内存的一部分拿来做文件和目录的缓存，是为了提高 程序执行的性能，当程序使用内存时，buffer/cached会很快地被使用。)
+* **cache** cache直接用来记忆我们打开的文件,给文件做缓冲，我本机大概占用300多M(这里是Linux/Unix的聪明之处，把空闲的物理内存的一部分拿来做文件和目录的缓存，是为了提高 程序执行的性能，当程序使用内存时，buffer/cached会很快地被使用。)
 
-**si**  每秒从磁盘读入虚拟内存的大小，如果这个值大于0，表示物理内存不够用或者内存泄露了，要查找耗内存进程解决掉。我的机器内存充裕，一切正常。
+* **si**  每秒从磁盘读入虚拟内存的大小，如果这个值大于0，表示物理内存不够用或者内存泄露了，要查找耗内存进程解决掉。我的机器内存充裕，一切正常。
 
-**so**  每秒虚拟内存写入磁盘的大小，如果这个值大于0，同上。
+* **so**  每秒虚拟内存写入磁盘的大小，如果这个值大于0，同上。
 
-**bi**  块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte，我本机上没什么IO操作，所以一直是0，但是我曾在处理拷贝大量数据(2-3T)的机器上看过可以达到140000/s，磁盘写入速度差不多140M每秒
+* **bi**  块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte，我本机上没什么IO操作，所以一直是0，但是我曾在处理拷贝大量数据(2-3T)的机器上看过可以达到140000/s，磁盘写入速度差不多140M每秒
 
-**bo** 块设备每秒发送的块数量，例如我们读取文件，bo就要大于0。bi和bo一般都要接近0，不然就是IO过于频繁，需要调整。
+* **bo** 块设备每秒发送的块数量，例如我们读取文件，bo就要大于0。bi和bo一般都要接近0，不然就是IO过于频繁，需要调整。
 
-**in** 每秒CPU的中断次数，包括时间中断
+* **in** 每秒CPU的中断次数，包括时间中断
 
-**cs** 每秒上下文切换次数，例如我们调用系统函数，就要进行上下文切换，线程的切换，也要进程上下文切换，这个值要越小越好，太大了，要考虑调低线程或者进程的数目,例如在apache和nginx这种web服务器中，我们一般做性能测试时会进行几千并发甚至几万并发的测试，选择web服务器的进程可以由进程或者线程的峰值一直下调，压测，直到cs到一个比较小的值，这个进程和线程数就是比较合适的值了。系统调用也是，每次调用系统函数，我们的代码就会进入内核空间，导致上下文切换，这个是很耗资源，也要尽量避免频繁调用系统函数。上下文切换次数过多表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，CPU没有充分利用，是不可取的。
+* **cs** 每秒上下文切换次数，例如我们调用系统函数，就要进行上下文切换，线程的切换，也要进程上下文切换，这个值要越小越好，太大了，要考虑调低线程或者进程的数目,例如在apache和nginx这种web服务器中，我们一般做性能测试时会进行几千并发甚至几万并发的测试，选择web服务器的进程可以由进程或者线程的峰值一直下调，压测，直到cs到一个比较小的值，这个进程和线程数就是比较合适的值了。系统调用也是，每次调用系统函数，我们的代码就会进入内核空间，导致上下文切换，这个是很耗资源，也要尽量避免频繁调用系统函数。上下文切换次数过多表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，CPU没有充分利用，是不可取的。
 
-**us** 用户CPU时间，我曾经在一个做加密解密很频繁的服务器上，可以看到us接近100,r运行队列达到80(机器在做压力测试，性能表现不佳)。
+* **us** 用户CPU时间，我曾经在一个做加密解密很频繁的服务器上，可以看到us接近100,r运行队列达到80(机器在做压力测试，性能表现不佳)。
 
-**sy** 系统CPU时间，如果太高，表示系统调用时间长，例如是IO操作频繁。
+* **sy** 系统CPU时间，如果太高，表示系统调用时间长，例如是IO操作频繁。
 
-**id**  空闲 CPU时间，一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。
+* **id**  空闲 CPU时间，一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。
 
-**wt** 等待IO CPU时间。
+* **wt** 等待IO CPU时间。
 
 ### pidstat
 查看每个进程的详细情况
@@ -151,6 +191,7 @@ Linux 3.10.0-862.14.4.el7.x86_64 (instance-xisc86cd) 	12/14/2018 	_x86_64_	(2 CP
 系统压力测试工具
 
 ```bash
+# ubuntu 安装
 $ apt install stress sysstat
 ```
 #### 1. mpstat
@@ -210,7 +251,37 @@ usermod -G groupname username  		#已有的用户增加工作组
 
  ## 网络
  ### DNS
- /etc/resolv.conf
+`/etc/resolv.conf`
+
+
+
+**CentOS**
+
+设置静态IP
+
+`vim /etc/sysconfig/network-scripts/ifcfg-ens33`
+
+```bash
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=static  # 设置为static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=5aa4d499-39ff-43dc-86c9-e049ec71e2bc
+DEVICE=ens33
+ONBOOT=yes			# 开机启动
+# 设置静态ip地址
+IPADDR=192.168.2.230		
+GATEWAY=192.168.2.1		
+NETMASK=255.255.255.0
+```
 
 #### 磁盘
 ```bash
@@ -343,44 +414,11 @@ df -h
 ###Supervisor 
 > 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
 
-#### 查看SELinux状态及关闭SELinux
-```bash
-sestatus -v 			#如果SELinux status参数为enabled即为开启状态
-getenforce          	#也可以用这个命令检查 Permissive 零时关闭
-setenforce 0       		#设置SELinux 成为permissive模式 零时关闭
-setenforce 1 			#设置SELinux 成为enforcing模式
-```
-永久关闭    
-`修改/etc/selinux/config 文件`   
 
-```base
-SELINUX=enforcing	#开启
-SELINUX=disabled    #关闭
-```
 
 ###查找被占用的端口					
 ```bash
 lsof -i:8700 或者 lsof -i | grep 8700
-```
-
-### Ubuntu
-
-```
-update-manager # 升级系统 图形界面
-sudo do-release-upgrade  # 升级系统
-```
-
-
-###Centos
-
-#### yum
-yum 的配置文件分为两部分：main 和repository
-
-* main 部分定义了全局配置选项，整个yum 配置文件应该只有一个main。常位于/etc/yum.conf 中。
-* repository 部分定义了每个源/服务器的具体配置，可以有一到多个。常位于/etc/yum.repo.d 目录下的各文件中
-```bash
-yum install epel-release  		# 增加epel源
-yum -y list java*   			# 搜索安装包
 ```
 
 ###防火墙
@@ -401,6 +439,53 @@ sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启
 sudo ntpdate cn.pool.ntp.org        #命令更新时间
 ```
 
+### 语言
+
+配置文件地址 **/etc/locale.conf**
+
+```bash
+# centos 设置语言
+localectl set-locale LANG=en_US.utf8
+```
+
+### wget
+
+```bash
+# 下载oracle jdk
+wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
+```
+
+### Ubuntu
+```
+update-manager # 升级系统 图形界面
+sudo do-release-upgrade  # 升级系统
+```
+
+###Centos
+#### yum
+yum 的配置文件分为两部分：main 和repository
+
+* main 部分定义了全局配置选项，整个yum 配置文件应该只有一个main。常位于/etc/yum.conf 中。
+* repository 部分定义了每个源/服务器的具体配置，可以有一到多个。常位于/etc/yum.repo.d 目录下的各文件中
+```bash
+yum install epel-release  		# 增加epel源
+yum -y list java*   			# 搜索安装包
+```
+
+#### 查看SELinux状态及关闭SELinux
+```bash
+sestatus -v 			#如果SELinux status参数为enabled即为开启状态
+getenforce          	#也可以用这个命令检查 Permissive 零时关闭
+setenforce 0       		#设置SELinux 成为permissive模式 零时关闭
+setenforce 1 			#设置SELinux 成为enforcing模式
+```
+永久关闭    
+`修改/etc/selinux/config 文件`   
+
+```base
+SELINUX=enforcing	#开启
+SELINUX=disabled    #关闭
+```
 
 ## tmux
 
@@ -567,3 +652,19 @@ bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
 
 - [tmux: Productive Mouse-Free Development](http://pragprog.com/book/bhtmux/tmux)
 - [How to reorder windows](http://superuser.com/questions/343572/tmux-how-do-i-reorder-my-windows)
+
+
+
+## Script
+
+### JAVA Application start
+
+```bash
+nohup java -jar frameworkapi.jar --spring.config.local=E:/app/jg/application-test.yml --spring.profiles.active=test >/dev/null 2>&1 &
+echo $!>pid
+```
+
+### JAVA Application stop
+```bash 
+kill `cat pid`
+```

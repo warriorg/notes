@@ -61,3 +61,8 @@ rm -rf ~/.vscode
 rm -rf ~/Library/Application Support/Code
 ```
 
+### 查看静态路由表
+```bash
+netstat -rn |grep default
+```
+
