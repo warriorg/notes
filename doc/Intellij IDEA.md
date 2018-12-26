@@ -1,5 +1,16 @@
-##IdeaVim快捷键设置
-![image](images/ideavim-shortcut.png)
+## 注释
+
+### 文件信息
+**Editor -> File and Code Templates -> Files -> Class **
+
+
+
+
+
+
+## 插件
+### IdeaVim快捷键设置
+![image](assets/images/ideavim-shortcut.png)
 
 
 
@@ -32,13 +43,13 @@ Your code goes here...
 首先，需要从调用 Database 窗口 `View>Tool Windows>Database`    
 添加到数据库的连接		
 选择数据的表，然后右击
-![image](images/idea-1.png)
+![image](assets/images/idea-1.png)
 选择 `Scripted Extensions > Generate POJOs.groovy` 既可以生成实体
 
 Scripted Extensions 中前面2个菜单，是生成实体的模版，后面一个是实体模版所在的目录。实际使用中，我们需要对生成的模版代码修改
 
 进入模版目录	
-![image](images/idea-2.png)
+![image](assets/images/idea-2.png)
 打开对应的模版文件进行修改, 下方是我修改后的模版文件和生成的代码
 
 ```groovy
