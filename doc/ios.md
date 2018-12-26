@@ -14,7 +14,7 @@
 ###[RDVTabBarController](https://github.com/robbdimitrov/RDVTabBarController)
 >Highly customizable tabBar and tabBarController for iOS
 
->![image](images/RDVTabBarController.png)
+>![image](assets/images/RDVTabBarController.png)
 
 ```objective-c
 UIViewController *firstViewController = [[RDVFirstViewController alloc] init];
@@ -39,15 +39,15 @@ self.viewController = tabBarController;
 ###[TSMessages](https://github.com/KrauseFx/TSMessages)
 >This library provides an easy to use class to show little notification views on the top of the screen
 
->![image](images/TSMessages_1.png)
+>![image](assets/images/TSMessages_1.png)
 
->![image](images/TSMessages_2.png)
+>![image](assets/images/TSMessages_2.png)
 
 -
 
 ###[WaveLoadingView](https://github.com/liuzhiyi1992/WaveLoadingView)
 >波浪进度指示器
->![image](images/WaveLoadingView.gif)
+>![image](assets/images/WaveLoadingView.gif)
 
 
 #UITextField
@@ -55,11 +55,11 @@ self.viewController = tabBarController;
 ###[TextFieldEffects](https://github.com/raulriera/TextFieldEffects)
 >*你不觉得标准的UITextField有些枯燥么？我也这样想——来认识一下TextFieldEffects吧！废话不多说，只要看几个例子*
 
->![image](images/TextFieldEffects_1.gif)
+>![image](assets/images/TextFieldEffects_1.gif)
 
->![image](images/TextFieldEffects_2.gif)
+>![image](assets/images/TextFieldEffects_2.gif)
 
->![image](images/TextFieldEffects_3.gif)
+>![image](assets/images/TextFieldEffects_3.gif)
 
 -
 
@@ -67,16 +67,16 @@ self.viewController = tabBarController;
 
 >*RegEx input validation and formatting as you type*
 
->![image](images/WTReTextField_1.png)
+>![image](assets/images/WTReTextField_1.png)
 
->![image](images/WTReTextField_2.png)
+>![image](assets/images/WTReTextField_2.png)
 
 -
 
 ###[JVFloatLabeledTextField](https://github.com/jverdi/JVFloatLabeledTextField)
 >*JVFloatLabeledTextField is the first implementation a UX pattern that has come to be known the "Float Label Pattern".*
 
->![image](images/JVFloatLabeledTextField.gif)
+>![image](assets/images/JVFloatLabeledTextField.gif)
 
 -
 
@@ -84,13 +84,13 @@ self.viewController = tabBarController;
 
 >*仿微信支付密码输入框*
 
->![image](images/DemoInPutPasswordView.gif)
+>![image](assets/images/DemoInPutPasswordView.gif)
 
 -
 
 ###[BEMCheckBox](https://github.com/Boris-Em/BEMCheckBox)
 
->![image](images/BEMCheckBox.gif)
+>![image](assets/images/BEMCheckBox.gif)
 
 -
 
@@ -98,13 +98,13 @@ self.viewController = tabBarController;
 ---
 ###[ARSegmentPager](https://github.com/AugustRush/ARSegmentPager)
 
->![image](images/ARSegmentPager_1.png)
+>![image](assets/images/ARSegmentPager_1.png)
 
->![image](images/ARSegmentPager_2.png)
+>![image](assets/images/ARSegmentPager_2.png)
 
->![image](images/ARSegmentPager_3.gif)
+>![image](assets/images/ARSegmentPager_3.gif)
 
->![image](images/ARSegmentPager_4.gif)
+>![image](assets/images/ARSegmentPager_4.gif)
 
 -
 
@@ -112,13 +112,13 @@ self.viewController = tabBarController;
 ---
 ###[DZNEmptyDataSet](https://github.com/dzenbot/DZNEmptyDataSet)
 >*DZNEmptyDataSet算是一个很标准的iOS内建方式，适合用来处理空的table view和collection view。默认情况下，如果你的table view为空，屏幕就为空，这样一来用户体验并不理想。*
-![image](images/DZNEmptyDataSet.jpg)
+![image](assets/images/DZNEmptyDataSet.jpg)
 
 -
 
 ###[RETableViewManager](https://github.com/romaonthego/RETableViewManager)
 >*可以帮助你进行动态创建与管理table views。它给我们提供了预定义cells（bool类型、文本、日期等等——请看下面的截图），但是你还可以创建自定义views，并与默认视图一同使用。*
-![image](images/RETableViewManager.png)
+![image](assets/images/RETableViewManager.png)
 
 -
 
@@ -127,18 +127,18 @@ self.viewController = tabBarController;
 ###[MGSwipeTableCell](https://github.com/MortimerGoro/MGSwipeTableCell)
 >*这是另一个常见于很多应用中的UI组件，苹果应该考虑在标准的iOS SDK中加入一些类似的内容。Swipeable表格cell是这个pod的最佳描述，也是最好的。*
 
->![image](images/MGSwipeTableCell_1.gif)
+>![image](assets/images/MGSwipeTableCell_1.gif)
 
->![image](images/MGSwipeTableCell_2.gif)
+>![image](assets/images/MGSwipeTableCell_2.gif)
 
->![image](images/MGSwipeTableCell_3.gif)
+>![image](assets/images/MGSwipeTableCell_3.gif)
 
 -
 ###[UIView-FDCollapsibleConstraints](https://github.com/forkingdog/UIView-FDCollapsibleConstraints)
 >*Builds to collapse a view and its relevant layout constraints, simulating a "Flow Layout" mode*
->![image](images/UIView-FDCollapsibleConstraints-1.gif)
+>![image](assets/images/UIView-FDCollapsibleConstraints-1.gif)
 
->![image](images/UIView-FDCollapsibleConstraints-2.gif)
+>![image](assets/images/UIView-FDCollapsibleConstraints-2.gif)
 
 -
 
@@ -146,27 +146,27 @@ self.viewController = tabBarController;
 >*Full aspect ratio grid layout for iOS*
 >
 
->![image](images/greedo-layout-for-ios.png)
+>![image](assets/images/greedo-layout-for-ios.png)
 
 #Image
 ----
 ###[Concorde](https://github.com/contentful-labs/Concorde) `Swift`
 
 >你在应用中载入了一堆jpeg吗？有了Concorde，你可以用更好的方式来解决，这是一个很大的进步。
->![image](images/Concorde.gif)
+>![image](assets/images/Concorde.gif)
 
 -
 
 ###[ETFoursquareImages](https://github.com/EugeneTrapeznikov/ETFoursquareImages)
 >When you scroll, image's shown area will become bigger. Like it appears on places' page in Foursquare app.
->![image](images/ETFoursquareImages.gif)
+>![image](assets/images/ETFoursquareImages.gif)
 
 -
 
 ###[RSKImageCropper](https://github.com/ruslanskorb/RSKImageCropper)
 
 >RSKImageCropper通过剪切图片作为头像。通过移动图片，剪切圆形框所显示的部分。
->![image](images/RSKImageCropper.png)
+>![image](assets/images/RSKImageCropper.png)
 
 -
 
@@ -174,7 +174,7 @@ self.viewController = tabBarController;
 
 >ImagePickerSheetController is similar to UIAlertController in its usage.
 
->![image](images/ImagePickerSheetController.gif)
+>![image](assets/images/ImagePickerSheetController.gif)
 
 ```swift
 let controller = ImagePickerSheetController(mediaType: .ImageAndVideo)
@@ -199,9 +199,9 @@ presentViewController(controller, animated: true, completion: nil)
 ###[SDCycleScrollView](https://github.com/gsdios/SDCycleScrollView)
 >无限循环自动图片轮播器
 
->![image](images/SDCycleScrollView-1.gif)
+>![image](assets/images/SDCycleScrollView-1.gif)
 >
->![image](images/SDCycleScrollView-2.gif)
+>![image](assets/images/SDCycleScrollView-2.gif)
 
 ```objective-c
 // 网络加载图片的轮播器
@@ -228,7 +228,7 @@ presentViewController(controller, animated: true, completion: nil)
 ---
 ###[PDTSimpleCalendar](https://github.com/jivesoftware/PDTSimpleCalendar)
  >*PDTSimpleCalendar也许可以算是iOS最棒的日历组件了。你可以在各个方面对它进行定制，无论是运行逻辑还是外观方面。*
->![image](images/PDTSimpleCalendar.png)
+>![image](assets/images/PDTSimpleCalendar.png)
 
 -
 
@@ -236,7 +236,7 @@ presentViewController(controller, animated: true, completion: nil)
 ---
 ###[FontAwesomeKit](https://github.com/PrideChung/FontAwesomeKit)
 >*有了它你可以很容易地给项目加字体，使用方式繁多。*
-![image](images/FontAwesomeKit.png)
+![image](assets/images/FontAwesomeKit.png)
 
 -
 
@@ -246,7 +246,7 @@ presentViewController(controller, animated: true, completion: nil)
 
 >*一个可爱的登陆界面，动画效果仿自国外网站readme.io*
 
->![image](images/JxbLovelyLogin.gif)
+>![image](assets/images/JxbLovelyLogin.gif)
 
 -
 
@@ -256,12 +256,12 @@ presentViewController(controller, animated: true, completion: nil)
 ##### CocoaPods
 
 	pod 'RadioButton'
-	
+
 >*Pretty simple class that extends standard UIButton functionality. Default and selected states can be configured for every button.*
 
->![image](images/RadioButton-1.gif)
+>![image](assets/images/RadioButton-1.gif)
 
->![image](images/RadioButton-2.gif)
+>![image](assets/images/RadioButton-2.gif)
 
 Alternatively group the buttons using single line of code:
 
@@ -289,7 +289,7 @@ And a helpful method to select button by tag:
 >*实现跑马灯效果
 >
 >MarqueeLabel is a UILabel subclass adds a scrolling marquee effect when the text of the label outgrows the available width. The label scrolling direction and speed/rate can be specified as well. All standard UILabel properties (where it makes sense) are available in MarqueeLabel and it behaves just like a UILabel.*
->![image](images/MarqueeLabel.gif)
+>![image](assets/images/MarqueeLabel.gif)
 
 ```Objective-C
 MarqueeLabel *scrollyLabel = [[MarqueeLabel alloc] initWithFrame:labelCGRectFrame duration:8.0 andFadeLength:10.0f];
@@ -298,4 +298,4 @@ MarqueeLabel *scrollyLabel = [[MarqueeLabel alloc] initWithFrame:labelCGRectFram
 ###[Instructions](https://github.com/ephread/Instructions)
 >Create walkthroughs and coach mark tours in a simple way.<br/>
 >专门帮助开发者简化引导教程实现的框架，它以比较灵活的方式用标准的 Cocoa 设计思想来实现了简化引导界面的制作
->![image](images/Instructions.gif)
+>![image](assets/images/Instructions.gif)

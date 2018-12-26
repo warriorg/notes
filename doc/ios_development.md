@@ -13,7 +13,7 @@ UITabBar |	49	| 83
 >1242/1080 = 1.15 </br>
 >750/1080 = 0.69
 
-![image](images/iPhoneSize.jpg)
+![image](assets/images/iPhoneSize.jpg)
 
 Element | iPhone 4S (and earlier) | iPhone 5 | iPhone 6 | iPhone 6 Plus
 --------|-------------------------|----------|----------|---------------
@@ -35,7 +35,7 @@ Text Field | 31 pts
 
 
 ###最新Android & IOS设计尺寸规范
-![image](images/app_design_2016.jpg)
+![image](assets/images/app_design_2016.jpg)
 
 
 
