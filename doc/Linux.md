@@ -253,7 +253,8 @@ usermod -G groupname username  		#已有的用户增加工作组
  ### DNS
 `/etc/resolv.conf`
 
-
+### mtr
+比ping屌
 
 **CentOS**
 

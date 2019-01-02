@@ -232,6 +232,8 @@ Spring MVC, Spring WebFlux, or Jersey
 - security.user.password 默认的用户密码.
 - security.user.role 默认用户的授权角色.
 
+
+
 ## Spring Microservices IN ACTION
 
 * YAML （Yet another Markup Language) 
@@ -247,7 +249,9 @@ Spring MVC, Spring WebFlux, or Jersey
 * @SpringBootApplication 标记项目引导类和配置类，然后开始自动扫描Java路径上的所有类
 * @RequestMapping 要公开的HTTP端点
 * @RefreshScope 重新加载应用程序配置中的自定义Spring属性。Spring Data使用的数据库配置等不会被重新加载。需要执行刷新，访问 [post] http://<yourserver>:8080/refresh
-*  @EnableEurekaServer 启用Eureka服务器
+* @EnableEurekaServer 启用Eureka服务器
+* @EnableDiscoveryClient  使应用程序能够使用DiscoveryClient 和 Ribbon库
+* @LoadBalanced 创建一个支持Ribbon的RestTemplate类
 
 ### 2
 #### 2.3 用Spring boot 和 Java构建微服务
@@ -289,3 +293,28 @@ Spring MVC, Spring WebFlux, or Jersey
 * Spring Cloud 配置服务可以使用基于文件或基于Git的应用程序撇脂存储库来存储应用程序属性
 * Spring Cloud配置服务允许使用对称加密和非对称加密对敏感属性文件进行加密。
 
+#### 4 .6 
+* 服务发现模式用于抽象服务的物理位置
+* 诸如Eureka这样的服务发现引擎可以在不影响服务客户端的情况下，无缝地向环境中添加和从环境中移除服务实例
+* 通过在进行服务调用的客户端中缓存服务的物理位置，客户端负载均衡可以提供额外的性能和弹性
+* Eureka 是Netflix项目，在与Spring Cloud一起使用时，很容易对Eureka进行建立和配置。
+* 本章在Spring Cloud、Netflix Eureka、和Netflix Ribbon中使用了3中不同的机制来调用服务。这些机制包括
+   * 使用Spring Cloud 服务DiscoveryClient
+   * 使用Spring Cloud 和支持 Ribbon的RestTemplate
+   * 使用Spring Cloud 和 Netflix 的 Feign 客户端
+
+
+
+### 第5章 使用Spring Cloud 和 Netflix Hystrix 的客户端弹性模式
+
+#### 5.1 什么是客户端弹性模式
+
+1. 客户端负载均衡（client load balance）模式
+2. 断路器（circuit breaker）模式
+3. 后备（fallback）模式
+4. 舱壁（bulkhead）模式
+![image](assets/images/spring-mic-in-action-5.1.jpeg)
+
+
+
+#### 5.2 为什么客户端弹性很重要

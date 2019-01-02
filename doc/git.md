@@ -46,8 +46,8 @@ git push origin --tags  # 推送标签
 ```
 
 ## branch
-* -r 查看远程分支
-* -a 查看所有分支
+* **-r** 查看远程分支
+* **-a** 查看所有分支
 ```bash
 
 ```
@@ -55,7 +55,9 @@ git push origin --tags  # 推送标签
 ## Submodule		
 ```bash
 git submodule add 
-git submodule foreach git pull  #更新所有submodule
+git submodule foreach git pull  			# 更新所有submodule
+
+git submodule update --init --recursive	 	# 下载子模块
 ```
 
 
@@ -67,7 +69,6 @@ git 切换远程代码库
 >.git/config	#方法3
 >```
 ```
-
 创建库
 >```bash
 touch README.md
@@ -84,29 +85,27 @@ git push -u origin master
 >```
 
 git 分支
->```bash
->git checkout -b iss53
->git push origin test:test  #提交本地test分支作为远程的test分支
->```
+```bash
+git checkout -b iss53
+git push origin test:test  #提交本地test分支作为远程的test分支
 ```
-
 关闭分支
->```bash
+```bash
 git checkout master
 git merge <branch-name>
 git branch -d <branch-name>
 ```
 
 删除不在git管理下的文件
->```bash
->git clean -nd #测试删除
->git clean -fd #真实删除
->```
+```bash
+git clean -nd #测试删除
+git clean -fd #真实删除
 ```
+
 
 导出不带版本的代码
 
->```bash
+```bash
 git archive master | bzip2 >source-tree.tar.bz2
 #ZIP archive:
 git archive --format zip --output /full/path/to/zipfile.zip master
@@ -116,33 +115,33 @@ git archive v1.0 gzip > source-tree.tgz
 
 迁出远程分支
 
->```bash
->git checkout -b <branch-name> <origin/branch_name>
->```
+```bash
+git checkout -b <branch-name> <origin/branch_name>
+```
 
 提交tag到服务器
 
->```bash
->git push --tags  
->```
->*push a single tag*
->
->```
->git push origin <tag_name>
->```
+```bash
+git push --tags  
+```
+*push a single tag*
+
+```
+git push origin <tag_name>
+```
 
 git如何删除本地所有未提交的更改（都可以使用
->```bash
->git reset
->git checkout .
->git clean -fdx
->```
->```bash
-> git checkout -- . #这条命令不会删除新增的文件
-> git checkout -f #这条命令不会删除新增的文件
-> git stash #新加的文件还在，但所有的修改都会抹去
-> git add . && git stash && git stash drop #至少不会影响 .gitignore 里面的不跟踪的文件
->```
+```bash
+git reset
+git checkout .
+git clean -fdx
+```
+```bash
+git checkout -- . #这条命令不会删除新增的文件
+git checkout -f #这条命令不会删除新增的文件
+git stash #新加的文件还在，但所有的修改都会抹去
+git add . && git stash && git stash drop #至少不会影响 .gitignore 里面的不跟踪的文件
+```
 
 修改最后一次提交的注释
 >```bas
