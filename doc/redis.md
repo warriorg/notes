@@ -62,6 +62,7 @@ keys *       	# 列出所有KEYS
 
 expire key seconds #设置超时时间
 ttl key 		# 返回具有超时的键的剩余生存时间。
+del key 		# 删除一个key
 
 flushdb     	# 清空当前数据库中的所有 key
 flushall    	# 清空所有数据的所有key

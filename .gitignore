@@ -2,3 +2,7 @@
 out
 .gradle
 .DS_Store
+.iml
+build/
+target/
+.DS_Store

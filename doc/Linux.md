@@ -37,7 +37,9 @@
 * **/var** 这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件
 * **/run** 是一个临时文件系统，存储系统启动以来的信息
 
-## 常用命令
+
+
+## 命令工具
 
 ### crontab 
 定时任务
@@ -457,12 +459,19 @@ wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://down
 ```
 
 ### Ubuntu
-```
+```bash
 update-manager # 升级系统 图形界面
 sudo do-release-upgrade  # 升级系统
 ```
+#### 启用root
+```bash
+sudo passwd root       # 设置密码
+su
+```
+
 
 ###Centos
+
 #### yum
 yum 的配置文件分为两部分：main 和repository
 
