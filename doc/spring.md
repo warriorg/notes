@@ -252,6 +252,9 @@ Spring MVC, Spring WebFlux, or Jersey
 * @EnableEurekaServer 启用Eureka服务器
 * @EnableDiscoveryClient  使应用程序能够使用DiscoveryClient 和 Ribbon库
 * @LoadBalanced 创建一个支持Ribbon的RestTemplate类
+* @EnableCiruitBreaker 为服务使用Hystrix
+* @HystrixCommand 使用Hystrix断路器包装方法
+* @EnableZuulProxy 注册成为 Zuul服务器
 
 ### 2
 #### 2.3 用Spring boot 和 Java构建微服务
