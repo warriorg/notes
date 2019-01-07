@@ -62,15 +62,14 @@ git submodule update --init --recursive	 	# 下载子模块
 
 
 git 切换远程代码库
-
->```bash
->git remote rm origin #方法1
->git remote set-url origin URL  #方法2
->.git/config	#方法3
->```
+```bash
+git remote rm origin #方法1
+git remote set-url origin URL  #方法2
+.git/config	#方法3
 ```
+
 创建库
->```bash
+```bash
 touch README.md
 git init
 git add README.md
@@ -80,17 +79,19 @@ git push -u origin master
 ```
 
 修改git仓库地址
->```bash
->git remote set-url origin http://114.55.148.240:10080/jinyi/bole-parking.git
->```
+```bash
+git remote set-url origin http://ip:port/jinyi/bole-parking.git
+```
 
 git 分支
 ```bash
 git checkout -b iss53
 git push origin test:test  #提交本地test分支作为远程的test分支
 ```
+
+```
 关闭分支
-```bash
+​```bash
 git checkout master
 git merge <branch-name>
 git branch -d <branch-name>
@@ -144,19 +145,18 @@ git add . && git stash && git stash drop #至少不会影响 .gitignore 里面�
 ```
 
 修改最后一次提交的注释
->```bas
->git commit --amend
->```
+```bas
+git commit --amend
 ```
 
 取消对文件的修改。还原到最近的版本，废弃本地做的修改
->```bash
->git checkout -- <file>
->```
+```bash
+git checkout -- <file>
+```
 
 解决冲突
 
->```bash
+```bash
 git mergetool -t diffmerge .
 ```
 
@@ -185,14 +185,13 @@ git mergetool -t diffmerge .
 
 
 回退到上一次提交的状态，按照某一次的commit完全反向的进行一次commit.(代码回滚到上个版本，并提交git)
->```bash
->git revert HEAD
->```
+```bash
+git revert HEAD
 ```
 
 解决git目录过大
 
-​```base
+```base
 git gc --prune=now  #运行 gc ，生成 pack 文件 --prune=now 表示对之前的所有提交做修剪，有的时候仅仅 gc 一下.git 文件就会小很多
 git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -3    #找出最大的三个文件 
 git rev-list --objects --all | grep c43a8da		#查看那些大文件究竟是谁（c43a8da 是上面大文件的hash码）
@@ -214,3 +213,13 @@ cat large-files.txt| awk '{print $2}' | tr '\n' ' '  >  large-files-inline.txt
 git filter-branch -f --prune-empty --index-filter "git rm -rf --cached --ignore-unmatch `cat large-files-inline.txt`" --tag-name-filter cat -- --all
 git push origin --force --all
 ```
+
+
+
+## 问题
+
+### fatal: refusing to merge unrelated histories
+```bash
+git pull origin master --allow-unrelated-histories 
+```
+

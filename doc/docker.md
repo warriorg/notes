@@ -136,7 +136,7 @@ docker logs --tail 1000 ihome-tomcat
 
 
 ##Listing containers
-``` bash
+```bash
 $ docker ps # Lists only running containers
 $ docker ps -a # Lists all containers
 ```
@@ -279,8 +279,7 @@ Cannot connect to the Docker daemon. Is the docker daemon running on this host?
 >*重启*
 
 在命令行直接启动
->`bash /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh`
->
+>` /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh`
 
 ### 改变docker存储位置
 You can change Docker's storage base directory (where container and images go) using the -g option when starting the Docker daemon.

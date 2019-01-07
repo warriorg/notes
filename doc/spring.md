@@ -1,7 +1,3 @@
-
-
-
-
 ### 控制反转（Inversion of Control，IoC）
 
 * 常见另一种叫法**依赖注入（Dependency Injection，DI）**, 还有一种叫法**依赖查找(Dependency Lookup)** 对象在被创建的时候，由IoC容器注入，对象的创建的控制权由IoC容器负责
@@ -128,6 +124,13 @@ bean(*Service) //Spring bean上的任何连接点(仅在Spring AOP中执行方�
 
 
 ## Spring Boot
+
+### 发布后启动
+```bash
+# 启动时指定环境变量
+java -jar xxx.jar --spring.profiles.active=prod
+```
+
 
 [Manual](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/)
 
