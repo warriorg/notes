@@ -189,6 +189,44 @@ git mergetool -t diffmerge .
 git revert HEAD
 ```
 
+#### 查看信息
+```bash
+git status  # 查看当前工作区状态(与暂存区对比，增加删除或修改)
+git log  # 显示当前分支的版本历史
+git log --stat  # 显示commit历史，以及每次commit发生变更的文件
+git log -S [keyword]  # 根据关键字搜索提交历史
+git log [tag] HEAD --pretty=format:%s  # 显示某个commit之后的变动，每个commit占据一行。我记得--pretty=online也行
+git log -p [file]  # 显示指定文件相关的每一个diff
+git log -5 --pretty --oneline  # 显示过去5次提交
+git shortlog -sn  # 显示所有提交过的用户，按提交次数排序
+git blame [file]  # 显示指定文件是什么人在什么时间修改过，这个blame很生动形象
+git diff  # 显示暂存区和工作区的差异
+git diff --cached [file]  # 显示暂存区和上一个commit的差异
+git diff HEAD  # 显示工作区与当前分支最新commit之间的差异
+git diff [first-branch]...[second-branch]  # 显示两次提交之间的差异
+git diff --shortstat "@{0 day agp}"  # 显示今天你写了多少航代码
+git show [commit]  # 显示某次提交的元数据和内容变化
+git show --name-only [commit]  # 显示某次提交发生变化的文件
+git show [commit]:[filename]  # 显示某次提交时，某个文件的内容
+git reflog  # 显示当前分支的最近几次提交
+```
+
+#### 撤销
+```bash
+git reset --hrad HEAD  # 撤销工作目录中所有未提交文件的修改内容
+git checkout HEAD <file>  # 撤销指定的未提交文件的修改内容
+git revert <commit>  # 撤销指定的提交
+git log --before="1 days"   # 退回到之前1天的版本
+git checkout [file]  # 恢复暂存区的指定文件到工作区
+git checkout [commit] [file]  # 恢复某个commit的指定文件到暂存区和工作区
+git checkout .  # 恢复暂存区的所有文件到工作区
+git reset [file]  # 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变
+git reset --hard  # 重置暂存区与工作区，与上一次commit保持一致
+git reset [commit]  # 重置当前分支的指针未指定commit，同时重置暂存区，但工作区不变
+git reset --hard [commit]  # 重置当前分支的HEAD未指定commit，同时重置暂存区和工作区，与指定commit一致
+git reset --keep [commit]  # 重置当前HEAD未指定commit，但保持暂存区和工作区不变
+```
+
 解决git目录过大
 
 ```base

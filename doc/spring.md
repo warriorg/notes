@@ -130,6 +130,15 @@ bean(*Service) //Spring bean上的任何连接点(仅在Spring AOP中执行方�
 # 启动时指定环境变量
 java -jar xxx.jar --spring.profiles.active=prod
 ```
+#### Linux start 脚本
+```bash
+nohup java -jar frameworkapi.jar --spring.config.local=E:/app/jg/application-test.yml --spring.profiles.active=test >/dev/null 2>&1 &
+echo $!>pid
+```
+#### Linux stop 脚本
+```bash
+kill `cat pid`
+```
 
 
 [Manual](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/)

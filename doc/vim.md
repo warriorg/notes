@@ -1,6 +1,4 @@
-
-
-Move
+#### Move
 
 ```bash
 h   move one character left
