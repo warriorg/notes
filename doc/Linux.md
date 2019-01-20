@@ -251,40 +251,14 @@ usermod -G groupname username  		#已有的用户增加工作组
  gpasswd -d A GROUP
  ```
 
- ## 网络
- ### DNS
-`/etc/resolv.conf`
+## 网络
+
+
 
 ### mtr
 比ping屌
 
-**CentOS**
 
-设置静态IP
-
-`vim /etc/sysconfig/network-scripts/ifcfg-ens33`
-
-```bash
-TYPE=Ethernet
-PROXY_METHOD=none
-BROWSER_ONLY=no
-BOOTPROTO=static  # 设置为static
-DEFROUTE=yes
-IPV4_FAILURE_FATAL=no
-IPV6INIT=yes
-IPV6_AUTOCONF=yes
-IPV6_DEFROUTE=yes
-IPV6_FAILURE_FATAL=no
-IPV6_ADDR_GEN_MODE=stable-privacy
-NAME=ens33
-UUID=5aa4d499-39ff-43dc-86c9-e049ec71e2bc
-DEVICE=ens33
-ONBOOT=yes			# 开机启动
-# 设置静态ip地址
-IPADDR=192.168.2.230		
-GATEWAY=192.168.2.1		
-NETMASK=255.255.255.0
-```
 
 #### 磁盘
 ```bash
@@ -470,9 +444,9 @@ su
 ```
 
 
-###Centos
+## Centos
 
-#### yum
+### yum
 yum 的配置文件分为两部分：main 和repository
 
 * main 部分定义了全局配置选项，整个yum 配置文件应该只有一个main。常位于/etc/yum.conf 中。
@@ -482,7 +456,7 @@ yum install epel-release  		# 增加epel源
 yum -y list java*   			# 搜索安装包
 ```
 
-#### 查看SELinux状态及关闭SELinux
+### 查看SELinux状态及关闭SELinux
 ```bash
 sestatus -v 			#如果SELinux status参数为enabled即为开启状态
 getenforce          	#也可以用这个命令检查 Permissive 零时关闭
@@ -496,6 +470,46 @@ setenforce 1 			#设置SELinux 成为enforcing模式
 SELINUX=enforcing	#开启
 SELINUX=disabled    #关闭
 ```
+
+### 主机名
+`/etc/sysconfig/network`
+```bash
+hostname=hostname
+```
+
+### DNS
+`/etc/resolv.conf`
+```bash
+DNS1=114.114.114.114
+```
+
+设置静态IP
+
+`vim /etc/sysconfig/network-scripts/ifcfg-ens33`
+
+```bash
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=static  # 设置为static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=5aa4d499-39ff-43dc-86c9-e049ec71e2bc
+DEVICE=ens33
+ONBOOT=yes			# 开机启动
+# 设置静态ip地址
+IPADDR=192.168.2.230		
+GATEWAY=192.168.2.1		
+NETMASK=255.255.255.0
+```
+
+
 
 ## tmux
 
