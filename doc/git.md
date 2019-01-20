@@ -59,6 +59,13 @@ git submodule foreach git pull  			# 更新所有submodule
 
 git submodule update --init --recursive	 	# 下载子模块
 ```
+## revert
+撤销某次操作，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容。
+
+## reset
+
+撤销某次提交，但是此次之后的修改都会被退回到暂存区。除了默认的 mixed 模式，还有 soft 和 hard 模式
+
 
 
 git 切换远程代码库

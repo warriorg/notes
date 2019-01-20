@@ -4,7 +4,7 @@ package com.warriorg.rs.ps;
 import java.util.concurrent.Flow;
 
 public class SimpleSubscriber implements Flow.Subscriber<Integer> {
-    
+
     /**
      * Method invoked prior to invoking any other Subscriber
      * methods for the given Subscription. If this method throws
