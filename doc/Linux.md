@@ -425,6 +425,13 @@ sudo ntpdate cn.pool.ntp.org        #命令更新时间
 localectl set-locale LANG=en_US.utf8
 ```
 
+### Font
+```bash
+fc-list							# fc-list查看已安装的字体
+fc-list :lang=zh				# 查看中文字体
+fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
+```
+
 ### wget
 
 ```bash
