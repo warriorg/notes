@@ -1,3 +1,9 @@
+# VS Code
+## 显示所有快捷键
+> CMD + k CMD + s
+
+
+# IntelliJ IDEA
 ## 注释
 
 ### 文件信息

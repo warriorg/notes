@@ -1,0 +1,13 @@
+
+
+dependencies {
+    compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
+    compile 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.10'
+}
+
+version=1.0
+
+sourceSets.main.resources {
+    srcDirs = ['src/main/java']
+    include '**/*.xml'
+}

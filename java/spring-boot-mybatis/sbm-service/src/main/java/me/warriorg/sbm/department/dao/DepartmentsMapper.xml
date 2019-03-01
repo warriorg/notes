@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dao.DepartmentsMapper">
+   <resultMap id="departmentsResultMap" type="me.warriorg.sbm.department.domain.Department">
+    <result column="dept_no" jdbcType="VARCHAR" property="deptNo" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+   </resultMap>
+</mapper>

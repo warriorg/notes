@@ -1,0 +1,24 @@
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+ext {
+    springfoxVersion = '2.9.2'
+
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+
+    compile "io.springfox:springfox-swagger2:$springfoxVersion"
+    compile "io.springfox:springfox-swagger-ui:$springfoxVersion"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+}
+
+configurations {
+    all {
+//        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}

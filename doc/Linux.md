@@ -92,6 +92,34 @@ ln -s abc cde 	# 建立abc 的软连接
 ln abc cde 		# 建立abc的硬连接，
 ```
 
+### &、ctrl + z、fg、bg、jobs、
+* **&** 后台执行命令
+* **ctrl + z** 将一个正在前台执行的命令放到后台，并且暂停
+* **jobs** 查看当前有多少在后台运行的命令
+* **fg** 将后台中的命令调至前台继续运行
+* **bg** 将一个在后台暂停的命令，变成继续执行
+```bash
+$ htop
+# 按下 ctrl+z htop 后台执行
+[1]+  Stopped                 htop
+$ jobs -l
+[1]+ 46989 Stopped                 htop
+$ bg
+[1]+ htop &
+
+[1]+  Stopped                 htop
+$ fg
+htop
+```
+
+### grep			
+```base
+$grep -5 'parttern' inputfile #打印匹配行的前后5行
+$grep -C 5 'parttern' inputfile #打印匹配行的前后5行
+$grep -A 5 'parttern' inputfile #打印匹配行的后5行
+$grep -B 5 'parttern' inputfile #打印匹配行的前5行
+```
+
 ### perf 
 
 分析cpu性能问题
@@ -139,35 +167,21 @@ $ vmstat 5 2
 ```
 
 * **r** 表示运行队列(就是说多少个进程真的分配到CPU)，我测试的服务器目前CPU比较空闲，没什么程序在跑，当这个值超过了CPU数目，就会出现CPU瓶颈了。这个也和top的负载有关系，一般负载超过了3就比较高，超过了5就高，超过了10就不正常了，服务器的状态很危险。top的负载类似每秒的运行队列。如果运行队列过大，表示你的CPU很繁忙，一般会造成CPU使用率很高。
-
 * **b** 表示阻塞的进程,这个不多说，进程阻塞。
-
 * **swpd** 虚拟内存已使用的大小，如果大于0，表示你的机器物理内存不足了，如果不是程序内存泄露的原因，那么你该升级内存了或者把耗内存的任务迁移到其他机器。
-
 * **free**   空闲的物理内存的大小，我的机器内存总共8G，剩余3415M。
-
 * **buff**   Linux/Unix系统是用来存储，目录里面有什么内容，权限等的缓存，我本机大概占用300多M
-
 * **cache** cache直接用来记忆我们打开的文件,给文件做缓冲，我本机大概占用300多M(这里是Linux/Unix的聪明之处，把空闲的物理内存的一部分拿来做文件和目录的缓存，是为了提高 程序执行的性能，当程序使用内存时，buffer/cached会很快地被使用。)
-
 * **si**  每秒从磁盘读入虚拟内存的大小，如果这个值大于0，表示物理内存不够用或者内存泄露了，要查找耗内存进程解决掉。我的机器内存充裕，一切正常。
-
 * **so**  每秒虚拟内存写入磁盘的大小，如果这个值大于0，同上。
-
-* **bi**  块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte，我本机上没什么IO操作，所以一直是0，但是我曾在处理拷贝大量数据(2-3T)的机器上看过可以达到140000/s，磁盘写入速度差不多140M每秒
-
+* **bi**  块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte，我本机上没什么IO操作，所以
+* 一直是0，但是我曾在处理拷贝大量数据(2-3T)的机器上看过可以达到140000/s，磁盘写入速度差不多140M每秒
 * **bo** 块设备每秒发送的块数量，例如我们读取文件，bo就要大于0。bi和bo一般都要接近0，不然就是IO过于频繁，需要调整。
-
 * **in** 每秒CPU的中断次数，包括时间中断
-
 * **cs** 每秒上下文切换次数，例如我们调用系统函数，就要进行上下文切换，线程的切换，也要进程上下文切换，这个值要越小越好，太大了，要考虑调低线程或者进程的数目,例如在apache和nginx这种web服务器中，我们一般做性能测试时会进行几千并发甚至几万并发的测试，选择web服务器的进程可以由进程或者线程的峰值一直下调，压测，直到cs到一个比较小的值，这个进程和线程数就是比较合适的值了。系统调用也是，每次调用系统函数，我们的代码就会进入内核空间，导致上下文切换，这个是很耗资源，也要尽量避免频繁调用系统函数。上下文切换次数过多表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，CPU没有充分利用，是不可取的。
-
 * **us** 用户CPU时间，我曾经在一个做加密解密很频繁的服务器上，可以看到us接近100,r运行队列达到80(机器在做压力测试，性能表现不佳)。
-
 * **sy** 系统CPU时间，如果太高，表示系统调用时间长，例如是IO操作频繁。
-
 * **id**  空闲 CPU时间，一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。
-
 * **wt** 等待IO CPU时间。
 
 ### pidstat
@@ -215,7 +229,7 @@ $ mpstat -P ALL 5
 $ pidstat -u 5 1
 ```
 
-## 用户设置
+### 用户设置
 
 adduser： 会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
 
@@ -251,33 +265,101 @@ usermod -G groupname username  		#已有的用户增加工作组
  gpasswd -d A GROUP
  ```
 
-## 网络
+### 网络
 
 
 
 ### mtr
 比ping屌
 
+###Supervisor 
+> 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
 
 
-#### 磁盘
+
+###查找被占用的端口					
+```bash
+lsof -i:8700 或者 lsof -i | grep 8700
+```
+
+###防火墙
+``` bash
+systemctl stop firewalld.service #停止firewall
+systemctl disable firewalld.service #禁止firewall开机启动
+systemctl enable iptables.service #设置防火墙开机启动
+systemctl restart iptables.service #重启防火墙使配置生效
+```
+
+###时间
+设置时区 
+```bash
+data -R  # 查看当前设置
+sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata
+sudo date -s    # 修改本地时间
+sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启后时区改变
+sudo ntpdate cn.pool.ntp.org        #命令更新时间
+```
+
+### 语言
+
+配置文件地址 **/etc/locale.conf**
+
+```bash
+# centos 设置语言
+localectl set-locale LANG=en_US.utf8
+```
+
+### Font
+```bash
+fc-list							# fc-list查看已安装的字体
+fc-list :lang=zh				# 查看中文字体
+fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
+```
+
+### wget
+
+```bash
+# 下载oracle jdk
+wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
+```
+
+### 磁盘
 ```bash
 fdisk -l
 mount /dev/vdb1 /mnt
 df -h
 ```
-##### 开机自动挂在
+#### 开机自动挂在
 `edit /etc/fstab`
 
 ```bash
 /dev/sda3      /mnt         ext4    defaults        1 1 
 ```
->*	第一列为设备号或该设备的卷标 	
->*	第二列为挂载点 	
->* 	第三列为文件系统 	
->*	第四列为文件系统参数 	
->*	第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
->*	第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
+*	第一列为设备号或该设备的卷标 	
+*	第二列为挂载点 	
+*	第三列为文件系统 	
+*	第四列为文件系统参数 	
+*	第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
+*	第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
+
+### 更改目录权限(不包含文件)
+`find Folder -type d -exec chmod 0777 {} +`
+
+### 查看各文件夹大小命令
+`du -h --max-depth=1`
+
+###查看进程，按内存从大到小
+
+`ps -e -o "%C : %p : %z : %a"|sort -k5 -nr`
+
+###查看进程，按CPU利用率从大到小排序
+`ps -e -o "%C : %p : %z : %a"|sort -nr`
+
+###查看剩余内存
+`free -m |grep "Mem" | awk "{print $2}"`
+
+###查看磁盘占用
+`df -h`
 
 ## SSH设置
 
@@ -357,89 +439,10 @@ interact
 expect eof
 
 ```
+### scp
+### sftp
 
-### grep			
-
-```base
-$grep -5 'parttern' inputfile #打印匹配行的前后5行
-$grep -C 5 'parttern' inputfile #打印匹配行的前后5行
-$grep -A 5 'parttern' inputfile #打印匹配行的后5行
-$grep -B 5 'parttern' inputfile #打印匹配行的前5行
-```
-
-#### 更改目录权限(不包含文件)
-`find Folder -type d -exec chmod 0777 {} +`
-
-#### 查看各文件夹大小命令
-`du -h --max-depth=1`
-
-####查看进程，按内存从大到小
-
-`ps -e -o "%C : %p : %z : %a"|sort -k5 -nr`
-
-####查看进程，按CPU利用率从大到小排序
-ps -e -o "%C : %p : %z : %a"|sort -nr
-
-####查看剩余内存
-
-free -m |grep "Mem" | awk "{print $2}"
-
-####查看磁盘占用
-
-df -h
-
-###Supervisor 
-> 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
-
-
-
-###查找被占用的端口					
-```bash
-lsof -i:8700 或者 lsof -i | grep 8700
-```
-
-###防火墙
-``` bash
-systemctl stop firewalld.service #停止firewall
-systemctl disable firewalld.service #禁止firewall开机启动
-systemctl enable iptables.service #设置防火墙开机启动
-systemctl restart iptables.service #重启防火墙使配置生效
-```
-
-###时间
-设置时区 
-```bash
-data -R  # 查看当前设置
-sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata
-sudo date -s    # 修改本地时间
-sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启后时区改变
-sudo ntpdate cn.pool.ntp.org        #命令更新时间
-```
-
-### 语言
-
-配置文件地址 **/etc/locale.conf**
-
-```bash
-# centos 设置语言
-localectl set-locale LANG=en_US.utf8
-```
-
-### Font
-```bash
-fc-list							# fc-list查看已安装的字体
-fc-list :lang=zh				# 查看中文字体
-fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
-```
-
-### wget
-
-```bash
-# 下载oracle jdk
-wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
-```
-
-### Ubuntu
+## Ubuntu
 ```bash
 update-manager # 升级系统 图形界面
 sudo do-release-upgrade  # 升级系统

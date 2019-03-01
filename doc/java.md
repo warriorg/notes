@@ -1,4 +1,21 @@
+```
+JavaBeans spec:
+getUrl/setUrl => property name: url
+getURL/setURL => property name: URL
+
+Jackson:
+getUrl/setUrl => property name: url
+getURL/setURL => property name: url
+
+Introspector.decapitalize() // 转换命名
+```
+
+
+
+
+
 ###jar
+
 ```bash
 jar xvf test.jar 			# 解压到当前目录
 jar cvf filename.jar a.class b.class    #压缩指定文件

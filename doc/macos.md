@@ -66,3 +66,15 @@ rm -rf ~/Library/Application Support/Code
 netstat -rn |grep default
 ```
 
+
+
+### 快捷键
+**Command-L** 功能和火狐的 F6 类似，聚焦到地址栏，直接修改内容。
+**Command-D** 在保存文件的时候，可以快速跳到桌面。
+
+
+
+
+### 软件
+
+* **OpenBoard** 白板
