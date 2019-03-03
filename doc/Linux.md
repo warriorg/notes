@@ -395,14 +395,14 @@ ssh username@localhost -p 10000
 
 ```bash
 ssh-keygen -t rsa
-# scp ~/.ssh/id_rsa.pub root@114.55.148.240:~
-scp -P 26611 /Users/warrior/id_rsa.pub  jinyi@114.55.148.240:/home/jinyi/id_rsa.pub
+# scp ~/.ssh/id_rsa.pub root@xxx.xxx.xxx.xxx:~
+scp -P 26611 /Users/warrior/id_rsa.pub  jinyi@xxx.xxx.xxx.xx:/home/jinyi/id_rsa.pub
 #remote
 cat id_rsa.pub >>~/.ssh/authorized_keys
 /etc/init.d/ssh restart
 
 #连接
-ssh -i ~/.ssh/id_rsa root@114.55.148.240
+ssh -i ~/.ssh/id_rsa root@xxx.xxx.xxx.xxx
 
 #edit /etc/ssh/ssh_config
 #增加
@@ -441,6 +441,9 @@ expect eof
 ```
 ### scp
 ### sftp
+### sshfs
+
+挂载远程目录到本地
 
 ## Ubuntu
 ```bash
