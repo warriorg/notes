@@ -119,6 +119,17 @@ $grep -C 5 'parttern' inputfile #打印匹配行的前后5行
 $grep -A 5 'parttern' inputfile #打印匹配行的后5行
 $grep -B 5 'parttern' inputfile #打印匹配行的前5行
 ```
+### tar
+```bash
+unzip filename.zip			# 解压zip
+tar -zxvf filename.tar.gz	# 解压tar.gz
+tar -jxvf filename.tar.bz2  # 解压tar.bz2
+tar -Jxvf filename.tar.xz 	# 解压tar.xz
+tar -Zxvf filename.tar.Z    # 解压tar.Z
+
+# 1.15 版本开始tar可以自动识别版本
+tar -xvf filename.tar.bz2
+```
 
 ### perf 
 
@@ -361,6 +372,17 @@ df -h
 ###查看磁盘占用
 `df -h`
 
+
+
+## 其它命令
+
+### tldr 
+一个简洁的社区驱动的帮助手册
+### autojump
+一键直达
+
+
+
 ## SSH设置
 
 ```bash
@@ -520,6 +542,23 @@ ONBOOT=yes			# 开机启动
 IPADDR=192.168.2.230		
 GATEWAY=192.168.2.1		
 NETMASK=255.255.255.0
+```
+
+```bash
+systemctl restart network  # 重启网络,使设置生效
+```
+
+### 升级vim
+```bash
+yum install ncurses-devel
+wget https://github.com/vim/vim/archive/master.zip
+unzip master.zip
+cd vim-master
+cd src/
+./configure
+make
+sudo make install
+vim
 ```
 
 

@@ -12,7 +12,11 @@
 * FileSystemXmlapplicationcontext：从文件系统下的一个或多个XML配置文件中加载上下文定义。 
 * XmlWebApplicationContext：从Web应用下的一个或多个XML配置文件中加载上下文定义。
 
+### Bean
+[Spring Bean Init](../uml/Spring Bean Init.pu)
+
 ## Web MVC
+
 ### DispatcherServlet
 #### interception
 

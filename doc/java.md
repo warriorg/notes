@@ -1,3 +1,14 @@
+## 基础理论
+**DO**（Data Object）与数据库表结构一一对应，通过 DAO 层向上传输数据源对象。
+**DTO**（Data Transfer Object）是远程调用对象，它是 RPC 服务提供的领域模型。
+> 对于 DTO 一定要保证其序列化，实现 Serializable 接口，并显示提供 serialVersionUID，否则在反序列化时，如果 serialVersionUID 被修改，那么反序列化会失败。
+
+**BO**（Business Object）是业务逻辑层封装业务逻辑的对象，一般情况下，它是聚合了多个数据源的复合对象。
+**DTO**（View Object） 通常是请求处理层传输的对象，它通过 Spring 框架的转换后，往往是一个 JSON 对象。
+
+
+
+
 ```
 JavaBeans spec:
 getUrl/setUrl => property name: url
@@ -9,10 +20,6 @@ getURL/setURL => property name: url
 
 Introspector.decapitalize() // 转换命名
 ```
-
-
-
-
 
 ###jar
 
