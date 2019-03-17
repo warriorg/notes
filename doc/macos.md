@@ -52,8 +52,39 @@ brew instal wakeonlan
 wakeonlan 00:11:32:49:00:FB
 ```
 
-### 显示所有隐藏文件
-`Command+Shift+.`
+### macos 命令行安装 ipa
+
+[ideviceinstaller](https://github.com/libimobiledevice/ideviceinstaller) 
+> 使用这个开源项目可以在macos下安装app
+
+```bash
+brew install ideviceinstaller			
+# 使用 brew 安装 ideviceinstaller
+idevice_id -l 
+# 查看链接的设备id
+ideviceinstaller -l
+# 获取设备上所有app的bundle id
+ideviceinstaller -i demo.ipa
+# 安装app到iphone
+ideviceinstaller -u appBundle_id
+# 卸载
+
+```
+
+安装后， 运行 `ideviceinstaller -i demo.ipa` 出现 `Could not connect to lockdownd. Exiting.` 这个，可以看看这个 [issues](https://github.com/libimobiledevice/ideviceinstaller/issues/48)
+
+我使用下面这个方式成功解决
+
+```bash
+brew uninstall ideviceinstaller
+brew uninstall libimobiledevice
+brew install --HEAD libimobiledevice
+brew link --overwrite libimobiledevice
+brew install --HEAD  ideviceinstaller
+brew link --overwrite ideviceinstaller
+sudo chmod -R 777 /var/db/lockdown/
+```
+
 
 ### 重装vscode
 ```bash
@@ -66,13 +97,10 @@ rm -rf ~/Library/Application Support/Code
 netstat -rn |grep default
 ```
 
-
-
 ### 快捷键
 **Command-L** 功能和火狐的 F6 类似，聚焦到地址栏，直接修改内容。
 **Command-D** 在保存文件的时候，可以快速跳到桌面。
-
-
+**Command+Shift+.** 显示所有隐藏文件
 
 
 ### 软件

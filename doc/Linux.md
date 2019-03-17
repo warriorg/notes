@@ -41,8 +41,26 @@
 
 ## 命令工具
 
-### crontab 
-定时任务
+### crontab 定时
+ **/etc/crontab** 配置文件
+
+```bash
+0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的脚本
+```
+
+
+
+### tail 
+命令从指定点开始将文件写到标准输出.使用tail命令的-f选项可以方便的查阅正在改变的日志文件,tail -f filename会把filename里最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容. 
+
+```bash
+tail notes  				# 显示 notes 文件的最后 10 行
+tail -20 notes				# 指定从 notes 文件结尾开始读取的行数
+tail -c +200 notes | pg		# 第 200 字节开始一次一页地显示 notes 文件
+tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 notes 文件时，tail 命令会继续显示这些行。 显示一直继续，直到您按下（Ctrl-C）组合键停止显示。
+```
+
+
 
 ### uname 
 显示内核信息
@@ -68,6 +86,9 @@ load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5�
 ```
 
 ### netstat
+
+`yum install -y net-tools` 
+
 ```bash
 netstat -ltnp  			# 列出端口	
 ```
@@ -507,9 +528,8 @@ SELINUX=disabled    #关闭
 ```
 
 ### 主机名
-`/etc/sysconfig/network`
 ```bash
-hostname=hostname
+hostnamectl set-hostname hostname # centos 7
 ```
 
 ### DNS
@@ -561,7 +581,40 @@ sudo make install
 vim
 ```
 
+### 防火墙
 
+#### 关闭防火墙
+
+```bash
+systemctl stop firewalld.service           # 停止firewall
+systemctl disable firewalld.service        # 禁止firewall开机启动
+```
+
+#### 开启端口
+
+```bash
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+```
+* **--zone**  作用域
+*  **--add-port=80/tcp**  添加端口，格式为：端口/通讯协议
+*  **--permanent** 永久生效，没有此参数重启后失效
+
+#### 常用命令
+
+```bash
+firewall-cmd --list-all						   # 检查新的防火墙规则
+firewall-cmd --state                           ##查看防火墙状态，是否是running
+firewall-cmd --reload                          ##重新载入配置，比如添加规则之后，需要执行此命令
+firewall-cmd --get-zones                       ##列出支持的zone
+firewall-cmd --get-services                    ##列出支持的服务，在列表中的服务是放行的
+firewall-cmd --query-service ftp               ##查看ftp服务是否支持，返回yes或者no
+firewall-cmd --add-service=ftp                 ##临时开放ftp服务
+firewall-cmd --add-service=ftp --permanent     ##永久开放ftp服务
+firewall-cmd --remove-service=ftp --permanent  ##永久移除ftp服务
+firewall-cmd --add-port=80/tcp --permanent     ##永久添加80端口 
+iptables -L -n                                 ##查看规则，这个命令是和iptables的相同的
+man firewall-cmd                               ##查看帮助
+```
 
 ## tmux
 
@@ -781,9 +834,9 @@ mkdir -p $OUT_DIR/$DATE
 # 备份数据库
 $DUMP -d cws -o $OUT_DIR/$DATE
 # 压缩
-tar -zcvf $TAR_DIR/$TAR_BAK $DATE
-# 删除30天前的备份文件
-find $TAR_DIR/ -mtime + $DAYS -delete
+tar -zcvf $TAR_DIR/$TAR_BAK $OUT_DIR/$DATE
+# 删除30天前的备份文件 注意+号的位置
+find $TAR_DIR/ -mtime +$DAYS -delete
 
 exit
 ```

@@ -4,9 +4,9 @@
 # mongodump命令路径
 DUMP=mongodump
 # 临时备份目录
-OUT_DIR=/Users/warrior/Downloads/data/backup/mongodb/now
+OUT_DIR=/Users/xxxxx/Downloads/data/backup/mongodb/now
 # 备份存放路径
-TAR_DIR=/Users/warrior/Downloads/data/backup/mongodb/
+TAR_DIR=/Users/xxxxx/Downloads/data/backup/mongodb/
 # 获取当前系统时间
 DATE=`date +%Y_%m_%d_%H_%M`
 # 数据库账号
@@ -30,7 +30,7 @@ mkdir -p $OUT_DIR/$DATE
 # 备份数据库
 $DUMP -d cws -o $OUT_DIR/$DATE
 # 压缩
-tar -zcvf $TAR_DIR/$TAR_BAK $DATE
+tar -zcvf $TAR_DIR/$TAR_BAK $OUT_DIR/$DATE
 # 删除30天前的备份文件
 find $TAR_DIR/ -mtime + $DAYS -delete
 
