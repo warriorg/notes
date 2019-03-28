@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.warriorg.dao.AdvertMapper" >
+  <resultMap id="BaseResultMap" type="me.warriorg.pojo.Advert" >
+    <id column="ad_id" property="adId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+    <result column="valid" property="valid" jdbcType="VARCHAR" />
+    <result column="ontime" property="ontime" jdbcType="TIMESTAMP" />
+    <result column="offtime" property="offtime" jdbcType="TIMESTAMP" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_id" property="updateId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="bak1" property="bak1" jdbcType="VARCHAR" />
+    <result column="bak2" property="bak2" jdbcType="VARCHAR" />
+    <result column="bak3" property="bak3" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_ad
+    where ad_id = #{adId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="me.warriorg.pojo.Advert" >
+    insert into tb_ad (ad_id, title, url, 
+      pic, sort, valid, ontime, 
+      offtime, category_id, create_id, 
+      create_time, update_id, update_time, 
+      is_delete, status, bak1, bak2, 
+      bak3)
+    values (#{adId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{pic,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, #{valid,jdbcType=VARCHAR}, #{ontime,jdbcType=TIMESTAMP}, 
+      #{offtime,jdbcType=TIMESTAMP}, #{categoryId,jdbcType=INTEGER}, #{createId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+      #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="me.warriorg.pojo.Advert" >
+    update tb_ad
+    set title = #{title,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      valid = #{valid,jdbcType=VARCHAR},
+      ontime = #{ontime,jdbcType=TIMESTAMP},
+      offtime = #{offtime,jdbcType=TIMESTAMP},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      create_id = #{createId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where ad_id = #{adId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select ad_id, title, url, pic, sort, valid, ontime, offtime, category_id, create_id, 
+    create_time, update_id, update_time, is_delete, status, bak1, bak2, bak3
+    from tb_ad
+    where ad_id = #{adId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ad_id, title, url, pic, sort, valid, ontime, offtime, category_id, create_id, 
+    create_time, update_id, update_time, is_delete, status, bak1, bak2, bak3
+    from tb_ad
+  </select>
+</mapper>

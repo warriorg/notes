@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.warriorg.dao.AdvertCateMapper" >
+  <resultMap id="BaseResultMap" type="me.warriorg.pojo.AdvertCate" >
+    <id column="ad_category_id" property="adCategoryId" jdbcType="INTEGER" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="groupname" property="groupname" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_id" property="updateId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
+    <result column="bak1" property="bak1" jdbcType="VARCHAR" />
+    <result column="bak2" property="bak2" jdbcType="VARCHAR" />
+    <result column="bak3" property="bak3" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_ad_category
+    where ad_category_id = #{adCategoryId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="me.warriorg.pojo.AdvertCate" >
+    insert into tb_ad_category (ad_category_id, category_name, groupname, 
+      code, status, create_id, 
+      create_time, update_id, update_time, 
+      is_delete, bak1, bak2, 
+      bak3)
+    values (#{adCategoryId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{groupname,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=CHAR}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+      #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="me.warriorg.pojo.AdvertCate" >
+    update tb_ad_category
+    set category_name = #{categoryName,jdbcType=VARCHAR},
+      groupname = #{groupname,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where ad_category_id = #{adCategoryId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select ad_category_id, category_name, groupname, code, status, create_id, create_time, 
+    update_id, update_time, is_delete, bak1, bak2, bak3
+    from tb_ad_category
+    where ad_category_id = #{adCategoryId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ad_category_id, category_name, groupname, code, status, create_id, create_time, 
+    update_id, update_time, is_delete, bak1, bak2, bak3
+    from tb_ad_category
+  </select>
+</mapper>

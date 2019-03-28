@@ -214,3 +214,33 @@ q := QuoteToASCII("Hello, 世界")
 * 嵌入类型提供了扩展类型的能力，而无需使用继承。
 * 标识符要么是从包里公开的，要么是在包里未公开的。
 
+## modules
+
+```bash
+download    download modules to local cache
+edit        edit go.mod from tools or scripts
+graph       print module requirement graph
+init        initialize new module in current directory
+tidy        add missing and remove unused modules
+vendor      make vendored copy of dependencies
+verify      verify dependencies have expected content
+why         explain why packages or modules are needed
+```
+
+```bash
+go mod init moduleName # 初始化go.mod
+go list -m -json all  # -json JSON格式显示 all 显示全部库
+```
+
+### go.mod
+
+```bash
+module cws
+
+require (
+    github.com/warriorg/cron v1.0.0
+    github.com/fatih/color v1.7.0 // indirect
+)
+```
+
+
