@@ -111,3 +111,18 @@ firewall-cmd --list-all  # 检查配置
 ./zkServer.sh status
 ```
 
+### zkCli
+
+```bash
+zkCli.sh -server 127.0.0.1:2181 								# 连接服务器
+ls /              															# 查看当前节点数据
+ls2 /             															# 查看当前节点数据并能看到更新次数等数据
+ls /dubbo/me.warriorg.service.CategoryService/consumers		# 查看dubbo的消费之
+create /config "test" 													# 创建一个新的节点并设置关联值
+create /config “”     													# 创建一个新的空节点
+get /brokers      															# 获取节点内容
+set /zk "zkbak"   															# 对 zk 所关联的字符串进行设置
+delete /brokers  																# 删除节点
+rmr    /brokers  																# 删除节点及子节点
+```
+

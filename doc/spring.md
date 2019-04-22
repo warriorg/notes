@@ -248,6 +248,17 @@ Spring MVC, Spring WebFlux, or Jersey
 - security.user.password 默认的用户密码.
 - security.user.role 默认用户的授权角色.
 
+## Spring Cloud 
+
+### 版本说明
+
+Finchley 与 Spring Boot 2.0.x, 兼容，不支持 Spring Boot 1.5.x. 
+Dalston 和 Edgware 与 Spring Boot 1.5.x, 兼容，不支持 Spring Boot 2.0.x. 
+Camden 是构建在 Spring Boot 1.4.x, 之上，但也支持 1.5.x. 
+Brixton 是构建在 Spring Boot 1.3.x, 之上，但也支持 1.4.x. 
+Angel 是构建在 Spring Boot 1.2.x, 之上，但也兼容 Spring Boot 1.3.x. 
+* 注意: Angel 和 Brixton 两个版本已于2017年7月终止不再进行维护。
+
 
 
 ## Spring Microservices IN ACTION

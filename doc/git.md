@@ -1,3 +1,20 @@
+## 配置
+
+```bash
+git config --global user.name 'your name'
+git config --global user.email 'your email'
+```
+
+### config 作用域
+
+* `--config`  项目级
+* `--global` 用户级
+* `--system` 系统级
+
+```bash
+git config --list 				# 查看配置
+```
+
 ## clone
 
 ```bash

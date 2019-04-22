@@ -1,3 +1,5 @@
+## 基础操作
+
 #### Move
 
 ```bash
@@ -149,3 +151,48 @@ ddp                      # 上下两行的位置交换
 ```bash 
 :w !sudo tee %   # 强行保存文件
 ```
+
+## vimdiff
+
+### 使用vimdiff作为git mergetool
+
+#### 设置 git mergetool 为 vimdiff
+
+```bash
+git config --global merge.tool vimdiff
+git config --global merge.conflictstyle diff3
+git config --global mergetool.prompt false
+```
+
+#### 用vimdiff解决合并冲突
+
+运行`git mergetool`，vim将展示如下
+
+```
++--------------------------------+
+| LOCAL  |     BASE     | REMOTE |
++--------------------------------+
+|             MERGED             |
++--------------------------------+
+```
+
+![git_vimdiff](./assets/images/git_vimdiff.png)
+
+移动光标到不同的split
+
+```
+Ctrl w + h   # move to the split on the left 
+Ctrl w + j   # move to the split below
+Ctrl w + k   # move to the split on top
+Ctrl w + l   # move to the split on the right
+```
+
+移动到`MERGED`文件上（Ctrl + w, j）,移动光标到一个合并冲突的区域(`[c` 或`]c`)，然后：
+
+```
+:diffg RE  " get from REMOTE
+:diffg BA  " get from BASE
+:diffg LO  " get from LOCAL
+```
+
+最后使用:wqa保存更改并关闭所有的分割

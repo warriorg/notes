@@ -68,6 +68,24 @@
 
 
 
+## 常用技巧
+
+**ctrl + u** 清除当前输入的命令
+
+**ctrl + k** 删除从光标开始处到结尾的命令文本
+
+**ctrl + a** 光标移动到命令开头
+
+**ctrl + e ** 光标移动到命令结尾
+
+**alt + f** 光标向后移动一个单词
+
+**alt + b** 光标向前移动一个单词
+
+**ctrl + w** 删除一个词(以空格开始的字符串)
+
+**ctrl + r** 搜索执行过的命令
+
 ## 命令工具
 
 ### 用户管理
@@ -149,7 +167,14 @@
 
 
 
+### head
+
+显示文件的头n行 ，默认10行
+
 ### tail 
+
+显示文件的尾n行，默认10行
+
 命令从指定点开始将文件写到标准输出.使用tail命令的-f选项可以方便的查阅正在改变的日志文件,tail -f filename会把filename里最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容. 
 
 ```bash
@@ -160,6 +185,16 @@ tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 n
 ```
 
 
+
+### wc
+
+统计制定文件中的字节数，字数，行数, 缺省参数 -lcw
+
+**-l** 统计行数
+
+**-w** 统计字数
+
+**-c** 统计字节数
 
 ### uname 
 显示内核信息
@@ -195,10 +230,11 @@ netstat -ltnp  			# 列出端口
 ### ps
 ```bash
 ps -aef
+ps -aux | sort -k4nr | head -n 10  # 查看内存占用10的进程
 ```
 ### ln
 
-* 硬链接(Hard Link) 硬链接说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
+* 硬链接(Hard Link) 说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
 ```bash
 ln [options] existingfile newfile	# sexistingfile 待建立链接文件的文件，newfile是新创建的链接文件
 ln [options] existingfile-list directory
@@ -239,7 +275,60 @@ $grep -C 5 'parttern' inputfile #打印匹配行的前后5行
 $grep -A 5 'parttern' inputfile #打印匹配行的后5行
 $grep -B 5 'parttern' inputfile #打印匹配行的前5行
 ```
+### xargs
+
+通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数
+
+```bash
+echo '--help' | xargs ls
+```
+
+### awk
+
+#### 语法
+
+```bash
+awk '{pattern + action}' {filenames}
+```
+
+#### 内建变量
+
+| 变量        | 描述                                                       |
+| :---------- | :--------------------------------------------------------- |
+| $n          | 当前记录的第n个字段，字段间由FS分隔                        |
+| $0          | 完整的输入记录                                             |
+| ARGC        | 命令行参数的数目                                           |
+| ARGIND      | 命令行中当前文件的位置(从0开始算)                          |
+| ARGV        | 包含命令行参数的数组                                       |
+| CONVFMT     | 数字转换格式(默认值为%.6g)ENVIRON环境变量关联数组          |
+| ERRNO       | 最后一个系统错误的描述                                     |
+| FIELDWIDTHS | 字段宽度列表(用空格键分隔)                                 |
+| FILENAME    | 当前文件名                                                 |
+| FNR         | 各文件分别计数的行号                                       |
+| FS          | 字段分隔符(默认是任何空格)                                 |
+| IGNORECASE  | 如果为真，则进行忽略大小写的匹配                           |
+| NF          | 一条记录的字段的数目                                       |
+| NR          | 已经读出的记录数，就是行号，从1开始                        |
+| OFMT        | 数字的输出格式(默认值是%.6g)                               |
+| OFS         | 输出记录分隔符（输出换行符），输出时用指定的符号代替换行符 |
+| ORS         | 输出记录分隔符(默认值是一个换行符)                         |
+| RLENGTH     | 由match函数所匹配的字符串的长度                            |
+| RS          | 记录分隔符(默认是一个换行符)                               |
+| RSTART      | 由match函数所匹配的字符串的第一个位置                      |
+| SUBSEP      | 数组下标分隔符(默认值是/034)                               |
+
+####  基本用法
+
+awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。awk有3个不同版本: awk、nawk和gawk，未作特别说明，一般指gawk，gawk 是 AWK 的 GNU 版本。
+
+```bash
+ps -ef | grep 'java' | awk '{print $1}' | xargs kill
+```
+
+
+
 ### tar
+
 ```bash
 unzip filename.zip			# 解压zip
 tar -zxvf filename.tar.gz	# 解压tar.gz
@@ -883,21 +972,52 @@ bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
 
 
 
-## Script
+## Bash Script
 
-### JAVA Application start
+### 注意
+* 如果 shell 不是交互式的，则不会展开别名，除非使用 `shopt` 设置 `expand_aliases` shell 选项。
+
+### 基础
+
+#### **shopt**
+
+用于显示和设置shell中的行为选项，通过这些选项以增强shell易用性。shopt命令若不带任何参数选项，则可以显示所有可以设置的shell操作选项。
+
+**-s** 激活指定的shell行为选项；
+
+**-u** 关闭指定的shell行为选项。
+
+```bash
+shopt           #输出所有可以设置的shell操作选项
+cdable_vars     off
+cdspell         off
+checkhash       off
+checkwinsize    on
+cmdhist         on
+dotglob         off
+execfail        off
+expand_aliases  on
+extdebug        off
+...
+```
+
+
+
+### 实战
+
+#### JAVA Application start
 
 ```bash
 nohup java -jar frameworkapi.jar --spring.config.local=E:/app/jg/application-test.yml --spring.profiles.active=test >/dev/null 2>&1 &
 echo $!>pid
 ```
 
-### JAVA Application stop
+#### JAVA Application stop
 ```bash 
 kill `cat pid`
 ```
 
-### 自动备份mongodb
+#### 自动备份mongodb
 [mongodb_back.sh](assets/files/mongodb_backup.sh)
 
 ```bash

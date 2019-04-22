@@ -1,5 +1,7 @@
 ## 安装
 
+
+
 ##常用命令
 ```bash
 #运行一个容器
@@ -247,3 +249,7 @@ Using a symlink is another method to change image storage.
 6. Take a peek at the directory structure to make sure it looks like it did before the mv: `ls /var/lib/docker/` (note the trailing slash to resolve the symlink)
 7. Start docker back up `service docker start`
 8. restart your containers
+
+
+
+## [Kubernetes](kubernetes.md)

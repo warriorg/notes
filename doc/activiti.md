@@ -2,8 +2,6 @@
 
 > 以任务（Task）的形式驱动人处理业务或者驱动业务系统自动完成作业。
 
-
-
 # 介绍
 
 * BPM(Business Process Management)  业务流程管理 

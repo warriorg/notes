@@ -1,19 +1,19 @@
-安装        
+## 安装        
 ```bash
 brew install node  #macos 下安装
 ```
 
-更换NPM镜像
+### 更换NPM镜像
 
 ```bash
 npm config set registry https://registry.npm.taobao.org
 ```
 
-设置代理
+### 设置代理
 
 `npm config set proxy http://127.0.0.1:1087`
 
-移除带来
+### 移除代理
 
 ````bash
 npm config delete http-proxy
@@ -24,9 +24,14 @@ npm config rm https-proxy
 
 set HTTP_PROXY=null
 set HTTPS_PROXY=null
-``
 ````
 
+### npm 命令
 
+```bash
+npm root -g  # 查看全局包位置
+npm config set prefix '目标目录'  # 修改全局包位置 
+npm uninstall -g xxx   # 卸载命令 
+```
 
 Webpack4 和 Babel

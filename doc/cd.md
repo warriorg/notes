@@ -16,18 +16,18 @@ docker run -d --name jenkins -p 3080:8080 -p 50000:50000 -v /mnt/jenkins/:/var/j
 安装 git、 PostBuildScript
 进入Global Tool Configuration设置，安装java，安装gradle，
 
-![image](images/cd-java.png)
-![image](images/cd-git.png)
-![image](images/cd-gradle.png)
+![image](./assets/images/cd-java.png)
+![image](./assets/images/cd-git.png)
+![image](./assets/images/cd-gradle.png)
 
 新建job
 
-![image](images/cd-newjob.png)
+![image](./assets/images/cd-newjob.png)
 配置job
-![image](images/cd-job-git.png)
-![image](images/cd-job-token.png)
-![image](images/cd-job-gradle.png)
-![image](images/cd-job-build.png)
+![image](./assets/images/cd-job-git.png)
+![image](./assets/images/cd-job-token.png)
+![image](./assets/images/cd-job-gradle.png)
+![image](./assets/images/cd-job-build.png)
 
 ```bash
 mv /var/jenkins_home/workspace/ihome/ihome-api/build/libs/ihome-1.0.war  /usr/tomcat/webapp/ihome.war
