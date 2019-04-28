@@ -1,5 +1,41 @@
-## 安装
+## 基础知识
 
+**容器** 一种沙盒技术
+
+### Namespace
+
+Docker 和虚拟机技术一样，从操作系统级上实现了资源的隔离，它本质上是宿主机上的进程（容器进程），所以资源隔离主要就是指进程资源的隔离。实现资源隔离的核心技术就是 Linux namespace。
+
+隔离意味着可以抽象出多个轻量级的内核（容器进程），这些进程可以充分利用宿主机的资源，宿主机有的资源容器进程都可以享有，但彼此之间是隔离的，同样，不同容器进程之间使用资源也是隔离的，这样，彼此之间进行相同的操作，都不会互相干扰，安全性得到保障。
+
+为了支持这些特性，Linux namespace 实现了 6 项资源隔离，基本上涵盖了一个小型操作系统的运行要素，包括主机名、用户权限、文件系统、网络、进程号、进程间通信。
+
+| 名称    | 宏定义        | 隔离内容                                                     | 发布版本                                           |
+| ------- | ------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| IPC     | CLONE_NEWIPC  | System V IPC, POSIX message queues                           | since Linux 2.6.19                                 |
+| Network | CLONE_NEWNET  | network device interfaces, IPv4 and IPv6 protocol stacks, IP routing tables, firewall rules, the /proc/net and /sys/class/net directory trees, sockets, etc | since Linux 2.6.24                                 |
+| Mount   | CLONE_NEWNS   | Mount points                                                 | since Linux 2.4.19                                 |
+| PID     | CLONE_NEWPID  | Process IDs                                                  | since Linux 2.6.24                                 |
+| User    | CLONE_NEWUSER | User and group IDs                                           | started in Linux 2.6.23 and completed in Linux 3.8 |
+| UTS     | CLONE_NEWUTS  | Hostname and NIS domain name                                 | since Linux 2.6.19                                 |
+
+这 6 项资源隔离分别对应 6 种系统调用，通过传入上表中的参数，调用 clone() 函数来完成。
+
+```
+int clone(int (*child_func)(void *), void *child_stack, int flags, void *arg);
+```
+
+clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实现方式，通过调用 clone()，并传入需要隔离资源对应的参数，就可以建立一个容器了（隔离什么我们自己控制）。
+
+一个容器进程也可以再 clone() 出一个容器进程，这是容器的嵌套。
+
+### Cgroups
+
+
+
+
+
+## 安装
 
 
 ##常用命令
@@ -27,6 +63,11 @@ docker rmi -f imageid
 
 #列出最新的1000条日志
 docker logs --tail 1000 ihome-tomcat
+
+# remove all containers
+docker rm $(docker ps -all -q)
+# remove all image
+docker rmi $(docker image ls -q)
 
 ```
 
