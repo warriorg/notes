@@ -6,6 +6,16 @@
 
 ## [Usage](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_usage)
 
+| Configuration name   | Role                                     | Consumable? | Resolvable? | Description                                                  |
+| :------------------- | :--------------------------------------- | :---------- | :---------- | :----------------------------------------------------------- |
+| api                  | Declaring API dependencies               | no          | no          | This is where you should declare dependencies which are transitively exported to consumers, for compile. |
+| implementation       | Declaring implementation dependencies    | no          | no          | This is where you should declare dependencies which are purely internal and not meant to be exposed to consumers. |
+| `compileOnly`        | Declaring compile only dependencies      | yes         | yes         | This is where you should declare dependencies which are only required at compile time, but should not leak into the runtime. This typically includes dependencies which are shaded when found at runtime. |
+| `runtimeOnly`        | Declaring runtime dependencies           | no          | no          | This is where you should declare dependencies which are only required at runtime, and not at compile time. |
+| `testImplementation` | Test dependencies                        | no          | no          | This is where you should declare dependencies which are used to compile tests. |
+| `testCompileOnly`    | Declaring test compile only dependencies | yes         | yes         | This is where you should declare dependencies which are only required at test compile time, but should not leak into the runtime. This typically includes dependencies which are shaded when found at runtime. |
+| `testRuntimeOnly`    | Declaring test runtime dependencies      | no          | no          | This is where you should declare dependencies which are only required at test runtime, and not at test compile time. |
+
 ### implementation
 
  编译项目的生产源所需的依赖项，这些依赖项不是项目公开的API的一部分。 例如，该项目使用Hibernate进行内部持久层实现。

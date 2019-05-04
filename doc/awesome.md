@@ -36,6 +36,16 @@ ELK(ElasticSearch, Logstash, Kibana)日志分析
 ### etcd 
 >是一个用于共享配置和服务发现的高可用的键值存储系统，使用Go语言编写，通过Raft来保证一致性，有基于HTTP+JSON的API接口。etcd也是一个强一致性系统，但是etcd似乎支持从non-leaders中读取数据以提高可用性；另外，写操作仍然需要leader的支持，所以在网络分区时，写操作仍可能失败。
 
+### [nacos](https://github.com/alibaba/nacos)
+一个易于使用的动态服务发现、配置和服务管理平台，用于构建云本地应用程序
+
+
+### [apollo](https://github.com/ctripcorp/apollo)
+
+Apollo（阿波罗）是携程框架部门研发的分布式配置中心，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，适用于微服务配置管理场景。
+
+
+
 ## 自动化
 [jenkins](https://jenkins-ci.org/) 自动构建工具
 
@@ -65,7 +75,9 @@ SSH [沃通](https://www.wosign.com/)
 [Karabiner](https://pqrs.org/osx/karabiner/)
 >*键盘映射工具*
 
-=====
+### dbeaver 
+
+数据库工具
 
 ###播放器
 [VLC](http://www.videolan.org/vlc/index.html)

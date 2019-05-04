@@ -196,3 +196,19 @@ Ctrl w + l   # move to the split on the right
 ```
 
 最后使用:wqa保存更改并关闭所有的分割
+
+## 源码阅读
+
+### ctags
+
+```bash
+# .vimrc  亲测可以不需要设置
+set tags=./tags,./TAGS,tags;~,TAGS;~
+```
+
+进入代码目录执行
+
+```bash
+ctags -R 					# 要阅读的代码目录
+```
+

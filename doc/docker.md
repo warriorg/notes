@@ -33,9 +33,30 @@ clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实�
 
 
 
-
-
 ## 安装
+
+### [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
+
+修改 `/etc/docker/daemon.json` 文件并添加上 registry-mirrors 键值。
+
+```
+{
+  "registry-mirrors": ["https://registry.docker-cn.com"]
+}
+```
+
+修改保存后重启 Docker 以使配置生效。
+
+```bash
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+```
+
+然后使用`docker info`检查是否生效
+
+
+
+
 
 
 ##常用命令
