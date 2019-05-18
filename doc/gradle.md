@@ -61,6 +61,8 @@ dependencies {
 configurations.all {
   	// 默认情况下，Gradle缓存24小时更改依赖项的版本。 调整10分钟
     resolutionStrategy.cacheDynamicVersionsFor 10, 'minutes'
+   // 不要缓存更改的模块
+    cacheChangingModulesFor 0, 'seconds'
 }
 ```
 
