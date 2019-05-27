@@ -1,3 +1,5 @@
+
+
 ## 配置
 
 ```bash
@@ -116,7 +118,9 @@ git push origin --tags  # 推送标签
 * **-r** 查看远程分支
 * **-a** 查看所有分支
 ```bash
-
+# 删除远程分支
+git branch --delete --remotes <remote>/<branch>	
+git branch -dr <remote>/<branch> # Shorter
 ```
 
 ## Submodule		
@@ -334,4 +338,18 @@ git push origin --force --all
 ```bash
 git pull origin master --allow-unrelated-histories 
 ```
+
+
+
+## GitHub
+
+### [帮助](https://help.github.com/)
+
+
+
+### 搜索技巧
+
+[search syntax](https://help.github.com/en/articles/understanding-the-search-syntax#query-for-values-greater-or-less-than-another-value)
+
+## GitLabel
 
