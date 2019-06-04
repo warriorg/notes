@@ -137,6 +137,14 @@ git submodule update --init --recursive	 	# 下载子模块
 
 撤销某次提交，但是此次之后的修改都会被退回到暂存区。除了默认的 mixed 模式，还有 soft 和 hard 模式
 
+## Stash
+
+**Stash**可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中，随时可以重新应用
+
+```bash
+# 从储藏中创建分支
+git stash branch testchanges
+```
 
 
 git 切换远程代码库
@@ -338,6 +346,20 @@ git push origin --force --all
 ```bash
 git pull origin master --allow-unrelated-histories 
 ```
+
+### git remote: HTTP Basic: Access denied
+
+```bash
+git config --system --unset credential.helper
+```
+
+### 解决每次都要输入密码
+
+```bash
+vim
+```
+
+
 
 
 

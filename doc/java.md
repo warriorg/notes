@@ -100,3 +100,6 @@ jenv local oracle64-1.8.0.192
 #Configure shell instance version
 jenv shell oracle64-1.8.0.192 
 ```
+
+
+

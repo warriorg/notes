@@ -106,6 +106,54 @@ Replace
 :1,$ s/old/new #替换全部
 ```
 
+
+
+## 执行Shell
+
+### :!cmd
+
+`:!{cmd}` 是 Vim 命令，用来执行一条 Shell 命令，命令完成后按任意键回到 Vim。 可通过`:!zsh ls`来指定不同的 Shell。适合只执行一条命令的场景，比如编译、运行测试、查看 IP 等，例如：
+
+```
+:!ifconfig en0
+:!!
+```
+
+`:!!` 为重复执行上一条命令（就像`@@`重复执行上一个宏一样），这在重复地编辑/编译时很方便。
+
+### c-z
+
+`<Ctrl+Z>` 是最基础的 Shell 快捷键，用来立即挂起当前进程（比如当前的 Vim）并进入 Shell。 在完成一系列的命令后，使用`fg`来切换回 Vim。适合暂时离开 Vim 但需要执行多条命令的场景。 例如暂时挂起 Vim 去创建一个新的文件：
+
+```
+vim index.html
+<Ctrl-Z>
+touch index.js
+fg
+```
+
+如果使用`<Ctrl+Z>`挂起了多个任务怎么办？可以 `fg %1` 来恢复第一个，`fg %2` 来恢复第二个，以此类推。 如果你配置了[oh my zsh](https://github.com/robbyrussell/oh-my-zsh)，在输入 `fg `后按下 `<Tab>` 便会提示当前所有的挂起任务。
+
+> 如果只是操作文件和目录，在 Vim 也可以做到。 详见：[在 Vim 中进行文件目录操作](https://harttle.land/2016/10/14/vim-file-and-directory.html)
+
+### :shell
+
+`:sh[ell]` 是 Vim 命令，可以从 Vim 中运行一个 Shell 出来。在完成一系列的命令后， 按下`Ctrl-D`来结束当前 Shell 并回到 Vim。其行为相当于`<Ctrl-Z>`，但由于是 Vim 主动地启动 Shell 进程， 可以通过 `shell` 选项来设置不同的 Shell：
+
+```
+:set shell=\"c:\program\ files\unix\sh.exe\"\ -f
+```
+
+在 [StackOverflow上提到](http://stackoverflow.com/questions/1236563/how-do-i-run-a-terminal-inside-of-vim) 可以将 `Ctrl+D` 映射到 `:sh`， 这样可以使用 `Ctrl+D` 来切换 Vim/Shell：
+
+```
+:noremap <c-d> :sh<cr>
+```
+
+
+
+
+
 快捷键
 
 ```

@@ -353,6 +353,7 @@ awk '{pattern + action}' {filenames}
 awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。awk有3个不同版本: awk、nawk和gawk，未作特别说明，一般指gawk，gawk 是 AWK 的 GNU 版本。
 
 ```bash
+# 结束所有java进程
 ps -ef | grep 'java' | awk '{print $1}' | xargs kill
 # 读取json version节点
 cat package.json | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'version'\042/){print $(i+1)}}}' | tr -d ' "'`
@@ -374,6 +375,14 @@ tar -Zxvf filename.tar.Z    # 解压tar.Z
 # 1.15 版本开始tar可以自动识别版本
 tar -xvf filename.tar.bz2
 ```
+
+### nohup
+
+### disown
+
+
+
+
 
 ### 用户设置
 
@@ -945,6 +954,42 @@ expect eof
 
 挂载远程目录到本地
 
+### ssh-agent
+
+ssh-agent是一种控制用来保存公钥身份验证所使用的私钥的程序，其实ssh-agent就是一个密钥管理器，运行ssh-agent以后，使用ssh-add将私钥交给ssh-agent保管，其他程序需要身份验证的时候可以将验证申请交给ssh-agent来完成整个认证过程。通过使用ssh-agent就可以很方便的在不的主机间进行漫游了，假如我们手头有三台server：host1、host2、host3且每台server上到保存了本机(owner)的公钥，因此我可以通过公钥认证登录到每台主机,但是这三台server之间并没有并没有保存彼此的公钥，而且我也不可能将自己的私钥存放到server上(不安全)，因此彼此之间没有公钥进行认证（可以密码认证，但是这样慢，经常输密码，烦且密码太多容易忘）。但是如果我们启用ssh-agent，问题就可以迎刃而解了
+
+#### 实战
+
+```bash
+eval `ssh-agent`  # 启动
+ssh-add ~/.ssh/id_rsa  # add 密钥
+
+# 全局修改 每一台服务器也要修改
+echo "ForwardAgent yes" >> /etc/ssh/ssh_config
+
+# 用户级修改
+vim ~/.ssh/config
+Host *
+ForwardAgent yes
+　　
+# 增加全局脚本 /etc/profile.d/ssh-agent.sh 
+#!/bin/sh
+if [ -f ~/.agent.env ]; then
+      . ~/.agent.env >/dev/null
+      if ! kill -0 $SSH_AGENT_PID >/dev/null 2>&1; then
+              echo “Stale agent file found. Spawning new agent…”
+              eval `ssh-agent |tee ~/.agent.env`
+              ssh-add
+      fi
+else
+      echo “Starting ssh-agent…”
+      eval `ssh-agent |tee ~/.agent.env`
+      ssh-add
+fi
+```
+
+
+
 
 
 
@@ -1356,3 +1401,11 @@ chmod +x ~/crontab/mongodb_backup.sh       # 增加执行权限
 vi /etc/crontab
 0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的脚本
 ```
+
+
+
+
+
+## 参考资料
+
+[命令行的艺术](https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md)
