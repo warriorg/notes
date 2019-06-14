@@ -256,9 +256,28 @@ load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5�
 
 ```bash
 netstat -ltnp  			# 列出端口	
+# -u 则检查 UDP 端口
 ```
 
+### ss 
+
+```bash
+ss -plat
+# -u 则检查 UDP 端口
+```
+
+### lsof
+
+来查看开启的套接字和文件。
+
+```bash
+lsof -iTCP -sTCP:LISTEN -P -n
+```
+
+
+
 ### ps
+
 ```bash
 ps -aef
 ps -aux | sort -k4nr | head -n 10  # 查看内存占用10的进程
@@ -856,6 +875,48 @@ $ hping3 -S -p 80 -i u100 192.168.0.30
 
 
 ## 其它命令
+
+### socat
+
+**[Socket CAT]**
+
+```bash
+# 从绝对路径读取
+$ socat - /var/www/html/flag.php 
+# 从相对路径读取
+$ socat - ./flag.php
+
+# 写入文件 
+echo "This is Test" | socat - /tmp/hello.html
+
+# 连接远程端口
+socat - TCP:192.168.1.252:3306
+
+# 监听一个新端口
+socat TCP-LISTEN:7000 -
+# 向 TCP 端口发送数据
+echo "test" | socat - tcp-connect:127.0.0.1:12345
+
+# 监听 192.168.1.252 网卡的 15672 端口，并将请求转发至 172.17.0.15 的 15672 端口
+socat  -d -d -lf /var/log/socat.log TCP4-LISTEN:15672,bind=192.168.1.252,reuseaddr,fork TCP4:172.17.0.15:15672
+# 转发 UDP 转发 UDP 和 TCP 类似，只要把 TCP4 改成 UDP4 就行了
+socat -d -d -lf /var/log/socat.log UDP4-LISTEN:123,bind=192.168.1.252,reuseaddr,fork UDP4:172.17.0.15:123
+
+# NAT 映射
+# 在外部公网机器上执行
+socat tcp-listen:1234 tcp-listen:3389
+# 在内部私网机器上执行
+socat tcp:outerhost:1234 tcp:192.168.1.34:3389
+
+# 文件传送
+# 在 192.168.1.252 上执行
+socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
+# 在 192.168.1.253 上执行
+socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
+
+```
+
+
 
 ### tldr 
 一个简洁的社区驱动的帮助手册

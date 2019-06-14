@@ -139,12 +139,37 @@ git submodule update --init --recursive	 	# 下载子模块
 
 ## Stash
 
-**Stash**可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中，随时可以重新应用
+**Stash**可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中，随时可以重新应
 
 ```bash
 # 从储藏中创建分支
 git stash branch testchanges
 ```
+
+
+
+## log
+
+```bash
+git log -L start,end:file   # 使用 log 来查看某一行的所有操作
+```
+
+
+
+## blame
+
+- 方便的 blame 一行代码是谁改的
+- blame 一行代码的改动历史（可能有多个人改过多次，有时候只看最后的改动不够）
+
+```bash
+git blame <filename>
+```
+
+
+
+
+
+
 
 
 git 切换远程代码库
@@ -356,7 +381,7 @@ git config --system --unset credential.helper
 ### 解决每次都要输入密码
 
 ```bash
-vim
+git config --global credential.helper store
 ```
 
 
