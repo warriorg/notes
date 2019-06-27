@@ -439,13 +439,6 @@ usermod -G groupname username  		#已有的用户增加工作组
  gpasswd -d A GROUP
  ```
 
-### 网络
-
-
-
-### mtr ping工具
-比ping屌
-
 ###Supervisor 
 > 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
 
@@ -537,6 +530,27 @@ df -h
 
 
 
+## 网络工具
+
+### mtr ping工具
+
+比ping屌
+
+### nethogs
+
+按进程查看流量占用
+
+
+
+- iptraf: 按连接/端口查看流量
+- ifstat: 按设备查看流量
+- ethtool: 诊断工具
+- tcpdump: 抓包工具
+- ss: 连接查看工具
+- 其他: dstat, slurm, nload, bmon
+
+
+
 ## 性能工具
 
 ### 根据指标找工具对应表
@@ -600,6 +614,23 @@ df -h
 | 内存泄露检测                     | memleak          |
 |                                  | valgrind         |
 | 指定文件的缓存大小               | pcstat           |
+
+#### I/O
+
+| 性能指标                                                     | 工具                        | 说明                                     |
+| ------------------------------------------------------------ | --------------------------- | ---------------------------------------- |
+| 文件系统空间容量、使用量以及剩余                             | df                          | info corrupt ils 'df invocation'         |
+| 索引节点容量、使用量以及剩余量                               | df                          | 使用-i选项                               |
+| 页缓存和可回收Slab缓存                                       | /proc/meminfo、sar、vmstat  | 使用 sar -r选项                          |
+| 缓冲区                                                       | /proc/slabinfo、sar、vmstat | 使用 sar -r选项                          |
+| 目录项、索引节点以及文件系统的缓存                           | /proc/slabinfo、slabtop     | slabtop更直观                            |
+| 磁盘I/O使用率、IOPS、吞吐量、响应时间、I/O平均大小以及等待队列长度 | iostat、sar、dstat          | 使用iostat -d -x 或 sar -d 选项          |
+| 进程I/O大小以及I/O延迟                                       | pidstat  iotop              | 使用 pidstat -d 选项                     |
+| 块设备I/O事件追踪                                            | blktrace                    | blktrace -d /dev/sda -o- \| blkparse -i- |
+| 进程I/O系统调用追踪                                          | strace                      | 通过系统调用跟踪进程的 I/O               |
+| 进程块设备I/O大小追踪                                        | biosnoop  biotop            | 需要安装bcc软件包                        |
+
+​	
 
 ### perf 
 
@@ -868,10 +899,6 @@ $ hping3 -S -p 80 -i u100 192.168.0.30
 
 一个常用的网络抓包工具，常用来分析各种网络问题。 
 
-- 
-
-
-
 
 
 ## 其它命令
@@ -926,8 +953,6 @@ socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
 
 
 ## BCC-tools
-
-
 
 
 
@@ -1051,12 +1076,6 @@ fi
 
 
 
-
-
-
-
-
-
 ## Ubuntu
 ```bash
 update-manager # 升级系统 图形界面
@@ -1066,6 +1085,27 @@ sudo do-release-upgrade  # 升级系统
 ```bash
 sudo passwd root       # 设置密码
 su
+```
+
+#### 网络配置
+
+/etc/netplan/50-cloud-init.yaml
+
+```bash
+network:
+    ethernets:
+        eno1:
+            addresses: [192.168.2.6/24]
+            gateway4: 192.168.2.1
+            nameservers:
+                    addresses: [114.114.114.114]
+    version: 2
+    wifis:
+        wlp2s0:
+            dhcp4: yes
+            access-points:
+                wmbp:
+                    password: ABCDE89123456
 ```
 
 

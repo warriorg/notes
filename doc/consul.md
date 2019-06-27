@@ -1,4 +1,7 @@
+
+
 ###Consul优点
+
 1.   使用 Raft 算法来保证一致性, 比复杂的 Paxos 算法更直接. 相比较而言, zookeeper 采用的是 Paxos, 而 etcd 使用的则是 Raft.
 2. 支持多数据中心，内外网的服务采用不同的端口进行监听,多数据中心集群可以避免单数据中心的单点故障,而其部署则需要考虑网络延迟, 分片等情况等. zookeeper 和 etcd 均不提供多数据中心功能的支持.
 3. 支持健康检查. etcd 不直接提供此功能(利用etcd使用创建节点的ttl机制可以实现健康检测).
@@ -101,5 +104,13 @@ consul agent -dev  #  Starts the agent in development mode.
 consul members 		# Lists the members of a Consul cluster
 curl localhost:8500/v1/catalog/nodes   # 
 dig @127.0.0.1 -p 8600 Armons-MacBook-Air.node.consul
+
+# 启动server 
+consul agent -server -data-dir dest  -bootstrap -client 0.0.0.0 -ui
 ```
 
+
+
+
+
+## consul-template
