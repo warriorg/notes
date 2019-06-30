@@ -137,3 +137,18 @@ jenv shell oracle64-1.8.0.192
 | -XX:TLABWasteTargetPercent  | TLAB占eden区的百分比                                       | 1%                   |                                                              |
 | -XX:+*CollectGen0First*     | FullGC时是否先YGC                                          | false                |                                                              |
 
+**Java8 内存占用**
+
+```bash
+java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintNMTStatistics -version
+```
+
+**Java11 内存占用**
+
+```bash
+java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintNMTStatistics -version
+```
+
+* **Reserved** 由操作系统承诺的可用内存大小。但尚未分配，JVM 无法访问
+
+* **Committed** 已被 JVM 分配，可访问
