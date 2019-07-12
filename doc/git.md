@@ -384,6 +384,13 @@ git config --system --unset credential.helper
 git config --global credential.helper store
 ```
 
+### 忽略对已入库文件的修改
+
+```bash
+git update-index --assume-unchanged FILENAME			# 忽略对如果文件的修改
+git update-index --no-assume-unchanged FILENAME		# 取消对入库文件的修改
+```
+
 
 
 
