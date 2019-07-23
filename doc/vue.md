@@ -83,3 +83,31 @@ npm install -g @vue/cli
 在src的Remote url处填写: webpack:///src			
 保存好调试配置
 
+
+
+## VUE 学习
+
+### scoped
+
+#### scoped穿透
+
+**stylus**
+
+```
+外层 >>> 第三方组件 
+	样式
+
+.wrapper >>> .swiper-pagination-bullet-active
+	background: #fff
+```
+
+**less** 和 **scss**
+
+```css
+外层 /deep/ 第三方组件 {
+  样式
+}
+.wrapper /deep/ .swiper-pagination-bullet-active{
+  background: #fff;
+}
+```

@@ -1,6 +1,0 @@
-logging:
-  level:
-    com.netflix: DEBUG
-    org.springframework: DEBUG
-server:
-  port: 8081

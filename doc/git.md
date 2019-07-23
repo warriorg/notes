@@ -391,7 +391,11 @@ git update-index --assume-unchanged FILENAME			# 忽略对如果文件的修改
 git update-index --no-assume-unchanged FILENAME		# 取消对入库文件的修改
 ```
 
+### 删除 .DS_Store
 
+```bash
+find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatc
+```
 
 
 
