@@ -1,3 +1,6 @@
 [submodule "java/spring-cloud-microservice"]
 	path = java/spring-cloud-microservice
 	url = https://github.com/warriorg/spring-cloud-microservice.git
+[submodule "java/java-sample"]
+	path = java/java-sample
+	url = https://github.com/warriorg/java-sample
