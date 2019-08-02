@@ -4,3 +4,6 @@
 [submodule "java/java-sample"]
 	path = java/java-sample
 	url = https://github.com/warriorg/java-sample
+[submodule "java/spring-boot-sample"]
+	path = java/spring-boot-sample
+	url = https://github.com/warriorg/spring-boot-sample
