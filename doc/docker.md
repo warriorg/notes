@@ -276,7 +276,21 @@ WORKDIR /opt/tomcat
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 ```
 
+### FTP
+
+```bash
+docker run -d -v /Users/warriorg/Downloads:/home/vsftpd -p 20:20 -p 21:21 \
+-p 47400-47470:47400-47470 \
+-e FTP_USER=test \
+-e FTP_PASS=test \
+-e PASV_ADDRESS=0.0.0.0 \
+--name ftp bogem/ftp
+```
+
+
+
 ## 常见问题
+
 ### Layer already being pulled by another client. Waiting.
 
 ```bash
