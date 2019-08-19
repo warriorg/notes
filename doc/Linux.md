@@ -186,6 +186,25 @@
 - find [搜索范围] [搜索条件]
 
 
+### 网络
+#### nc
+
+```bash
+# 端口扫描
+nc -z -v -n 127.0.0.1 21-25			
+# 使用netcat 连接服务抓取他们的banner
+nc -v 127.0.0.1 9999
+
+# 聊天
+$nc -l 3000      				# server
+$nc 127.0.0.1 3000		  # client
+
+# 文件传输
+$nc -l 3000 < file.txt							# server
+$nc -n 127.0.0.1 3000 > file.txt		# client
+```
+
+
 
 
 
@@ -272,9 +291,8 @@ ss -plat
 
 ```bash
 lsof -iTCP -sTCP:LISTEN -P -n
+lsof -p pid 				# 查看进程打开了那些文件
 ```
-
-
 
 ### ps
 

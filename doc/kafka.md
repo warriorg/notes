@@ -176,7 +176,7 @@ LEO， Log End Offset，日志最后消息的偏移量。消息在Kafka中是被
 
 #### Consumer Group
 
-consumer group 是kafka提供的课扩且具有容错性的消费者机制。组内可以有多个消费者，它们共享一个公共的ID，即group ID。组内的所有消费者协调在一起来消费订阅主题的所有分区。
+consumer group 是kafka提供的可扩且具有容错性的消费者机制。组内可以有多个消费者，它们共享一个公共的ID，即group ID。组内的所有消费者协调在一起来消费订阅主题的所有分区。
 
 kafka 保证同一个consumer group中只有一个consumer会消费某条消息，实际上kafka保证的是稳定状态下每一个consumer实例只会消费某一个或多个特定的数据只会被某一个特定的consumer实例所消费。
 
@@ -297,6 +297,38 @@ segment是一个逻辑概念，其由两类物理文件组成，分别为`.index
 
 
 ## API
+
+
+
+
+
+## Java 集成
+
+### 错误解决
+
+#### java.lang.IllegalArgumentException: The class 'com.dc.bill.dto.apiModel.ApiParamModel' is not in the trusted packages: [java.util, java.lang]. If you believe this class is safe to deserialize, please provide its name. If the serialization is only done by a trusted source, you can also enable trust all (*).
+
+```yaml
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:   # 配置生产者
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:   # 配置消费者
+      group-id: group0  # 消费者组
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.dc.bill.dto.apiModel			# 相信包
+    listener:
+      ack-mode: manual		# 手动ack
+```
 
 
 
