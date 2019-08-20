@@ -123,6 +123,26 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
 1. 初始化同步
 
    恢复模式具有两个阶段：Leader选举与初始化同步。当完成Leader选举后，此时的Leader还是一个准Leader，其要经过初始化同步后才能变为真正的Leader。
+   
+   1. 为了保证Leader向Learner发送的提案有序，Leader会为每一个learner服务器准备一个队列
+   2. Leader将那些没有被各个Learner同步的事务封装为Proposal
+   3. Leader将这些Proposal逐条发给各个Learner，并在每一个Proposal后都紧跟一个COMMIT消息，表示该事务已经被提交，Learner可以直接接收并执行
+   4. Learner接收来自于Leader的Proposal，并将其更新到本地
+   5. 当Follower更新成功后，会向准Leader发送ACK信息
+   6. Leader服务器在接到来自Follower的ACK后就会将该Follower加入到真正可用的Follower列表。没有反馈ACK，或反馈了但Leader没有收到Follower，Leader不会将其加入到Follower列表
+   
+2. 消息广播算法
+
+   当集群中已经有过半的Follower完成了初始化状态同步，那么整个zk集群就进入到了正常工作模式了
+
+    如果集群中的其它节点收到客户端的事务请求，那么这些Learner会将请求转发给Leader服务器。然后在执行如下的具体过程
+
+   1. Leader接收到事务请求后，为事务赋予一个全局唯一的64位自增id，即zxid，通过zxid的大小比较即可实现事务的有序性管理，然后将事务封装为一个Proposal。
+   2. Leader根据Follower列表获取到所有Follower，然后在将Proposal通过这些Follower的队列将提案发送给各个Follower
+   3. 当Follower接收到提案后，会先将提案的zxid与本地记录的事务日志中的最大的zxid进行比较。若当前提案的zxid大于最大的zxid，则将当前提案记录到本地事务日志中，并向Leader返回一个ACK
+   4. 当Leader接收到过半的ACKs后，Leader就会向所有Follower的队列发送COMMIT 
+
+   
 
 #### 恢复模式与两个原则
 
