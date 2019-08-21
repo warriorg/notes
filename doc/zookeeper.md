@@ -153,10 +153,25 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
 
 #### Leader选举
 
+在集群启动过程中，或Leader宕机后，集群就进入了恢复模式。恢复模式中最重要的阶段就是Leader选举。
+
 1. Leader选举中的概念
    1. myid
+   
+      这是zk集群中服务器的唯一标识，称为myid。例如，有三个zk服务器，那么编号分别是1，2，3.
+   
    2. 逻辑时钟
+   
+      逻辑时钟，logicalclock，是一个整型数，该概念在选举时称为logicalclock，而在选举结束后称为epoch。即epoch与logicalclock时同一个值，在不同情况下的不同名称。
+   
    3. zk状态
+   
+      zk集群中的每一台主机，在不同阶段会处于不同状态，每一台主机具有四种状态
+   
+      * LOOKING 		选举状态
+      * FOLLOWING 	Follower在正常运行情况下状态
+      * OBSERVING      Observer在正常运行情况下状态
+      * LEADING       Leader在正常运行情况下状态
 2. Leader选举算法
    1. 集群启动中的选举过程
    2. 断开后的Leader选举
@@ -173,9 +188,13 @@ zk遵循的是CP原则，即保证了一致性，但牺牲了可用性。具体�
 
 当Leader宕机后，zk集群会马上进行新的Leader选举。但选举时长一般在30-100ms内，最长不超过60s，整个选举期间zk集群是不接受客户端的读写操作的，即zk集群是处于瘫痪状态的。所以，其不满足可用性。
 
-## Install
 
-### 配置
+
+## 安装与集群搭建
+
+### 集群搭建
+
+#### 配置
 
 
 | 名称  | IP           | 角色     |
@@ -185,7 +204,7 @@ zk遵循的是CP原则，即保证了一致性，但牺牲了可用性。具体�
 | ZK-22 | 192.168.2.22 |          |
 | ZK-23 | 192.168.2.23 | observer |
 
-### 安装
+#### 安装
 
 ```bash
 hostnamectl set-hostname ZK-20
@@ -237,7 +256,7 @@ server.3=192.168.2.22:2888:3888
 server.4=192.168.2.23:2888:3888:observer
 ```
 
-### 设置防火墙
+#### 设置防火墙
 
 ```bash
 firewall-cmd --zone=public --add-port=2888/tcp --permanent
@@ -247,14 +266,14 @@ firewall-cmd --reload   # 使配置生效
 firewall-cmd --list-all  # 检查配置
 ```
 
-### Test
+#### Test
 
 ```bash
 ./zkServer.sh start
 ./zkServer.sh status
 ```
 
-### zkCli
+#### zkCli
 
 ```bash
 zkCli.sh -server 127.0.0.1:2181 								# 连接服务器
