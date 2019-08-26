@@ -117,9 +117,183 @@
 
 **ctrl + r** 搜索执行过的命令
 
+
+
 ## 命令工具
 
+### 系统管理
+
+#### 磁盘
+
+```bash
+fdisk -l
+mount /dev/vdb1 /mnt
+df -h
+```
+
+##### 开机自动挂在
+
+`edit /etc/fstab`
+
+```bash
+/dev/sda3      /mnt         ext4    defaults        1 1 
+```
+
+- 第一列为设备号或该设备的卷标 	
+- 第二列为挂载点 	
+- 第三列为文件系统 	
+- 第四列为文件系统参数 	
+- 第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
+- 第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
+
+#### du
+
+```bash
+du -h --max-depth=1						# 查看各文件夹大小命令
+```
+
+#### ps
+
+```bash
+ps -aef
+ps -aux | sort -k4nr | head -n 10  # 查看内存占用10的进程
+ps -e -o "%C : %p : %z : %a"|sort -k5 -nr 		# 查看进程，按内存从大到小
+ps -e -o "%C : %p : %z : %a"|sort -nr					# 查看进程，按CPU利用率从大到小排序
+```
+
+#### &、ctrl + z、fg、bg、jobs、
+
+- **&** 后台执行命令
+- **ctrl + z** 将一个正在前台执行的命令放到后台，并且暂停
+- **jobs** 查看当前有多少在后台运行的命令
+- **fg** 将后台中的命令调至前台继续运行
+- **bg** 将一个在后台暂停的命令，变成继续执行
+
+```bash
+$ htop
+# 按下 ctrl+z htop 后台执行
+[1]+  Stopped                 htop
+$ jobs -l
+[1]+ 46989 Stopped                 htop
+$ bg
+[1]+ htop &
+
+[1]+  Stopped                 htop
+$ fg
+htop
+```
+
+#### crontab 定时
+
+ **/etc/crontab** 配置文件
+
+```bash
+0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的
+```
+
+#### uname 
+
+显示内核信息
+
+```bash
+uname -a   # 显示内核信息
+
+# 适用于所有的linux，包括Redhat、SuSE、Debian、Centos等发行版。
+lsb_release -a  
+# RedHat,CentOS
+cat /etc/redhat-release
+```
+
+#### uptime 系统平均负载
+
+系统总共运行了多长时间和系统的平均负载
+
+```bash
+~# uptime
+13:49:31 up 188 days,  4:27,  1 users,  load average: 0.01, 0.03, 0.00
+
+13:49:31             # 系统当前时间
+up 188 days,  4:27   # 主机已运行时间,时间越大，说明你的机器越稳定。
+1 users               # 用户连接数，是总连接数而不是用户数
+load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5，15分钟的系统平均负载, 如果是1 的话，说明在1核CPU上，使用率是100%， 在2核心CPU上，50%！
+```
+
+#### 时间
+
+设置时区 
+
+```bash
+data -R  # 查看当前设置
+sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata
+sudo date -s    # 修改本地时间
+sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启后时区改变
+sudo ntpdate cn.pool.ntp.org        #命令更新时间
+```
+
+#### 语言
+
+配置文件地址 **/etc/locale.conf**
+
+```bash
+# centos 设置语言
+localectl set-locale LANG=en_US.utf8
+```
+
+#### Font
+
+```bash
+fc-list							# fc-list查看已安装的字体
+fc-list :lang=zh				# 查看中文字体
+fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
+```
+
+
+
+#### nohup
+
+#### disown
+
+#### Supervisor 
+
+> 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
+
+
+
 ### 用户管理
+
+adduser： 会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
+
+useradd：需要使用参数选项指定上述基本设置，如果不使用任何参数，则创建的用户无密码、无主目录、没有指定shell版本。
+
+userdel 删除用户
+
+```bash
+adduser apple
+useradd -g group apple #新建用户添加到组
+passwd apple # 修改密码
+
+cat /etc/passwd # 查看所有用户
+cat /etc/group # 查看所有组
+w  # 查看活跃用户
+```
+
+组
+
+```bash
+groups 								#查看当前用户的组
+groups user 						# 查看用户的组
+groupadd group
+usermod -G groupname username  		#已有的用户增加工作组
+
+```
+
+从组中删除用户
+编辑/etc/group 找到GROUP1那一行，删除用户
+或者用命令
+
+```
+ gpasswd -d A GROUP
+```
 
 ### 文件处理命令
 #### mkdir
@@ -129,6 +303,28 @@
 #### rm
 #### cp
 #### ln 
+
+* 硬链接(Hard Link) 说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
+
+```bash
+ln [options] existingfile newfile	# sexistingfile 待建立链接文件的文件，newfile是新创建的链接文件
+ln [options] existingfile-list directory
+# -f 建立时，将同档案名删除.
+# -i 删除前进行询问.
+```
+
+- 软链接(Soft Link), 软链接又称为符号链接（Symbolic link）。符号连接相当于Windows下的快捷方式。
+
+```bash
+ln -s abc cde 	# 建立abc 的软连接
+ln abc cde 		# 建立abc的硬连接，
+```
+
+
+
+#### tr 
+
+可以对来自标准输入的字符进行替换、压缩和删除。它可以将一组字符变成另一组字符，经常用来编写优美的单行命令，作用很强大
 
 
 
@@ -182,46 +378,24 @@
 
 #### find
 
+```bash
+find Folder -type d -exec chmod 0777 {} +			# 更改目录权限(不包含文件)
+```
+
+
+
 - 文件搜索命令
 - find [搜索范围] [搜索条件]
 
 
-### 网络
-#### nc
 
-```bash
-# 端口扫描
-nc -z -v -n 127.0.0.1 21-25			
-# 使用netcat 连接服务抓取他们的banner
-nc -v 127.0.0.1 9999
+### 文件操作
 
-# 聊天
-$nc -l 3000      				# server
-$nc 127.0.0.1 3000		  # client
-
-# 文件传输
-$nc -l 3000 < file.txt							# server
-$nc -n 127.0.0.1 3000 > file.txt		# client
-```
-
-
-
-
-
-### crontab 定时
- **/etc/crontab** 配置文件
-
-```bash
-0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的脚本
-```
-
-
-
-### head
+#### head
 
 显示文件的头n行 ，默认10行
 
-### tail 
+#### tail 
 
 显示文件的尾n行，默认10行
 
@@ -236,7 +410,7 @@ tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 n
 
 
 
-### wc
+#### wc
 
 统计制定文件中的字节数，字数，行数, 缺省参数 -lcw
 
@@ -246,104 +420,16 @@ tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 n
 
 **-c** 统计字节数
 
-### uname 
-显示内核信息
-```bash
-uname -a   # 显示内核信息
+#### grep			
 
-# 适用于所有的linux，包括Redhat、SuSE、Debian、Centos等发行版。
-lsb_release -a  
-# RedHat,CentOS
-cat /etc/redhat-release
-```
-
-### uptime 系统平均负载
-系统总共运行了多长时间和系统的平均负载
-```bash
-~# uptime
-13:49:31 up 188 days,  4:27,  1 users,  load average: 0.01, 0.03, 0.00
-
-13:49:31             # 系统当前时间
-up 188 days,  4:27   # 主机已运行时间,时间越大，说明你的机器越稳定。
-1 users               # 用户连接数，是总连接数而不是用户数
-load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5，15分钟的系统平均负载, 如果是1 的话，说明在1核CPU上，使用率是100%， 在2核心CPU上，50%！
-```
-
-### netstat
-
-`yum install -y net-tools` 
-
-```bash
-netstat -ltnp  			# 列出端口	
-# -u 则检查 UDP 端口
-```
-
-### ss 
-
-```bash
-ss -plat
-# -u 则检查 UDP 端口
-```
-
-### lsof
-
-来查看开启的套接字和文件。
-
-```bash
-lsof -iTCP -sTCP:LISTEN -P -n
-lsof -p pid 				# 查看进程打开了那些文件
-```
-
-### ps
-
-```bash
-ps -aef
-ps -aux | sort -k4nr | head -n 10  # 查看内存占用10的进程
-```
-### ln
-
-* 硬链接(Hard Link) 说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
-```bash
-ln [options] existingfile newfile	# sexistingfile 待建立链接文件的文件，newfile是新创建的链接文件
-ln [options] existingfile-list directory
-# -f 建立时，将同档案名删除.
-# -i 删除前进行询问.
-```
-* 软链接(Soft Link), 软链接又称为符号链接（Symbolic link）。符号连接相当于Windows下的快捷方式。
-
-```bash
-ln -s abc cde 	# 建立abc 的软连接
-ln abc cde 		# 建立abc的硬连接，
-```
-
-### &、ctrl + z、fg、bg、jobs、
-* **&** 后台执行命令
-* **ctrl + z** 将一个正在前台执行的命令放到后台，并且暂停
-* **jobs** 查看当前有多少在后台运行的命令
-* **fg** 将后台中的命令调至前台继续运行
-* **bg** 将一个在后台暂停的命令，变成继续执行
-```bash
-$ htop
-# 按下 ctrl+z htop 后台执行
-[1]+  Stopped                 htop
-$ jobs -l
-[1]+ 46989 Stopped                 htop
-$ bg
-[1]+ htop &
-
-[1]+  Stopped                 htop
-$ fg
-htop
-```
-
-### grep			
 ```base
 $grep -5 'parttern' inputfile #打印匹配行的前后5行
 $grep -C 5 'parttern' inputfile #打印匹配行的前后5行
 $grep -A 5 'parttern' inputfile #打印匹配行的后5行
 $grep -B 5 'parttern' inputfile #打印匹配行的前5行
 ```
-### xargs
+
+#### xargs
 
 通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数
 
@@ -351,15 +437,15 @@ $grep -B 5 'parttern' inputfile #打印匹配行的前5行
 echo '--help' | xargs ls
 ```
 
-### awk
+#### awk
 
-#### 语法
+##### 语法
 
 ```bash
 awk '{pattern + action}' {filenames}
 ```
 
-#### 内建变量
+##### 内建变量
 
 | 变量        | 描述                                                       |
 | :---------- | :--------------------------------------------------------- |
@@ -385,7 +471,7 @@ awk '{pattern + action}' {filenames}
 | RSTART      | 由match函数所匹配的字符串的第一个位置                      |
 | SUBSEP      | 数组下标分隔符(默认值是/034)                               |
 
-####  基本用法
+##### 基本用法
 
 awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。awk有3个不同版本: awk、nawk和gawk，未作特别说明，一般指gawk，gawk 是 AWK 的 GNU 版本。
 
@@ -396,11 +482,9 @@ ps -ef | grep 'java' | awk '{print $1}' | xargs kill
 cat package.json | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'version'\042/){print $(i+1)}}}' | tr -d ' "'`
 ```
 
-### tr
+#### sed
 
-
-
-### tar
+#### tar
 
 ```bash
 unzip filename.zip			# 解压zip
@@ -413,156 +497,21 @@ tar -Zxvf filename.tar.Z    # 解压tar.Z
 tar -xvf filename.tar.bz2
 ```
 
-### nohup
+### 网络
 
-### disown
-
-
-
-
-
-### 用户设置
-
-adduser： 会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
-
-useradd：需要使用参数选项指定上述基本设置，如果不使用任何参数，则创建的用户无密码、无主目录、没有指定shell版本。
-
-userdel 删除用户
-
-```bash
-adduser apple
-useradd -g group apple #新建用户添加到组
-passwd apple # 修改密码
-
-cat /etc/passwd # 查看所有用户
-cat /etc/group # 查看所有组
-w  # 查看活跃用户
-```
-
-组
-
-```bash
-groups 								#查看当前用户的组
-groups user 						# 查看用户的组
-groupadd group
-usermod -G groupname username  		#已有的用户增加工作组
-
-```
-
-从组中删除用户
-编辑/etc/group 找到GROUP1那一行，删除用户
-或者用命令
-
- ```
- gpasswd -d A GROUP
- ```
-
-###Supervisor 
-> 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
-
-
-
-###查找被占用的端口					
-```bash
-lsof -i:8700 或者 lsof -i | grep 8700
-```
-
-###防火墙
-``` bash
-systemctl stop firewalld.service #停止firewall
-systemctl disable firewalld.service #禁止firewall开机启动
-systemctl enable iptables.service #设置防火墙开机启动
-systemctl restart iptables.service #重启防火墙使配置生效
-```
-
-###时间
-设置时区 
-```bash
-data -R  # 查看当前设置
-sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata
-sudo date -s    # 修改本地时间
-sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启后时区改变
-sudo ntpdate cn.pool.ntp.org        #命令更新时间
-```
-
-### 语言
-
-配置文件地址 **/etc/locale.conf**
-
-```bash
-# centos 设置语言
-localectl set-locale LANG=en_US.utf8
-```
-
-### Font
-```bash
-fc-list							# fc-list查看已安装的字体
-fc-list :lang=zh				# 查看中文字体
-fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
-```
-
-### wget
-
-```bash
-# 下载oracle jdk
-wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
-```
-
-### 磁盘
-```bash
-fdisk -l
-mount /dev/vdb1 /mnt
-df -h
-```
-#### 开机自动挂在
-`edit /etc/fstab`
-
-```bash
-/dev/sda3      /mnt         ext4    defaults        1 1 
-```
-*	第一列为设备号或该设备的卷标 	
-*	第二列为挂载点 	
-*	第三列为文件系统 	
-*	第四列为文件系统参数 	
-*	第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
-*	第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
-
-### 更改目录权限(不包含文件)
-`find Folder -type d -exec chmod 0777 {} +`
-
-### 查看各文件夹大小命令
-`du -h --max-depth=1`
-
-###查看进程，按内存从大到小
-
-`ps -e -o "%C : %p : %z : %a"|sort -k5 -nr`
-
-###查看进程，按CPU利用率从大到小排序
-`ps -e -o "%C : %p : %z : %a"|sort -nr`
-
-###查看剩余内存
-`free -m |grep "Mem" | awk "{print $2}"`
-
-###查看磁盘占用
-`df -h`
-
-
-
-## 网络工具
-
-### mtr ping工具
+#### mtr ping工具
 
 比ping屌
 
-### nethogs
+#### nethogs
 
 按进程查看流量占用
 
-### tcpdump
+#### tcpdump
 
  抓包工具
 
-### 选项
+##### 选项
 
 ```
 -a：尝试将网络和广播地址转换成名称；
@@ -592,7 +541,7 @@ df -h
 -w <数据包文件>：把数据包数据写入指定的文件。
 ```
 
-### 实例
+##### 实例
 
 ```bash
 # 监视指定网络接口的数据包 如果不指定网卡，默认tcpdump只会监视第一个网络接口，一般是eth0，下面的例子都没有指定网络接口。
@@ -627,13 +576,70 @@ tcpdump 'gateway snup and (port ftp or ftp-data)'
 tcpdump ip and not net localnet
 ```
 
-
-
 - iptraf: 按连接/端口查看流量
 - ifstat: 按设备查看流量
 - ethtool: 诊断工具
 - ss: 连接查看工具
 - 其他: dstat, slurm, nload, bmon
+
+#### nc
+
+```bash
+# 端口扫描
+nc -z -v -n 127.0.0.1 21-25			
+# 使用netcat 连接服务抓取他们的banner
+nc -v 127.0.0.1 9999
+
+# 聊天
+$nc -l 3000      				# server
+$nc 127.0.0.1 3000		  # client
+
+# 文件传输
+$nc -l 3000 < file.txt							# server
+$nc -n 127.0.0.1 3000 > file.txt		# client
+```
+
+#### netstat
+
+`yum install -y net-tools` 
+
+```bash
+netstat -ltnp  			# 列出端口	
+# -u 则检查 UDP 端口
+```
+
+#### ss 
+
+```bash
+ss -plat
+# -u 则检查 UDP 端口
+```
+
+#### lsof
+
+来查看开启的套接字和文件。
+
+```bash
+lsof -iTCP -sTCP:LISTEN -P -n
+lsof -p pid 				# 查看进程打开了那些文件
+lsof -i:8700 或者 lsof -i | grep 8700  # 查找被占用的端口
+```
+
+#### 防火墙
+
+```bash
+systemctl stop firewalld.service #停止firewall
+systemctl disable firewalld.service #禁止firewall开机启动
+systemctl enable iptables.service #设置防火墙开机启动
+systemctl restart iptables.service #重启防火墙使配置生效
+```
+
+#### wget
+
+```bash
+# 下载oracle jdk
+wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
+```
 
 
 

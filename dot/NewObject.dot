@@ -1,0 +1,16 @@
+digraph G {
+    node [shape="record"];
+    edge [style="dashed"];
+
+    label = "对象的创建过程";
+    labelloc = "t";
+    
+    A[label="new Object"];
+    B[label="在常量池中定位类的符号引用"];
+    C[label="如果没有找到类的符号引用，说明类还没有\n被加载,则进行类加载、解析和初始化"]
+    D[label="虚拟机在堆中为对象分配内存"]
+    E[label="将分配的内存初始化零值（不包括对象头）"]
+    F[label="调用对象的\<init\>方法"]
+
+    A->B->C->D->E->F
+}

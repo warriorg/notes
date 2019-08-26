@@ -172,11 +172,17 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
       * FOLLOWING 	Follower在正常运行情况下状态
       * OBSERVING      Observer在正常运行情况下状态
       * LEADING       Leader在正常运行情况下状态
+   
 2. Leader选举算法
+   
+   ![zookeeper选主过程-1](./assets/images/zookeeper选主过程-1.png)
+   
    1. 集群启动中的选举过程
    2. 断开后的Leader选举
 
 ### CAP
+
+CAP原则又称CAP定理，指的是在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）。CAP 原则指的是，这三个要素最多只能同时实现两点，不可能三者兼顾。
 
 #### 简介
 

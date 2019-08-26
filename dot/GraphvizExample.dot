@@ -1,0 +1,98 @@
+digraph graphviz{
+    // 定义图属性
+    graph [bgcolor="#666666", style="rounded", color="#1c1c1c", penwidth="0.5",
+    fontname="Futura", fontcolor=white, fontsize=24,
+    labelloc=t, labeljust=c,
+    compound=true]
+
+    label = "Graphviz\n关系图脚本绘制工具"
+
+    copyright [shape=plaintext, fontcolor="#2222ff", label=<
+                <TABLE BORDER="0">
+                <TR><TD><FONT FACE="Futura" POINT-SIZE="16">周刚</FONT></TD></TR>
+                <TR><TD>https://stidio.github.io/</TD></TR>
+                </TABLE>
+                >]
+
+    // 定义共用节点属性
+    node [shape="cds", color="#1c1c1c", penwidth="0.5", style="filled",
+    fixedsize=true, width=3, height=0.5, fontname="Futura", fontsize=10]
+    // 定义公用边属性
+    edge [color="#cccccc", style="dashed", arrowhead=vee, arrowsize=0.75, penwidth="0.75"]
+
+    {
+        rank = same
+        prepare [fillcolor="#dfc1c1", label="准备"]
+        dot [fillcolor="#c1dfc1", label="DOT语言"]
+        tpi [fillcolor="#c1c1df", label="第三方集成"]
+
+        // 步骤
+        prepare -> dot -> tpi
+    }
+
+    copyright -> dot [style=invis]
+
+    node [shape="box", style="rounded,filled", color="#aaaaaa", width=2.75, height=0.4]
+    edge [color="#222222", style="dotted"]
+
+    subgraph cluster_prepare {
+        graph [bgcolor="#dfc1c1", fontsize=12, labelloc=b]
+
+        label = "准备"
+
+        p_install [label="安装"]
+        p_layout [label="布局引擎"]
+        p_format [label="输出格式"]
+        p_cmd [label="命令运行方式"]
+        p_tools [label="工具"]
+
+        p_install -> p_layout -> p_format -> p_cmd -> p_tools
+    }
+    subgraph cluster_dot {
+        graph [bgcolor="#c1dfc1", fontsize=12, labelloc=b]
+
+        label = "DOT语言"
+
+        d_base [label="基本语法"]
+        d_graph [label="图"]
+        d_node [label="节点"]
+        d_edge [label="边"]
+        d_subgraph [label="子图"]
+        d_group [label="分组与布局"]
+        d_table [label="表格"]
+        d_image [label="图片"]
+        d_strict [label="约束条件"]
+
+        d_base -> d_graph -> d_node -> d_edge -> d_subgraph -> d_group -> d_table -> d_image -> d_strict
+    }
+    subgraph cluster_tpi {
+        graph [bgcolor="#c1c1df", fontsize=12, labelloc=b]
+        edge [style="invis"]
+
+        label = "第三方集成"
+
+        t_c [label="C", color="#ff4444"]
+        t_python [label="Python"]
+        t_javascript [label="JavaScript"]
+        t_other [label="..."]
+
+        t_c -> t_python -> t_javascript -> t_other
+    }
+
+    edge [dir=none, color="#ffffff"]
+    prepare -> p_install [lhead=cluster_prepare]
+    dot -> d_base [lhead=cluster_dot]
+    tpi -> t_c [lhead=cluster_tpi]
+
+    footer [fixedsize=true, width=8, height=0.8,
+    shape=plaintext, style="",
+    fontcolor=white, fontsize=8,
+    label=<
+        <TABLE BORDER="0">
+            <TR><TD></TD></TR>
+            <TR><TD>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</TD></TR>
+        </TABLE>
+        >]
+
+    d_strict -> footer [style=invis]
+}
