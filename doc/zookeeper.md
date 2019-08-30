@@ -177,12 +177,32 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
   
    ![zookeeper选主过程-1](./assets/images/zookeeper选主过程-1.png)
    
-   1. 集群启动中的选举过程
-   2. 断开后的Leader选举
+   
+   
+   * 集群启动中的选举过程
+   
+   ![集群启动中的Leader选举](./assets/images/集群启动中的Leader选举.png)
+   
+   
+   
+   * 断开后的Leader选举
+   
+   ![Leader 宕机后的Leader选举示意图](./assets/images/Leader 宕机后的Leader选举示意图.png)
+   
+   
+
 
 ### CAP
 
+#### 简介
+
 CAP原则又称CAP定理，指的是在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）。CAP 原则指的是，这三个要素最多只能同时实现两点，不可能三者兼顾。
+
+* 一致性(C): 分布是系统中多个主机之间是否能够保值数据一致的特性。即，当系统数据发生更新操作后，各个主机中的数据仍然处于一致的状态。
+* 可用性(A): 系统提供的服务必须一致处于可用状态，即对于用户的每一次请求，系统总是可以在有限的时间内对 用户做出响应
+* 分区容错性(P): 分布式系统在遇到任何网络分区故障时，仍能够保证对外提供满足一致性和可用性的服务。
+
+对于分布式系统，网络环境相对时不可控的，出现网络分区时不可避免的，因此系统必须具备分区容错性。但其斌不能同事保证一致性与可用性。CAP原则对于一个分布式系统来说，只能满足两项。
 
 * CP 系统  Google BigTable, Hbase, MongoDB, Redis, MemCacheDB 
 
@@ -194,7 +214,6 @@ CAP原则又称CAP定理，指的是在一个分布式系统中，一致性（Co
 
 [Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services](https://courses.e-ce.uth.gr/CE623/CAP_theorem_proof.pdf)
 
-#### 简介
 
 #### BASE理论
 

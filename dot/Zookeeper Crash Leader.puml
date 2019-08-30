@@ -1,0 +1,21 @@
+@startuml
+
+title Leader 宕机后的Leader选举示意图
+
+Server1 --> Server1: 状态由FOLLOWING变为LOOKING
+Server1 --> Server1: 产生选票(1, 111)
+Server3 --> Server3: 状态由FOLLOWING变为LOOKING
+Server3 --> Server3: 产生选票(3, 333)
+Server1 -> Server3: 将(1, 111)选票广播出去
+Server3 -> Server1: 将(3, 333)选票广播出去
+Server3 --> Server3: 发现择机的选票更适合，自己的选票不变
+Server1 --> Server1: 发现Server3币自己更适合，修改自己的选票为(3, 333)
+Server1 -> Server3: 将修改后的(3, 333)选票广播出去
+Server3 --> Server3: 接收到(3, 333)，发现自己的选票已经过半，所以自己当选Leader
+Server3 --> Server3: 更新状态为Leading
+Server3 -> Server1: 将epoch等信息广播给Learner
+Server1 --> Server1: 更新状态为Following
+Server1 --> Server1: 将Leader的epoch等信息同步到本地
+
+
+@enduml
