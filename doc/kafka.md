@@ -168,7 +168,7 @@ LEO， Log End Offset，日志最后消息的偏移量。消息在Kafka中是被
 > 3. follower1完全复制了消息，follower2只复制了一部分，HW移动一位。
 > 4. follower2完全复制消息，HW和LEO一致。
 
-#### Zookeeper
+#### [Zookeeper](./zookeeper.md)
 
 负责维护和协调broker。当然，ZK还负责Broker Controller的选举。
 
@@ -195,6 +195,8 @@ kafka 保证同一个consumer group中只有一个consumer会消费某条消息�
 #### Offset Commit
 
 consumer在消费过消息后需要将其消费的消息的offset提交给broker，以让broker记录下那些消息是消费过的。记录已消费过的offset值有什么用呢？除了用于表示那些消息将来要被删除外，还有一个很重要的作用：在发生再均衡时不会引发消息的丢失或重复消费。
+
+
 
 ### 工作原理与过程
 
@@ -235,7 +237,7 @@ consumer在消费过消息后需要将其消费的消息的offset提交给broker
   > 丢失消息的原因
   >
   > * kafka根本没有收到消息
-  > * kafka的buffer满了，要想partition写入消息，在还未写入的瞬间，生产者又生产了新的消息并发送了过来，那么，这小消息就丢失了
+  > * kafka的buffer满了，要想partition写入消息，在还未写入的瞬间，生产者又生产了新的消息并发送了过来，那么，这条消息就丢失了
   > * 消息的生产顺序与写入到kafka中的顺序不一致
 
 * 1 同步发送。生产者发送消息给kafka，broker的partition leader在收到消息后马上发送成功ack（无需等待ISR中的follower同步），生产者收到后知道消息发送成功，然后会在发送消息。如果一直未收到kafka的ack，则认为消息发送失败，会自动重发消息
@@ -275,7 +277,7 @@ consumer在消费过消息后需要将其消费的消息的offset提交给broker
 
 解决方案
 
-1. 增加绘画超时时限`session.timeout.ms`的值，延长offset提交时间；
+1. 增加会话超时时限`session.timeout.ms`的值，延长offset提交时间；
 2. 设置`enable.auto.commit`为fasle，将kafka自动提交offset改为手动提交。
 
 ### 日志查看

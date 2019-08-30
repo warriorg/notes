@@ -1,0 +1,38 @@
+@startuml
+
+package "运营系统" {
+  [Web发布消息页面]
+} 
+
+package "业务系统" {
+   [智慧关务]
+}
+
+queue 消息系统 
+
+package "消息消费" {
+  [NodeJs推送]
+  [Bom3 API]
+  [邮件通知]
+  [短信通知]
+  [微信通知]
+}
+ 
+database "MySql" {
+}
+
+
+[Web发布消息页面] --> [消息系统]
+[智慧关务] --> 消息系统
+消息系统 <-- [NodeJs推送]
+消息系统 <-- [Bom3 API]
+消息系统 <-- [邮件通知]
+消息系统 <-- [短信通知]
+消息系统 <-- [微信通知]
+[Bom3 API] --> MySql
+[Bom3 API] <-- [Bom3 Web] 
+[NodeJs推送] <--> [Bom3 Web] 
+
+[Web发布消息页面] ..> [Bom3 API] 
+
+@enduml

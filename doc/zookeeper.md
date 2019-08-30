@@ -20,7 +20,7 @@ Paxos算法要解决的问题是，在分布式系统中如何就决议达成一
 
 #### Paxos与拜占庭将军问题
 
-==在不可靠信道上视图通过消息传递的方式达到一致性的可能性。==所以，Paxos算法的前提是不存在拜占庭将军问题，即Paxos算法的信道是安全的，可靠的，集群节点间传递的消息是不会被篡改的。
+==在不可靠信道上试图通过消息传递的方式达到一致性的可能性。==所以，Paxos算法的前提是不存在拜占庭将军问题，即Paxos算法的信道是安全的，可靠的，集群节点间传递的消息是不会被篡改的。
 
 一般情况下，分布式系统中各个节点间采用两种通讯模型：
 
@@ -174,7 +174,7 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
       * LEADING       Leader在正常运行情况下状态
    
 2. Leader选举算法
-   
+  
    ![zookeeper选主过程-1](./assets/images/zookeeper选主过程-1.png)
    
    1. 集群启动中的选举过程
@@ -183,6 +183,16 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
 ### CAP
 
 CAP原则又称CAP定理，指的是在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）。CAP 原则指的是，这三个要素最多只能同时实现两点，不可能三者兼顾。
+
+* CP 系统  Google BigTable, Hbase, MongoDB, Redis, MemCacheDB 
+
+* AP 系统 Amazon Dynamo,Apache Cassandra, Voldemort
+
+* CA 系统 Kafka
+
+  > 严格来说,CAP理论是针对分区副本来定义的，之所以说kafka放弃P，只支持CA，是因为，kafka原理中当出现单个broke宕机，将要出现分区的时候，直接将该broke从集群中剔除，确保整个集群不会出现P现象
+
+[Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services](https://courses.e-ce.uth.gr/CE623/CAP_theorem_proof.pdf)
 
 #### 简介
 

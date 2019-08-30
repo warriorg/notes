@@ -1,5 +1,21 @@
 
 
+## 理论基础
+
+### Raft 
+
+#### 算法简介
+[Raft 一致性算法论文译文](https://www.infoq.cn/article/raft-paper)
+
+Diego Ongaro和 John Ousterhout 大神的论文原文
+[In Search of an Understandable Consensus Algorithm (Extended Version)](https://ramcloud.atlassian.net/wiki/download/attachments/6586375/raft.pdf)
+
+
+
+
+
+
+
 ###Consul优点
 
 1.   使用 Raft 算法来保证一致性, 比复杂的 Paxos 算法更直接. 相比较而言, zookeeper 采用的是 Paxos, 而 etcd 使用的则是 Raft.
