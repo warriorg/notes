@@ -199,10 +199,12 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
 CAP原则又称CAP定理，指的是在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）。CAP 原则指的是，这三个要素最多只能同时实现两点，不可能三者兼顾。
 
 * 一致性(C): 分布是系统中多个主机之间是否能够保值数据一致的特性。即，当系统数据发生更新操作后，各个主机中的数据仍然处于一致的状态。
-* 可用性(A): 系统提供的服务必须一致处于可用状态，即对于用户的每一次请求，系统总是可以在有限的时间内对 用户做出响应
+* 可用性(A): 系统提供的服务必须一致处于可用状态，即对于用户的每一次请求，系统总是可以==在有限的时间==内对 用户==做出响应==
 * 分区容错性(P): 分布式系统在遇到任何网络分区故障时，仍能够保证对外提供满足一致性和可用性的服务。
 
 对于分布式系统，网络环境相对时不可控的，出现网络分区时不可避免的，因此系统必须具备分区容错性。但其斌不能同事保证一致性与可用性。CAP原则对于一个分布式系统来说，只能满足两项。
+
+
 
 * CP 系统  Google BigTable, Hbase, MongoDB, Redis, MemCacheDB 
 
@@ -211,11 +213,18 @@ CAP原则又称CAP定理，指的是在一个分布式系统中，一致性（Co
 * CA 系统 Kafka
 
   > 严格来说,CAP理论是针对分区副本来定义的，之所以说kafka放弃P，只支持CA，是因为，kafka原理中当出现单个broke宕机，将要出现分区的时候，直接将该broke从集群中剔除，确保整个集群不会出现P现象
+  >
+  > 如果topic仅配置了两个副本且一个失败（即，同步副本中只有一个仍然存在），则指定acks = all的写入将成功。 但是，如果剩余的副本也失败，则这些写入可能会丢失。 
+  >
+  > https://stackoverflow.com/questions/51375187/why-kafka-is-not-p-in-cap-theorem/51379079
 
 [Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services](https://courses.e-ce.uth.gr/CE623/CAP_theorem_proof.pdf)
 
-
 #### BASE理论
+
+BASE 时 Basically Available(基本可用)、Soft state(软状态)和Eventually consistent(最终一致性)三个短语的简写
+
+BASE理论的核心思想是：即使无法做到强一致性，但每个系统都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性。
 
 #### ZK与CP
 
