@@ -1,0 +1,15 @@
+digraph G {
+    node [shape="record"];
+    edge [style="dashed"];
+
+    label = "MQ消息必达架构设计";
+    labelloc = "t";
+
+    PUB->MQ[label="1. 将消息发给服务端MQ"]
+    MQ->DB [label="2. MQ将消息落地"]
+    MQ->PUB[label="3. MQ回ACK给发送端"]
+    MQ->SUB[label="4. MQ将消息发给接收端"]
+    SUB->MQ[label="5. SUB回ACK给MQ"] 
+    MQ->DB[label="6. MQ将落地消息删除"]
+    
+}

@@ -1,4 +1,4 @@
-
+ 
 
 # ActiveMQ
 
@@ -16,11 +16,11 @@
 
 #### 面向消息的中间件 (Message-Oriented Middleware, MOM)
 
+[Sun Java System Message Queue 3.7 UR1 技术概述](https://docs.oracle.com/cd/E19148-01/820-0533/6nc927vst/index.html)
 
 
 
-
-#### JMS由以下元素组成
+#### JMS元素
 
 - JMS提供者
 
@@ -51,6 +51,8 @@
   一种支持发送消息给多个订阅者的机制。
 
 #### JMS模型
+
+![jmsmodel](./assets/images/jmsmodel.png)
 
 * 点对点或队列模型
   - 只有一个消费者将获得消息
@@ -92,11 +94,84 @@ Java消息服务的API在javax.jms包中提供。
 * Session 接口（会话）
   表示一个单线程的上下文，用于发送和接收消息。由于会话是单线程的，所以消息是连续的，就是说消息是按照发送的顺序一个一个接收的。会话的好处是它支持事务。如果用户选择了事务支持，会话上下文将保存一组消息，直到事务被提交才发送这些消息。在提交事务之前，用户可以使用回滚操作取消这些消息。一个会话允许用户创建消息生产者来发送消息，创建消息消费者来接收消息。
 
+### ActiveMQ
+
+ActiveMQ 是由 Apache 出品的一款开源消息中间件，旨在为应用程序提供高效、可扩展、稳定、安全的企业级消息通信。 它的设计目标是提供标准的、面向消息的、多语言的应用集成消息通信中间件。ActiveMQ 实现了 JMS 1.1 并提供了很多附加的特性，比如 JMX 管理、主从管理、消息组通信、消息优先级、延迟接收消息、虚拟接收者、消息持久化、消息队列监控等等。其主要特性有：
+
+1. 支持包括 Java、C、C++、C#、Ruby、Perl、Python、PHP 等多种语言的客户端和协议。协议包含 OpenWire、Stomp、AMQP、MQTT 。
+2. 提供了像消息组通信、消息优先级、延迟接收消息、虚拟接收者、消息持久化之类的高级特性
+3. 完全支持 JMS 1.1 和 J2EE 1.4规范（包括持久化、分布式事务消息、事务）
+4. 对 Spring 框架的支持，ActiveMQ 可以通过 Spring 的配置文件方式很容易嵌入到 Spring 应用中
+5. 通过了常见的 J2EE 服务器测试，比如 TomEE、Geronimo、JBoss、GlassFish、WebLogic
+6. 连接方式的多样化，ActiveMQ 提供了多种连接模式，例如 in-VM、TCP、SSL、NIO、UDP、多播、JGroups、JXTA
+7. 支持通过使用 JDBC 和 journal 实现消息的快速持久化
+8. 为高性能集群、客户端-服务器、点对点通信等场景而设计
+9. 提供了技术和语言中立的 REST API 接口
+10. 支持 Ajax 方式调用 ActiveMQ
+11. ActiveMQ 可以轻松地与 CXF、Axis 等 Web Service 技术整合，以提供可靠的消息传递
+12. 可用作为内存中的 JMS 提供者，非常适合 JMS 单元测试
+13. 
+
 ## 基本使用
 
+### 安装
+
+#### macos
+```bash
+brew install activemq
+
+activemq start
+activemq stop
+activemq status
+```
 
 
-## 事务
+
+#### 测试安装
+URL: http://127.0.0.1:8161/admin/
+Login: admin
+Passwort: admin
+
+
+
+### 自定义BrokerServer
+
+通过代码内建一个Broker的，内建的Broker比较小巧，适用于一些希望把Broker整合到项目中的场景。
+
+
+
+
+## 可靠性消息机制
+
+### 一条消息的生命周期
+
+![](./assets/images/132032_VE6U_1400519.jpg)
+
+
+
+![ActiveMQ消息传送机制](./assets/images/132147_esxo_1400519.jpg)
+
+### 消息重复消费
+
+消息总线为了尽量保证消息必达，架构设计方向为：
+
+1. 消息收到先落地
+
+2. 消息超时、重传、确认保证消息必达
+
+![MQ消息必达](./assets/images/MQ消息必达.png)
+
+[消息总线真的能保证幂等](https://www.w3cschool.cn/architectroad/architectroad-message-idempotence.html)
+
+### 消息确认
+
+### ACK模式
+
+### ACK类型
+
+### optimizeACK
+
+
 
 
 
