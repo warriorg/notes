@@ -7,8 +7,6 @@
 **DTO**（View Object） 通常是请求处理层传输的对象，它通过 Spring 框架的转换后，往往是一个 JSON 对象。
 
 
-
-
 ```
 JavaBeans spec:
 getUrl/setUrl => property name: url
@@ -21,18 +19,6 @@ getURL/setURL => property name: url
 Introspector.decapitalize() // 转换命名
 ```
 
-###jar
-
-```bash
-jar xvf test.jar 			# 解压到当前目录
-jar cvf filename.jar a.class b.class    #压缩指定文件
-jar cvf weibosdkcore.jar *  #全部压缩
-
-# 解开压缩包，修改文件，在次打包成jar
-unzip test.jar test			
-cd test
-jar -cmv0f META-INF/MANIFEST.MF test.jar *
-```
 
 ### SPI
 
@@ -42,10 +28,23 @@ SPI 全称为 (Service Provider Interface) ，是JDK内置的一种服务提供�
 
 
 
+### JMX
+
+JMX（Java Management Extensions，即 Java 管理扩展）是一个为应用程序、设备、系统等植入监控管理功能的框架。JMX 使用管理 MBean 来监控业务资源，这些 MBean 在 JMX MBean 服务器上注册，代表 JVM 中运行的应用程序或服务。每个 MBean 都有一个属性列表。JMX 客户端可以连接到 MBean Server 来读写 MBean 的属性值。
+
+
+
+## 语言特性
+
+
+
+
+
 ## Test
 
-###java run single unit testing
-```base
+### java run single unit testing
+
+```bash
 gradle test -Dtest.single=PropertyBillServiceTest
 ```
 
@@ -108,6 +107,184 @@ jenv shell oracle64-1.8.0.192
 
 
 
+## 常用命令
+
+### java
+
+```bash
+-verbose:gc     # 输出垃圾回收信息
+```
+
+
+
+#### 实战
+
+```bash
+# 当前的垃圾回收器版本
+java -XX:+PrintCommandLineFlags -version
+# java8内存占用
+java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintNMTStatistics -version
+# java11内存占用
+java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintNMTStatistics -version
+
+```
+
+### jar
+
+```bash
+jar xvf test.jar 			# 解压到当前目录
+jar cvf filename.jar a.class b.class    #压缩指定文件
+jar cvf weibosdkcore.jar *  #全部压缩
+
+# 解开压缩包，修改文件，在次打包成jar
+unzip test.jar test			
+cd test
+jar -cmv0f META-INF/MANIFEST.MF test.jar *
+```
+
+
+
+### jhsdb
+
+jdk9 以后提供
+
+```bash
+ ~ jhsdb
+    clhsdb       	command line debugger
+    debugd       	debug server
+    hsdb         	ui debugger
+    jstack --help	to get more information
+    jmap   --help	to get more information
+    jinfo  --help	to get more information
+    jsnap  --help	to get more information
+```
+
+
+
+#### 实战
+
+```bash
+jhsdb jmap --heap --pid <pid>			# 查看heap的信息，GC使用的算法，heap的配置. (原来的jmap -heap 命令没有了, 被这个命令代替了)
+```
+
+
+
+### jcmd
+
+```bash
+jcmd <pid> PerfCounter.print 			# 性能统计信息
+jcmd <pid> help    # 列出可执行的进程操作
+```
+
+```bash
+~ jcmd 43358 help
+43358:
+The following commands are available:
+Compiler.CodeHeap_Analytics
+Compiler.codecache
+Compiler.codelist
+Compiler.directives_add
+Compiler.directives_clear
+Compiler.directives_print
+Compiler.directives_remove
+Compiler.queue
+GC.class_histogram		 # 查看系统中类统计信息 jmap -histo <pid>
+GC.class_stats
+GC.finalizer_info
+GC.heap_dump
+GC.heap_info
+GC.run  								# 对JVM执行System.gc()
+GC.run_finalization
+JFR.check
+JFR.configure
+JFR.dump
+JFR.start
+JFR.stop
+JVMTI.agent_load
+JVMTI.data_dump
+ManagementAgent.start
+ManagementAgent.start_local
+ManagementAgent.status
+ManagementAgent.stop
+Thread.print				 			# 查看线程堆栈信息  jstack <pid>
+VM.class_hierarchy
+VM.classloader_stats
+VM.classloaders
+VM.command_line
+VM.dynlibs
+VM.flags										# 查看JVM的启动参数
+VM.info
+VM.log
+VM.metaspace
+VM.native_memory
+VM.print_touched_methods
+VM.set_flag
+VM.stringtable
+VM.symboltable
+VM.system_properties				 # 查看JVM的系统配置信息
+VM.systemdictionary
+VM.uptime
+VM.version
+help
+```
+
+
+
+### jmap
+
+可以生成 java 程序的 dump 文件， 也可以查看堆内对象示例的统计信息、查看 ClassLoader 的信息以及 finalizer 队列。
+
+```bash
+jmap -dump:live,format=b,file=dump.hprof <pid>  # 输出堆信息到文件
+```
+
+
+
+#### 参数：
+
+- **option：** 选项参数。
+- **pid：** 需要打印配置信息的进程ID。
+- **executable：** 产生核心dump的Java可执行文件。
+- **core：** 需要打印配置信息的核心文件。
+- **server-id** 可选的唯一id，如果相同的远程主机上运行了多台调试服务器，用此选项参数标识服务器。
+- **remote server IP or hostname** 远程调试服务器的IP地址或主机名。
+
+#### option
+
+- **no option：** 查看进程的内存映像信息,类似 Solaris pmap 命令。
+- **heap：** 显示Java堆详细信息, java9 以后实用`jhsdb`
+- **histo[:live]：** 显示堆中对象的统计信息
+- **clstats：**打印类加载器信息
+- **finalizerinfo：** 显示在F-Queue队列等待Finalizer线程执行finalizer方法的对象
+- **dump:<dump-options>：**生成堆转储快照
+- **F：** 当-dump没有响应时，使用-dump或者-histo参数. 在这个模式下,live子参数无效.
+- **help：**打印帮助信息
+- **J<flag>：**指定传递给运行jmap的JVM的参数
+
+
+
+### JConsole
+
+#### 通过 JConsole 监控 Tomcat
+
+首先我们需要开启 JMX 的远程监听端口，具体来说就是设置若干 JVM 参数。我们可以在 Tomcat 的 bin 目录下新建一个名为`setenv.sh`的文件，然后输入下面的内容：
+
+```bash
+export JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote"
+export JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.port=9001"
+export JAVA_OPTS="${JAVA_OPTS} -Djava.rmi.server.hostname=x.x.x.x"
+export JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.ssl=false"
+export JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.authenticate=false"
+```
+
+重启 Tomcat，这样 JMX 的监听端口 9001 就开启了，接下来通过 JConsole 来连接这个端口。
+
+```bash
+jconsole x.x.x.x:9001
+```
+
+
+
 ## JVM 优化
 
 ### 参数
@@ -152,3 +329,11 @@ java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintN
 * **Reserved** 由操作系统承诺的可用内存大小。但尚未分配，JVM 无法访问
 
 * **Committed** 已被 JVM 分配，可访问
+
+**当前的垃圾回收器版本**
+
+```bash
+java -XX:+PrintCommandLineFlags -version
+```
+
+3

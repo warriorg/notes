@@ -20,6 +20,18 @@
 
 
 
+### JRebel
+
+#### JRebel 能做什么？
+
+JRebel 是一款热部署插件。当你的 java-web 项目在 tomcat 中 run/debug 的时候 ,修改某一个 java 文件时，tomcat 并不能将此文件的修改 *实时编译* 并反映到运行的项目中去。JRebel 就可以解决在项目运行状态`run/debug 状态`下任意修改 java 文件并动态反馈到运行的项目中。
+
+
+
+[Jrebel&JetBrains License Server 最新激活破解方式长期稳定版本](https://blog.csdn.net/qierkang/article/details/95095954)
+
+
+
 ## 修改阿里云插件
 
 

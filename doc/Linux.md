@@ -121,6 +121,23 @@
 
 ## 命令工具
 
+### 简介
+
+#### 2>&1
+
+2>&1表明将文件描述2（标准错误输出）的内容重定向到文件描述符1（标准输出），为什么1前面需要&？当没有&时，1会被认为是一个普通的文件，有&表示重定向的目标不是一个文件，而是一个文件描述符。
+
+```bash
+cd /proc/5270/fd   				#进程5270所有打开的文件描述符信息都在此
+ls -l              				#列出目录下的内容
+ 0 -> /dev/pts/7
+ 1 -> /dev/pts/7
+ 2 -> /dev/pts/7
+ 255 -> /home/hyb/workspaces/shell/test.sh
+```
+
+
+
 ### 系统管理
 
 #### 磁盘
@@ -1048,7 +1065,7 @@ socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
 
 
 
-## SSH设置
+## SSH
 
 ```bash
 vi /etc/ssh/sshd_config
@@ -1078,7 +1095,7 @@ ssh -f -N -R 10000:localhost:22 username@主控端ip
 ssh username@localhost -p 10000
 #username是你被控端的username，10000就是刚才的那个端口号。
 ```
-#####ssh 证书登录
+##### ssh 证书登录
 
 ```bash
 ssh-keygen -t rsa

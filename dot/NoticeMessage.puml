@@ -21,8 +21,6 @@ package "消息消费" {
 database "MySql" {
 }
 
-
-[Web发布消息页面] --> [消息系统]
 [智慧关务] --> 消息系统
 消息系统 <-- [NodeJs推送]
 消息系统 <-- [Bom3 API]
@@ -33,6 +31,6 @@ database "MySql" {
 [Bom3 API] <-- [Bom3 Web] 
 [NodeJs推送] <--> [Bom3 Web] 
 
-[Web发布消息页面] ..> [Bom3 API] 
+[Web发布消息页面] ---> [Bom3 API] 
 
 @enduml

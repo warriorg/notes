@@ -17,7 +17,11 @@ git config --global user.email 'your email'
 git config --list 				# 查看配置
 ```
 
-## clone
+
+
+## 常用命令
+
+### clone
 
 ```bash
 # 支持的所有协议
@@ -30,7 +34,7 @@ git clone ftp[s]://example.com/path/to/repo.git/
 git clone rsync://example.com/path/to/repo.git/
 ```
 
-## add/delete
+### add/delete
 
 ```bash
 # 添加指定文件到暂存区
@@ -56,7 +60,7 @@ $ git rm --cached [file]
 $ git mv [file-original] [file-renamed]
 ```
 
-## commit
+### commit
 
 ```bash
 # 提交暂存区到仓库区
@@ -79,7 +83,7 @@ $ git commit --amend -m [message]
 $ git commit --amend [file1] [file2] ...
 ```
 
-## remote
+### remote
 
 远程主机自动被Git命名为`origin`。如果想用其他的主机名，需要用`git clone`命令的`-o`选项指定。
 
@@ -91,7 +95,7 @@ git remote rm <主机名>  #删除远程主机
 git remote rename <原主机名> <新主机名> #修改远程主机名
 ```
 
-## fetch
+### fetch
 通常用来查看其他人的进程，因为它取回的代码对你本地的开发代码没有影响。默认情况下，取回所有分支（branch）的更新。
 ```bash
 git fetch <远程主机名> # 将远程主机的更新，全部取回本地
@@ -100,44 +104,82 @@ git fetch origin master #取回origin主机的master分支
 
 ```
 
-## pull
+### pull
 取回远程主机某个分支的更新，再与本地的指定分支合并
 ```bash
 # 如果远程分支是与当前分支合并，则冒号后面的部分可以省略
 git pull <远程主机名> <远程分支名>:<本地分支名>
 ```
 
-## push
+### push
 ```bash
 git push <远程主机名> <本地分支名>:<远程分支名>
 git push --force origin # 用本地版本覆盖远程主机的更新
 git push origin --tags  # 推送标签
+git push --tags 	# 推送标签
+git push origin <tag_name>  # 推送一个tag
 ```
 
-## branch
+### checkout
+```bash
+# 查看指定文件的历史版本
+git log <filename>
+# 回滚到指定commitID
+git checkout <commitID> <filename>
+```
+
+### branch
 * **-r** 查看远程分支
+
 * **-a** 查看所有分支
+
+  
 ```bash
 # 删除远程分支
 git branch --delete --remotes <remote>/<branch>	
 git branch -dr <remote>/<branch> # Shorter
+
+git push origin test:test  #提交本地test分支作为远程的test分支
 ```
 
-## Submodule		
+
+
+
+
+### Submodule		
+
 ```bash
 git submodule add 
 git submodule foreach git pull  			# 更新所有submodule
 
 git submodule update --init --recursive	 	# 下载子模块
 ```
-## revert
+### revert
 撤销某次操作，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容。
 
-## reset
+```bash
+# 删除最后一次提交
+git revert HEAD			
+git push origin master
+
+git revert commitID  # 回滚到commitID
+```
+
+
+
+### reset
 
 撤销某次提交，但是此次之后的修改都会被退回到暂存区。除了默认的 mixed 模式，还有 soft 和 hard 模式
 
-## Stash
+```bash
+# 删除最后一次提交
+git reset --hard HEAD^
+git push origin master -f
+```
+
+
+
+### Stash
 
 **Stash**可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中，随时可以重新应
 
@@ -148,7 +190,7 @@ git stash branch testchanges
 
 
 
-## log
+### log
 
 ```bash
 git log -L start,end:file   # 使用 log 来查看某一行的所有操作
@@ -156,13 +198,27 @@ git log -L start,end:file   # 使用 log 来查看某一行的所有操作
 
 
 
-## blame
+### blame
 
 - 方便的 blame 一行代码是谁改的
 - blame 一行代码的改动历史（可能有多个人改过多次，有时候只看最后的改动不够）
 
 ```bash
 git blame <filename>
+```
+
+
+
+### archive 
+
+```bash
+# 导出不带版本的代码
+git archive master | bzip2 >source-tree.tar.bz2
+#ZIP archive:
+git archive --format zip --output /full/path/to/zipfile.zip master
+#tag
+git archive v1.0 gzip > source-tree.tgz
+# -------------------
 ```
 
 
@@ -197,7 +253,7 @@ git remote set-url origin http://ip:port/jinyi/bole-parking.git
 git 分支
 ```bash
 git checkout -b iss53
-git push origin test:test  #提交本地test分支作为远程的test分支
+
 ```
 
 ```
@@ -211,36 +267,10 @@ git branch -d <branch-name>
 删除不在git管理下的文件
 ```bash
 git clean -nd #测试删除
-git clean -fd #真实删除
+git clean -fd #真实删除 
 ```
 
 
-导出不带版本的代码
-
-```bash
-git archive master | bzip2 >source-tree.tar.bz2
-#ZIP archive:
-git archive --format zip --output /full/path/to/zipfile.zip master
-#tag
-git archive v1.0 gzip > source-tree.tgz
-```
-
-迁出远程分支
-
-```bash
-git checkout -b <branch-name> <origin/branch_name>
-```
-
-提交tag到服务器
-
-```bash
-git push --tags  
-```
-*push a single tag*
-
-```
-git push origin <tag_name>
-```
 
 git如何删除本地所有未提交的更改（都可以使用
 ```bash

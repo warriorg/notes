@@ -85,10 +85,6 @@ this is another message
 #### 集群
 
 
-
-
-
-
 ## 工作原理与工作过程
 ### 基本原理
 
@@ -101,7 +97,7 @@ this is another message
 #### Partition
 
 分区。 topic中的消息被分割为一个或者多个partition，其是一个物理概念，对应到系统上就是一个或若干个目录
-> 每个分区在物理上对应为一个文件夹。分区的命名柜子为 [主题名称]-[分区编号]    
+> 每个分区在物理上对应为一个文件夹。分区的命名规则为 [主题名称]-[分区编号]    
 > 每个分区又有一至多个副本(Replica), 分区的副本分布在集群的不同代理上，以提高可用性
 
 
@@ -196,6 +192,8 @@ kafka 保证同一个consumer group中只有一个consumer会消费某条消息�
 
 consumer在消费过消息后需要将其消费的消息的offset提交给broker，以让broker记录下那些消息是消费过的。记录已消费过的offset值有什么用呢？除了用于表示那些消息将来要被删除外，还有一个很重要的作用：在发生再均衡时不会引发消息的丢失或重复消费。
 
+![](./assets/images/IMG_0971.jpg)
+
 
 
 ### 工作原理与过程
@@ -254,12 +252,14 @@ consumer在消费过消息后需要将其消费的消息的offset提交给broker
 
 * 消费者订阅指定topic的消息
 * broker controller会为消费者分配partition，并将该partition的当前offset发送给消费者
-* 当broker接收到生产者发送的消息时，broker会想消息推送给消费者
+* 当broker接收到生产者发送的消息时，broker会将消息推送给消费者
 * 消费者接受broker推送的消息后对消息进行消费
 * 当消费者消费完该条消息后，消费者会向broker发送一个该消息已被消费的反馈
 * 当broker接到消费者反馈后，broker会更新partition中的offset
 * 以上过程一直重复，直到消费者停止请求消息
 * 消费者可以重置offset，从而可以灵活消费存储在broker上的消息
+
+> #### [Push vs. pull](http://kafka.apache.org/documentation.html#design_pull)
 
 #### Partition Leader选举范围
 
@@ -295,6 +295,46 @@ segment是一个逻辑概念，其由两类物理文件组成，分别为`.index
 ##### 消息的查找
 
 ##### 查看segment
+
+
+
+## 运维管理
+
+### 设置
+
+### 命令脚本
+
+#### kafka-topics.sh
+
+```bash
+./kafka-topics.sh --bootstrap-server=*:9092 --list		# 查看Topic
+# 创建topic
+./kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test     		
+
+# 删除topic
+./kafka-topics.sh --delete --topic test --bootstrap-server localhost:9092     						
+# 查看Topic的分区和副本情况
+./kafka-topics.sh --describe --topic test --bootstrap-server localhost:9092
+# 修改topic的partition数量（只能增加不能减少）
+./kafka-topics.sh --alter --partitions 10  --topic test --bootstrap-server localhost:9092
+
+```
+
+
+
+#### kafka-consumer-groups.sh
+
+```bash
+# 所有的topic group info
+./kafka-consumer-groups.sh --describe --bootstrap-server localhost:9092 --all-groups 
+
+# 查看消息堆积
+./kafka-consumer-groups.sh --describe --bootstrap-server localhost:9092 --group group0
+# 设置offset到最大
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group group0 --reset-offsets --to-latest --topic test --execute
+```
+
+
 
 
 
