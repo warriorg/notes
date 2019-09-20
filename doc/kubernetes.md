@@ -139,3 +139,8 @@ $ kubeadm init --config kubeadm.yaml
 
 #### StatefulSet
 
+
+
+## Kubernetes 对象
+
+
