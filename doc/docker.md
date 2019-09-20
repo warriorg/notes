@@ -58,7 +58,7 @@ $ sudo systemctl restart docker
 
 
 
-##常用命令
+## 常用命令
 
 ```bash
 #运行一个容器
@@ -113,10 +113,11 @@ docker images | sed -n -e '2,$p'|awk '{if($2 ~ /[0-9a-f]{64}/) print $1":"$2}'|x
 
 
 
-### Listing containers
+### ps
 ```bash
 $ docker ps # Lists only running containers
-$ docker ps -a # Lists all containers
+$ docker ps -a  # Lists all containers
+$ docker ps --size  # 大小
 ```
 
 ### Committing (saving) a container state
@@ -125,7 +126,8 @@ $ docker ps -a # Lists all containers
 $ docker commit <container> <some_name>
 ```
 
-##Dockerfile
+## Dockerfile
+
 1. Docker从基础镜像运行一个容器
 2. 执行一条指令，对容器修改
 3. 执行类似docker commit的操作，提交一个新的镜像
@@ -134,7 +136,7 @@ $ docker commit <container> <some_name>
 
 >docker build 执行时, Dockerfile 中的所有指令都被执行并且提交，并且在该命令成功结束后返回一个新镜像。
 
-###Dockerfile指令
+### Dockerfile指令
 
 ## Docker Compose
 
