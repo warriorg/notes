@@ -176,7 +176,7 @@ $ kubeadm init --config kubeadm.yaml
   --token="": 认证到API Server使用的令牌。
   --user="": 指定使用的kubeconfig配置文件中的用户名。
   --username="": API Server进行简单认证使用的用户名。
-  --v=0: 指定输出日志的级别。
+  --v=0: 指定输出日志的chr级别。
   --vmodule=: 指定输出日志的模块，格式如下：pattern=N，使用逗号分隔。
 ```
 
