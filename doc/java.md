@@ -129,6 +129,12 @@ java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintN
 
 ```
 
+### javap
+
+JDK自带的反汇编器，可以查看java编译器为我们生成的字节码
+
+
+
 ### jar
 
 ```bash
