@@ -1,6 +1,10 @@
 digraph G {
+    rankdir = LR
+
     node [shape="record"];
     edge [style="dashed"];
+
+  
 
     label = "MQ消息必达架构设计";
     labelloc = "t";

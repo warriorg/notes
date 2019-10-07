@@ -1,0 +1,20 @@
+digraph architecture {
+	// Render chart with left to right layout
+	rankdir="LR";
+
+    bom3[label="框架项目",shape=box,height=3]
+    CNF [label="配置", shape="box"]
+    A [label="业务A",shape=box]
+    B [label="业务B",shape=box]
+    C [label="管理项目",shape=box]
+
+    bom3 -> CNF[dir=both]
+
+    A->bom3[label=注册]
+    B->bom3[label=注册]
+    C->bom3[label=注册]
+
+    
+
+}
+

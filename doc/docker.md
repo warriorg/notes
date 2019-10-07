@@ -110,10 +110,52 @@ docker images | sed -n -e '2,$p'|awk '{if($1 ~ /[0-9a-f]{32}/) print $1":"$2}'|x
 docker images | sed -n -e '2,$p'|awk '{if($2 ~ /[0-9a-f]{64}/) print $1":"$2}'|xargs docker rmi
 ```
 
+### volume
 
+[Use volumes](https://docs.docker.com/storage/volumes/)
 
+卷是用于持久化由Docker容器生成和使用的数据的首选机制。 尽管绑定挂载取决于主机的目录结构，但是卷完全由Docker管理。 与绑定安装相比，卷具有几个优点：
+
+* 与绑定安装相比，卷更易于备份或迁移。
+
+* 您可以使用Docker CLI命令或Docker API管理卷。
+
+* 卷在Linux和Windows容器上均可工作。
+
+* 可以在多个容器之间更安全地共享卷。
+
+* 卷驱动程序使您可以将卷存储在远程主机或云提供商上，以加密卷内容或添加其他功能。
+
+* 新卷的内容可以由容器预先填充。
+
+![types-of-mounts-volume.png](./assets/images/types-of-mounts-volume.png)
+
+```bash
+# create volume
+docker volume create my-vol
+# 列出 volume
+docker volume ls
+# inspect volumen, 显示详细信息
+docker volume inspect my-vol
+# 删除一个volume
+docker volume rm my-vol
+```
+
+#### 在macos上
+
+在macos上，`/var/lib/docker/volumes` 是没有的，需要以以下方式进入虚拟机查看
+
+```bash
+# 进入虚拟机的命令
+screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
+```
+
+`ctrl a` + `d` to detach the screen
+
+`screen -dr` to re-attach the screen again
 
 ### ps
+
 ```bash
 $ docker ps # Lists only running containers
 $ docker ps -a  # Lists all containers
