@@ -34,7 +34,7 @@ protoc --java_out=/Users/username/code/grpc/grpc-test/src/generated/main/ hellow
 ```
 >*如果需要指定生成目录，目录一定要先建立出来*
 
->golan安装
+>golang安装
 >
 >*go get -u github.com/golang/protobuf/{proto,protoc-gen-go}*
 >不需要把protoc-gen-go的路径设置到环境变量中，必须要让protoc能找到`protoc  helloworld.proto --go_out=plugins=grpc:.`
