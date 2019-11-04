@@ -504,6 +504,24 @@ GET _cluster/health?level=shards
 
 倒排的优缺点和正排的优缺点整好相反。倒排在构建索引的时候较为耗时且维护成本较高，但是搜索耗时短。
 
+##### 倒排索引不可变性
+
+倒排索引采用 Immutable Design,一旦生成，不可更改
+
+**好处**
+
+* 无需考虑并发写文件的问题，避免了锁机制带来的性能问题
+* 一旦读入内核的文件系统缓存，便留在哪里。只要文件系统存有足够的空间，大部分请求就会直接亲故内存，不会命中磁盘，提升了很大的性能
+* 缓存容易生成和维护 / 数据可以被压缩
+
+**缺点**
+
+如果需要让一个新的文档可以被搜索，需要重建整个索引
+
+
+
+
+
 
 
 ####  Elasticsearch中的倒排索引
@@ -899,14 +917,40 @@ POST users/_search
 ### Dynamic Mapping
 #### 什么是Mapping
 
+* Mapping 类似数据库中的schema的定义
+  * 定义索引中的字段的名称
+  * 定义字段的数据类型
+  * 字段，倒排索引的相关配置
+* Mapping 会把JSON文档映射成Lucene所需要的扁平格式
+* 一个Mapping属于一个索引的Type
+  * 每个文档都属于一个Type
+  * 一个Type又一个Mapping定义
+  * 7.0开始，不需要在Mapping定义中指定type信息
 
+#### 什么事Dynamic Mapping
 
+* 在写入文档时候，如果索引不存在，会自动创建索引
+* Dynamic Mapping的机制，使得我们无需手动定义Mappings。Elasticsearch会自动根据文档信息，推算出字段的类型
+* 但是有时候会推算的不对，例如地理位置信息
+* 当类型如果设置不对时，会导致一些功能无法正常运行，例如Range查询
 
+```bash
+GET index/_mapping
+# 获取mapping
+```
 
+#### 显示定义一个Mapping
 
-## 索引管理
+```bash
+PUT movies
+{
+	"mappings": {
+		# 定义
+	}
+} 
+```
 
-### 字段类型
+#### 字段类型
 
 | 一级分类 | 二级分类 | 具体类型                             | 备注                                                         |
 | ------------- | -------- | ------------------------------------ | ------------------------------------------------------------ |
@@ -930,5 +974,712 @@ POST users/_search
 |          | 附件     | attachment                           |                                                              |
 |          | 抽取     | percolator                           |                                                              |
 
-### DSL语法
+### Index Template
+
+**Index Template** 设定Mappings和Settings，并按照一定的规则，自动匹配到新创建的索引之上
+
+* 模版仅在一个索引被新创建时，才会产生作用。修改模版不会影响已创建的索引
+* 你可以设定多个索引模版，这些设置会被merge在一起
+* 你可以指定 order 的数值，控制 merging 的过程
+
+**Index Template**的工作方式
+
+* 当一个索引被新创建时
+  * 应用Elasticsearch默认的settings和mappings
+  * 应用order数值低的Index Template中的设定
+  * 应用order高的 Index Template中的设定，之前的设定会被覆盖
+  * 应用创建索引时，用户所指定的Settings和Mappings，并覆盖之前模版中的设定
+
+#### 实战
+
+```bash
+# 数值被映射成了text，日期被映射成了日期
+PUT ttemplate/_doc/1 
+{
+  "someNumber": "1",
+  "someDate": "2019/01/01"
+}
+GET ttemplate/_mapping
+
+# create a default template
+PUT _template/template_default
+{
+  "index_patterns": ["*"],
+  "order": 0,
+  "version": 1,
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1
+  }
+}
+
+PUT /_template/template_test
+{
+  "index_patterns": ["test*"],
+  "order": 1,
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 2
+  },
+  "mappings": {
+    "date_detection": false,
+    "numeric_detection": true
+  }
+}
+
+# 查看template信息
+GET /_template/template_default
+GET _template/temp*
+
+# 写如新的数据，index以test开头
+# 数值被映射成了long，日期被映射成了text
+PUT testtemplate/_doc/1 
+{
+  "someNumber": "1",
+  "someDate": "2019/01/01"
+}
+GET testtemplate/_mapping
+GET testtemplate/_settings
+```
+
+### Dynamic Template
+
+根据Elasticsearch识别的数据类型，结合字段名称，来动态设定字段类型
+
+* 所有的字符串类型都设定成Keyword，或者关闭keyword字段
+* is开头的字段都设置成boolean
+* long_开头的都设置成long类型
+
+ ```bash
+PUT test_index 
+{
+	"mappings": {
+		"dynamic_templates": [
+			{
+				"full_name": {
+					"path_match": "name.*",
+					"path_unmatch": "*.middle",
+					"mapping": {
+						"type": "text",
+						"copy_to": "full_name"
+					}
+				}
+			}
+		]
+	}
+}
+ ```
+
+* **Dynamic Template** 是定义在在某个缩影的Mapping中
+* Template有一个名称
+* 匹配规则时一个数组
+* 为匹配到字段设置Mapping
+
+#### 实战
+
+```bash
+# 设置一个dynamic template
+PUT my_index
+{
+  "mappings": {
+    "dynamic_templates":[
+      {
+        "strings_as_boolean": {
+          "match_mapping_type": "string",
+          "match": "is*",
+          "mapping": {
+            "type": "boolean"
+          }
+        }
+      },
+      {
+        "strings_as_keywords": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "keyword"
+          }
+        }
+      }
+    ]
+  }
+}
+
+PUT my_index/_doc/1
+{
+  "firstName": "Ruan",
+  "isVIP": "true"
+}
+GET my_index/_mapping
+DELETE my_index
+# 另一个例子
+PUT my_index
+{
+  "mappings": {
+    "dynamic_templates": [
+      {
+        "full_name": {
+          "path_match": "name.*",
+          "path_unmatch": "*.middle",
+          "mapping": {
+            "type": "text",
+            "copy_to": "full_name"
+          }
+        }
+      }
+    ]
+  }
+}
+
+PUT my_index/_doc/1
+{
+  "name": {
+    "first": "John",
+    "middle": "Winstohn",
+    "last": "Lennon"
+  }
+}
+GET my_index/_search?q=full_name:John
+GET my_index/_mapping
+DELETE my_index
+```
+
+### 聚合（Aggregation ）
+
+* Elasticsearch 除了搜索以为，提供的针对ES数据进行统计分析的能力
+  * 实时性高
+  * Hadoop（T+1）下可能需要一天时间得到一个统计结果
+* 通过聚合，我们会得到一个数据的概览，是分析和总结全套的数据，而不是寻找单个文档
+  * 尖沙咀和香港到的房客数量
+  * 不同的价格区间，可预定的经济型酒店和五星级酒店的数量
+* 高性能，只需要一条语句，就可以从Elasticsearch得到分析结果
+  * 无需在客户端自己去实现分析逻辑
+
+
+
+#### 集合的分类
+
+* **Bucket Aggregation** 一些列满足特定条件的文档的集合
+* **Metric Aggregation** 一些数学运算，可以对文档字段进行统计分析
+* **Pipeline Aggregation** 对其他的聚合结果进行二次聚合
+* **Matrix Aggregration** 支持对多个字段的操作并提供一个结果矩阵
+
+#### Bucket
+
+文档的分类
+
+##### 实战
+
+```bash
+# 查看航班目的地的统计信息
+# 按照目的地按桶统计
+GET kibana_sample_data_flights/_search
+{
+  "size": 0,
+  "aggs": {
+    "flight_dest": {
+      "terms": { 
+        "field": "DestCountry"
+      }
+    }
+  }
+}
+```
+
+
+
+#### Metric
+
+* 基于数据集计算结果，除了支持在字段上进行计算，同样也支持在脚步产生的结果之上进行计算
+* 大多数Metric是数学计算，仅输出一个值 min/max/sum/avg/cardinality
+* 部分Metric支持输出多个数值 stats/percentiles/percentile_ranks
+
+##### 实战
+
+```bash
+# 查看航班目的地的统计信息，增加均价，最高最低价, 通过嵌套得到天气状况
+GET kibana_sample_data_flights/_search
+{
+  "size": 0,
+  "aggs": {
+    "flight_dest": {
+      "terms": {
+        "field": "DestCountry"
+      },
+      "aggs": {
+        "average_price": {
+          "avg": {
+            "field": "AvgTicketPrice"
+          }
+        },
+        "max_price": {
+          "max": {
+            "field": "AvgTicketPrice"
+          }
+        },
+        "min_price": {
+          "min": {
+            "field": "AvgTicketPrice"
+          }
+        },
+        "weather": {
+          "terms": {
+            "field": "DestWeather"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+#### Pipeline
+
+支持对聚合分析的结果，再次进行聚合分析
+
+Pipeline 的分析结果会输出到原结果中，根据位置的不同，分为两类
+
+1. Sibiling 结果和现有分析结果同级
+   * max, min, Avg & Sum Bucket
+   * Stats, Extended Status Bucket
+   * Percentiles Bucket
+2. Parent 结果内嵌到现有的聚合分析结果中
+   * Derivative (求导)
+   * Cumultive Sum (累计求和)
+   * Moving Function (滑动窗口)
+
+
+
+## 搜索
+
+### 基于词项(Term)的查询
+
+Term 是表达语意的最小单位。搜素和利用统计语言模型进行自然语言处理都需要处理Term
+
+特点：
+
+* Term Level Query: Term Query/Range Q?uery/ Exists Query/ Prefix Query/ Wildcard Query
+* 在ES中，Term查询，对你输入不做分词。会将输入作为一个整体，在倒排索引中查找准确的词项，并且使用相关度算分公式为每个包含改词项的文档进行相关度算分 例如 “Apple Store”
+* 可以通过Constant Score将查询转换成一个Filtering，避免算分，并利用缓存，提高性能
+
+#### 实战
+
+```bash
+DELETE products
+PUT products
+{
+  "settings": {
+    "number_of_shards": 1
+  }
+}
+
+POST /products/_bulk
+{ "index": { "_id": 1 }}
+{ "productID": "XHDK-A-1293-#fJ3", "desc":"iPhone" }
+{ "index": { "_id": 2 }}
+{ "productID": "KDKE-B-9947-#kL5", "desc":"iPad" }
+{ "index": { "_id": 3 }}
+{ "productID": "JODL-X-1937-#pV7", "desc":"MBP" }
+
+GET /products
+# "value": "iPhone"
+POST /products/_search
+{
+  "query": {
+    "term": {
+      "desc": {
+        "value": "iphone"
+      }
+    }
+  }
+}
+```
+
+#### 复合查询 Constant Score转为Filter
+
+* 将Query转成Filter，忽略TF-IDF计算，避免相关性算分的开销
+* Filter 可以有效利用缓存
+
+```bash
+POST /products/_search
+{
+  "explain": true,
+  "query": {
+    "constant_score": {
+      "filter": {
+        "term": {
+          "productID.keyword": "XHDK-A-1293-#fJ3"
+        }
+      }
+    }
+  }
+}
+```
+
+### 基于全文的查询
+
+Match Query / Match Phrase Query / Query String Query
+
+* 索引和搜索是都会进行分词，查询字符串先传递到一个合适的分词器，然后生成一个供查询的词项列表
+* 查询时候，先会对输入的查询进行分词，然后每个词项逐个进行底层的查询，最终将结果进行合并。并为每个文档生成一个算分。例如查 “Matrix reloaded”，会查到包括Matrix或者reload的所有结果
+
+![match_query_查询过程](./assets/images/match_query_查询过程.png)
+
+### 结构化搜索
+
+指对结构化数据的搜索，日期、布尔、和数字都是结构化的。文本也可以是结构化的。
+
+#### 实战
+
+```bash
+DELETE products
+PUT products
+{
+  "settings": {
+    "number_of_shards": 1
+  }
+}
+
+POST /products/_bulk
+{ "index": { "_id": 1 }}
+{ "productID": "XHDK-A-1293-#fJ3", "desc":"iPhone", "date": "2018-01-01", "price": 10, "avaliable": true }
+{ "index": { "_id": 2 }}
+{ "productID": "KDKE-B-9947-#kL5", "desc":"iPad", "date": "2019-01-01", "price": 20, "avaliable": true }
+{ "index": { "_id": 3 }}
+{ "productID": "JODL-X-1937-#pV7", "desc":"MBP", "price": 30, "avaliable": true }
+{ "index": { "_id": 4 }}
+{ "productID": "QQPX-R-3956-#aD8", "desc":"ipod", "price": 40, "avaliable": false }
+
+GET products/_mapping
+
+# 对布尔值match查询，有算分
+POST products/_search
+{
+  "profile": "true",
+  "explain": true,
+  "query": {
+    "term": {
+      "avaliable": true
+    }
+  }
+}
+
+# 对布尔值match查询，通过constant score 转换成filtering，没有算分
+POST products/_search
+{
+  "profile": "true",
+  "explain": true,
+  "query": {
+    "constant_score": {
+      "filter": {
+        "term": {
+          "avaliable": true
+        }
+      }
+    }
+  }
+}
+
+# 数字 Range 查询
+GET products/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "range": {
+          "price": {
+            "gte": 20,
+            "lte": 30
+          }
+        }
+      }
+    }
+  }
+}
+
+# 日期 range
+GET products/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "range": {
+          "date": {
+            "gte": "now-1y"
+          }
+        }
+      }
+    }
+  }
+}
+
+# exists 有date字段的
+GET products/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "exists": {
+          "field": "date"
+        }
+      }
+    }
+  }
+}
+
+# 处理多指字段, term 查询我是包含，而不是等于
+POST movies/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "term": {
+          "genre.keyword": "Comedy"
+        }
+      }
+    }
+  }
+}
+```
+
+### 搜索的相关性算分
+
+#### 相关性 （Relevance）
+
+* 搜索的相关性算分，描述了一个文档和查询语句匹配的程度。ES会对你每个匹配查询条件的记过进行算分_score
+* 打分的本质是排序，需要把最符合用户需求的文档排在前面。ES5之前，默认的相关性算分采用TF-IDF，现在采用BM25
+
+#### 词频 （Term Frequeny）
+
+* 检索词在一篇文档中出现的频率  计算公式`检索词/文档总字数`
+* 度量一条查询和结果文档相关性的简单方法： 简单将搜索中每一个词的TF进行相加， 如 TF(区块链) + TF(的) + TF(应用)
+* Stop Word， `的`在文档中出现了很多次，但是对贡献相关度几乎没有用处，不应该考虑他们的TF
+* 
+
+#### 逆文档频率 （IDF）
+
+* **DF** 检索词在所有文档中出现的频率
+  * `区块链`在相对比较少的文档中出现
+  * `应用`在相对比较多的文档中出现
+  * `Stop Word`在大量文档中出现
+* Inverse Document Frequency `log(全部文档数/检索词出现过的文档总数)`
+* TF-IDF 就是将TF求和编程加权求和
+  * `TF(区块链)*IDF(区块链)+TF(的)*IDF(的)+TF(应用)*IDF(应用)`
+
+#### TF-IDF
+
+* 公认为是信息检索领域最重要的发明
+* 在文献分类和其他相关领域有着非常广泛的应用
+
+* 通过 Explain Api 查看TF-IDF
+
+```bash
+POST movies/_search
+{
+  "explain": true,
+  "query": {
+    "match": {
+      "title": "old"
+    }
+  }
+}
+```
+
+### Query Context
+
+相关性算分
+
+### Filter Context
+
+不需要算分，可以利用Cache，获得更好的性能
+
+### 单字符串多字段查询
+
+#### Dis Max Query
+
+```bash
+PUT /blogs/_bulk
+{ "index": { "_id": 1 } }
+{ "title": "Quick brown rabbits", "body": "Brown rabbits are commojnly seen." }
+{ "index": { "_id": 2 } }
+{ "title": "Keeping pets healthy", "body": "My quick brown fox eats rabbits on a regular basis." }
+
+POST blogs/_search
+{
+  "explain": true,
+  "query": {
+    "bool": {
+      "should": [
+        { "match": { "title": "Brown fox" }},
+        { "match": { "body": "Brown fox" }}
+      ]
+    }
+  }
+}
+# dis max 查询
+POST blogs/_search
+{
+  "query": {
+    "dis_max": {
+      "queries": [
+        { "match": { "title": "Brown fox" }},
+        { "match": { "body": "Brown fox" }}
+      ]
+    }
+  }
+}
+
+# tie_breaker 是一个介于0-1之间的浮点数。0 代表使用最佳匹配，1 代表所有语句同等重要
+# 1 获得最佳匹配语句的评分
+# 2 将其他匹配语句的评分与tie_breaker相乘
+# 3 对以上评分求和并规范化
+POST blogs/_search
+{
+  "query": {
+    "dis_max": {
+      "queries": [
+        { "match": { "title": "Quick pet" }},
+        { "match": { "body": "Quick pet" }}
+      ],
+      "tie_breaker": 0.7
+    }
+  }
+}
+
+```
+
+#### Multi Match
+
+```bash
+PUT /blogs/_bulk
+{ "index": { "_id": 1 } }
+{ "title": "Quick brown rabbits", "body": "Brown rabbits are commojnly seen." }
+{ "index": { "_id": 2 } }
+{ "title": "Keeping pets healthy", "body": "My quick brown fox eats rabbits on a regular basis." }
+
+# best_fields
+POST blogs/_search
+{
+  "query": {
+    "multi_match": {
+      "type": "best_fields",
+      "query": "Quick pets",
+      "fields": ["title", "body"],
+      "tie_breaker": 0.2,
+      "minimum_should_match": "20%"
+    }
+  }
+}
+
+# 跨字段查询，cross_fields
+# 支持使用operator
+# 与copy_to相比，其中一个优势就是它可以在搜素时为当呃呃呃字段提升权重。
+POST blogs/_search
+{
+  "query": {
+    "multi_match": {
+      "type": "cross_fields",
+      "query": "Quick pets",
+      "operator": "and", 
+      "fields": ["title", "body"]
+    }
+  }
+}
+```
+
+### 多语言
+
+### 中文分词与检索
+
+### 实战
+
+### Search Template 
+
+解耦程序&搜索DSL
+
+官网文档
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html
+
+### Index Alias
+
+### Function Score Query
+
+可以在查询结束后，对每一个匹配的文档进行一系列的重新算分，根据新生成的分数进行排序。
+
+默认的计算分值的函数
+
+* Weight  为每一个文档设置一个简单而不被规范化的权重
+* Field Value Factor  使用该数值来修改_score，例如将`热度`和`点赞数`作为算分的参考因素
+* Random Score  为每一个用户使用一个不同的，随机算分结果
+* 衰减函数  以某个字段的值为标准，距离某个值越近，得分越高
+* Script Score  自定义脚步完全控制所需逻辑
+
+### Term &Phrase Suggester
+
+#### 自动补全与基于上下文的提示
+
+* Completion Suggester提供了自动完成的功能，用户每输入一个字符，就需要即时发送一个查询请求到后段查找匹配项
+* 对性能要求比较苛刻。 Elasticsearch采用了不同的数据结构，并非通过倒排索引来完成。而是将Analyze的数据编码成FST和索引一起存放。FST会被ES整个加载进内存，速度很快
+* FST只能用于前缀查找
+
+
+
+## 运维管理
+
+### Hot & Warm 架构
+
+
+
+## Logstash
+
+### 概念
+
+#### Pipeline
+
+* 包含了input -- filter -- output 三个阶段的处理流程
+* 插件生命周期管理
+* 队列管理
+
+#### Logstash Event
+
+* 数据在内部流转市的具体表现形式。数据在input阶段被转换为Event，在output被转化成目标格式数据
+* Event 其实是一个Java Object,在配置文件中，对Event的属性进行增删改查
+
+#### Logstash Queue
+
+* In Memory Queu e
+  * ​	一进程Crash，机器宕机，都会引起数据的丢失
+* Persistent Queue
+  * Queue.type.persisted (默认是memory)
+    * Queue.max_bytes: 4gb
+  * 机器宕机，数据也不会丢失；数据保证会被消费；可以替代Kafka等消息队列缓冲区的作用
+
+
+
+#### JDBC Input Plugin 
+
+## Beats
+
+Beats 平台集合了多种单一用途数据采集器。它们从成百上千或成千上万台机器和系统向 Logstash 或 Elasticsearch 发送数据。
+
+### FileBeat
+
+### Metricbeat
+
+
+
+## Kibana
+
+
+
+
+
+
+## 其他工具
+
+### [cerebro](https://github.com/lmenezes/cerebro)
+
+elasticsearch Web管理工具。
+
+
 
