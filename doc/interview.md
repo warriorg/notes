@@ -1,4 +1,4 @@
-##数组
+## 数组
 [1.1 实现一个算法，确定一个字符串的所有字符是否全都不同。假使不允许使用额外的 数据结构，又该如何处理](#1.1) <br/>
 
 [1.2 用C或者C++实现void reverse(char* str)函数，即反转一个null结尾的字符串](#1.2)<br/>
@@ -15,7 +15,7 @@
 
 [1.8 假定有一个方法isSubstring,可检查一个单词是否为其他字符串的子串。给定两个字符串s1,s2,请编写代码检查s2是否为s1旋转而成，要求只能调用一次isSubstring。(比如waterbottle是erbottlewat旋转后的字符串)](#1.8)<br/>
 
-##链表
+## 链表
 [2.1 编写代码，移除未排序链表中重复节点。如果不得使用缓冲区，改怎么解决](#2.1)
 
 [2.2 实现一个算法, 找出单向链表中倒数第k个结点](#2.2)
@@ -30,7 +30,7 @@
 
 [2.7 编写一个函数，检车链表是否为回文](#2.7)
 
-##栈与队列
+## 栈与队列
 [3.1 描述如何只用一个数组来实现三个栈](#3.1) 
 
 <h5 id='1.1'>
@@ -160,7 +160,6 @@ public void replaceSpaces(char[] str, int lenght) {
 ```
 
 <h5 id='1.5'>1.5 利用字符重复出现的次数，编写一个方法，实现基本的字符串压缩功能。比如，字符串aabcccccaaa会变为a2b1c5a3。若“压缩”后的字符串没有变短，则返回原先的字符串。</h5>
-
 ```java
 public String compressBad(String str) {
 	String mystr = "";
@@ -279,7 +278,6 @@ int countCompression(String str) {
 ```
 
 <h5 id='1.6'>1.6 给定一幅由 N×N 矩阵表示的图像，其中每个像素的大小为4字节，编写一个方法，将图像旋转90度。不占用额外内存空间能否做到</h5>
-
 ![image](images/interview-1.6.png)
 
 ```java
@@ -305,7 +303,6 @@ public void rotate(int[][] matrix, int n) {
 ```
 
 <h5 id='1.7'>1.7 编写一个算法，若MxN矩形中牧歌元素为0，则将其所在的行与列清零。</h5>
-
 > 需要先遍历数据，标记所有的0
 
 ```java
@@ -334,7 +331,6 @@ public void setZeros(int[][] matrix) {
 ```
 
 <h5 id='1.8'>1.8 假定有一个方法isSubstring,可检查一个单词是否为其他字符串的子串。给定两个字符串s1,s2,请编写代码检查s2是否为s1旋转而成，要求只能调用一次isSubstring。(比如waterbottle是erbottlewat旋转后的字符串)</h5>
-
 >假设s2由s1旋转而成，我们只要找出旋转点在那。<br/>
 >s1 = xy = waterbottle;<br/>
 >x = wat<br/>
@@ -356,7 +352,6 @@ public boolean isRotation(String s1, String s2) {
 ```
 
 <h5 id='2.1'>2.1 编写代码，移除未排序链表中重复节点。如果不得使用缓冲区，改怎么解决</h5>
-
 >迭代访问整个链表，将每个结点加入散列表。若发现重复，则将该结点移除
 
 ```java
@@ -398,7 +393,6 @@ public static void deleteDups(LinkedListNode head) {
 ```
 
 <h5 id='2.2'>2.2 实现一个算法, 找出单向链表中倒数第k个结点</h5>
-
 解法1 链表长度已知
 
 > 倒数第k个几点就是 (length - k)
@@ -456,7 +450,7 @@ LinkedListNode nthToLastR2(LinkedListNode head, int k, IntWrapper i) {
 	}
 	return node;
 }
-```	
+```
 
 解法3 迭代法
 
@@ -486,7 +480,6 @@ LinkedListNode nthToLast(LinkedListNode head, int k) {
 ```
 
 <h5 id='2.3'>2.3 实现一个算法，删除单向链表中间的某个结点，假定你只能访问该结点。</h5>
-
 > 直接将后续节点的数据复制到当前节点，然后删除后续的节点，如果待删除结点为链表的结尾，问题误解
 
 ```java
@@ -503,7 +496,6 @@ public static boolean deleteNode(LinkedListNode n) {
 ```
 
 <h5 id='2.4'>2.4 编写代码，以给定值x为基准将链表分割成两部分，所有小于x的结点排在大于或等于x的结点之前。</h5>
-
 >创建2个链表，一个存放小于x的元素；另一个存放大于x的元素
 
 ```java
@@ -547,7 +539,6 @@ public LinkedListNode partition(LinkedListNode node, int x) {
 }
 ```
 <h5 id='2.5'>2.5 给定两个用链表表示的整数，每个结点包含一个数位。这些数位是反向存放的，也就是个位排在链表首部。编写函数对这两个整数求和，并用链 表形式返回结果。(假设这些位数正向存放，请在做一遍)</h5>
-
 >假设链表
 ><pre>
 >	7 -> 1 -> 6
@@ -658,7 +649,6 @@ LinkedListNode insertBefore(LinkedListNode list, int data) {
 ```
 
 <h5 id='2.6'>2.6 给定一个有环链表，实现一个算法返回环路的开头结点。</h5>
-
 >检测链表环路，简单的做法叫 FastRunner/SlowRunner法。FastRunner 一次移动2步，SlowRunner一次移动一步。
 >
 >FastRunner会不会刚好“越过”SlowRunner，而不发生碰撞呢？绝无可能。假设FastRunner真的越过了SlowRunner，且SlowRunner处于位置i，FastRunner处于位置i + 1。那么，在前一步，SlowRunner 就处于位置 i - 1，FastRunner处于位置((i + 1)- 2)或i - 1。也就是说，两者碰在一起了。
@@ -703,7 +693,6 @@ public LinkedListNode FindBeginging(LinkedListNode head){
 ```
 
 <h5 id='2.7'>2.7 编写一个函数，检车链表是否为回文</h5>
-
 解法1: 反转并比较
 
 > 反转整个链表，然后比较反转链表和原始链表，若2者相同，则该链表为回文。在比较时，只需要比较链表的前办部分。如果前半部分相同，那么，两者后半部分肯定相同
@@ -775,7 +764,6 @@ boolean isPalinddrome(LinkedListNode head) {
 ```
 
 <h5 id='3.1'>3.1 描述如何只用一个数组来实现三个栈</h5>
-
 方法1 固定分割
 将数组划分为3等份，将每个栈的增长限制在各自的空间里。 "["包含端点 "(" 表示不含端点
 
