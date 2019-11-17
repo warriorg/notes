@@ -338,6 +338,14 @@ compile "ch.qos.logback:logback-classic:$logbackVersion"
 * 嵌入式（Embedded） `jdbc:h2:~/test`
 * 内存（Memory） `jdbc:h2:tcp://localhost/mem:test`
 
+
+
+## lombok
+
+https://projectlombok.org/
+
+
+
 ## mapstruct学习
 
 [官网](http://mapstruct.org/)		
@@ -377,3 +385,12 @@ jenv local oracle64-1.8.0.192
 jenv shell oracle64-1.8.0.192 
 ```
 
+
+
+## Flyway
+
+数据库跟踪框架
+
+## Liquibase
+
+数据库跟踪框架

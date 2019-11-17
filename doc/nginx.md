@@ -84,3 +84,59 @@ http {
 ### 测试 rtmp 推流
 
 `ffmpeg -f avfoundation -framerate 30 -i "0" -c:v libx264 -an -f flv rtmp://localhost/live/hello`
+
+
+
+## 基本概念
+
+### 应用场景
+
+* 静态资源服务
+* 反向代理
+  * Nginx 强大的性能
+  * 缓存
+  * 负载均衡
+* API服务 OpenRestry
+
+### 优点
+
+1. 高并发，高性能
+
+2. 可扩展性好
+
+3. 高可可靠性
+
+4. 热部署
+5. BSD许可证
+
+### 主要组成部分
+
+1. Nginx 二进制可执行文件
+2. Nginx.conf 配置文件
+3. access.log 访问日志
+4. error.log 错误日志
+
+### 编译
+
+
+
+### 配置文件的通用语法介绍
+
+
+
+
+
+
+
+
+
+## Nginx 架构基础
+
+## 详解HTTP模块
+
+## 反向代理与负载均衡
+
+## Nginx的系统层性能优化
+
+##  Nginx 与 OpenResty
+

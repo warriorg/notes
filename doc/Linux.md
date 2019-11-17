@@ -173,9 +173,15 @@ du -h --max-depth=1						# 查看各文件夹大小命令
 
 ```bash
 ps -aef
+ps aux --sort -rss | head  # 查看内存占用10的进程
 ps -aux | sort -k4nr | head -n 10  # 查看内存占用10的进程
 ps -e -o "%C : %p : %z : %a"|sort -k5 -nr 		# 查看进程，按内存从大到小
 ps -e -o "%C : %p : %z : %a"|sort -nr					# 查看进程，按CPU利用率从大到小排序
+```
+
+#### top
+```bash
+top -c -b -o +%MEM | head -n 20 | tail -15		查看内存占用并且排序
 ```
 
 #### &、ctrl + z、fg、bg、jobs、

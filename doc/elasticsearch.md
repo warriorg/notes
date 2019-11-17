@@ -229,6 +229,10 @@ http.cors.allow-origin: "*"
 | Schema | Mapping       |
 | SQL    | DSL           |
 
+```
+GET /_cat/indices?v    # 列出所有的index
+```
+
 
 
 ### 文档
@@ -1246,6 +1250,20 @@ Pipeline 的分析结果会输出到原结果中，根据位置的不同，分�
    * Derivative (求导)
    * Cumultive Sum (累计求和)
    * Moving Function (滑动窗口)
+
+
+
+## REST API
+
+### Search API
+
+#### Search
+
+```bash
+GET /twitter/_search?q=field:wow   # 搜索字段 field 值为wow的记录
+```
+
+
 
 
 
