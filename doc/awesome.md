@@ -7,7 +7,7 @@
 
 [NATS](http://nats.io/) is an open-source, cloud-native messaging system
 
-###Elasticsearch 
+### Elasticsearch 
 
 搜索服务器
 
@@ -44,6 +44,20 @@ ELK(ElasticSearch, Logstash, Kibana)日志分析
 
 Apollo（阿波罗）是携程框架部门研发的分布式配置中心，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，适用于微服务配置管理场景。
 
+### [matomo](<https://github.com/matomo-org/matomo>)
+
+Matomo是领先的Free / Libre开放式分析平台
+
+
+
+## 管理工具
+
+### wekan 
+
+看板工具
+
+
+
 
 
 ## 自动化
@@ -55,10 +69,14 @@ Apollo（阿波罗）是携程框架部门研发的分布式配置中心，能�
 
 ### Vanilla JS	——世界上最轻量的JavaScript框架
 
-### [matomo](<https://github.com/matomo-org/matomo>)
-Matomo是领先的Free / Libre开放式分析平台
+
+
+
+
+
 
 ## golang
+
 [Martini](https://github.com/go-martini/martini)
 >Martini is a powerful package for quickly writing modular web applications/services in Golang.
 
@@ -89,18 +107,21 @@ SSH [沃通](https://www.wosign.com/)
 
 数据库工具
 
-###播放器
+### 播放器
 [VLC](http://www.videolan.org/vlc/index.html)
 
-###电子书
+### 电子书
 [calibre](http://calibre-ebook.com/)
+
 > 处理成kindle可以阅读的书
 
-###项目管理工具
+### 项目管理工具
 [trello](https://trello.com/)
+
 >多人协作工具
 
 [zeplin](https://zeplin.io/)
+
 >前端与设计协同工作专用工具
 >
 
@@ -110,7 +131,8 @@ Iconjar
 
 Lingo
 
-###网盘
+### 网盘
+
 >seafile
 
 

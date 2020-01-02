@@ -20,10 +20,6 @@ brew install elasticsearch
 brew install kibana
 ```
 
-
-
-
-
 ### 集群安装
 
 | 名称  | IP 地址      |

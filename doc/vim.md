@@ -57,6 +57,15 @@ TX  til previous 'X'
 ,   repeat above, in reverse direction
 ```
 
+### 左右移动
+
+```bash
+shift+</>
+:80,89> # 把80，89行左移动，右移动<
+```
+
+
+
 
 
 #### 动词
@@ -208,6 +217,7 @@ ddp                      # 上下两行的位置交换
 
 ```bash
 git config --global merge.tool vimdiff
+# git has an option to display merge conflicts in diff3 format (by default it only displays the two files to be merged). You can enable it like so:
 git config --global merge.conflictstyle diff3
 git config --global mergetool.prompt false
 ```

@@ -407,6 +407,14 @@ git pull origin master --allow-unrelated-histories
 ```bash
 git config --system --unset credential.helper
 ```
+### error: You have not concluded your merge (MERGE_HEAD exists)
+
+```bash
+git merge --abort
+git reset --merge
+git pull
+```
+
 
 ### 解决每次都要输入密码
 

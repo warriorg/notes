@@ -1,40 +1,134 @@
-## 基础理论
-**DO**（Data Object）与数据库表结构一一对应，通过 DAO 层向上传输数据源对象。
-**DTO**（Data Transfer Object）是远程调用对象，它是 RPC 服务提供的领域模型。
-> 对于 DTO 一定要保证其序列化，实现 Serializable 接口，并显示提供 serialVersionUID，否则在反序列化时，如果 serialVersionUID 被修改，那么反序列化会失败。
-
-**BO**（Business Object）是业务逻辑层封装业务逻辑的对象，一般情况下，它是聚合了多个数据源的复合对象。
-**DTO**（View Object） 通常是请求处理层传输的对象，它通过 Spring 框架的转换后，往往是一个 JSON 对象。
-
-
-```
-JavaBeans spec:
-getUrl/setUrl => property name: url
-getURL/setURL => property name: URL
-
-Jackson:
-getUrl/setUrl => property name: url
-getURL/setURL => property name: url
-
-Introspector.decapitalize() // 转换命名
-```
-
-
-### SPI
-
-SPI 全称为 (Service Provider Interface) ，是JDK内置的一种服务提供发现机制。SPI是一种动态替换发现的机制， 比如有个接口，想运行时动态的给它添加实现，你只需要添加一个实现。我们经常遇到的就是java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，mysql和postgresql都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。
-
-当服务的提供者提供了一种接口的实现之后，需要在classpath下的META-INF/services/目录里创建一个以服务接口命名的文件，这个文件里的内容就是这个接口的具体的实现类。当其他的程序需要这个服务的时候，就可以通过查找这个jar包（一般都是以jar包做依赖）的META-INF/services/中的配置文件，配置文件中有接口的具体实现类名，可以根据这个类名进行加载实例化，就可以使用该服务了。JDK中查找服务实现的工具类是：java.util.ServiceLoader。
-
-
-
-### JMX
-
-JMX（Java Management Extensions，即 Java 管理扩展）是一个为应用程序、设备、系统等植入监控管理功能的框架。JMX 使用管理 MBean 来监控业务资源，这些 MBean 在 JMX MBean 服务器上注册，代表 JVM 中运行的应用程序或服务。每个 MBean 都有一个属性列表。JMX 客户端可以连接到 MBean Server 来读写 MBean 的属性值。
-
-
-
 ## 语言特性
+
+
+
+## 多线程
+
+### Synchronized 
+
+#### 实现原理
+
+JVM中的同步是基于进入和退出管程(Monitor)对象实现的，每一个对象实例都会有一个Monitor，Monitor可以和对象一起创建、销毁。Monitor是由ObjectMonitor实现，ObjectMonitor由C++实现
+
+#### 锁升级
+##### Java 对象头
+
+JDK1.6 JVM 对象实例在堆内存中被分为3部分
+
+1. 对象头
+   1. Mark Word
+   2. 指向类的指针
+   3. 数组长度
+2. 实例数据
+3. 对齐填充
+
+64位JVM的存储结构
+
+![64位JVM的存储结构](./assets/images/jvm64head.jpg)
+
+<u>Synchronized同步锁就是从偏向锁开始的，随着竞争越来越激烈，偏向锁升级到轻量级锁，最终升级到重量级锁</u>
+
+##### 偏向锁
+
+##### 轻量级锁
+
+##### 自旋锁
+
+##### 重量级锁
+
+
+
+### Lock同步锁
+
+Lock 锁的基本操作是通过乐观锁来实现的，但由于 Lock 锁也会在阻塞时被挂起，因此它依然属于悲观锁。
+
+![synchronizedvslock](./assets/images/synchronizedvslock.jpg)
+
+从性能方面上来说，在并发量不高、竞争不激烈的情况下，Synchronized 同步锁由于具有分级锁的优势，性能上与 Lock 锁差不多；但在高负载、高并发的情况下，Synchronized 同步锁由于竞争激烈会升级到重量级锁，性能则没有 Lock 锁稳定。
+
+#### 实现原理
+
+从性能方面上来说，在并发量不高、竞争不激烈的情况下，Synchronized 同步锁由于具有分级锁的优势，性能上与 Lock 锁差不多；但在高负载、高并发的情况下，Synchronized 同步锁由于竞争激烈会升级到重量级锁，性能则没有 Lock 锁稳定。
+
+AQS 类结构中包含一个基于链表实现的等待队列（CLH 队列），用于存储所有阻塞的线程，AQS 中还有一个 state 变量，该变量对 ReentrantLock 来说表示加锁状态。
+
+
+
+## JVM
+
+### Java Object Header
+
+#### [32 bit jvm](./assets/files/ObjectHeader32.txt)
+![ObjectHeader32](./assets/images/ObjectHeader32.png)
+
+#### [64 bit jvm](./assets/files/ObjectHeader64.txt)
+![ObjectHeader32](./assets/images/ObjectHeader64.png)
+
+#### [64 bit jvm with pointer compression](./assets/files/ObjectHeader64Coops.txt)
+![ObjectHeader32](./assets/images/ObjectHeader64Coops.png)
+
+
+
+### GC
+
+#### 日志
+
+##### 开启日志
+
+```bash
+-XX:+PrintGC 输出简要GC日志 
+-XX:+PrintGCDetails 输出详细GC日志 
+-Xloggc:gc.log  输出GC日志到文件
+-XX:+PrintGCTimeStamps 输出GC的时间戳（以JVM启动到当期的总时长的时间戳形式） 
+-XX:+PrintGCDateStamps 输出GC的时间戳（以日期的形式，如 2013-05-04T21:53:59.234+0800） 
+-XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息
+-verbose:gc
+-XX:+PrintReferenceGC 打印年轻代各个引用的数量以及时长
+```
+
+###### -XX:+PrintGC与-verbose:gc
+
+```bash
+[GC (Allocation Failure)  61805K->9849K(256000K), 0.0041139 secs]
+```
+
+1、`GC` 表示是一次YGC（Young GC）
+
+2、`Allocation Failure` 表示是失败的类型
+
+3、`68896K->9849K` 表示年轻代从68896K降为9849K
+
+4、`256000K`表示整个堆的大小
+
+5、`0.0041139 secs`表示这次GC总计所用的时间
+
+######  -XX:+PrintGCDetails
+
+```bash
+[GC (Allocation Failure) [PSYoungGen: 53248K->2176K(59392K)] 58161K->7161K(256000K), 0.0039189 secs] [Times: user=0.02 sys=0.01, real=0.00 secs]
+```
+
+1、`GC` 表示是一次YGC（Young GC）
+
+2、`Allocation Failure` 表示是失败的类型
+
+3、PSYoungGen 表示年轻代大小
+
+4、`53248K->2176K` 表示年轻代占用从`53248K`降为`2176K`
+
+5、`59392K`表示年轻带的大小
+
+6、`58161K->7161K` 表示整个堆占用从`53248K`降为`2176K`
+
+7、`256000K`表示整个堆的大小
+
+8、 0.0039189 secs 表示这次GC总计所用的时间
+
+9、`[Times: user=0.02 sys=0.01, real=0.00 secs]`  分别表示，用户态占用时长，内核用时，真实用时。
+
+
+
+
 
 ## Test
 
@@ -204,7 +298,20 @@ jmap -dump:live,format=b,file=dump.hprof <pid>  # 输出堆信息到文件
 - **help：**打印帮助信息
 - **J<flag>：**指定传递给运行jmap的JVM的参数
 
+### jstat
 
+* **-class**  类加载器
+* **-compiler**  JIT
+* **-gc** GC堆状态
+* **-gccapacity** 各区大小
+* **-gccause**  最近一次GC统计和原因
+* **-gcmetacapacity** 新区大小
+* **-gcnew** 新区统计
+* **-gcnewcapacity** 老区大小
+* **-gcold** 老区统计
+* **-gcoldcapacity** 永久区大小
+* **-gcutil** GC统计汇总
+* **-printcompilation** HotSpot编译统计
 
 ### JConsole
 
@@ -394,3 +501,111 @@ jenv shell oracle64-1.8.0.192
 ## Liquibase
 
 数据库跟踪框架
+
+
+
+
+
+## 附录
+
+**DO**（Data Object）与数据库表结构一一对应，通过 DAO 层向上传输数据源对象。
+**DTO**（Data Transfer Object）是远程调用对象，它是 RPC 服务提供的领域模型。
+
+> 对于 DTO 一定要保证其序列化，实现 Serializable 接口，并显示提供 serialVersionUID，否则在反序列化时，如果 serialVersionUID 被修改，那么反序列化会失败。
+
+**BO**（Business Object）是业务逻辑层封装业务逻辑的对象，一般情况下，它是聚合了多个数据源的复合对象。
+**DTO**（View Object） 通常是请求处理层传输的对象，它通过 Spring 框架的转换后，往往是一个 JSON 对象。
+
+
+```
+JavaBeans spec:
+getUrl/setUrl => property name: url
+getURL/setURL => property name: URL
+
+Jackson:
+getUrl/setUrl => property name: url
+getURL/setURL => property name: url
+
+Introspector.decapitalize() // 转换命名
+```
+
+
+### SPI
+
+SPI 全称为 (Service Provider Interface) ，是JDK内置的一种服务提供发现机制。SPI是一种动态替换发现的机制， 比如有个接口，想运行时动态的给它添加实现，你只需要添加一个实现。我们经常遇到的就是java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，mysql和postgresql都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。
+
+当服务的提供者提供了一种接口的实现之后，需要在classpath下的META-INF/services/目录里创建一个以服务接口命名的文件，这个文件里的内容就是这个接口的具体的实现类。当其他的程序需要这个服务的时候，就可以通过查找这个jar包（一般都是以jar包做依赖）的META-INF/services/中的配置文件，配置文件中有接口的具体实现类名，可以根据这个类名进行加载实例化，就可以使用该服务了。JDK中查找服务实现的工具类是：java.util.ServiceLoader。
+
+
+
+### JMX
+
+JMX（Java Management Extensions，即 Java 管理扩展）是一个为应用程序、设备、系统等植入监控管理功能的框架。JMX 使用管理 MBean 来监控业务资源，这些 MBean 在 JMX MBean 服务器上注册，代表 JVM 中运行的应用程序或服务。每个 MBean 都有一个属性列表。JMX 客户端可以连接到 MBean Server 来读写 MBean 的属性值。
+
+### CAS
+
+#### 什么是CAS
+
+（1）CAS(compare and swap) 比较并替换，比较和替换是线程并发算法时用到的一种技术
+（2）CAS是原子操作，保证并发安全，而不是保证并发同步
+（3）CAS是CPU的一个指令
+（4）CAS是非阻塞的、轻量级的乐观锁
+
+#### 为什么说CAS是乐观锁
+
+乐观锁，严格来说并不是锁，通过原子性来保证数据的同步，比如说数据库的乐观锁，通过版本控制来实现等，所以CAS不会保证线程同步。乐观的认为在数据更新期间没有其他线程影响
+
+#### CAS原理
+
+CAS(compare and swap) 比较并替换，就是将内存值更新为需要的值，但是有个条件，内存值必须与期望值相同。举个例子，期望值 E、内存值M、更新值U，当E == M的时候将M更新为U。
+
+#### CAS应用
+
+由于CAS是CPU指令，我们只能通过JNI与操作系统交互，关于CAS的方法都在sun.misc包下Unsafe的类里 java.util.concurrent.atomic包下的原子类等通过CAS来实现原子操作。
+
+#### CAS优缺点
+
+- 优点
+  非阻塞的轻量级的乐观锁，通过CPU指令实现，在资源竞争不激烈的情况下性能高，相比synchronized重量锁，synchronized会进行比较复杂的加锁，解锁和唤醒操作。
+- 缺点
+  （1）ABA问题 线程C、D,线程D将A修改为B后又修改为A,此时C线程以为A没有改变过，java的原子类AtomicStampedReference，通过控制变量值的版本来保证CAS的正确性。
+  （2）自旋时间过长，消耗CPU资源， 如果资源竞争激烈，多线程自旋长时间消耗资源。
+
+#### CAS总结
+
+CAS不仅是乐观锁，是种思想，我们也可以在日常项目中通过类似CAS的操作保证数据安全，但并不是所有场合都适合。
+
+### RMI
+
+Java RMI 指的是远程方法调用 (Remote Method Invocation)。它是一种机制，能够让在某个 Java 虚拟机上的对象调用另一个 Java 虚拟机中的对象上的方法。
+
+RMI 可以使用以下协议实现：
+
+- Java Remote Method Protocol (JRMP)：专门为 RMI 设计的协议
+- Internet Inter-ORB Protocol (IIOP) ：基于 `CORBA` 实现的跨语言协议
+
+RMI 程序通常包括
+
+- `rmi registry` naming service，提供 remote object 注册，name 到 remote object 的绑定和查询，是一种特殊的 remote object
+- `rmi server` 创建 remote object，将其注册到 RMI registry
+- `rmi client` 通过 name 向 RMI registry 获取 remote object reference (stub)，调用其方法
+
+![rmi-2](./assets/images/rmi-2.gif)
+
+#### 参考
+
+https://docs.oracle.com/javase/tutorial/rmi/overview.html
+
+### 术语
+
+| 术语                    | 含义             | 举例                     |
+| ----------------------- | ---------------- | ------------------------ |
+| Parameterized type      | 参数化类型       | `List<String>`           |
+| Actual type parameter   | 实际参数类型     | `String`                 |
+| Generic type            | 泛型类型         | `List<E>`                |
+| Formal type parameter   | 形式类型参数     | `E`                      |
+| Unbounded wildcard type | 无限制通配符类型 | `List<?>`                |
+| Raw type                | 原始类型         | `List`                   |
+| Bounded type parameter  | 限制类型参数     | `<E extends Number>`     |
+| Bounded wildcard type   | 限制通配符类型   | `List<? extends Number>` |
+
