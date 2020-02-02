@@ -31,6 +31,7 @@ clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实�
 
 ### Cgroups
 
+### rootfs
 
 
 ## 安装
@@ -382,8 +383,10 @@ Using a symlink is another method to change image storage.
 5. Make a symlink: `ln -s /mnt/pd0/docker /var/lib/docker`
 6. Take a peek at the directory structure to make sure it looks like it did before the mv: `ls /var/lib/docker/` (note the trailing slash to resolve the symlink)
 7. Start docker back up `service docker start`
-8. restart your containers
+8. restart your container
 
 
 
-## [Kubernetes](kubernetes.md)
+## 参考
+
+[Kubernetes](kubernetes.md)

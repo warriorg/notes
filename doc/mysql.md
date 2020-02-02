@@ -51,7 +51,7 @@ yum install mysql-community-server			# 安装数据库
 systemctl start mysqld.service				# 启动数据库服务
 grep 'temporary password' /var/log/mysqld.log		# 查看数据库默认密码
 mysql -uroot -p										# 登录数据库
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!';	# 修改默认密码
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!';	# 修改密码
 ```
 
 

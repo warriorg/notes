@@ -1,0 +1,11 @@
+@startuml
+:加载\nLoading;
+partition 连接 {
+    :验证\nVerification;
+    :准备\nPreparation;
+    :解析\nResolution;
+}
+:初始化\nInitialization;
+:使用\nUsing;
+:卸载\nUnLoading;
+@enduml

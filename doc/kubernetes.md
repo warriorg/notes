@@ -1,3 +1,5 @@
+
+
 ## Install
 
 ### Install with Homebrew on macOS
@@ -40,21 +42,19 @@ kubectl get namespaces
 
 #### Install Kubernetes Dashboard
 
+[github](https://github.com/kubernetes/dashboard)
+
 ```bash 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc2/aio/deploy/recommended.yaml
 
 # 查看部署的容器和服务
-kubectl get deployments --namespace kube-system
-kubectl get services --namespace kube-system
+kubectl get deployments --namespace kubernetes-dashboard
+kubectl get services --namespace kubernetes-dashboard
 
 # 使用 kubectl 提供的 Proxy 服务来访问Dashboard
 kubectl proxy
 # 地址
 # http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-# 若果出错，可以尝试编辑 kubernetes-dashboard 服务
-# https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.7.X-and-above
-kubectl -n kube-system edit service kubernetes-dashboard
 ```
 
 #### [Creating sample user](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
@@ -126,6 +126,135 @@ kubernetesVersion: "v1.13.4"
 ```bash
 $ kubeadm init --config kubeadm.yaml
 ```
+
+
+
+### 部署容器存储插件
+
+#### Rook
+
+##### 部署 Rook Operator
+
+部署rook, [github](https://github.com/rook/rook)地址。
+
+```bash 
+cd cluster/examples/kubernetes/ceph
+kubectl create -f common.yaml
+kubectl create -f operator.yaml
+
+## verify the rook-ceph-operator is in the `Running` state before proceeding
+kubectl -n rook-ceph get pod
+```
+
+##### 创建 Rook Ceph 集群
+
+```yaml
+# cluster-test.yaml
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: rook-ceph
+  namespace: rook-ceph
+spec:
+  cephVersion:
+    image: ceph/ceph:v14.2.4-20190917
+    allowUnsupported: false
+  dataDirHostPath: /Users/warrior/code/k8s/volume
+  mon:
+    count: 1
+    allowMultiplePerNode: false
+  dashboard:
+    enabled: true
+    ssl: true
+  monitoring:
+    enabled: false  # requires Prometheus to be pre-installed
+    rulesNamespace: rook-ceph
+  network:
+    hostNetwork: false
+```
+
+##### Ceph Dashboard
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rook-ceph-mgr-dashboard-external-http
+  namespace: rook-ceph
+  labels:
+    app: rook-ceph-mgr
+    rook_cluster: rook-ceph
+spec:
+  ports:
+  - name: dashboard
+    port: 7000
+    protocol: TCP
+    targetPort: 7000
+  selector:
+    app: rook-ceph-mgr
+    rook_cluster: rook-ceph
+  sessionAffinity: None
+  type: NodePort
+```
+查看创建的dashboard这个 Service 服务
+```bash
+kubectl get service -n rook-ceph
+```
+
+![rook-ceph-mgr-dashboard](./assets/images/rook-ceph-mgr-dashboard.jpg)
+
+访问地址`http://localhost:31695`, Rook 创建了一个默认的用户 admin，并在运行 Rook 的命名空间中生成了一个名为 `rook-ceph-dashboard-admin-password` 的 Secret，运行以下命令获取密码。
+
+```bash
+kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 --decode && echo
+```
+
+
+
+## 实战
+
+### 部署第一个容器应用
+
+**nginx-deployment.yaml**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.17.0
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: nginx-vol
+      volumes:
+      - name: nginx-vol 
+        hostPath: 
+          path: /Users/warrior/www/bom
+```
+
+```bash
+kubectl apply -f nginx-deployment.yaml  	# 部署容器，或者修改yaml文件后更新容器
+kubectl get pods -l app=nginx			# 检查容器运行的状态
+kubectl describe pod nginx-deployment-74dc4b47f6-7886h  # 查看容器的细节
+kubectl exec -it nginx-deployment-74dc4b47f6-7886h -- /bin/bash  # 进入容器
+kubectl delete -f nginx-deployment.yaml   # 删除容器
+```
+
+
 
 
 

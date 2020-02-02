@@ -41,7 +41,18 @@
 ### 安装
 
 #### 单机
-Download [kafka](http://kafka.apache.org/)	
+MacOS
+
+```bash
+brew install zookeeper
+brew install kafka
+```
+
+修改 `/usr/local/etc/kafka/server.properties`
+
+```bash
+listeners=PLAINTEXT://localhost:9092
+```
 
 Start zookeeper server
 
