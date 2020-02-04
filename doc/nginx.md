@@ -294,9 +294,16 @@ https://goaccess.io/get-started
 
 
 
-
-
 ## Nginx 架构基础
+
+### Nginx的请求处理流程
+
+![](./assets/images/nginx的请求处理流程.png)
+
+1. nginx可以处理来自web（http），Email，TCP/UDP的三类请求。
+2. nginx底层使用非阻塞的事件驱动引擎，结合状态机来完成异步通知，其中处理Http请求的是HTTP状态机。
+
+
 
 ## 详解HTTP模块
 

@@ -48,6 +48,20 @@
    3. 解析 将符号引用转成直接引用；
 3. 初始化 对类的静态变量，静态代码块执行初始化操作
 
+## NIO
+
+### Channel
+
+Java NIO Channels 和 streams 的区别
+
+* Channels可以进行读写操作。Streams通常是单向的(读或写)。
+* Channels可以异步读写
+* Channels总是读写缓冲区
+
+### Buffer
+
+
+
 
 
 ## 多线程
