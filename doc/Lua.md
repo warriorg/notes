@@ -1,6 +1,7 @@
-##Lua学习笔记
+## Lua学习笔记
 
-###if - else 
+### if - else 
+
 ```lua
 score = 90
 if score == 100 then
@@ -13,7 +14,8 @@ else
 end
 ```
 
-###While 型控制结构
+### While 型控制结构
+
 ```lua
 while 表达式 do
 --body
@@ -32,7 +34,7 @@ for i, v in ipairs(t) do
 end
 ```
 
-####repeat 控制结构
+#### repeat 控制结构
 repeat 控制结构类似于其他语言中的do-while 但是控制方式是刚好相反的。简单点说，执行repeat循环体后，知道until的条件为真时才结束。
 
 ```lua
@@ -43,7 +45,7 @@ until false
 --这段代码将是一个死循环，因为until的条件一直为假，循环不会结束
 ```
 
-####for控制结构
+#### for控制结构
 for 语句有两种形式: numeric(数字) for 和 generic(范型)for 
 #####numeric for
 
@@ -57,6 +59,7 @@ end
 3. 第三个表达式step是可选的，默认为1
 
 #####generic for
+
 ```lua
 local a = {"a", "b", "c", "d"}
 for i, v in ipairs(a) do
@@ -99,16 +102,16 @@ end
 2. 每个函数的长度要尽量控制在一个屏幕内，一眼可以看明白。
 3. 让代码自己说话，不需要注释最好。
 
-###参数传递
+### 参数传递
 
 1. Lua 函数大部分是按值传递的。
 2. 函数参数是table类型时，为引用传
 3. Lua 在调用时传入参数不同时，会自动调整实参个数，调整规则：若实参个数大于行参，从左向右，多余实参忽略；若实参个数小于行参，从左向右，没有被实参初始化的行参会被初始化为nil
 
-###函数返回值
+### 函数返回值
   lua 容许函数返回多个值，返回多个值时，值之间用","分割
- 
-##模块
+
+## 模块
 `require`用于加载和缓存模块。
 
 ```lua
@@ -132,11 +135,12 @@ local fp = require(nbzhou)
 fp.greeting()
 ```
 
-##table 库
+## table 库
 table 库由一些辅助函数构成，这些函数将table作为数组来操作
+
 >lua中，数组下标从1开始计数
 
-##元表
+## 元表
 元表 (metatable) 的表现行为类似于 C++ 语言中的操作符重载，例如我们可以重载 "__add" 元方法 (metamethod) ，来计算两个 Lua 数组的并集；或者重载 "__index" 方法，来定义我们自己的 Hash 函数。
 
 * setmetatable(table, metatable)：此方法用于为一个表设置元表。

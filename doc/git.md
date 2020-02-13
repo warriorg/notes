@@ -17,6 +17,14 @@ git config --global user.email 'your email'
 git config --list 				# 查看配置
 ```
 
+## 基础功能
+
+### .gitigonre
+
+
+
+### .gitattributes
+
 
 
 ## 常用命令

@@ -1,6 +1,6 @@
 ## 基础操作
 
-#### Move
+### Move
 
 ```bash
 h   move one character left
@@ -63,6 +63,49 @@ TX  til previous 'X'
 shift+</>
 :80,89> # 把80，89行左移动，右移动<
 ```
+
+
+
+### Tabs
+
+#### Opening and closing tabs
+
+```bash
+vim -p first.txt second.txt
+:tabedit {file}   # edit specified file in a new tab
+:tabfind {file}   # open a new tab with filename given, searching the 'path' to find it
+:tabclose         # close current tab
+:tabclose {i}     # close i-th tab
+:tabonly          # close all other tabs (show only the current tab)
+:tab ball         # show each buffer in a tab (up to 'tabpagemax' tabs)
+:tab help         # open a new help window in its own tab page
+:tab drop {file}  # open {file} in a new tab, or jump to a window/tab containing the file if there is one
+:tab split        # copy the current window to a new tab of its own
+```
+
+#### Navigation
+
+```bash
+:tabs         # list all tabs including their displayed windows
+:tabm 0       # move current tab to first
+:tabm         # move current tab to last
+:tabm {i}     # move current tab to position i+1
+
+:tabn         # go to next tab
+:tabp         # go to previous tab
+:tabfirst     # go to first tab
+:tablast      # go to last tab
+
+# In normal mode
+gt            # go to next tab
+gT            # go to previous tab
+{i}gt         # go to tab in position i
+# Using recent vim versions, in normal mode and in insert mode
+Ctrl-PgDn     # go to next tab
+Ctrl-PgUp     # go to previous tab
+```
+
+
 
 
 

@@ -1,15 +1,32 @@
-[mybatis](http://www.mybatis.org/mybatis-3/)
 
-
-# 什么是 MyBatis 
+# MyBatis 
 
 * 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。
 * 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。
 * 使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs(Plain Old Java Objects,普通的 Java对象)映射成数据库中的记录。
 
-2层缓存
 
 
+
+
+## 动态 SQL
+
+### if 
+
+动态 SQL 通常要做的事情是根据条件包含 where 子句的一部分。比如：
+
+```
+<select id="findActiveBlogWithTitleLike"
+     resultType="Blog">
+  SELECT * FROM BLOG
+  WHERE state = ‘ACTIVE’
+  <if test="title != null">
+    AND title like #{title}
+  </if>
+</select>
+```
+
+mybatis是用OGNL表达式来解析的，在OGNL的表达式中，’1’会被解析成字符，java是强类型的，char 和 一个string 会导致不等，所以**单个的字符要写到双引号里面或者使用.toString()。例如`<if test='title != "1"'>`或者改为`<if test="title != '1'.toString()">`
 
 
 # MyBatis Generator		

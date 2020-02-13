@@ -1,4 +1,43 @@
+Mongodb 是一个分布式文件存储的NoSQL数据库，使用C++编写。MongoDB就是文档型NoSQL数据库，它文档中的数据是以类似JSON的BSON格式进行存储的。
+
+## 基本概念
+
+### 对比关系型数据库
+
+| SQL         | MongoDB     | 说明                                 |
+| ----------- | ----------- | ------------------------------------ |
+| database    | database    | 数据库                               |
+| table       | collection  | 数据库表/集合                        |
+| row         | document    | 数据记录行/文档                      |
+| column      | field       | 数据字段/域                          |
+| index       | index       | 索引                                 |
+| table joins |             | 表连接，MongoDB不支持                |
+| primary key | primary key | 主键，MongoDB自动将_id字段设置为主键 |
+
+### 数据库
+
+### 文档
+
+### 集合
+
+### 元数据
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 其它
+
 ### 备份
+
 ```bash
 mongodump -h dbhost -d dbname -o dbdirectory
 ```
