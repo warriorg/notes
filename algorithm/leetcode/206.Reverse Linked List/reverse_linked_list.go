@@ -1,4 +1,4 @@
-package main
+p:ckage main
 
 import "fmt"
 /**
