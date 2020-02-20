@@ -2,6 +2,8 @@
 
 **容器** 一种沙盒技术
 
+![docker architecture](./assets/images/docker architecture.svg)
+
 ### Namespace
 
 Docker 和虚拟机技术一样，从操作系统级上实现了资源的隔离，它本质上是宿主机上的进程（容器进程），所以资源隔离主要就是指进程资源的隔离。实现资源隔离的核心技术就是 Linux namespace。
@@ -32,6 +34,10 @@ clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实�
 ### Cgroups
 
 ### rootfs
+
+
+
+
 
 
 ## 安装

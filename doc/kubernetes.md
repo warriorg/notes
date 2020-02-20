@@ -1,5 +1,44 @@
 
 
+## 基本理论
+
+### 虚拟化
+
+### OpenStack & KVM
+
+#### OpenStack
+
+OpenStack是一个云操作系统，通过数据中心可控制大型的计算、存储、网络等资源池。所有的管理通过前端界面管理员就可以完成，同样也可以通过web接口让最终用户部署资源。
+
+#### KVM
+
+基于内核的虚拟机 Kernel-based Virtual Machine（KVM）是一种内建于 Linux® 中的开源虚拟化技术。具体而言，KVM 可帮助您将 Linux 转变为虚拟机监控程序，使主机计算机能够运行多个隔离的虚拟环境，即虚拟客户机或虚拟机（VM）。
+
+
+
+### docker
+
+[docker](./deocker.md)
+
+
+
+### 容器编排
+
+
+
+## K8S原理
+
+### Master
+
+
+
+### Node
+
+
+
+
+
+
 ## Install
 
 ### Install with Homebrew on macOS

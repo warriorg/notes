@@ -7,6 +7,62 @@
 
 
 
+## 基础应用
+
+### Mpaaer代理开发方式
+
+代理分为静态代理和动态代理。Mybatis中使用动态代理的方式。动态代理分为以下两种方式：
+
+* 基于JDK的动态代理 针对有**接口的类**进行动态代理
+* 基于CGLIB的动态代理  通过子类继承父类的方式进行代理
+
+#### XML方式
+
+只需要Mapper接口和Mapper映射文件，不需要编写实现类
+
+Mapper接口开发方式需要遵守以下规范
+
+* Mapper接口的类路径与Mapper.xml文件中的namespace相同
+* Mapper接口方法名称和Mapper.xml中定义的每个statement的id相同
+* Mapper接口方法的输入参数类型和Mapper.xml中定义的每个sql的parameterType的类型相同
+* Mapper接口方法的返回值类型和Mapper.xml中定义的每个sql的resultType的类型相同。
+
+#### 注解方式
+
+
+
+### 全局配置
+
+
+
+### 输入映射
+
+#### `#{}` `${}`  的区别
+
+`#{}` 解析为一个 JDBC 预编译语句（prepared statement）的参数标记符。
+
+`${}` 仅仅为一个纯碎的 string 替换，在动态 SQL 解析阶段将会进行变量替换
+
+### 输出映射
+
+
+
+### 关联查询
+
+
+
+### 延迟加载
+
+
+
+### OGNL
+
+OGNL 是 Object-Graph Navigation Language 的缩写，对象-图行导航语言。它是一种功能强大的表达式语言，通过它简单一致的表达式语法，可以存取对象的任意属性，调用对象的方法，遍历整个对象的结构图，实现字段类型转化等功能。它使用相同的表达式去存取对象的属性。这样可以更好的取得数据。
+
+- OGNL大部分场景是取属性，不建议new对象
+- OGNL不支持类似Groovy的safe-null，比如`user?.role?.name`这样的问号表达式，而SpingEL是支持的
+- OGNL定位是XML中的胶水，调试方便程度肯定不如Java，因此尽可能不折腾
+
 
 
 ## 动态 SQL
@@ -15,7 +71,7 @@
 
 动态 SQL 通常要做的事情是根据条件包含 where 子句的一部分。比如：
 
-```
+```xml
 <select id="findActiveBlogWithTitleLike"
      resultType="Blog">
   SELECT * FROM BLOG
@@ -23,10 +79,19 @@
   <if test="title != null">
     AND title like #{title}
   </if>
+  <if test='state != "1"'>
+    AND title like #{title}
+  </if>
 </select>
 ```
 
-mybatis是用OGNL表达式来解析的，在OGNL的表达式中，’1’会被解析成字符，java是强类型的，char 和 一个string 会导致不等，所以**单个的字符要写到双引号里面或者使用.toString()。例如`<if test='title != "1"'>`或者改为`<if test="title != '1'.toString()">`
+mybatis是用OGNL表达式来解析的，在OGNL的表达式中，’1’会被解析成字符，java是强类型的，char 和 一个string 会导致不等，所以**单个的字符要写到双引号里面或者使用.toString()。例如`<if test='state != "1"'>`或者改为`<if test="state != '1'.toString()">`
+
+## 架构原理
+
+![mybatis-arch](./assets/images/mybatis-arch.jpeg)
+
+
 
 
 # MyBatis Generator		

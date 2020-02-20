@@ -4,7 +4,22 @@
 
 
 
-## [Usage](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_usage)
+## [The Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_usage)
+
+The following graph describes the main configurations setup when the Java Library plugin is in use.
+
+![java-library-ignore-deprecated-main](./assets/images/java-library-ignore-deprecated-main.png)
+
+- The configurations in *green* are the ones a user should use to declare dependencies
+- The configurations in *pink* are the ones used when a component compiles, or runs against the library
+- The configurations in *blue* are internal to the component, for its own use
+
+And the next graph describes the test configurations setup:
+
+![java-library-ignore-deprecated-test](./assets/images/java-library-ignore-deprecated-test.png)
+
+> The *compile*, *testCompile*, *runtime* and *testRuntime* configurations inherited from the Java plugin are still available but are deprecated. You should avoid using them, as they are only kept for backwards compatibility.
+
 
 | Configuration name   | Role                                     | Consumable? | Resolvable? | Description                                                  |
 | :------------------- | :--------------------------------------- | :---------- | :---------- | :----------------------------------------------------------- |
