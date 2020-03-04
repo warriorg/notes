@@ -727,6 +727,8 @@ wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://down
 
 #### 根据指标找工具对应表
 
+![](http://www.brendangregg.com/Perf/linux_perf_tools_full.png)
+
 ##### CPU
 
 | 性能指标          | 工具             | 说明                                                   |

@@ -81,12 +81,97 @@ npm init
 npm install electron --save-dev
 # 安装时如果node install.js卡死，使用一下命令在安装
 export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
-export ELECTRON_CUSTOM_DIR=8.0.0
+export ELECTRON_CUSTOM_DIR=8.0.1
 或者使用代理
 npm config set proxy http://127.0.0.1:1081
 ```
 
 
 
+## 整合VUE
+
+```bash
+mkdir electron-vue
+cd electron-vue
+npm init
+# 安装时如果node install.js卡死，使用一下命令在安装
+export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
+export ELECTRON_CUSTOM_DIR=8.0.1
+npm i electron --save-dev
+npm i electron-is-dev --save-dev
+npm i concurrently wait-on --save-dev 
+
+cd app/renderer/src/main
+vue create main   # 创建react项目
+```
+
+整个项目结构
+
+```bash
+electron-vue
+├── app
+│   ├── main
+│   │   └── index.js
+│   └── renderer
+│       ├── pages
+│       │   └── main   # VUE构建后的成果物
+│       └── src
+│           └── main
+│               ├── README.md
+│               ├── babel.config.js
+│               ├── package-lock.json
+│               ├── package.json
+│               ├── public
+│               │   ├── favicon.ico
+│               │   └── index.html
+│               ├── src
+│               │   ├── App.vue
+│               │   ├── assets
+│               │   │   └── logo.png
+│               │   ├── components
+│               │   │   └── HelloWorld.vue
+│               │   ├── main.js
+│               │   ├── router
+│               │   │   └── index.js
+│               │   ├── store
+│               │   │   └── index.js
+│               │   └── views
+│               │       ├── About.vue
+│               │       └── Home.vue
+│               └── vue.config.js
+├── package-lock.json
+└── package.json
+```
+
+修改VUE Router模式为Hash模式
+
+修改Vue.config.js 文件
+
+```bash
+module.exports = {
+    outputDir: '../../pages/main',
+    publicPath: './'
+}
+```
+
+
+
 ## 整合react
+
+```bash
+mkdir electron-react
+cd electron-react
+npm init
+# 安装时如果node install.js卡死，使用一下命令在安装
+export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
+export ELECTRON_CUSTOM_DIR=8.0.1
+npm install electron --save-dev
+npm install electron-is-dev --save-dev
+npm i concurrently wait-on --save-dev 
+
+cd app/renderer/src/main
+create-react-app main --use-npm  # 创建react项目
+npm i customize-cra react-app-rewired --save-dev  # 自定义cra配置
+
+```
 

@@ -416,6 +416,45 @@ Java虚拟机中的原始数据类型（int，long等数值类型以及reference
 
 
 
+## Class 文件
+
+### Class 文件概述
+
+class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述， 由于class文件很灵活， 它甚至比Java源文件有着更强的描述能力。
+
+单个ClassFile结构
+
+```
+ClassFile {
+    u4             magic;
+    u2             minor_version;
+    u2             major_version;
+    u2             constant_pool_count;
+    cp_info        constant_pool[constant_pool_count-1];
+    u2             access_flags;
+    u2             this_class;
+    u2             super_class;
+    u2             interfaces_count;
+    u2             interfaces[interfaces_count];
+    u2             fields_count;
+    field_info     fields[fields_count];
+    u2             methods_count;
+    method_info    methods[methods_count];
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+
+**Class文件字节码结构组织示意图**
+
+![Class文件字节码结构组织示意图](./assets/images/Class文件字节码结构组织示意图.png)
+
+#### class文件中的常量池概述
+
+![class文件中的常量池概述](./assets/images/class文件中的常量池概述.png)
+
+
+
 ## Test
 
 ### java run single unit testing
