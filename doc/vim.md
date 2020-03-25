@@ -168,6 +168,65 @@ Replace
 
 
 
+### Fold折叠
+
+```bash
+:help folding  # 查看帮助
+
+:set foldcolumn=N  # N是一个0-12的整数，用于指定显示折叠标识列的宽度，分别用“-”和“+”而表示打开和关闭的折叠
+```
+
+| 命令 | 作用                       |
+| ---- | -------------------------- |
+| `za` | 打开/关闭当前的折叠        |
+| `zc` | 关闭当前打开的折叠         |
+| `zo` | 打开当前的折叠             |
+| `zm` | 关闭所有折叠               |
+| `zM` | 关闭所有折叠及其嵌套的折叠 |
+| `zr` | 打开所有折叠               |
+| `zR` | 打开所有折叠及其嵌套的折叠 |
+| `zd` | 删除当前折叠               |
+| `zE` | 删除所有折叠               |
+| `zj` | 移动至下一个折叠           |
+| `zk` | 移动至上一个折叠           |
+| `zn` | 禁用折叠                   |
+| `zN` | 启用折叠                   |
+
+#### Manual（手工折叠）
+
+```bash
+:set foldmethod=manual  # 启用手工折叠
+zf  			# 折叠选中的文本
+zfa(  		# 折叠括号（比如()、[]、{}、><等）包围的区域
+:mkview  	# 保存当前的折叠状态
+:loadview # 载入记忆的折叠信息
+:help fold-manual  # 查看关于手工折叠的帮助信息
+```
+
+#### Indent（缩进折叠）
+
+```bash
+:set foldmethod=indent 	# 启用缩进折叠
+:set foldlevel=1        # 指定折叠缩进的级别
+:help fold-indent       # help
+```
+
+#### Marker（标记折叠）
+
+```bash
+:set foldmethod=marker   # 启用标记折叠。所有文本将按照特定标记（默认为{{{和}}}）自动折叠。
+:help fold-marker
+```
+
+
+#### Syntax（语法折叠
+
+```bash
+:set foldmethod=syntax   # 按照语法结构自动折叠
+:help fold-syntax
+```
+
+
 ## 执行Shell
 
 ### :!cmd

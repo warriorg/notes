@@ -2,6 +2,10 @@ Mongodb 是一个分布式文件存储的NoSQL数据库，使用C++编写。Mong
 
 ## 基本概念
 
+### MongoDB软件包组件
+
+::q
+
 ### 对比关系型数据库
 
 | SQL         | MongoDB     | 说明                                 |
