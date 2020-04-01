@@ -303,6 +303,7 @@ sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata
 sudo date -s    # 修改本地时间
 sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启后时区改变
 sudo ntpdate cn.pool.ntp.org        #命令更新时间
+ntpdate -u ntp.api.bz       # 同步时间
 ```
 
 #### 语言
