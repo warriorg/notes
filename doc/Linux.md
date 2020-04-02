@@ -1043,7 +1043,12 @@ $ pidstat -u 5 1
 
 #### sar
 
-`apt install sar`
+```bash
+ apt install sar
+ vim /etc/default/sysstat    	# 打开性能收集工具的开关
+ # 设置 ENABLED=”true”
+ /etc/init.d/sysstat start    # 启动Sar来收集系统性能数据
+```
 
 是一个系统活动报告工具，既可以实时查看系统的当前活动，又可以配置保存和报告历史统计数据。sar是目前Linux上最为全面的系统性能分析工具之一，可以从14个大方面对系统的活动进行报告，包括文件的读写情况、系统调用的使用情况、串口、CPU效率、内存使用状况、进程活动及IPC有关的活动等，使用也是较为复杂。
 
