@@ -9,7 +9,7 @@ git config --global user.email 'your email'
 
 ### config 作用域
 
-* `--config`  项目级
+* `--local`  项目级
 * `--global` 用户级
 * `--system` 系统级
 
