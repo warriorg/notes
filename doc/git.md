@@ -262,11 +262,7 @@ git 分支
 ```bash
 git checkout -b iss53
 
-```
-
-```
-关闭分支
-​```bash
+# 关闭分支
 git checkout master
 git merge <branch-name>
 git branch -d <branch-name>
@@ -433,8 +429,8 @@ git config --global credential.helper store
 ### 忽略对已入库文件的修改
 
 ```bash
-git update-index --assume-unchanged FILENAME			# 忽略对如果文件的修改
-git update-index --no-assume-unchanged FILENAME		# 取消对入库文件的修改
+git update-index --assume-unchanged FILENAME			# 停止查看工作区文件可能发生的改变
+git update-index --no-assume-unchanged FILENAME		# 继续查看工作区文件可能发生的改变
 ```
 
 ### 删除 .DS_Store
