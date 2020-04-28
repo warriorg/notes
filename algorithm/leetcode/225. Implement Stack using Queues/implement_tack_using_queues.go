@@ -64,11 +64,11 @@ func (this *MyStack) Pop() int {
 
 /** Get the top element. */
 func (this *MyStack) Top() int {
-    
+	return this.stack[len(this.stack -1)]    
 }
 
 
 /** Returns whether the stack is empty. */
 func (this *MyStack) Empty() bool {
-    
+	return len(this.stack)==0   
 }

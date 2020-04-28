@@ -121,23 +121,6 @@
 
 ## 命令
 
-### 简介
-
-#### 2>&1
-
-2>&1表明将文件描述2（标准错误输出）的内容重定向到文件描述符1（标准输出），为什么1前面需要&？当没有&时，1会被认为是一个普通的文件，有&表示重定向的目标不是一个文件，而是一个文件描述符。
-
-```bash
-cd /proc/5270/fd   				#进程5270所有打开的文件描述符信息都在此
-ls -l              				#列出目录下的内容
- 0 -> /dev/pts/7
- 1 -> /dev/pts/7
- 2 -> /dev/pts/7
- 255 -> /home/hyb/workspaces/shell/test.sh
-```
-
-
-
 ### 系统管理
 
 #### 磁盘
@@ -430,6 +413,29 @@ fs.file-max = 102400
 #### Supervisor 
 
 > 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
+
+
+
+#### 重定向
+
+![bash-redirection](./assets/images/bash-redirection.jpeg)
+
+
+
+#### 2>&1
+
+2>&1表明将文件描述2（标准错误输出）的内容重定向到文件描述符1（标准输出），为什么1前面需要&？当没有&时，1会被认为是一个普通的文件，有&表示重定向的目标不是一个文件，而是一个文件描述符。
+
+```bash
+cd /proc/5270/fd   				#进程5270所有打开的文件描述符信息都在此
+ls -l              				#列出目录下的内容
+ 0 -> /dev/pts/7
+ 1 -> /dev/pts/7
+ 2 -> /dev/pts/7
+ 255 -> /home/hyb/workspaces/shell/test.sh
+```
+
+
 
 
 
@@ -1045,10 +1051,16 @@ $ pidstat -u 5 1
 #### sar
 
 ```bash
- apt install sar
- vim /etc/default/sysstat    	# 打开性能收集工具的开关
- # 设置 ENABLED=”true”
- /etc/init.d/sysstat start    # 启动Sar来收集系统性能数据
+# ubuntu
+apt install sysstat   
+vim /etc/default/sysstat    	# 打开性能收集工具的开关
+# 设置 ENABLED=”true”
+etc/init.d/sysstat start    # 启动Sar来收集系统性能数据
+# centos
+yum install sysstat 
+yum install sysstat -y
+systemctl start sysstat.service
+systemctl enable sysstat.service
 ```
 
 是一个系统活动报告工具，既可以实时查看系统的当前活动，又可以配置保存和报告历史统计数据。sar是目前Linux上最为全面的系统性能分析工具之一，可以从14个大方面对系统的活动进行报告，包括文件的读写情况、系统调用的使用情况、串口、CPU效率、内存使用状况、进程活动及IPC有关的活动等，使用也是较为复杂。
@@ -1709,8 +1721,9 @@ bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
 | [[ ]]               | 字符串比较                               |
 | { }                 | 括起一个语句块                           |
 
-### 注意
-* 如果 shell 不是交互式的，则不会展开别名，除非使用 `shopt` 设置 `expand_aliases` shell 选项。
+* 如果 shell 不是交互式的，则不会展开别名，除非使用 `shopt` 设置 `expand_aliases` shell 选项
+
+
 
 ### 基础
 
