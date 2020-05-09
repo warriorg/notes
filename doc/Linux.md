@@ -996,7 +996,7 @@ $ vmstat 5 2
 * **st** 虚拟 CPU 等待实际 CPU 的时间的百分比
 
 #### pidstat
-查看每个进程的详细情况
+实时查看进程的 CPU、内存、I/O 以及上下文切换等性能指标
 * -w 输出进程切换指标
 * -wt 输出线程上下文切换指标
 * -u 输出CPU使用指标
@@ -1008,6 +1008,19 @@ Linux 3.10.0-862.14.4.el7.x86_64 (instance-xisc86cd) 	12/14/2018 	_x86_64_	(2 CP
 03:45:37 PM   UID       PID   cswch/s nvcswch/s  Command
 03:45:42 PM     0         1      0.80      0.00  systemd
 03:45:42 PM     0         9     40.12      0.00  rcu_sched
+
+# 模拟一个cpu使用100%的情况
+$ stress --cpu 1 --timeout 600
+# 模拟 I/O 压力，即不停地执行 sync
+$ stress -i 1 --timeout 60
+# 模拟的是 8 个进程
+$ stress -c 8 --timeout 600
+
+# -P ALL 表示监控所有 CPU，后面数字 5 表示间间隔 5 秒后输出一组数据
+$ mpstat -P ALL 5
+
+# 哪个进程导致了 CPU 使用率为 100%，间隔 5 秒后输出一组数据 
+$ pidstat -u 5 1
 
 ```
 * cswch/s (voluntary context switches) 每秒自愿上下文切换的次数
@@ -1031,23 +1044,6 @@ $ apt install sysstat
 ```
 #### mpstat
 多核 CPU 性能分析工具，用来实时查看每个 CPU 的性能指标，以及所有 CPU 的平均指标。
-#### pidstat
-实时查看进程的 CPU、内存、I/O 以及上下文切换等性能指标。
-```bash
-# 模拟一个cpu使用100%的情况
-$ stress --cpu 1 --timeout 600
-# 模拟 I/O 压力，即不停地执行 sync
-$ stress -i 1 --timeout 60
-# 模拟的是 8 个进程
-$ stress -c 8 --timeout 600
-
-# -P ALL 表示监控所有 CPU，后面数字 5 表示间间隔 5 秒后输出一组数据
-$ mpstat -P ALL 5
-
-# 哪个进程导致了 CPU 使用率为 100%，间隔 5 秒后输出一组数据 
-$ pidstat -u 5 1
-```
-
 #### sar
 
 ```bash
