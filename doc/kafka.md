@@ -320,7 +320,7 @@ segment是一个逻辑概念，其由两类物理文件组成，分别为`.index
 ```bash
 ./kafka-topics.sh --bootstrap-server=*:9092 --list		# 查看Topic
 # 创建topic
-./kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test     		
+./kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test     
 
 # 删除topic
 ./kafka-topics.sh --delete --topic test --bootstrap-server localhost:9092     						
@@ -328,24 +328,25 @@ segment是一个逻辑概念，其由两类物理文件组成，分别为`.index
 ./kafka-topics.sh --describe --topic test --bootstrap-server localhost:9092
 # 修改topic的partition数量（只能增加不能减少）
 ./kafka-topics.sh --alter --partitions 10  --topic test --bootstrap-server localhost:9092
+# 创建名字为 "op_log" 的 Topic。
+$ bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partition 3 --topic op_log
+# 查看指定 ZK 管理的 Topic 列表
+$ bin/kafka-topics.sh --list --zookeeper localhost:2181
+# 查看指定 Topic 的详细信息，包括 Partition 个数，副本数，ISR 信息
+$ bin/kafka-topics.sh --zookeeper localhost:2181 --describe op_log
 
 ```
-
-
 
 #### kafka-consumer-groups.sh
 
 ```bash
 # 所有的topic group info
 ./kafka-consumer-groups.sh --describe --bootstrap-server localhost:9092 --all-groups 
-
 # 查看消息堆积
 ./kafka-consumer-groups.sh --describe --bootstrap-server localhost:9092 --group group0
 # 设置offset到最大
 ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group group0 --reset-offsets --to-latest --topic test --execute
 ```
-
-
 
 
 
