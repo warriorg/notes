@@ -1,45 +1,67 @@
 
 
-## 基本理论
+# 介绍
 
-### 虚拟化
+## 集群架构
 
-### OpenStack & KVM
+* 主节点 承载着Kubernetes控制和管理整个集群系统的控制面板
+* 工作节点 运行用户实际部署的应用
 
-#### OpenStack
+![image-20200512185216239](assets/images/image-20200512185216239.png)
+
+### 控制面板
+
+控制面板用于控制集群并使它工作。它包含多个组件，组件可以运行在单个主节点上或者通过副本分别部署在多个主节点以确保高可用性。这些组件是：
+
+* KubernetesAPI服务器，你和其他控制面板组件都要和它通信
+
+* Scheculer，它调度你的应用（为应用的每个可部署组件分配一个工作节点）
+
+* ControllerManager，它执行集群级别的功能，如复制组件、持续跟踪工作节点、处理节点失败等
+
+* etcd，一个可靠的分布式数据存储，它能持久化存储集群配置控制面板的组件持有并控制集群状态，但是它们不运行你的应用程序。这是由工作节点完成的。
+
+### 工作节点
+
+工作节点是运行容器化应用的机器。运行、监控和管理应用服务的任务是由以下组件完成的：
+
+* Docker、rtk或其他的容器类型
+* Kubelet，它与API服务器通信，并管理它所在节点的容器
+* Kubernetes Service Proxy（kubeproxy），它负责组件之间的负载均衡网络流量
+
+
+# 基本理论
+
+## 虚拟化
+
+## OpenStack & KVM
+
+### OpenStack
 
 OpenStack是一个云操作系统，通过数据中心可控制大型的计算、存储、网络等资源池。所有的管理通过前端界面管理员就可以完成，同样也可以通过web接口让最终用户部署资源。
 
-#### KVM
+### KVM
 
 基于内核的虚拟机 Kernel-based Virtual Machine（KVM）是一种内建于 Linux® 中的开源虚拟化技术。具体而言，KVM 可帮助您将 Linux 转变为虚拟机监控程序，使主机计算机能够运行多个隔离的虚拟环境，即虚拟客户机或虚拟机（VM）。
 
 
 
-### docker
+## docker
 
 [docker](./deocker.md)
 
 
 
-### 容器编排
-
-
-
-## K8S原理
-
-### Master
-
-
-
-### Node
+## 容器编排
 
 
 
 
-
+# 开始使用Kubernetes 和 Docker
 
 ## Install
+
+
 
 ### Install with Homebrew on macOS
 
@@ -235,7 +257,9 @@ spec:
   sessionAffinity: None
   type: NodePort
 ```
+
 查看创建的dashboard这个 Service 服务
+
 ```bash
 kubectl get service -n rook-ceph
 ```
@@ -250,7 +274,100 @@ kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['dat
 
 
 
-## 实战
+
+
+### 创建、运行及共享容器镜像
+
+#### 运行一个hello world容器
+
+##### 背后的原理
+
+![image-20200512190107940](assets/images/image-20200512190107940.png)
+
+#### 为镜像创建Dockerfile
+
+```dockerfile
+FROM node:7										# 定义镜像的起始内容
+ADD app.js /app.js						# 把 app.js 从本地文件夹加到镜像的根目录。保持文件名
+ENTRYPOINT ["node", "app.js"] # 运行node命令
+```
+
+#### 构建容器镜像
+
+![image-20200512190647676](assets/images/image-20200512190647676.png)
+
+##### 镜像的构建过程
+
+构建过程不是由Docker客户端进行的，而是将整个目录的文件上传到Docker守护进程并在那里进行的。Docker客户端和守护进程不要求在同一台机器上。
+
+> 不要在构建目录中包含任何不需要的文件，这样会减慢构建的速度——尤其当Docker守护进程运行在一个远端机器的时候。
+
+##### 镜像分层
+
+![image-20200512190920937](assets/images/image-20200512190920937.png)
+
+
+
+
+
+# 概念
+
+## Kubernetes 对象
+
+### 简介
+
+在 Kubernetes 系统中，*Kubernetes 对象* 是持久化的实体。Kubernetes 使用这些实体去表示整个集群的状态。特别地，它们描述了如下信息：
+
+- 哪些容器化应用在运行（以及在哪个 Node 上）
+- 可以被应用使用的资源
+- 关于应用运行时表现的策略，比如重启策略、升级策略，以及容错策略
+
+#### 对象规约（Spec）与状态（Status）
+
+每个 Kubernetes 对象包含两个嵌套的对象字段，它们负责管理对象的配置：对象 *spec* 和 对象 *status* 。 *spec* 是必需的，它描述了对象的 *期望状态（Desired State）* —— 希望对象所具有的特征。 *status* 描述了对象的 *实际状态（Actual State）* ，它是由 Kubernetes 系统提供和更新的。
+
+#### 必需字段
+
+在想要创建的 Kubernetes 对象对应的 `.yaml` 文件中，需要配置如下的字段：
+
+- `apiVersion` - 创建该对象所使用的 Kubernetes API 的版本
+- `kind` - 想要创建的对象的类型
+- `metadata` - 帮助识别对象唯一性的数据，包括一个 `name` 字符串、UID 和可选的 `namespace`
+
+
+
+## Pod
+
+*Pod* 是 Kubernetes 应用程序的基本执行单元，即它是 Kubernetes 对象模型中创建或部署的最小和最简单的单元。Pod 表示在集群上运行的进程。
+
+
+
+
+
+
+### Service
+
+### Volume
+
+### Namespace
+
+## Controller
+
+### Deployment
+
+为 Pods 和ReplicaSet 提供声明式更新
+
+### DaemonSet
+
+### StatefulSet
+
+### ReplicaSet
+
+### Job
+
+
+
+# 实战
 
 ### 部署第一个容器应用
 
@@ -297,53 +414,7 @@ kubectl delete -f nginx-deployment.yaml   # 删除容器
 
 
 
-## 概念
-
-### Kubernetes 对象
-
-#### 简介
-
-在 Kubernetes 系统中，*Kubernetes 对象* 是持久化的实体。Kubernetes 使用这些实体去表示整个集群的状态。特别地，它们描述了如下信息：
-
-- 哪些容器化应用在运行（以及在哪个 Node 上）
-- 可以被应用使用的资源
-- 关于应用运行时表现的策略，比如重启策略、升级策略，以及容错策略
-
-##### 对象规约（Spec）与状态（Status）
-
-每个 Kubernetes 对象包含两个嵌套的对象字段，它们负责管理对象的配置：对象 *spec* 和 对象 *status* 。 *spec* 是必需的，它描述了对象的 *期望状态（Desired State）* —— 希望对象所具有的特征。 *status* 描述了对象的 *实际状态（Actual State）* ，它是由 Kubernetes 系统提供和更新的。
-
-##### 必需字段
-
-在想要创建的 Kubernetes 对象对应的 `.yaml` 文件中，需要配置如下的字段：
-
-- `apiVersion` - 创建该对象所使用的 Kubernetes API 的版本
-- `kind` - 想要创建的对象的类型
-- `metadata` - 帮助识别对象唯一性的数据，包括一个 `name` 字符串、UID 和可选的 `namespace`
-
-
-
-#### Pod
-
-#### Service
-
-#### Volume
-
-#### Namespace
-
-### Controller
-
-#### Deployment
-
-为 Pods 和ReplicaSet 提供声明式更新
-
-#### DaemonSet
-
-#### StatefulSet
-
-#### ReplicaSet
-
-#### Job
+### 
 
 ## kubectl 命令
 
