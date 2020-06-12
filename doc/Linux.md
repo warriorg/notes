@@ -97,6 +97,23 @@
 
 * **/run** 是一个临时文件系统，存储系统启动以来的信息
 
+### 安装字体
+
+```bash
+fc-list  # 查看安装的字体
+fc-list :lang=zh   # 查看安装的中文字体
+```
+
+在 `/usr/share/fonts` 中新建 chinese 目录，copy字体去chinese目录
+
+```bash
+cd /usr/share/fonts
+mkdir chinese
+fc-cache # 扫描字体目录并生成字体信息的缓存
+```
+
+
+
 
 
 ## 常用技巧
@@ -1380,6 +1397,8 @@ else
 fi
 ```
 
+## PACMAN
+
 
 
 ## Ubuntu
@@ -1702,6 +1721,12 @@ bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
 ## Bash Script
 
 ### 语法
+
+#### 脚本调试
+
+-n 只读取shell脚本，但不实际执行
+-x 进入跟踪方式，显示所执行的每一条命令
+-c "string" 从strings中读取命令
 
 #### 符号的意义
 
