@@ -577,6 +577,7 @@ ln abc cde 		# 建立abc的硬连接，
 
 ```bash
 find Folder -type d -exec chmod 0777 {} +			# 更改目录权限(不包含文件)
+find /data -mtime +30 -name "*.log" -print -exec rm -rf {} \;    # 将/data 目录下所有30天前带".log"的文件删除
 ```
 
 
