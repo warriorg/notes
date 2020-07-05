@@ -348,6 +348,32 @@ $ bin/kafka-topics.sh --zookeeper localhost:2181 --describe op_log
 ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group group0 --reset-offsets --to-latest --topic test --execute
 ```
 
+#### kafka-mirror-maker
+
+```bash
+./kafka-mirror-maker --consumer.config mirror-consumer.properties --producer.config mirror-producer.properties --whitelist "ICS-EDI-IMGIE,test"
+# 或者使用下面的命令
+./
+./kafka-run-class -daemon -name sdc-sync -loggc kafka.tools.MirrorMaker  --consumer.config mirror-consumer.properties --producer.config mirror-producer.properties --whitelist="ICS-EDI-IMGIE,test"
+```
+
+##### mirror-consumer.properties
+
+```bash
+bootstrap.servers=192.168.1.238:9092
+group.id=sdc-MirrorMaker-sync
+partition.assignment.strategy=org.apache.kafka.clients.consumer.RoundRobinAssignor
+```
+
+##### mirror-producer.properties
+
+```bash
+bootstrap.servers=localhost:9092
+```
+
+
+
+
 
 
 ## API

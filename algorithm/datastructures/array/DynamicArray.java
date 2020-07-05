@@ -84,7 +84,18 @@ public class DynamicArray<T> implements Iterable<T>{
     }
 
     public void ensureCapacityInternal(int minCapacity) {
-
+        if (minCapacity < capacity) {
+            return;
+        }    
+        if (capacity == 0) {
+            capacity = DEFAULT_CAPACITY;
+        }
+        capacity *= 2;
+        T[] newElement = (T []) new Object[capacity];
+        for (int i = 0; i < size; i++) {
+            newElement[i] = elementData[i];
+        } 
+        elementData = newElement;
     }
 
     @Override
@@ -122,21 +133,37 @@ public class DynamicArray<T> implements Iterable<T>{
             T item = it.next();
             sb.append(item);
             if (!it.hasNext()) {
-                return sb.append(']').toString();
+                sb.append(']').toString();
+                break;
             }
             sb.append(',').append(' ');
         }
-
+        sb.append("capacity:").append(this.capacity + "");
+        return sb.toString();
     }
 
     public static void main(String[] args) {
         System.out.println("dynamic array");
-        DynamicArray<Integer> intArr = new DynamicArray(50);
+        DynamicArray<Integer> intArr = new DynamicArray(0);
         intArr.add(3);
         intArr.add(6);
         intArr.add(2);
         intArr.add(-2);
         intArr.add(7);
+        System.out.println(intArr);
+
+        intArr.add(7);
+        intArr.add(3);
+        intArr.add(3);
+        intArr.add(6);
+        intArr.add(3);
+        intArr.add(3);
+        intArr.add(6);
+        intArr.add(2);
+        intArr.add(-2);
+        intArr.add(6);
+        intArr.add(2);
+        intArr.add(-2);
 
         
         System.out.println(intArr);

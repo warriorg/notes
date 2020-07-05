@@ -455,6 +455,34 @@ ClassFile {
 
 
 
+## Garbage Collector
+
+### G1（Garbage-First）
+
+#### Overview
+
+![HeapStructure.png](./assets/images/HeapStructure.png)
+
+The older garbage collectors (serial, parallel, CMS) all structure the heap into three sections: young generation, old generation, and permanent generation of a fixed memory size.
+
+
+
+![G1.png](./assets/images/g1-heap.png)
+
+The heap is partitioned into a set of equal-sized heap regions, each a contiguous range of virtual memory. Certain region sets are assigned the same roles (eden, survivor, old) as in the older collectors, but there is not a fixed size for them. This provides greater flexibility in memory usage.
+
+
+
+
+
+
+
+###  CMS（Concurrent Mark-Sweep Collector ）
+
+
+
+
+
 ## Test
 
 ### java run single unit testing
