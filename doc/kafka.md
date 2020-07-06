@@ -353,7 +353,6 @@ $ bin/kafka-topics.sh --zookeeper localhost:2181 --describe op_log
 ```bash
 ./kafka-mirror-maker --consumer.config mirror-consumer.properties --producer.config mirror-producer.properties --whitelist "ICS-EDI-IMGIE,test"
 # 或者使用下面的命令
-./
 ./kafka-run-class -daemon -name sdc-sync -loggc kafka.tools.MirrorMaker  --consumer.config mirror-consumer.properties --producer.config mirror-producer.properties --whitelist="ICS-EDI-IMGIE,test"
 ```
 
