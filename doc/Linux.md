@@ -114,6 +114,244 @@ fc-cache # 扫描字体目录并生成字体信息的缓存
 
 
 
+## 网络管理
+
+### net-tools vs iproute
+
+### 网络接口命名修改
+
+网卡命名规则受 `biosdevname `和`net.ifnames`两个参数影响
+
+编辑`/etc/default/grub`文件，增加`biosdevname=0`和`net.ifnames=0`
+
+更新 grub `grub2-mkconfig -o /boot/grub2/grub.cfg`  reboot生效
+
+| biosdevname | net.ifnames | 网卡名 |
+| ----------- | ----------- | ------ |
+| 0           | 1           | ens33  |
+| 1           | 0           | em1    |
+| 0           | 0           | eth0   |
+
+
+
+### ifconfig
+
+```bash
+ifconfig <接口> <IP地址> <子网掩码>
+```
+
+
+
+### ifup
+
+```bash
+ifup <接口>     # 启用网卡
+```
+
+
+
+### ifdown
+
+```bash
+ifdown <接口>     # 禁用网卡
+```
+
+
+
+### mii-tool 
+
+```bash
+mii-tool eth0 						# 查看物理连接情况 
+```
+
+### route
+
+```bash
+route 										# 查看路由
+route add default gw <网关ip>				# 添加网关
+route add -host <指定ip> gw <网关ip>
+route add -net <指定网段> netmask <子网掩码>  gw <网关ip>
+```
+
+
+
+### ip
+
+```bash
+ip add ls      # ifconfig
+ip link set dev eth0 up     # ifup eth0
+ip addr add 10.0.0.1/24 dev eth1    # ifconfig eth1 10.0.0.1 netmask 255.255.255.0
+ip route add 10.0.0/24 via 192.168.0.1   # route add -net 10.0.0.0 netmask 255.255.255.0 gw 192.168.0.1
+```
+
+### ping
+
+### traceroute
+
+```bash
+traceroute -w 1 www.bing.com   
+```
+
+### mtr
+
+
+
+### nslookup
+
+```bash
+nslookup www.bing.com
+```
+
+### dig
+
+
+
+### telnet
+
+```bash
+telnet www.bing.com 80 				# 检查目标端口是否打开
+```
+
+
+
+### tcpdump
+
+#### Options
+
+```
+-a：尝试将网络和广播地址转换成名称；
+-c<数据包数目>：收到指定的数据包数目后，就停止进行倾倒操作；
+-d：把编译过的数据包编码转换成可阅读的格式，并倾倒到标准输出；
+-dd：把编译过的数据包编码转换成C语言的格式，并倾倒到标准输出；
+-ddd：把编译过的数据包编码转换成十进制数字的格式，并倾倒到标准输出；
+-e：在每列倾倒资料上显示连接层级的文件头；
+-f：用数字显示网际网络地址；
+-F<表达文件>：指定内含表达方式的文件；
+-i<网络界面>：使用指定的网络截面送出数据包；
+-l：使用标准输出列的缓冲区；
+-n：不把主机的网络地址转换成名字；
+-N：不列出域名；
+-O：不将数据包编码最佳化；
+-p：不让网络界面进入混杂模式；
+-q ：快速输出，仅列出少数的传输协议信息；
+-r<数据包文件>：从指定的文件读取数据包数据；
+-s<数据包大小>：设置每个数据包的大小；
+-S：用绝对而非相对数值列出TCP关联数；
+-t：在每列倾倒资料上不显示时间戳记；
+-tt： 在每列倾倒资料上显示未经格式化的时间戳记；
+-T<数据包类型>：强制将表达方式所指定的数据包转译成设置的数据包类型；
+-v：详细显示指令执行过程；
+-vv：更详细显示指令执行过程；
+-x：用十六进制字码列出数据包资料；
+-w <数据包文件>：把数据包数据写入指定的文件。
+```
+
+#### 实例
+
+```bash
+# 监视指定网络接口的数据包 如果不指定网卡，默认tcpdump只会监视第一个网络接口，一般是eth0，下面的例子都没有指定网络接口。
+tcpdump -i eth1
+# 打印所有进入或离开sundown的数据包。
+tcpdump host sundown
+# 截获所有210.27.48.1 的主机收到的和发出的所有的数据包
+tcpdump host 210.27.48.1
+# 打印helios 与 hot 或者与 ace 之间通信的数据包
+tcpdump host helios and \( hot or ace \)
+# 截获主机210.27.48.1 和主机210.27.48.2 或210.27.48.3的通信
+tcpdump host 210.27.48.1 and \ (210.27.48.2 or 210.27.48.3 \)
+# 打印ace与任何其他主机之间通信的IP 数据包, 但不包括与helios之间的数据包.
+tcpdump ip host ace and not helios
+# 获取主机210.27.48.1除了和主机210.27.48.2之外所有主机通信的ip包
+tcpdump ip host 210.27.48.1 and ! 210.27.48.2
+# 截获主机hostname发送的所有数据
+tcpdump -i eth0 src host hostname
+# 监视所有送到主机hostname的数据包
+tcpdump -i eth0 dst host hostname
+# 监视指定主机和端口的数据包
+# 获取主机210.27.48.1接收或发出的telnet包
+tcpdump tcp port 23 host 210.27.48.1
+# 对本机的udp 123 端口进行监视
+tcpdump udp port 123
+# 监视指定网络的数据包
+# 打印本地主机与Berkeley网络上的主机之间的所有通信数据包
+tcpdump net ucb-ether
+# 打印所有通过网关snup的ftp数据包
+tcpdump 'gateway snup and (port ftp or ftp-data)'
+# 打印所有源地址或目标地址是本地主机的IP数据包
+tcpdump ip and not net localnet
+```
+
+- iptraf: 按连接/端口查看流量
+- ifstat: 按设备查看流量
+- ethtool: 诊断工具
+- ss: 连接查看工具
+- 其他: dstat, slurm, nload, bmon
+
+### netstat
+
+```bash
+netstat -ntlp  					# 
+```
+
+### ss
+
+```bash
+ss -plat 					# -u 则检查 UDP 端口
+ss -ntpl
+```
+
+
+
+## 包管理
+
+### rpm
+
+#### Options
+
+* **-q** 查下软件包
+* **-i** 安装软件包
+* **-e** 卸载软件包
+
+
+
+### yum
+
+`/etc/yum.repos.d/CentOS-base.repo`
+
+yum 的配置文件分为两部分：main 和repository
+
+* main 部分定义了全局配置选项，整个yum 配置文件应该只有一个main。常位于/etc/yum.conf 中。
+* repository 部分定义了每个源/服务器的具体配置，可以有一到多个。常位于/etc/yum.repo.d 目录下的各文件中
+
+```bash
+yum install epel-release  		# 增加epel源
+yum -y list java*   			# 搜索安装包
+```
+
+### 源码编译安装
+
+```bash
+wget xxx.tar.gz
+tar -zxf xxx.tar.gz
+cd xxx
+./configure --prefix=/usr/local/xxx
+make -j2				# 用两个逻辑的CPU去编译
+make install
+```
+
+### 内核升级
+
+```bash
+uname -r 		# 查看内核版本
+yum install kernel-3.10.0    # 升级内核版本
+```
+
+### grub文件
+
+
+
+
+
 
 
 ## 常用技巧
@@ -468,11 +706,107 @@ ls -l              				#列出目录下的内容
 
 ### 用户管理
 
-adduser： 会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
+#### useradd
 
-useradd：需要使用参数选项指定上述基本设置，如果不使用任何参数，则创建的用户无密码、无主目录、没有指定shell版本。
+会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
 
-userdel 删除用户
+````bash
+useradd test   			# 新建test用户
+useradd -g group1 user2  # 新增用户并指定组
+id test							# 验证test用户
+tail -10 /etc/passwd   #
+tail -10 /etc/shadow    # 用户密码相关
+````
+
+#### userdel
+
+删除用户
+
+```bash
+userdel -r test    # -r参数删除时一起删除用户目录 
+```
+
+#### passwd
+
+修改用户密码
+
+```bash
+passwd test  					# 为test用户设置密码
+passwd    						# 更改当前用户密码
+```
+
+#### usermod
+
+修改用户属性
+
+```bash
+usermod -d /home/xxx test    # 修改用户test的home目录
+```
+
+#### chage
+
+修改用户密码过期信息
+
+```bash
+
+```
+
+#### groupadd
+
+```bash
+groupadd group1											# 新增组
+useradd user1												# 新增用户
+usermod -g group1 user1							# 修改用户的组
+useradd -g group1 user2  						# 新增用户并指定组
+id user1														# 查看用户的信息
+```
+
+#### groupdel
+
+
+
+#### 用户和组的配置文件
+
+
+
+##### /etc/passwd
+
+文件存放的是用户的信息，由6个分号组成的7个信息，解释如下
+
+1. 用户名。
+2. 密码（已经加密）
+3. UID（用户标识）,操作系统自己用的
+4. GID组标识。
+5. 用户全名或本地帐号
+6. 开始目录
+7. 登录使用的Shell，就是对登录命令进行解析的工具。
+
+##### /etc/shadow
+
+存放的普通帐号信息如下：
+
+1. 帐号名称
+2. 密码：这里是加密过的，但高手也可以解密的。要主要安全问题（代！符号标识该帐号不能用来登录）
+3. 上次修改密码的日期
+4. 密码不可被变更的天数
+5. 密码需要被重新变更的天数（99999表示不需要变更）
+6. 密码变更前提前几天警告
+7. 帐号失效日期
+8. 帐号取消日期
+9. 保留条目，目前没用
+
+##### /etc/group
+
+存放用户组的所有信息
+
+1. 组名
+2. 口令
+3. 组标示号
+4. 组内用户列表
+
+
+
+
 
 ```bash
 adduser apple
@@ -503,12 +837,47 @@ usermod -G groupname username  		#已有的用户增加工作组
 ```
 
 ### 文件处理命令
+
+#### 文件权限
+
+
+
+![](./assets/images/linux-file-info.jpg)
+
+
+
+#### ls
+
+##### Options
+
+* **-h** –human-readable 以容易理解的格式列出文件大小
+
 #### mkdir
 #### cd
 #### pwd
 #### rmdir
 #### rm
 #### cp
+
+#### tar 
+
+##### Options
+
+* **c** 打包
+* **x** 解包
+* **f** 指定操作类型的文件
+
+```bash
+tar cf /tmp/etc-backup.tar /etc  # 打包etc目录
+tar czf /tmp/etc-backup.tar.gz /etc   # 打包压缩etc目录
+tar cjf /tmp/etc-backup.tar.bz2 /etc   # 打包压缩etc目录
+tar xf /tmp/etc-backup.tar -C /root    # 解开包到特定目录
+tar zxf /tmp/etc-backup.tar.gz
+tar jxf /tmp/etc-backup.tar.bz2 
+```
+
+
+
 #### ln 
 
 * 硬链接(Hard Link) 说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
@@ -532,6 +901,19 @@ ln abc cde 		# 建立abc的硬连接，
 #### tr 
 
 可以对来自标准输入的字符进行替换、压缩和删除。它可以将一组字符变成另一组字符，经常用来编写优美的单行命令，作用很强大
+
+
+
+#### chown. 
+
+#### chgrp
+
+#### chmod
+
+```bash
+chmod u+x filename        # 为用户增加执行权限
+chmod u-r filename				# 为组减少读取权限
+```
 
 
 
@@ -713,88 +1095,9 @@ tar -xvf filename.tar.bz2
 
 `yum install bind-utils`
 
-#### mtr ping工具
-
-比ping屌
-
 #### nethogs
 
 按进程查看流量占用
-
-#### tcpdump
-
- 抓包工具
-
-##### 选项
-
-```
--a：尝试将网络和广播地址转换成名称；
--c<数据包数目>：收到指定的数据包数目后，就停止进行倾倒操作；
--d：把编译过的数据包编码转换成可阅读的格式，并倾倒到标准输出；
--dd：把编译过的数据包编码转换成C语言的格式，并倾倒到标准输出；
--ddd：把编译过的数据包编码转换成十进制数字的格式，并倾倒到标准输出；
--e：在每列倾倒资料上显示连接层级的文件头；
--f：用数字显示网际网络地址；
--F<表达文件>：指定内含表达方式的文件；
--i<网络界面>：使用指定的网络截面送出数据包；
--l：使用标准输出列的缓冲区；
--n：不把主机的网络地址转换成名字；
--N：不列出域名；
--O：不将数据包编码最佳化；
--p：不让网络界面进入混杂模式；
--q ：快速输出，仅列出少数的传输协议信息；
--r<数据包文件>：从指定的文件读取数据包数据；
--s<数据包大小>：设置每个数据包的大小；
--S：用绝对而非相对数值列出TCP关联数；
--t：在每列倾倒资料上不显示时间戳记；
--tt： 在每列倾倒资料上显示未经格式化的时间戳记；
--T<数据包类型>：强制将表达方式所指定的数据包转译成设置的数据包类型；
--v：详细显示指令执行过程；
--vv：更详细显示指令执行过程；
--x：用十六进制字码列出数据包资料；
--w <数据包文件>：把数据包数据写入指定的文件。
-```
-
-##### 实例
-
-```bash
-# 监视指定网络接口的数据包 如果不指定网卡，默认tcpdump只会监视第一个网络接口，一般是eth0，下面的例子都没有指定网络接口。
-tcpdump -i eth1
-# 打印所有进入或离开sundown的数据包。
-tcpdump host sundown
-# 截获所有210.27.48.1 的主机收到的和发出的所有的数据包
-tcpdump host 210.27.48.1
-# 打印helios 与 hot 或者与 ace 之间通信的数据包
-tcpdump host helios and \( hot or ace \)
-# 截获主机210.27.48.1 和主机210.27.48.2 或210.27.48.3的通信
-tcpdump host 210.27.48.1 and \ (210.27.48.2 or 210.27.48.3 \)
-# 打印ace与任何其他主机之间通信的IP 数据包, 但不包括与helios之间的数据包.
-tcpdump ip host ace and not helios
-# 获取主机210.27.48.1除了和主机210.27.48.2之外所有主机通信的ip包
-tcpdump ip host 210.27.48.1 and ! 210.27.48.2
-# 截获主机hostname发送的所有数据
-tcpdump -i eth0 src host hostname
-# 监视所有送到主机hostname的数据包
-tcpdump -i eth0 dst host hostname
-# 监视指定主机和端口的数据包
-# 获取主机210.27.48.1接收或发出的telnet包
-tcpdump tcp port 23 host 210.27.48.1
-# 对本机的udp 123 端口进行监视
-tcpdump udp port 123
-# 监视指定网络的数据包
-# 打印本地主机与Berkeley网络上的主机之间的所有通信数据包
-tcpdump net ucb-ether
-# 打印所有通过网关snup的ftp数据包
-tcpdump 'gateway snup and (port ftp or ftp-data)'
-# 打印所有源地址或目标地址是本地主机的IP数据包
-tcpdump ip and not net localnet
-```
-
-- iptraf: 按连接/端口查看流量
-- ifstat: 按设备查看流量
-- ethtool: 诊断工具
-- ss: 连接查看工具
-- 其他: dstat, slurm, nload, bmon
 
 #### nc
 
@@ -823,12 +1126,7 @@ netstat -ltnp  			# 列出端口
 netstat -anop|more 		# 查看网络队列
 ```
 
-#### ss 
 
-```bash
-ss -plat
-# -u 则检查 UDP 端口
-```
 
 #### lsof
 
@@ -1235,6 +1533,10 @@ $ hping3 -S -p 80 -i u100 192.168.0.30
 
 
 
+
+
+
+
 ## 其它命令
 
 ### socat
@@ -1447,15 +1749,6 @@ network:
 
 ## Centos
 
-### yum
-yum 的配置文件分为两部分：main 和repository
-
-* main 部分定义了全局配置选项，整个yum 配置文件应该只有一个main。常位于/etc/yum.conf 中。
-* repository 部分定义了每个源/服务器的具体配置，可以有一到多个。常位于/etc/yum.repo.d 目录下的各文件中
-```bash
-yum install epel-release  		# 增加epel源
-yum -y list java*   			# 搜索安装包
-```
 
 ### 查看SELinux状态及关闭SELinux
 ```bash
