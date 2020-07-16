@@ -118,7 +118,6 @@ public class DoublyLinkedList<T> implements Iterable<T> {
         if (curr.next != null) {
             curr.next.prev = curr.prev;
         }
-        return true;
     }
 
     public T removeFirst() {

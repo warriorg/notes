@@ -3,7 +3,7 @@ package datastructures.queue;
 
 public interface Queue<T> {
 
-    public void offer(T elem);
+    public boolean offer(T elem);
 
     public T poll();
 

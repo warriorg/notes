@@ -302,6 +302,143 @@ ss -ntpl
 
 
 
+## 进程管理
+
+进程有5种状态
+
+1. 运行(正在运行或在运行队列中等待)
+2. 中断(休眠中, 受阻, 在等待某个条件的形成或接受到信号)
+3. 不可中断(收到信号不唤醒和不可运行, 进程必须等待直到有中断发生)
+4. 僵死(进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放)
+5. 停止(进程收到SIGSTOP, SIGTSTP, SIGTTIN, SIGTTOU信号后停止运行运行)
+
+### ps (process status)
+
+#### Options
+
+- a 显示所有进程
+- -a 显示同一终端下的所有程序
+- -A 显示所有进程
+- c 显示进程的真实名称
+- -N 反向选择
+- -e 等于“-A”
+- e 显示环境变量
+- f 显示程序间的关系
+- -H 显示树状结构
+- r 显示当前终端的进程
+- T 显示当前终端的所有程序
+- u 指定用户的所有进程
+- -au 显示较详细的资讯
+- -aux 显示所有包含其他使用者的行程
+- -C<命令> 列出指定命令的状况
+- –lines<行数> 每页显示的行数
+- –width<字符数> 每页显示的字符数
+- –help 显示帮助信息
+- –version 显示版本显示
+
+```bash
+ps -aef
+ps -eLf       # 显示线程数
+ps aux --sort -rss | head  # 查看内存占用10的进程
+ps -aux | sort -k4nr | head -n 10  # 查看内存占用10的进程
+ps -e -o "%C : %p : %z : %a"|sort -k5 -nr 		# 查看进程，按内存从大到小
+ps -e -o "%C : %p : %z : %a"|sort -nr					# 查看进程，按CPU利用率从大到小排序
+```
+
+### pstree
+
+
+
+### top
+
+```bash
+top -c -b -o +%MEM | head -n 20 | tail -15		查看内存占用并且排序
+```
+
+
+
+### nice
+
+调整进程优先级
+
+### renice
+
+重新调整进程优先级
+
+
+
+### &、ctrl + z、fg、bg、jobs
+
+进程作业控制
+
+- **&** 后台执行命令
+- **ctrl + z** 将一个正在前台执行的命令放到后台，并且暂停
+- **jobs** 查看当前有多少在后台运行的命令
+- **fg** 将后台中的命令调至前台继续运行
+- **bg** 将一个在后台暂停的命令，变成继续执行
+
+```bash
+$ htop
+# 按下 ctrl+z htop 后台执行
+[1]+  Stopped                 htop
+$ jobs -l
+[1]+ 46989 Stopped                 htop
+$ bg
+[1]+ htop &
+
+[1]+  Stopped                 htop
+$ fg
+htop
+$ fg %jobnumber  # jobnumber jobs查询到的命令的序号
+```
+
+### kill
+
+```bash
+kill -l  				# 查看系统支持的所有信号
+```
+
+
+
+### nohup
+
+### disown
+
+### supervisor 
+
+> 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
+
+
+
+### 重定向
+
+![bash-redirection](./assets/images/bash-redirection.jpeg)
+
+
+
+### 2>&1
+
+2>&1表明将文件描述2（标准错误输出）的内容重定向到文件描述符1（标准输出），为什么1前面需要&？当没有&时，1会被认为是一个普通的文件，有&表示重定向的目标不是一个文件，而是一个文件描述符。
+
+```bash
+cd /proc/5270/fd   				#进程5270所有打开的文件描述符信息都在此
+ls -l              				#列出目录下的内容
+ 0 -> /dev/pts/7
+ 1 -> /dev/pts/7
+ 2 -> /dev/pts/7
+ 255 -> /home/hyb/workspaces/shell/test.sh
+```
+
+
+
+
+
+## 系统管理
+
+
+
+
+
 ## 包管理
 
 ### rpm
@@ -348,7 +485,23 @@ yum install kernel-3.10.0    # 升级内核版本
 
 ### grub文件
 
+GNU GRUB（GRand Unified Bootloader简称“GRUB”）是一个来自GNU项目的多操作系统启动程序。GRUB是多启动规范的实现，它允许用户可以在计算机内同时拥有多个操作系统，并在计算机启动时选择希望运行的操作系统。GRUB可用于选择操作系统分区上的不同内核，也可用于向这些内核传递启动参数。
 
+#### grub配置文件
+
+* /etc/default/grub
+
+* /etc/grub.d/
+
+* /boot/grub2/grub.cfg
+
+* grub2-mkconfig -o /boot/grub2/grub.cfg
+
+```bash
+grub2-editenv list								# 列出当前默认引导项
+grub2-set-default 0 							# 默认使用第一个内核引导
+grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
+```
 
 
 
@@ -417,43 +570,7 @@ df -h
 du -h --max-depth=1						# 查看各文件夹大小命令
 ```
 
-#### ps
 
-```bash
-ps -aef
-ps aux --sort -rss | head  # 查看内存占用10的进程
-ps -aux | sort -k4nr | head -n 10  # 查看内存占用10的进程
-ps -e -o "%C : %p : %z : %a"|sort -k5 -nr 		# 查看进程，按内存从大到小
-ps -e -o "%C : %p : %z : %a"|sort -nr					# 查看进程，按CPU利用率从大到小排序
-```
-
-#### top
-```bash
-top -c -b -o +%MEM | head -n 20 | tail -15		查看内存占用并且排序
-```
-
-#### &、ctrl + z、fg、bg、jobs、
-
-- **&** 后台执行命令
-- **ctrl + z** 将一个正在前台执行的命令放到后台，并且暂停
-- **jobs** 查看当前有多少在后台运行的命令
-- **fg** 将后台中的命令调至前台继续运行
-- **bg** 将一个在后台暂停的命令，变成继续执行
-
-```bash
-$ htop
-# 按下 ctrl+z htop 后台执行
-[1]+  Stopped                 htop
-$ jobs -l
-[1]+ 46989 Stopped                 htop
-$ bg
-[1]+ htop &
-
-[1]+  Stopped                 htop
-$ fg
-htop
-$ fg %jobnumber  # jobnumber jobs查询到的命令的序号
-```
 
 #### crontab 定时
 
@@ -670,37 +787,6 @@ net.ipv4.ip_local_port_range = 2048 65000
 # 表示文件句柄的最大数量
 fs.file-max = 102400
 ```
-
-#### nohup
-
-#### disown
-
-#### Supervisor 
-
-> 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
-
-
-
-#### 重定向
-
-![bash-redirection](./assets/images/bash-redirection.jpeg)
-
-
-
-#### 2>&1
-
-2>&1表明将文件描述2（标准错误输出）的内容重定向到文件描述符1（标准输出），为什么1前面需要&？当没有&时，1会被认为是一个普通的文件，有&表示重定向的目标不是一个文件，而是一个文件描述符。
-
-```bash
-cd /proc/5270/fd   				#进程5270所有打开的文件描述符信息都在此
-ls -l              				#列出目录下的内容
- 0 -> /dev/pts/7
- 1 -> /dev/pts/7
- 2 -> /dev/pts/7
- 255 -> /home/hyb/workspaces/shell/test.sh
-```
-
-
 
 
 

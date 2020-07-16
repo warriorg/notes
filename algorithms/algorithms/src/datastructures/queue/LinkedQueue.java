@@ -31,8 +31,9 @@ public class LinkedQueue<T> implements Queue<T>,Iterable<T> {
     }
     
     @Override
-    public void offer(T item) {
+    public boolean offer(T item) {
         linkedList.addLast(item);
+        return true;
     }
 
     @Override
