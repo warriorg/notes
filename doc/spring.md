@@ -1,3 +1,34 @@
+# 配置属性
+
+## 细粒度的自动配置
+
+### 理解Spring的环境抽象
+
+Spring环境从各个属性源中拉取属性，并让Spring应用上下中的bean可以使用他们
+
+![Spring 环境](./assets/images/1594982522062.jpg)
+
+几种spring环境属性的设置
+
+```bash
+server.port=9000      # properties
+server:               # ymal
+    port: 9000
+java -jar test.jar --server.port=9000       # java
+export SERVER_PORT=9000                     # 环境变量，注意，命名方式的不通
+```
+
+## 自定义配置属性
+
+
+
+
+# spring
+
+
+
+
+
 ### 控制反转（Inversion of Control，IoC）
 
 * 常见另一种叫法**依赖注入（Dependency Injection，DI）**, 还有一种叫法**依赖查找(Dependency Lookup)** 对象在被创建的时候，由IoC容器注入，对象的创建的控制权由IoC容器负责
