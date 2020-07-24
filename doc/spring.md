@@ -20,6 +20,46 @@ export SERVER_PORT=9000                     # 环境变量，注意，命名方�
 
 ## 自定义配置属性
 
+在bean上添加@ConfigurationProperties注解，就会为bean中的属性根据Spring环境注入值。
+
+### 声明配置属性元数据
+
+创建自定义配置属性的元数据，需要在META-INF下创建一个名为`additional-spring-configuration-metadata.json`的文件。默认在项目的`src/main/resources/META-INFO`下。
+
+```json 
+{
+  "properties": [
+    {
+      "name": "taco.orders.page-size",
+      "type": "java.lang.String",
+      "description": "Sets the maximum number of orders to display in a list."
+    },
+    {
+      "name": "taco.discount.codes",
+      "type": "java.util.Map<String, Integer>",
+      "description": "A map of discount codes to a discount percentage."
+    }
+  ]
+}
+
+```
+
+### 使用profile进行配置
+
+#### 定义特定profile属性
+
+定义特定profile属性文件，遵守如下约定`application-{profile name}.yaml 或 application-{profile name}.properties`
+
+#### 使用profile条件化地创建bean
+
+`@Profile`注解可以把bean设置为仅适用于给定的profile
+
+```java
+@Profile({"dev", "test"})
+public CommandLineRunner dataLoader() {
+
+}
+```
 
 
 
