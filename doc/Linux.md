@@ -398,9 +398,9 @@ $ fg %jobnumber  # jobnumber jobs查询到的命令的序号
 kill -l  				# 查看系统支持的所有信号
 ```
 
-
-
 ### nohup
+
+
 
 ### disown
 
@@ -429,13 +429,78 @@ ls -l              				#列出目录下的内容
  255 -> /home/hyb/workspaces/shell/test.sh
 ```
 
-
-
-
-
 ## 系统管理
 
+### systemctl
 
+服务集中管理工具
+
+服务文件的默认路径`/lib/systemd/system`
+
+
+
+### SELinux
+
+```bash
+# 查看SELinux
+getenforce
+/usr/sbin/sestatus
+ps -Z 
+ls -Z
+id -Z
+
+# 关闭SELinux
+setenforce 0									# 临时
+/etc/selinux/sysconfig				# 持久
+```
+
+### free
+
+查看内存使用率
+
+
+
+### fdisk
+
+```bash
+fdisk -l 
+ls -l /dev/sd?      # 查看所有的磁盘，从abc依次往下
+ls -l /dev/sd??     # 查看所有磁盘的所有分区
+```
+
+### parted 
+
+```bash
+parted -l # 列出所有块设备上的分区布局
+```
+
+### df
+
+report file system disk space usage
+
+```bash
+df -h      # 	显示包含每个文件名参数的文件系统上的可用磁盘空间
+```
+
+### du
+
+```bash
+ls -lh /etc/passwd    # 文件的大小
+du /etc/passwd				# 文件的大小 实际大小
+```
+
+
+
+### dd
+
+```bash
+dd if=afile bs=4M count=10 of=bfile    
+dd if=/dev/zero bs=4M count=10 seek=20 of=bfile   # 创建空洞文件
+```
+
+**/dev/null ** 它是空设备，也称为位桶（bit bucket）、回收站、无底洞，可以向它输出任何数据。任何写入它的输出都会被抛弃。如果不想让消息以标准输出显示或写入文件，那么可以将消息重定向到位桶。
+
+**/dev/zero** 是一个输入设备，可用它来初始化文件。该设备无穷尽地提供0，可以使用任何需要的数目——设备提供的要多的多。他可以用于向设备或文件写入字符串0。
 
 
 

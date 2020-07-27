@@ -1,70 +1,91 @@
 package leetcode
 
 type MyQueue struct {
-	stack *MyStack
+	s1 *ArrayStack
+	s2 *ArrayStack
 }
 
 /** Initialize your data structure here. */
 func Constructor() MyQueue {
 	return MyQueue{
-		stack: NewStack(),
+		s1: NewStack(),
+		s2: NewStack(),
 	}
 }
 
 /** Push element x to the back of queue. */
 func (this *MyQueue) Push(x int) {
-	this.stack.Push(x)
+	for !this.s1.Empty() {
+		this.s2.Push(this.s1.Pop())
+	}
+	this.s1.Push(x)
+	for !this.s2.Empty() {
+		this.s1.Push(this.s2.Pop())
+	}
 }
 
 /** Removes the element from in front of queue and returns that element. */
 func (this *MyQueue) Pop() int {
-	return this.stack.Pop()
+	return this.s1.Pop()
 }
 
 /** Get the front element. */
 func (this *MyQueue) Peek() int {
-	return this.stack.Top()
+	return this.s1.Peek()
 }
 
 /** Returns whether the queue is empty. */
 func (this *MyQueue) Empty() bool {
-	return this.stack.Empty()
+	return this.s1.Empty()
 }
 
-type MyStack struct {
-	stack []int
+type ArrayStack struct {
+	data []int // 存放数据的位置
+	top  int   // 栈顶指针
 }
 
 /** Initialize your data structure here. */
-func NewStack() *MyStack {
-	return &MyStack{
-		stack: []int{},
+func NewStack() *ArrayStack {
+	return &ArrayStack{
+		data: make([]int, 0, 32),
+		top:  -1,
 	}
+}
+
+/** Size  */
+func (this *ArrayStack) Size() int {
+	return this.top + 1
 }
 
 /** Push element x to the back of queue. */
-func (this *MyStack) Push(x int) {
-	this.stack = append(this.stack, x)
-}
-
-/** Removes the element on top of the stack and returns that element. */
-func (this *MyStack) Pop() int {
-	if len(this.stack) > 0 {
-		n := len(this.stack) - 1 // Top element
-		val := this.stack[n]
-
-		this.stack = this.stack[:n]
-		return val
+func (this *ArrayStack) Push(x int) {
+	this.top += 1
+	if this.top > len(this.data)-1 {
+		this.data = append(this.data, x)
+	} else {
+		this.data[this.top] = x
 	}
-	return -1
 }
 
-/** Get the top element. */
-func (this *MyStack) Top() int {
-	return this.stack[len(this.stack)-1]
+/** Removes the element from in front of queue and returns that element. */
+func (this *ArrayStack) Pop() int {
+	if this.Empty() {
+		return -1
+	}
+	x := this.data[this.top]
+	this.top -= 1
+	return x
 }
 
-/** Returns whether the stack is empty. */
-func (this *MyStack) Empty() bool {
-	return len(this.stack) == 0
+/** Get the front element. */
+func (this *ArrayStack) Peek() int {
+	if this.Empty() {
+		return -1
+	}
+	return this.data[this.top]
+}
+
+/** Returns whether the queue is empty. */
+func (this *ArrayStack) Empty() bool {
+	return this.top == -1
 }

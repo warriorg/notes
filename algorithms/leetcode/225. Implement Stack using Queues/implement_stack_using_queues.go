@@ -1,4 +1,46 @@
-package queue
+package leetcode
+
+type MyStack struct {
+	q1 *ArrayQueue
+	q2 *ArrayQueue
+}
+
+/** Initialize your data structure here. */
+func Constructor() MyStack {
+	return MyStack{
+		q1: NewArrayQueue(),
+		q2: NewArrayQueue(),
+	}
+}
+
+/** Push element x onto stack. */
+func (this *MyStack) Push(x int) {
+	for !this.q1.Empty() {
+		this.q2.Push(this.q1.Pop())
+	}
+	this.q1.Push(x)
+	for !this.q2.Empty() {
+		this.q1.Push(this.q2.Pop())
+	}
+}
+
+/** Removes the element on top of the stack and returns that element. */
+func (this *MyStack) Pop() int {
+	if this.q1.Empty() {
+		return -1
+	}
+	return this.q1.Pop().(int)
+}
+
+/** Get the top element. */
+func (this *MyStack) Top() int {
+	return this.q1.Peek().(int)
+}
+
+/** Returns whether the stack is empty. */
+func (this *MyStack) Empty() bool {
+	return this.q1.Empty()
+}
 
 type ArrayQueue struct {
 	q    []interface{}
@@ -8,7 +50,7 @@ type ArrayQueue struct {
 }
 
 /** Initialize your data structure here. */
-func Constructor() *ArrayQueue {
+func NewArrayQueue() *ArrayQueue {
 	return &ArrayQueue{
 		q:    make([]interface{}, 32),
 		size: 0,
@@ -68,10 +110,10 @@ func (this *ArrayQueue) dequeue() interface{} {
 }
 
 /**
- * Your ArrayQueue object will be instantiated and called as such:
+ * Your MyStack object will be instantiated and called as such:
  * obj := Constructor();
  * obj.Push(x);
  * param_2 := obj.Pop();
- * param_3 := obj.Peek();
+ * param_3 := obj.Top();
  * param_4 := obj.Empty();
  */
