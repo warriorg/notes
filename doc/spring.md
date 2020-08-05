@@ -63,6 +63,112 @@ public CommandLineRunner dataLoader() {
 
 
 
+# 异步消息
+
+## JMS
+
+## RabbitMQ和AMQP
+
+AMQP消息使用Exchange和routing key来寻址，这样消息就与接收者要监听的队列解耦了。
+
+Exchange和队列的关系如下
+
+![image-20200730192257175](./assets/images/image-20200730192257175.png)
+
+发送到RabbitMQ Exchange的消息会基于routing key和binding被路由到一个或多个队列上
+
+Exchange 的类型
+
+* Default 这是代理创建的特殊Exchange。它会将消息路由至名字与消息routing key相同的队列。所有的队列都会自动绑定至Default Exchange。
+* Direct 如果消息的routing key与队列的binding key相同，那么消息将会路由到该队列上
+* Topic 如果消息的routing key与队列的binding key(可能会包含通配符)匹配，那么消息将会路由到一个或多个这样的队列上。
+* Fanout 不管routing key 和binding key是什么，消息都会路由到所有绑定队列上
+* Headers 与Topic Exchange类似，只不过要基于消息的头信息进行路由，而不是routing key
+* Dead letter 捕获所有无法投递(也就是他们无法匹配所有已定义的Exchange和队列的binding关系)的消息。
+
+
+
+## Kafka
+
+[kafka](./kafka.md)
+
+
+
+# Integration
+
+
+
+# Reactor
+
+## 反应式编程概览
+
+反应式编程是一种可以替代命令式编程的编程范式。
+
+反应式编程本质上是函数式和声明式的。相对于描述一组将依次执行的步骤，反应式编程描述了数据将会流经的管道或者流。相对于要求将被处理的数据作为一个整体进行处理，反应式流可以在数据可用时立即开始处理。
+
+### 定义反应式流
+
+反应式流可以总结为4个接口
+
+* Publisher 负责生成数据并将数据发送给`Subscription`
+
+  ```java
+  interface Publisher<T> {
+    void subscribe(Subscriber<? super T> subscriber);
+  }
+  ```
+
+* Subscriber 通过`Publisher`的`subscribe()`方法向Publisher发起订阅
+
+  ```java
+  interface Subscriber<T> {
+    void onSubscribe(Subscription sub);
+    void onNext(T item);
+    void onError(Throwable ex);
+    void onComplete();
+  }
+  ```
+
+* Subscription 通过Subscription，Subscriber管理其订阅情况
+
+  ```java
+  interface Subscription {
+    /**
+    * 请求Publisher发送数据
+    * @param n 表明愿意接受多少数据
+    **/
+    void request(long n);
+    /**
+    * 取消订阅
+    */
+    void cancel();
+  }
+  ```
+
+* Processor `Subscriber`和`Publisher`的组合
+
+  ```java
+  interface Processor<T, R> extends Subscriber<T>, Publisher<R> {}
+  ```
+
+  作为`Subscriber`时，`Processor`会接受数据并以某种方式对数据进行处理，然后它会将角色转换为`Publisher`,并将处理的结果发布给它的`Subscriber`
+
+## Reactor
+
+
+
+# WebFlux
+
+![image-20200731103829434](./assets/images/image-20200731103829434.png)
+
+异步web框架能够以更少的线程获得更高的可扩展性，通常它们只需要与CPU核心数量相同的线程。通过使用时间轮询（event looping）机制，能够用一个线程处理很多请求，这样每次连接的成本会更低。
+
+**Spring 5 通过名为WebFlux的新Web框架来支持反应式Web应用**
+
+![image-20200731111418201](./assets/images/image-20200731111418201.png)
+
+
+
 # spring
 
 

@@ -1,3 +1,33 @@
+# 安装
+
+
+
+# SQL语言
+
+## 创建表
+
+## 查询表
+
+## 表关联
+
+## 聚合函数
+
+## 新增数据
+
+## 修改数据
+
+## 删除
+
+
+
+# 高级特性
+
+
+
+
+
+
+
 ## MSSQL
 
 ```sql
@@ -56,3 +86,6 @@ show global status like 'innodb_buffer_pool_pages_%'
 
 
 mysql proxy 读写分离
+
+
+

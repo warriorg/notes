@@ -16,15 +16,18 @@ Output: 2
 **/
 
 func majorityElement(nums []int) int {
-	var majority int = nums[0]
-	dict := map[int]int{}
-	for _, val := range nums {
-		dict[val]++
-		if val == majority {
-			continue
-		}
-		if dict[val] > dict[majority] {
-			majority = val
+	majority, count := nums[0], 1
+
+	for i := 1; i < len(nums); i++ {
+		if nums[i] != majority {
+			if count > 0 {
+				count--
+			} else {
+				majority = nums[i]
+				count = 1
+			}
+		} else {
+			count++
 		}
 	}
 
