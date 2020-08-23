@@ -156,7 +156,7 @@ Kafka在ZooKeeper中动态维护一个ISR(In-sync Replica)，即保存同步的�
 
 分区偏移量。当consumer从partition中消费了若干消息后，consumer会将这些消费的消息中最大的offset提交给broker，表示当前partition已经消费到了该offset所标识的消息。
 
-####Broker Controller
+#### Broker Controller
 
 Kafka集群的多个broker中，有一个会被选举为controller。负责管理整个集群中partition和replicas的状态 
 
