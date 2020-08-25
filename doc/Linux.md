@@ -497,7 +497,8 @@ ps -e -o "%C : %p : %z : %a"|sort -nr					# 查看进程，按CPU利用率从大
 ### top
 
 ```bash
-top -c -b -o +%MEM | head -n 20 | tail -15		查看内存占用并且排序
+top -c -b -o +%MEM | head -n 20 | tail -15		# 查看内存占用并且排序
+top -H -p pid          # 显示进程的所有线程
 ```
 
 
