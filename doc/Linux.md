@@ -185,6 +185,90 @@ https://www.ruanyifeng.com/blog/2011/12/inode.html
 
 
 
+### LVM
+
+#### LVM基本组成
+
+LVM利用Linux内核的[device-mapper](http://sources.redhat.com/dm/)功能来实现存储系统的虚拟化（系统分区独立于底层硬件）。 通过LVM，你可以实现存储空间的抽象化并在上面建立虚拟分区（virtual partitions），可以更简便地扩大和缩小分区，可以增删分区时无需担心某个硬盘上没有足够的连续空间，避免为正在使用的磁盘重新分区的麻烦、为调整分区而不得不移动其他分区的不便。
+
+LVM的基本组成部分如下：
+
+- 物理卷 (PV)
+
+  一个可供存储LVM的块设备. 例如: 一块硬盘, 一个MBR或GPT[分区](https://wiki.archlinux.org/index.php/Partitioning_(简体中文)), 一个回环文件, 一个被内核映射的设备 (例如 [dm-crypt](https://wiki.archlinux.org/index.php/Dm-crypt_(简体中文))).它包含一个特殊的LVM头。
+
+- 卷组 (VG)
+
+  物理卷的一个组，作为存放逻辑卷的容器。 PEs are allocated from a VG for a LV.
+
+- 逻辑卷 (LV)
+
+  "虚拟/逻辑卷"存放在一个卷组中并由物理块组成。是一个类似于物理设备的块设备，例如，你可以直接在它上面创建一个文件系统[文件系统](https://wiki.archlinux.org/index.php/File_systems_(简体中文))。
+
+- 物理块 (PE)
+
+  一个卷组中最小的连续区域(默认为4 MiB)，多个物理块将被分配给一个逻辑卷。你可以把它看成物理卷的一部分，这部分可以被分配给一个逻辑卷。
+
+  ![image-20200831072056815](./assets/images/image-20200831072056815.png)
+
+
+示例:
+
+```
+物理硬盘
+                 
+   硬盘1 (/dev/sda):
+      _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+     |分区1 50GB (物理卷)           |分区2 80GB (物理卷)             |
+     |/dev/sda1                    |/dev/sda2                     |
+     |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _|_ _ _ _ _ _ _ _ _ _ _ _ _ _ __|
+                                   
+   硬盘2 (/dev/sdb):
+      _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+     |分区1 120GB (物理卷)                          |
+     |/dev/sdb1                                   |
+     | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|
+
+LVM逻辑卷
+ 
+   卷组（Volume Group1） (/dev/MyVolGroup/ = /dev/sda1 + /dev/sda2 + /dev/sdb1):
+  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+  |逻辑卷1 15GB                  |逻辑卷2 35GB                    |逻辑卷3 200GB             |
+  |/dev/MyVolGroup/rootvol      |/dev/MyVolGroup/homevol        |/dev/MyVolGroup/mediavol |
+  |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|_ _ _ _ _ _ _ _ _ _ _ _ _|
+```
+
+#### 优点
+
+比起普通的硬盘分区管理方式，LVM更富于灵活性：
+
+- 将多块硬盘看作一块大硬盘
+- 使用逻辑卷（LV），可以创建跨越众多硬盘空间的分区。
+- 可以创建小的逻辑卷（LV），在空间不足时再动态调整它的大小。
+- 在调整逻辑卷（LV）大小时可以不用考虑逻辑卷在硬盘上的位置，不用担心没有可用的连续空间。
+- 可以在线（online）对逻辑卷（LV）和卷组（VG）进行创建、删除、调整大小等操作。不过LVM上的文件系统也需要重新调整大小，好在某些文件系统（例如ext4）也支持在线操作。
+- 无需重新启动服务，就可以将服务中用到的逻辑卷（LV）在线（online）/动态（live）迁移至别的硬盘上。
+- 允许创建快照，可以保存文件系统的备份，同时使服务的下线时间（downtime）降低到最小。
+- 支持各种设备映射目标（device-mapper targets），包括透明文件系统加密和缓存常用数据（caching of frequently used data）。这将允许你创建一个包含一个或多个磁盘、并用LUKS加密的系统，使用[LVM on top](https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#LVM_on_LUKS) 可轻松地管理和调整这些独立的加密卷 （例如. `/`, `/home`, `/backup`等) 并免去开机时多次输入密钥的麻烦。
+
+#### 缺点
+
+- 在系统设置时需要更复杂的额外步骤。
+- Windows系统并不支持LVM，若使用双系统，你将无法在Windows上访问LVM分区。
+
+```bash
+lvmdiskscan    			# 列出可被用作物理卷的设备
+pvcreate DEVICE			# 在列出的设备上创建物理卷
+pvdisplay						# 查看已创建好的物理卷
+# 创建完成物理卷（PV）之后，下一步就是在该物理卷创建卷组（VG）了
+vgcreate <volume_group> <physical_volume>   
+
+```
+
+
+
+
+
 
 ### 目录结构
 
@@ -349,7 +433,9 @@ nslookup www.bing.com
 
 ### dig
 
+即Domain Information Groper。
 
+`yum install bind-utils`
 
 ### telnet
 
@@ -360,6 +446,10 @@ telnet www.bing.com 80 				# 检查目标端口是否打开
 
 
 ### tcpdump
+
+`apt install tcpdump`
+
+一个常用的网络抓包工具，常用来分析各种网络问题。 
 
 #### Options
 
@@ -447,6 +537,60 @@ ss -ntpl
 
 
 
+### nethogs
+
+按进程查看流量占用
+
+### nc
+
+```bash
+# 端口扫描
+nc -z -v -n 127.0.0.1 21-25			
+# 使用netcat 连接服务抓取他们的banner
+nc -v 127.0.0.1 9999
+
+# 聊天
+$nc -l 3000      				# server
+$nc 127.0.0.1 3000		  # client
+
+# 文件传输
+$nc -l 3000 < file.txt							# server
+$nc -n 127.0.0.1 3000 > file.txt		# client
+```
+
+### netstat
+
+`yum install -y net-tools` 
+
+```bash
+netstat -ltnp  			# 列出端口	
+# -u 则检查 UDP 端口
+netstat -anop|more 		# 查看网络队列
+```
+
+
+
+### 防火墙
+
+```bash
+systemctl stop firewalld.service #停止firewall
+systemctl disable firewalld.service #禁止firewall开机启动
+systemctl enable iptables.service #设置防火墙开机启动
+systemctl restart iptables.service #重启防火墙使配置生效
+
+```
+
+### wget
+
+```bash
+# 下载oracle jdk
+wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
+```
+
+
+
+
+
 ## 进程管理
 
 进程有5种状态
@@ -501,7 +645,17 @@ top -c -b -o +%MEM | head -n 20 | tail -15		# 查看内存占用并且排序
 top -H -p pid          # 显示进程的所有线程
 ```
 
+### lsof
 
+来查看开启的套接字和文件。
+
+```bash
+lsof -iTCP -sTCP:LISTEN -P -n
+lsof -p pid 				# 查看进程打开了那些文件
+lsof -i:8700 或者 lsof -i | grep 8700  # 查找被占用的端口
+```
+
+### 
 
 ### nice
 
@@ -612,12 +766,67 @@ setenforce 0									# 临时
 fdisk -l 
 ls -l /dev/sd?      # 查看所有的磁盘，从abc依次往下
 ls -l /dev/sd??     # 查看所有磁盘的所有分区
+
+fdisk  /ev/sdb       # 对磁盘进行分区，进入分区页面
 ```
+
+> 磁盘容量>2T,需要使用parted进行分区
+
+### mkfs  
+
+```bash
+mkfs.xfs /dev/sdb1     # 使用xfs文件系统格式化分区
+```
+
+![image-20200830173446697](./assets/images/image-20200830173446697.png)
+
+
+
+### mount
+
+```bash
+mount /dev/vdb1 /mnt/vdb1
+mount -o uquota,gquota /dev/vdb1/ /mnt/vdb1    # 让挂载的磁盘支持用户磁盘配额和组磁盘配额 xfs格式磁盘支持
+df -h
+```
+
+##### 开机自动挂在
+
+`edit /etc/fstab`
+
+```bash
+/dev/sda3      /mnt/disk1         ext4    defaults        1 1 
+```
+
+- 第一列为设备号或该设备的卷标 	
+- 第二列为挂载点 	
+- 第三列为文件系统 	
+- 第四列为文件系统参数 	
+- 第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
+- 第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
 
 ### parted 
 
 ```bash
 parted -l # 列出所有块设备上的分区布局
+
+parted /dev/sdd    # 对磁盘分区
+```
+
+
+
+### 交换分区
+
+```bash
+mkswap /dev/sdd1			# 标记分区为swap
+swapon /dev/sdd1      # 打开分区为swap
+swapoff /ev/sdd1			# 关闭分区为swap
+
+# 使用文件制作交换分区
+dd if=/dev/zero bs=4M count=1024 of=/swapfile     
+mkswap /swapfile 
+swapon /swapfile
+swapoff /swapfile
 ```
 
 ### df
@@ -643,6 +852,7 @@ du -h --max-depth=1						# 查看各文件夹大小命令
 ```bash
 dd if=afile bs=4M count=10 of=bfile    
 dd if=/dev/zero bs=4M count=10 seek=20 of=bfile   # 创建空洞文件
+dd if=/dev/zero bs=4M count=1024 of=/swapfile     # 使用文件制作交换分区
 ```
 
 **/dev/null ** 它是空设备，也称为位桶（bit bucket）、回收站、无底洞，可以向它输出任何数据。任何写入它的输出都会被抛弃。如果不想让消息以标准输出显示或写入文件，那么可以将消息重定向到位桶。
@@ -651,7 +861,357 @@ dd if=/dev/zero bs=4M count=10 seek=20 of=bfile   # 创建空洞文件
 
 
 
-### inode
+### hostname
+
+```bash
+hostname [new-host-name]     # 设置主机名称
+```
+
+
+
+#### crontab 定时
+
+##### 格式
+
+`秒 分 小时 日 月 星期 年`
+
+| 字段名 | 允许的值         | 允许的特殊字符    |
+| ------ | ---------------- | ----------------- |
+| 秒     | 0-59             | `, - * /`         |
+| 分     | 0-59             | `, - * /`         |
+| 小时   | 0-23             | `, - * /`         |
+| 日     | 1-31             | `, - * ? / L W C` |
+| 月     | 0-11 or JAN-DEC  | `, - * /`         |
+| 星期   | 1-7 or SUN-SAT   | `, - * ? / L C #` |
+| 年     | empty, 1970-2099 | `, - * /`         |
+
+* 月 用0-11 或用字符串 `JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV and DEC` 表示
+* 星期 数字1-7（1 ＝ 星期日），或用字符口串`SUN, MON, TUE, WED, THU, FRI and SAT`
+
+##### 符号
+
+* **`*`** 代表整个时间段
+* **`?`** 表示不确定的值
+* **`,`** 指定数个值
+* **`-`** 指定一个值的范围
+* **`/`** 指定一个值的增加幅度。n/m表示从n开始，每次增加m
+* **`L`** 用在日表示一个月中的最后一天，用在周表示该月最后一个星期X
+* **`W`** 指定离给定日期最近的工作日(周一到周五)
+* **`#`** 表示该月第几个周X。6#3表示该月第3个周五
+
+##### 实例
+
+```bash
+*/5 * * * * ?  	# 每隔5秒执行一次
+0 */1 * * * ?  	# 每隔1分钟执行一次
+0 0 23 * * ?  	# 每天23点执行一次
+0 0 1 * * ?  		# 每天凌晨1点执行一次：
+0 0 1 1 * ?  		# 每月1号凌晨1点执行一次
+0 0 23 L * ?  	# 每月最后一天23点执行一次
+0 0 1 ? * L  		# 每周星期天凌晨1点实行一次
+0 26,29,33 * * * ?  # 在26分、29分、33分执行一次
+0 0 12 ? * WED    # 表示每个星期三中午12点 
+0 0 0,13,18,21 * * ? # 每天的0点、13点、18点、21点都执行一次
+0 15 10 ? * MON-FRI    # 周一至周五的上午10:15触发 
+0 15 10 15 * ?    # 每月15日上午10:15触发 
+0 15 10 L * ?     # 每月最后一日的上午10:15触发 
+0 15 10 ? * 6L    # 每月的最后一个星期五上午10:15触发 
+0 15 10 ? * 6L 2002-2005   # 2002年至2005年的每月的最后一个星期五上午10:15触发 
+0 15 10 ? * 6#3   # 每月的第三个星期五上午10:15触发
+```
+
+ **/etc/crontab** 配置文件
+
+```bash
+0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的
+```
+
+### uname 
+
+显示内核信息
+
+```bash
+uname -a   # 显示内核信息
+
+# 适用于所有的linux，包括Redhat、SuSE、Debian、Centos等发行版。
+lsb_release -a  
+# RedHat,CentOS
+cat /etc/redhat-release
+```
+
+### uptime 系统平均负载
+
+系统总共运行了多长时间和系统的平均负载
+
+```bash
+~# uptime
+13:49:31 up 188 days,  4:27,  1 users,  load average: 0.01, 0.03, 0.00
+
+13:49:31             # 系统当前时间
+up 188 days,  4:27   # 主机已运行时间,时间越大，说明你的机器越稳定。
+1 users               # 用户连接数，是总连接数而不是用户数
+load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5，15分钟的系统平均负载, 如果是1 的话，说明在1核CPU上，使用率是100%， 在2核心CPU上，50%！
+```
+
+### 时间
+
+设置时区 
+
+```bash
+data -R  # 查看当前设置
+sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata
+sudo date -s    # 修改本地时间
+sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启后时区改变
+sudo ntpdate cn.pool.ntp.org        #命令更新时间
+ntpdate -u ntp.api.bz       # 同步时间
+```
+
+### 语言
+
+配置文件地址 **/etc/locale.conf**
+
+```bash
+# centos 设置语言
+localectl set-locale LANG=en_US.utf8
+```
+
+### Font
+
+```bash
+fc-list							# fc-list查看已安装的字体
+fc-list :lang=zh				# 查看中文字体
+fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
+```
+
+
+
+### sysctl 
+
+用于在内核运行时动态地修改内核的运行参数，可用的内核参数在目录`/proc/sys`中。它包含一些tcp/ip堆栈和虚拟内存系统的高级选项。用sysctl可以读取设置超过五百个系统变量。正常可以通过修改`/etc/sysctl.conf` 来修改配置。
+
+```bash
+# 读取内核参数设置的变量值
+sysctl variable
+
+# 变量=值：设置内核参数对应的变量值。
+sysctl variable=1
+```
+
+#### 参数
+
+variable 变量，例如 `kernel.ostype` 也可以是`kernel/ostype`
+variable=value 设置变量的值
+-n：打印值时不打印关键字；
+-e：忽略未知关键字错误；
+-N：仅打印名称；
+-w：当改变sysctl设置时使用此项；
+-p：从配置文件“/etc/sysctl.conf”加载内核参数设置；
+-a：打印当前所有可用的内核参数变量和值；
+
+
+
+
+> 这是一个在网络上流传已久的 sysctl.conf 优化配置
+
+```bash
+# 优化 TCP
+# 禁用包过滤功能 
+net.ipv4.ip_forward = 0  
+# 启用源路由核查功能 
+net.ipv4.conf.default.rp_filter = 1  
+# 禁用所有 IP 源路由 
+net.ipv4.conf.default.accept_source_route = 0  
+# 使用 sysrq 组合键是了解系统目前运行情况，为安全起见设为 0 关闭 
+kernel.sysrq = 0  
+# 控制 core 文件的文件名是否添加 pid 作为扩展
+kernel.core_uses_pid = 1  
+# 开启 SYN Cookies，当出现 SYN 等待队列溢出时，启用 cookies 来处理
+net.ipv4.tcp_syncookies = 1  
+# 每个消息队列的大小（单位：字节）限制
+kernel.msgmnb = 65536  
+# 整个系统最大消息队列数量限制
+kernel.msgmax = 65536  
+# 单个共享内存段的大小（单位：字节）限制，计算公式 64G*1024*1024*1024(字节)
+kernel.shmmax = 68719476736  
+# 所有内存大小（单位：页，1 页 = 4Kb），计算公式 16G*1024*1024*1024/4KB(页)
+kernel.shmall = 4294967296  
+#timewait 的数量，默认是 180000
+net.ipv4.tcp_max_tw_buckets = 6000  
+# 开启有选择的应答
+net.ipv4.tcp_sack = 1  
+# 支持更大的 TCP 窗口. 如果 TCP 窗口最大超过 65535(64K), 必须设置该数值为 1
+net.ipv4.tcp_window_scaling = 1  
+#TCP 读 buffer
+net.ipv4.tcp_rmem = 4096 131072 1048576
+#TCP 写 buffer
+net.ipv4.tcp_wmem = 4096 131072 1048576   
+# 为 TCP socket 预留用于发送缓冲的内存默认值（单位：字节）
+net.core.wmem_default = 8388608
+# 为 TCP socket 预留用于发送缓冲的内存最大值（单位：字节）
+net.core.wmem_max = 16777216  
+# 为 TCP socket 预留用于接收缓冲的内存默认值（单位：字节）  
+net.core.rmem_default = 8388608
+# 为 TCP socket 预留用于接收缓冲的内存最大值（单位：字节）
+net.core.rmem_max = 16777216
+# 每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目
+net.core.netdev_max_backlog = 262144  
+#web 应用中 listen 函数的 backlog 默认会给我们内核参数的 net.core.somaxconn 限制到 128，而 nginx 定义的 NGX_LISTEN_BACKLOG 默认为 511，所以有必要调整这个值
+net.core.somaxconn = 262144  
+# 系统中最多有多少个 TCP 套接字不被关联到任何一个用户文件句柄上。这个限制仅仅是为了防止简单的 DoS 攻击，不能过分依靠它或者人为地减小这个值，更应该增加这个值(如果增加了内存之后)
+net.ipv4.tcp_max_orphans = 3276800  
+# 记录的那些尚未收到客户端确认信息的连接请求的最大值。对于有 128M 内存的系统而言，缺省值是 1024，小内存的系统则是 128
+net.ipv4.tcp_max_syn_backlog = 262144  
+# 时间戳可以避免序列号的卷绕。一个 1Gbps 的链路肯定会遇到以前用过的序列号。时间戳能够让内核接受这种“异常” 的数据包。这里需要将其关掉
+net.ipv4.tcp_timestamps = 0  
+# 为了打开对端的连接，内核需要发送一个 SYN 并附带一个回应前面一个 SYN 的 ACK。也就是所谓三次握手中的第二次握手。这个设置决定了内核放弃连接之前发送 SYN+ACK 包的数量
+net.ipv4.tcp_synack_retries = 1  
+# 在内核放弃建立连接之前发送 SYN 包的数量
+net.ipv4.tcp_syn_retries = 1  
+# 开启 TCP 连接中 time_wait sockets 的快速回收
+net.ipv4.tcp_tw_recycle = 1  
+# 开启 TCP 连接复用功能，允许将 time_wait sockets 重新用于新的 TCP 连接（主要针对 time_wait 连接）
+net.ipv4.tcp_tw_reuse = 1  
+#1st 低于此值, TCP 没有内存压力, 2nd 进入内存压力阶段, 3rdTCP 拒绝分配 socket(单位：内存页)
+net.ipv4.tcp_mem = 94500000 915000000 927000000   
+# 如果套接字由本端要求关闭，这个参数决定了它保持在 FIN-WAIT-2 状态的时间。对端可以出错并永远不关闭连接，甚至意外当机。缺省值是 60 秒。2.2 内核的通常值是 180 秒，你可以按这个设置，但要记住的是，即使你的机器是一个轻载的 WEB 服务器，也有因为大量的死套接字而内存溢出的风险，FIN- WAIT-2 的危险性比 FIN-WAIT-1 要小，因为它最多只能吃掉 1.5K 内存，但是它们的生存期长些。
+net.ipv4.tcp_fin_timeout = 15  
+# 表示当 keepalive 起用的时候，TCP 发送 keepalive 消息的频度（单位：秒）
+net.ipv4.tcp_keepalive_time = 30  
+# 对外连接端口范围
+net.ipv4.ip_local_port_range = 2048 65000
+# 表示文件句柄的最大数量
+fs.file-max = 102400
+```
+
+
+
+## 用户管理
+
+### useradd
+
+会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
+
+````bash
+useradd test   			# 新建test用户
+useradd -g group1 user2  # 新增用户并指定组
+id test							# 验证test用户
+tail -10 /etc/passwd   #
+tail -10 /etc/shadow    # 用户密码相关
+````
+
+### userdel
+
+删除用户
+
+```bash
+userdel -r test    # -r参数删除时一起删除用户目录 
+```
+
+### passwd
+
+修改用户密码
+
+```bash
+passwd test  					# 为test用户设置密码
+passwd    						# 更改当前用户密码
+```
+
+### usermod
+
+修改用户属性
+
+```bash
+usermod -d /home/xxx test    # 修改用户test的home目录
+```
+
+### chage
+
+修改用户密码过期信息
+
+```bash
+
+```
+
+### groupadd
+
+```bash
+groupadd group1											# 新增组
+useradd user1												# 新增用户
+usermod -g group1 user1							# 修改用户的组
+useradd -g group1 user2  						# 新增用户并指定组
+id user1														# 查看用户的信息
+```
+
+### groupdel
+
+
+
+### 用户和组的配置文件
+
+
+
+#### /etc/passwd
+
+文件存放的是用户的信息，由6个分号组成的7个信息，解释如下
+
+1. 用户名。
+2. 密码（已经加密）
+3. UID（用户标识）,操作系统自己用的
+4. GID组标识。
+5. 用户全名或本地帐号
+6. 开始目录
+7. 登录使用的Shell，就是对登录命令进行解析的工具。
+
+#### /etc/shadow
+
+存放的普通帐号信息如下：
+
+1. 帐号名称
+2. 密码：这里是加密过的，但高手也可以解密的。要主要安全问题（代！符号标识该帐号不能用来登录）
+3. 上次修改密码的日期
+4. 密码不可被变更的天数
+5. 密码需要被重新变更的天数（99999表示不需要变更）
+6. 密码变更前提前几天警告
+7. 帐号失效日期
+8. 帐号取消日期
+9. 保留条目，目前没用
+
+#### /etc/group
+
+存放用户组的所有信息
+
+1. 组名
+2. 口令
+3. 组标示号
+4. 组内用户列表
+
+```bash
+adduser apple
+useradd -g group apple #新建用户添加到组
+passwd apple # 修改密码
+
+cat /etc/passwd # 查看所有用户
+cat /etc/group # 查看所有组
+w  # 查看活跃用户
+```
+
+组
+
+```bash
+groups 								#查看当前用户的组
+groups user 						# 查看用户的组
+groupadd group
+usermod -G groupname username  		#已有的用户增加工作组
+
+```
+
+从组中删除用户
+编辑/etc/group 找到GROUP1那一行，删除用户
+或者用命令
+
+```
+ gpasswd -d A GROUP
+```
 
 
 
@@ -755,382 +1315,7 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 
 
 
-### 系统管理
 
-#### fdisk
-
-```bash
-fdisk -l
-mount /dev/vdb1 /mnt
-df -h
-```
-
-##### 开机自动挂在
-
-`edit /etc/fstab`
-
-```bash
-/dev/sda3      /mnt         ext4    defaults        1 1 
-```
-
-- 第一列为设备号或该设备的卷标 	
-- 第二列为挂载点 	
-- 第三列为文件系统 	
-- 第四列为文件系统参数 	
-- 第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
-- 第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
-
-
-
-#### crontab 定时
-
-##### 格式
-
-`秒 分 小时 日 月 星期 年`
-
-| 字段名 | 允许的值         | 允许的特殊字符    |
-| ------ | ---------------- | ----------------- |
-| 秒     | 0-59             | `, - * /`         |
-| 分     | 0-59             | `, - * /`         |
-| 小时   | 0-23             | `, - * /`         |
-| 日     | 1-31             | `, - * ? / L W C` |
-| 月     | 0-11 or JAN-DEC  | `, - * /`         |
-| 星期   | 1-7 or SUN-SAT   | `, - * ? / L C #` |
-| 年     | empty, 1970-2099 | `, - * /`         |
-
-* 月 用0-11 或用字符串 `JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV and DEC` 表示
-* 星期 数字1-7（1 ＝ 星期日），或用字符口串`SUN, MON, TUE, WED, THU, FRI and SAT`
-
-##### 符号
-
-* **`*`** 代表整个时间段
-* **`?`** 表示不确定的值
-* **`,`** 指定数个值
-* **`-`** 指定一个值的范围
-* **`/`** 指定一个值的增加幅度。n/m表示从n开始，每次增加m
-* **`L`** 用在日表示一个月中的最后一天，用在周表示该月最后一个星期X
-* **`W`** 指定离给定日期最近的工作日(周一到周五)
-* **`#`** 表示该月第几个周X。6#3表示该月第3个周五
-
-##### 实例
-
-```bash
-*/5 * * * * ?  	# 每隔5秒执行一次
-0 */1 * * * ?  	# 每隔1分钟执行一次
-0 0 23 * * ?  	# 每天23点执行一次
-0 0 1 * * ?  		# 每天凌晨1点执行一次：
-0 0 1 1 * ?  		# 每月1号凌晨1点执行一次
-0 0 23 L * ?  	# 每月最后一天23点执行一次
-0 0 1 ? * L  		# 每周星期天凌晨1点实行一次
-0 26,29,33 * * * ?  # 在26分、29分、33分执行一次
-0 0 12 ? * WED    # 表示每个星期三中午12点 
-0 0 0,13,18,21 * * ? # 每天的0点、13点、18点、21点都执行一次
-0 15 10 ? * MON-FRI    # 周一至周五的上午10:15触发 
-0 15 10 15 * ?    # 每月15日上午10:15触发 
-0 15 10 L * ?     # 每月最后一日的上午10:15触发 
-0 15 10 ? * 6L    # 每月的最后一个星期五上午10:15触发 
-0 15 10 ? * 6L 2002-2005   # 2002年至2005年的每月的最后一个星期五上午10:15触发 
-0 15 10 ? * 6#3   # 每月的第三个星期五上午10:15触发
-```
-
-
-
- **/etc/crontab** 配置文件
-
-```bash
-0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的
-```
-
-#### uname 
-
-显示内核信息
-
-```bash
-uname -a   # 显示内核信息
-
-# 适用于所有的linux，包括Redhat、SuSE、Debian、Centos等发行版。
-lsb_release -a  
-# RedHat,CentOS
-cat /etc/redhat-release
-```
-
-#### uptime 系统平均负载
-
-系统总共运行了多长时间和系统的平均负载
-
-```bash
-~# uptime
-13:49:31 up 188 days,  4:27,  1 users,  load average: 0.01, 0.03, 0.00
-
-13:49:31             # 系统当前时间
-up 188 days,  4:27   # 主机已运行时间,时间越大，说明你的机器越稳定。
-1 users               # 用户连接数，是总连接数而不是用户数
-load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5，15分钟的系统平均负载, 如果是1 的话，说明在1核CPU上，使用率是100%， 在2核心CPU上，50%！
-```
-
-#### 时间
-
-设置时区 
-
-```bash
-data -R  # 查看当前设置
-sudo tzselect  # 选择时区 命令不存在使用 dpkg-reconfigure tzdata
-sudo date -s    # 修改本地时间
-sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    # 防止系统重启后时区改变
-sudo ntpdate cn.pool.ntp.org        #命令更新时间
-ntpdate -u ntp.api.bz       # 同步时间
-```
-
-#### 语言
-
-配置文件地址 **/etc/locale.conf**
-
-```bash
-# centos 设置语言
-localectl set-locale LANG=en_US.utf8
-```
-
-#### Font
-
-```bash
-fc-list							# fc-list查看已安装的字体
-fc-list :lang=zh				# 查看中文字体
-fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
-```
-
-
-
-#### sysctl 
-
-用于在内核运行时动态地修改内核的运行参数，可用的内核参数在目录`/proc/sys`中。它包含一些tcp/ip堆栈和虚拟内存系统的高级选项。用sysctl可以读取设置超过五百个系统变量。正常可以通过修改`/etc/sysctl.conf` 来修改配置。
-
-```bash
-# 读取内核参数设置的变量值
-sysctl variable
-
-# 变量=值：设置内核参数对应的变量值。
-sysctl variable=1
-```
-
-##### 参数
-
-variable 变量，例如 `kernel.ostype` 也可以是`kernel/ostype`
-variable=value 设置变量的值
--n：打印值时不打印关键字；
--e：忽略未知关键字错误；
--N：仅打印名称；
--w：当改变sysctl设置时使用此项；
--p：从配置文件“/etc/sysctl.conf”加载内核参数设置；
--a：打印当前所有可用的内核参数变量和值；
-
-
-
-
-> 这是一个在网络上流传已久的 sysctl.conf 优化配置
-
-```bash
-# 优化 TCP
-# 禁用包过滤功能 
-net.ipv4.ip_forward = 0  
-# 启用源路由核查功能 
-net.ipv4.conf.default.rp_filter = 1  
-# 禁用所有 IP 源路由 
-net.ipv4.conf.default.accept_source_route = 0  
-# 使用 sysrq 组合键是了解系统目前运行情况，为安全起见设为 0 关闭 
-kernel.sysrq = 0  
-# 控制 core 文件的文件名是否添加 pid 作为扩展
-kernel.core_uses_pid = 1  
-# 开启 SYN Cookies，当出现 SYN 等待队列溢出时，启用 cookies 来处理
-net.ipv4.tcp_syncookies = 1  
-# 每个消息队列的大小（单位：字节）限制
-kernel.msgmnb = 65536  
-# 整个系统最大消息队列数量限制
-kernel.msgmax = 65536  
-# 单个共享内存段的大小（单位：字节）限制，计算公式 64G*1024*1024*1024(字节)
-kernel.shmmax = 68719476736  
-# 所有内存大小（单位：页，1 页 = 4Kb），计算公式 16G*1024*1024*1024/4KB(页)
-kernel.shmall = 4294967296  
-#timewait 的数量，默认是 180000
-net.ipv4.tcp_max_tw_buckets = 6000  
-# 开启有选择的应答
-net.ipv4.tcp_sack = 1  
-# 支持更大的 TCP 窗口. 如果 TCP 窗口最大超过 65535(64K), 必须设置该数值为 1
-net.ipv4.tcp_window_scaling = 1  
-#TCP 读 buffer
-net.ipv4.tcp_rmem = 4096 131072 1048576
-#TCP 写 buffer
-net.ipv4.tcp_wmem = 4096 131072 1048576   
-# 为 TCP socket 预留用于发送缓冲的内存默认值（单位：字节）
-net.core.wmem_default = 8388608
-# 为 TCP socket 预留用于发送缓冲的内存最大值（单位：字节）
-net.core.wmem_max = 16777216  
-# 为 TCP socket 预留用于接收缓冲的内存默认值（单位：字节）  
-net.core.rmem_default = 8388608
-# 为 TCP socket 预留用于接收缓冲的内存最大值（单位：字节）
-net.core.rmem_max = 16777216
-# 每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目
-net.core.netdev_max_backlog = 262144  
-#web 应用中 listen 函数的 backlog 默认会给我们内核参数的 net.core.somaxconn 限制到 128，而 nginx 定义的 NGX_LISTEN_BACKLOG 默认为 511，所以有必要调整这个值
-net.core.somaxconn = 262144  
-# 系统中最多有多少个 TCP 套接字不被关联到任何一个用户文件句柄上。这个限制仅仅是为了防止简单的 DoS 攻击，不能过分依靠它或者人为地减小这个值，更应该增加这个值(如果增加了内存之后)
-net.ipv4.tcp_max_orphans = 3276800  
-# 记录的那些尚未收到客户端确认信息的连接请求的最大值。对于有 128M 内存的系统而言，缺省值是 1024，小内存的系统则是 128
-net.ipv4.tcp_max_syn_backlog = 262144  
-# 时间戳可以避免序列号的卷绕。一个 1Gbps 的链路肯定会遇到以前用过的序列号。时间戳能够让内核接受这种“异常” 的数据包。这里需要将其关掉
-net.ipv4.tcp_timestamps = 0  
-# 为了打开对端的连接，内核需要发送一个 SYN 并附带一个回应前面一个 SYN 的 ACK。也就是所谓三次握手中的第二次握手。这个设置决定了内核放弃连接之前发送 SYN+ACK 包的数量
-net.ipv4.tcp_synack_retries = 1  
-# 在内核放弃建立连接之前发送 SYN 包的数量
-net.ipv4.tcp_syn_retries = 1  
-# 开启 TCP 连接中 time_wait sockets 的快速回收
-net.ipv4.tcp_tw_recycle = 1  
-# 开启 TCP 连接复用功能，允许将 time_wait sockets 重新用于新的 TCP 连接（主要针对 time_wait 连接）
-net.ipv4.tcp_tw_reuse = 1  
-#1st 低于此值, TCP 没有内存压力, 2nd 进入内存压力阶段, 3rdTCP 拒绝分配 socket(单位：内存页)
-net.ipv4.tcp_mem = 94500000 915000000 927000000   
-# 如果套接字由本端要求关闭，这个参数决定了它保持在 FIN-WAIT-2 状态的时间。对端可以出错并永远不关闭连接，甚至意外当机。缺省值是 60 秒。2.2 内核的通常值是 180 秒，你可以按这个设置，但要记住的是，即使你的机器是一个轻载的 WEB 服务器，也有因为大量的死套接字而内存溢出的风险，FIN- WAIT-2 的危险性比 FIN-WAIT-1 要小，因为它最多只能吃掉 1.5K 内存，但是它们的生存期长些。
-net.ipv4.tcp_fin_timeout = 15  
-# 表示当 keepalive 起用的时候，TCP 发送 keepalive 消息的频度（单位：秒）
-net.ipv4.tcp_keepalive_time = 30  
-# 对外连接端口范围
-net.ipv4.ip_local_port_range = 2048 65000
-# 表示文件句柄的最大数量
-fs.file-max = 102400
-```
-
-
-
-### 用户管理
-
-#### useradd
-
-会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
-
-````bash
-useradd test   			# 新建test用户
-useradd -g group1 user2  # 新增用户并指定组
-id test							# 验证test用户
-tail -10 /etc/passwd   #
-tail -10 /etc/shadow    # 用户密码相关
-````
-
-#### userdel
-
-删除用户
-
-```bash
-userdel -r test    # -r参数删除时一起删除用户目录 
-```
-
-#### passwd
-
-修改用户密码
-
-```bash
-passwd test  					# 为test用户设置密码
-passwd    						# 更改当前用户密码
-```
-
-#### usermod
-
-修改用户属性
-
-```bash
-usermod -d /home/xxx test    # 修改用户test的home目录
-```
-
-#### chage
-
-修改用户密码过期信息
-
-```bash
-
-```
-
-#### groupadd
-
-```bash
-groupadd group1											# 新增组
-useradd user1												# 新增用户
-usermod -g group1 user1							# 修改用户的组
-useradd -g group1 user2  						# 新增用户并指定组
-id user1														# 查看用户的信息
-```
-
-#### groupdel
-
-
-
-#### 用户和组的配置文件
-
-
-
-##### /etc/passwd
-
-文件存放的是用户的信息，由6个分号组成的7个信息，解释如下
-
-1. 用户名。
-2. 密码（已经加密）
-3. UID（用户标识）,操作系统自己用的
-4. GID组标识。
-5. 用户全名或本地帐号
-6. 开始目录
-7. 登录使用的Shell，就是对登录命令进行解析的工具。
-
-##### /etc/shadow
-
-存放的普通帐号信息如下：
-
-1. 帐号名称
-2. 密码：这里是加密过的，但高手也可以解密的。要主要安全问题（代！符号标识该帐号不能用来登录）
-3. 上次修改密码的日期
-4. 密码不可被变更的天数
-5. 密码需要被重新变更的天数（99999表示不需要变更）
-6. 密码变更前提前几天警告
-7. 帐号失效日期
-8. 帐号取消日期
-9. 保留条目，目前没用
-
-##### /etc/group
-
-存放用户组的所有信息
-
-1. 组名
-2. 口令
-3. 组标示号
-4. 组内用户列表
-
-
-
-
-
-```bash
-adduser apple
-useradd -g group apple #新建用户添加到组
-passwd apple # 修改密码
-
-cat /etc/passwd # 查看所有用户
-cat /etc/group # 查看所有组
-w  # 查看活跃用户
-```
-
-组
-
-```bash
-groups 								#查看当前用户的组
-groups user 						# 查看用户的组
-groupadd group
-usermod -G groupname username  		#已有的用户增加工作组
-
-```
-
-从组中删除用户
-编辑/etc/group 找到GROUP1那一行，删除用户
-或者用命令
-
-```
- gpasswd -d A GROUP
-```
 
 ### 文件处理命令
 
@@ -1383,83 +1568,15 @@ tar -Zxvf filename.tar.Z    # 解压tar.Z
 tar -xvf filename.tar.bz2
 ```
 
-### 网络
-
-#### dig
-
-即Domain Information Groper。
-
-`yum install bind-utils`
-
-#### nethogs
-
-按进程查看流量占用
-
-#### nc
-
-```bash
-# 端口扫描
-nc -z -v -n 127.0.0.1 21-25			
-# 使用netcat 连接服务抓取他们的banner
-nc -v 127.0.0.1 9999
-
-# 聊天
-$nc -l 3000      				# server
-$nc 127.0.0.1 3000		  # client
-
-# 文件传输
-$nc -l 3000 < file.txt							# server
-$nc -n 127.0.0.1 3000 > file.txt		# client
-```
-
-#### netstat
-
-`yum install -y net-tools` 
-
-```bash
-netstat -ltnp  			# 列出端口	
-# -u 则检查 UDP 端口
-netstat -anop|more 		# 查看网络队列
-```
 
 
+## 性能
 
-#### lsof
-
-来查看开启的套接字和文件。
-
-```bash
-lsof -iTCP -sTCP:LISTEN -P -n
-lsof -p pid 				# 查看进程打开了那些文件
-lsof -i:8700 或者 lsof -i | grep 8700  # 查找被占用的端口
-```
-
-#### 防火墙
-
-```bash
-systemctl stop firewalld.service #停止firewall
-systemctl disable firewalld.service #禁止firewall开机启动
-systemctl enable iptables.service #设置防火墙开机启动
-systemctl restart iptables.service #重启防火墙使配置生效
-
-```
-
-#### wget
-
-```bash
-# 下载oracle jdk
-wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
-```
-
-
-
-### 性能
-
-#### 根据指标找工具对应表
+### 根据指标找工具对应表
 
 ![](http://www.brendangregg.com/Perf/linux_perf_tools_full.png)
 
-##### CPU
+#### CPU
 
 | 性能指标          | 工具             | 说明                                                   |
 | ----------------- | ---------------- | ------------------------------------------------------ |
@@ -1491,7 +1608,7 @@ wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://down
 | 事件剖析          | perf             | 分析cpu的缓存以及内核调用链                            |
 |                   | execsnoop        | 监控短时进程                                           |
 
-##### memory
+#### memory
 
 | 内存指标                         | 性能工具         |
 | -------------------------------- | ---------------- |
@@ -1519,7 +1636,7 @@ wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://down
 |                                  | valgrind         |
 | 指定文件的缓存大小               | pcstat           |
 
-##### I/O
+#### I/O
 
 | 性能指标                                                     | 工具                        | 说明                                     |
 | ------------------------------------------------------------ | --------------------------- | ---------------------------------------- |
@@ -1536,7 +1653,7 @@ wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://down
 
 ​	
 
-#### perf 
+### perf 
 
 分析cpu性能问题
 
@@ -1568,7 +1685,7 @@ $ perf report # 展示类似于 perf top 的报告
 
 > perf top 和 perf record 加上 -g 参数，开启调用关系的采样，方便我们根据调用链来分析性能问题
 
-#### vmstat
+### vmstat
 
 vmstat工具的使用是通过两个数字参数来完成的，第一个参数是采样的时间间隔数，单位是秒，第二个参数是采样的次数
 
@@ -1581,35 +1698,35 @@ $ vmstat 1
 # 每隔 5 秒输出 1 组数据, 共输出2组
 $ vmstat 5 2
 ```
-##### procs
+#### procs
 * **r** 表示运行队列(就是说多少个进程真的分配到CPU)，我测试的服务器目前CPU比较空闲，没什么程序在跑，当这个值超过了CPU数目，就会出现CPU瓶颈了。这个也和top的负载有关系，一般负载超过了3就比较高，超过了5就高，超过了10就不正常了，服务器的状态很危险。top的负载类似每秒的运行队列。如果运行队列过大，表示你的CPU很繁忙，一般会造成CPU使用率很高。
 * **b** 表示阻塞的进程,这个不多说，进程阻塞。
 
-##### memory
+#### memory
 
 * **swpd** 虚拟内存已使用的大小，如果大于0，表示你的机器物理内存不足了，如果不是程序内存泄露的原因，那么你该升级内存了或者把耗内存的任务迁移到其他机器。
 * **free**   空闲的物理内存的大小，我的机器内存总共8G，剩余3415M。
 * **buff**   Linux/Unix系统是用来存储，目录里面有什么内容，权限等的缓存，我本机大概占用300多M
 * **cache** cache直接用来记忆我们打开的文件,给文件做缓冲，我本机大概占用300多M(这里是Linux/Unix的聪明之处，把空闲的物理内存的一部分拿来做文件和目录的缓存，是为了提高 程序执行的性能，当程序使用内存时，buffer/cached会很快地被使用。)
 
-##### swap
+#### swap
 
 * **si**  每秒从磁盘读入虚拟内存的大小，如果这个值大于0，表示物理内存不够用或者内存泄露了，要查找耗内存进程解决掉。。
 * **so**  每秒虚拟内存写入磁盘的大小，如果这个值大于0，同上。
 
-##### IO
+#### IO
 
 * **bi**  块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte，我本机上没什么IO操作，所以一直是0，但是我曾在处理拷贝大量数据(2-3T)的机器上看过可以达到140000/s，磁盘写入速度差不多140M每秒
 
 * **bo** 块设备每秒发送的块数量，例如我们读取文件，bo就要大于0。bi和bo一般都要接近0，不然就是IO过于频繁，需要调整。
 
-##### system
+#### system
 
 * **in** 每秒CPU的中断次数，包括时间中断
 
 * **cs** 每秒上下文切换次数，例如我们调用系统函数，就要进行上下文切换，线程的切换，也要进程上下文切换，这个值要越小越好，太大了，要考虑调低线程或者进程的数目,例如在apache和nginx这种web服务器中，我们一般做性能测试时会进行几千并发甚至几万并发的测试，选择web服务器的进程可以由进程或者线程的峰值一直下调，压测，直到cs到一个比较小的值，这个进程和线程数就是比较合适的值了。系统调用也是，每次调用系统函数，我们的代码就会进入内核空间，导致上下文切换，这个是很耗资源，也要尽量避免频繁调用系统函数。上下文切换次数过多表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，CPU没有充分利用，是不可取的。
 
-##### cpu
+#### cpu
 
 * **us** 用户CPU时间
 * **sy** 系统CPU时间，如果太高，表示系统调用时间长，例如是IO操作频繁。
@@ -1617,7 +1734,7 @@ $ vmstat 5 2
 * **wa** IO等待时间百分比。
 * **st** 虚拟 CPU 等待实际 CPU 的时间的百分比
 
-#### pidstat
+### pidstat
 实时查看进程的 CPU、内存、I/O 以及上下文切换等性能指标
 * -w 输出进程切换指标
 * -wt 输出线程上下文切换指标
@@ -1648,7 +1765,7 @@ $ pidstat -u 5 1
 * cswch/s (voluntary context switches) 每秒自愿上下文切换的次数
 * nvcswch/s (non voluntary context switches) 每秒非自愿上下文切换的次数 
 
-#### stress
+### stress
 
 ```bash
 $ apt install stress
@@ -1656,7 +1773,7 @@ $ apt install stress
 
 
 
-#### sysstat
+### sysstat
 
 系统压力测试工具
 
@@ -1687,7 +1804,7 @@ systemctl enable sysstat.service
 - 怀疑内存存在瓶颈，可用sar -B、sar -r 和 sar -W 等来查看
 - 怀疑I/O存在瓶颈，可用 sar -b、sar -u 和 sar -d 等来查看
 
-##### 参数
+#### 参数
 
 - -A 汇总所有的报告
 - -a 报告文件读写使用情况
@@ -1709,7 +1826,7 @@ systemctl enable sysstat.service
 - -w 报告系统交换活动状况
 - -y 报告TTY设备活动状况
 
-##### 查看CPU使用率
+#### 查看CPU使用率
 
 ```bash
 sar -u 1 3
@@ -1729,7 +1846,7 @@ Average:        all      0.25      0.00      0.50      0.00      0.00     99.25
 - %steal 利用Xen等操作系统虚拟化技术，等待其它虚拟CPU计算占用的时间比例；
 - %idle CPU空闲时间比例；
 
-##### 查看平均负载
+#### 查看平均负载
 
 ```bash
 sar -q 1 3
@@ -1747,7 +1864,7 @@ Average:            0       204      0.07      0.05      0.04         0
 - ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载
 - ldavg-15：过去15分钟的系统平均负载
 
-##### 查看内存使用状况
+#### 查看内存使用状况
 
 ```bash
 sar -r 1 3
@@ -1767,7 +1884,7 @@ Average:      4932260   7430684   3071392     38.37    159248   2346044    76257
 - kbcommit：保证当前系统所需要的内存,即为了确保不溢出而需要的内存(RAM+swap).
 - %commit：这个值是kbcommit与内存总量(包括swap)的一个百分比.
 
-##### 查看页面交换发生状况
+#### 查看页面交换发生状况
 
 ```bash
 sar -W 1 3
@@ -1783,7 +1900,7 @@ Average:         0.00      0.00
 - pswpin/s：每秒系统换入的交换页面（swap page）数量
 - pswpout/s：每秒系统换出的交换页面（swap page）数量
 
-##### 查看网络收发报告
+#### 查看网络收发报告
 
 ```bash
 sar -n DEV 1 1
@@ -1802,13 +1919,13 @@ Linux 4.15.0-47-generic (ubuntu) 	05/03/19 	_x86_64_	(4 CPU)
 * **rxkB/s** 每秒接收的千字节数，也就是  BPS
 * **txkB/s** 每秒发送的千字节数，也就是  BPS
 
-#### dstat
+### dstat
 
 `apt instll dstat`
 
 个新的性能工具，它吸收了 vmstat、iostat、ifstat 等几种工具的优点，可以同时观察系统的 CPU、磁盘 I/O、网络以及内存使用情况
 
-#### hping3
+### hping3
 
 `apt install hping3`
 
@@ -1820,14 +1937,6 @@ Linux 4.15.0-47-generic (ubuntu) 	05/03/19 	_x86_64_	(4 CPU)
 # 注：如果你在实践过程中现象不明显，可以尝试把 100 调小，比如调成 10 甚至 1
 $ hping3 -S -p 80 -i u100 192.168.0.30
 ```
-
-#### tcpdump
-
-`apt install tcpdump`
-
-一个常用的网络抓包工具，常用来分析各种网络问题。 
-
-
 
 
 
