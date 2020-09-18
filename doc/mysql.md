@@ -1,5 +1,3 @@
-# MYSQL
-
 ## Install
 ### macos下安装         
 
@@ -143,5 +141,33 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 
 
+##  架构
 
+![mysql-architecture](./assets/images/mysql-architecture.png)
+
+
+
+## Server层对象
+
+
+
+
+
+## MyIsam
+
+
+
+## InnoDB
+
+### 架构
+
+![innodb-architecture](./assets/images/innodb-architecture.png)
+
+### 磁盘文件
+
+### 内存结构
+
+
+
+## 事务
 

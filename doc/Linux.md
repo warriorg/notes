@@ -577,8 +577,38 @@ systemctl stop firewalld.service #停止firewall
 systemctl disable firewalld.service #禁止firewall开机启动
 systemctl enable iptables.service #设置防火墙开机启动
 systemctl restart iptables.service #重启防火墙使配置生效
-
 ```
+
+#### 开启端口
+
+```bash
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+```
+
+* **--zone**  作用域
+* **--add-port=80/tcp**  添加端口，格式为：端口/通讯协议
+* **--permanent** 永久生效，没有此参数重启后失效
+
+#### 常用命令
+
+```bash
+firewall-cmd --list-all						   # 检查新的防火墙规则
+firewall-cmd --state                           ##查看防火墙状态，是否是running
+firewall-cmd --reload                          ##重新载入配置，比如添加规则之后，需要执行此命令
+firewall-cmd --get-zones                       ##列出支持的zone
+firewall-cmd --get-services                    ##列出支持的服务，在列表中的服务是放行的
+firewall-cmd --query-service ftp               ##查看ftp服务是否支持，返回yes或者no
+firewall-cmd --add-service=ftp                 ##临时开放ftp服务
+firewall-cmd --add-service=ftp --permanent     ##永久开放ftp服务
+firewall-cmd --remove-service=ftp --permanent  ##永久移除ftp服务
+firewall-cmd --add-port=80/tcp --permanent     ##永久添加80端口 
+iptables -L -n                                 ##查看规则，这个命令是和iptables的相同的
+man firewall-cmd                               ##查看帮助
+```
+
+## 
+
+
 
 ### wget
 
@@ -848,9 +878,12 @@ dd if=/dev/zero bs=4M count=1024 of=/swapfile     # 使用文件制作交换分�
 hostname [new-host-name]     # 设置主机名称
 ```
 
+#### <span id="crontab">crontab 定时</span>
 
-
-#### crontab 定时
+```bash
+crontab -e 						# 编辑
+crontab -l 						# 查看
+```
 
 ##### 格式
 
@@ -1194,6 +1227,91 @@ usermod -G groupname username  		#已有的用户增加工作组
  gpasswd -d A GROUP
 ```
 
+## 文本处理
+
+### 元字符
+
+元字符（Metacharacter），指SHELL直译器或正则表达式（regex）引擎等计算机程序中具有特殊意义的字符。它们被作为一般的字符使用时，必须要通过“转义”（前面加一个反斜杠“\”）来去除他们本身的特殊意义，这些元字符包括：
+
+* 开和闭方括号：`[`和`]`
+* 反斜线：`\`
+* 脱字符：`^`
+* 美元符号：`$`
+* 句号/点：`.`
+* 竖线/管道符：`|`
+* 问号：`?`
+* 星号：`*`
+* 加号：`+`
+* 开和闭 花括号：`{`和`}`
+* 开和闭 小括号：`(`和`)`
+
+### awk
+
+#### 语法
+
+```bash
+awk '{pattern + action}' {filenames}
+```
+
+#### 内建变量
+
+| 变量        | 描述                                                       |
+| :---------- | :--------------------------------------------------------- |
+| $n          | 当前记录的第n个字段，字段间由FS分隔                        |
+| $0          | 完整的输入记录                                             |
+| ARGC        | 命令行参数的数目                                           |
+| ARGIND      | 命令行中当前文件的位置(从0开始算)                          |
+| ARGV        | 包含命令行参数的数组                                       |
+| CONVFMT     | 数字转换格式(默认值为%.6g)ENVIRON环境变量关联数组          |
+| ERRNO       | 最后一个系统错误的描述                                     |
+| FIELDWIDTHS | 字段宽度列表(用空格键分隔)                                 |
+| FILENAME    | 当前文件名                                                 |
+| FNR         | 各文件分别计数的行号                                       |
+| FS          | 字段分隔符(默认是任何空格)                                 |
+| IGNORECASE  | 如果为真，则进行忽略大小写的匹配                           |
+| NF          | 一条记录的字段的数目                                       |
+| NR          | 已经读出的记录数，就是行号，从1开始                        |
+| OFMT        | 数字的输出格式(默认值是%.6g)                               |
+| OFS         | 输出记录分隔符（输出换行符），输出时用指定的符号代替换行符 |
+| ORS         | 输出记录分隔符(默认值是一个换行符)                         |
+| RLENGTH     | 由match函数所匹配的字符串的长度                            |
+| RS          | 记录分隔符(默认是一个换行符)                               |
+| RSTART      | 由match函数所匹配的字符串的第一个位置                      |
+| SUBSEP      | 数组下标分隔符(默认值是/034)                               |
+
+#### 基本用法
+
+awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。awk有3个不同版本: awk、nawk和gawk，未作特别说明，一般指gawk，gawk 是 AWK 的 GNU 版本。
+
+```bash
+# 结束所有java进程
+ps -ef | grep 'java' | awk '{print $1}' | xargs kill
+# 读取json version节点
+cat package.json | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'version'\042/){print $(i+1)}}}' | tr -d ' "'`
+```
+
+### sed
+
+是一种在线编辑器，它一次处理一行内容。处理时，把当前处理的行存储在临时缓冲区中，称为“模式空间”（pattern space），接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕。接着处理下一行，这样不断重复，直到文件末尾。文件内容并没有 改变，除非你使用重定向存储输出。Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作；编写转换程序等。
+
+``` bash
+sed 's/old/new' filename
+sed 's/old/new/g' filename     # 全局替换
+# 数字 第几次出现替换
+# g 每次数显都进行替换
+# p 打印模式空间内容
+# w file 将模式空间的内容写入到文件
+sed 's/old/new/标志位'					
+sed '1,3s/new/old'   						# 特定范围替换
+sed '/regular/s/new/old'          # 使用正则查找替换的行
+sed '/regular/{s/old/new;s/old/new}'    # 分组，匹配多条命令
+sed -f sedscript filename								# sed 脚本
+sed '/regular/d'    										# 删除匹配的行
+
+```
+
+
+
 
 
 ## 包管理
@@ -1460,7 +1578,9 @@ tail -c +200 notes | pg		# 第 200 字节开始一次一页地显示 notes 文�
 tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 notes 文件时，tail 命令会继续显示这些行。 显示一直继续，直到您按下（Ctrl-C）组合键停止显示。
 ```
 
+#### uniq
 
+用于检查及删除文本文件中重复出现的行列，一般与 sort 命令结合使用
 
 #### wc
 
@@ -1489,52 +1609,7 @@ $grep -B 5 'parttern' inputfile #打印匹配行的前5行
 echo '--help' | xargs ls
 ```
 
-#### awk
-
-##### 语法
-
-```bash
-awk '{pattern + action}' {filenames}
-```
-
-##### 内建变量
-
-| 变量        | 描述                                                       |
-| :---------- | :--------------------------------------------------------- |
-| $n          | 当前记录的第n个字段，字段间由FS分隔                        |
-| $0          | 完整的输入记录                                             |
-| ARGC        | 命令行参数的数目                                           |
-| ARGIND      | 命令行中当前文件的位置(从0开始算)                          |
-| ARGV        | 包含命令行参数的数组                                       |
-| CONVFMT     | 数字转换格式(默认值为%.6g)ENVIRON环境变量关联数组          |
-| ERRNO       | 最后一个系统错误的描述                                     |
-| FIELDWIDTHS | 字段宽度列表(用空格键分隔)                                 |
-| FILENAME    | 当前文件名                                                 |
-| FNR         | 各文件分别计数的行号                                       |
-| FS          | 字段分隔符(默认是任何空格)                                 |
-| IGNORECASE  | 如果为真，则进行忽略大小写的匹配                           |
-| NF          | 一条记录的字段的数目                                       |
-| NR          | 已经读出的记录数，就是行号，从1开始                        |
-| OFMT        | 数字的输出格式(默认值是%.6g)                               |
-| OFS         | 输出记录分隔符（输出换行符），输出时用指定的符号代替换行符 |
-| ORS         | 输出记录分隔符(默认值是一个换行符)                         |
-| RLENGTH     | 由match函数所匹配的字符串的长度                            |
-| RS          | 记录分隔符(默认是一个换行符)                               |
-| RSTART      | 由match函数所匹配的字符串的第一个位置                      |
-| SUBSEP      | 数组下标分隔符(默认值是/034)                               |
-
-##### 基本用法
-
-awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。awk有3个不同版本: awk、nawk和gawk，未作特别说明，一般指gawk，gawk 是 AWK 的 GNU 版本。
-
-```bash
-# 结束所有java进程
-ps -ef | grep 'java' | awk '{print $1}' | xargs kill
-# 读取json version节点
-cat package.json | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'version'\042/){print $(i+1)}}}' | tr -d ' "'`
-```
-
-#### sed
+#### 
 
 #### tar
 
@@ -2205,40 +2280,7 @@ sudo make install
 vim
 ```
 
-### 防火墙
 
-#### 关闭防火墙
-
-```bash
-systemctl stop firewalld.service           # 停止firewall
-systemctl disable firewalld.service        # 禁止firewall开机启动
-```
-
-#### 开启端口
-
-```bash
-firewall-cmd --zone=public --add-port=80/tcp --permanent
-```
-* **--zone**  作用域
-*  **--add-port=80/tcp**  添加端口，格式为：端口/通讯协议
-*  **--permanent** 永久生效，没有此参数重启后失效
-
-#### 常用命令
-
-```bash
-firewall-cmd --list-all						   # 检查新的防火墙规则
-firewall-cmd --state                           ##查看防火墙状态，是否是running
-firewall-cmd --reload                          ##重新载入配置，比如添加规则之后，需要执行此命令
-firewall-cmd --get-zones                       ##列出支持的zone
-firewall-cmd --get-services                    ##列出支持的服务，在列表中的服务是放行的
-firewall-cmd --query-service ftp               ##查看ftp服务是否支持，返回yes或者no
-firewall-cmd --add-service=ftp                 ##临时开放ftp服务
-firewall-cmd --add-service=ftp --permanent     ##永久开放ftp服务
-firewall-cmd --remove-service=ftp --permanent  ##永久移除ftp服务
-firewall-cmd --add-port=80/tcp --permanent     ##永久添加80端口 
-iptables -L -n                                 ##查看规则，这个命令是和iptables的相同的
-man firewall-cmd                               ##查看帮助
-```
 
 ## tmux
 
@@ -2436,6 +2478,36 @@ source ./file.sh								# 在当前环境执行脚本
 * 内建命令不需要产生子进程
 * 内建命令对当前shell生效
 
+#### 脚本调试
+
+-n 只读取shell脚本，但不实际执行
+-x 进入跟踪方式，显示所执行的每一条命令
+-c "string" 从strings中读取命令
+
+#### **shopt**
+
+用于显示和设置shell中的行为选项，通过这些选项以增强shell易用性。shopt命令若不带任何参数选项，则可以显示所有可以设置的shell操作选项。
+
+**-s** 激活指定的shell行为选项；
+
+**-u** 关闭指定的shell行为选项。
+
+```bash
+shopt           #输出所有可以设置的shell操作选项
+cdable_vars     off
+cdspell         off
+checkhash       off
+checkwinsize    on
+cmdhist         on
+dotglob         off
+execfail        off
+expand_aliases  on
+extdebug        off
+...
+```
+
+
+
 ### 管道
 
 * 管道和信号一样，也是进程通信的方式之一
@@ -2478,6 +2550,26 @@ ls -l              				#列出目录下的内容
 * `[][[]]` 单独使用方括号是测试`（test）`或数组元素功能 两个方括号是表示测试表达式
 * `<>` 尖括号 重定向符号
 * `{}` 输出范围 `echo {0..9}` 文件复制 `cp /etc/passwd{,.bak}`
+
+
+
+#### 符号的意义
+
+| 符号                | 符号                                     |
+| ------------------- | ---------------------------------------- |
+| 双引号 " "          | 引用字符串，字符串中部分特殊符号有意义   |
+| 单引号 ' '          | 引用字符串，字符串中特殊符号全都没有意义 |
+| 反引号\` \`、$()    | 命令替换                                 |
+| $(( ))、$[ ]、(( )) | 算术运算                                 |
+| ${}                 | 变量替换                                 |
+| ()                  | 数组初始化                               |
+| [ ]                 | 条件测试                                 |
+| [[ ]]               | 字符串比较                               |
+| { }                 | 括起一个语句块                           |
+
+* 如果 shell 不是交互式的，则不会展开别名，除非使用 `shopt` 设置 `expand_aliases` shell 选项
+
+
 
 ### 变量
 
@@ -2837,59 +2929,65 @@ Bash 会对`select`依次进行下面的处理。
 4. 执行命令体`commands`。
 5. 执行结束后，回到第一步，重复这个过程。
 
+### 函数
 
-
-## Bash Script
-
-### 语法
-
-#### 脚本调试
-
--n 只读取shell脚本，但不实际执行
--x 进入跟踪方式，显示所执行的每一条命令
--c "string" 从strings中读取命令
-
-#### 符号的意义
-
-| 符号                | 符号                                     |
-| ------------------- | ---------------------------------------- |
-| 双引号 " "          | 引用字符串，字符串中部分特殊符号有意义   |
-| 单引号 ' '          | 引用字符串，字符串中特殊符号全都没有意义 |
-| 反引号\` \`、$()      | 命令替换                                 |
-| $(( ))、$[ ]、(( )) | 算术运算                                 |
-| ${}                 | 变量替换                                 |
-| ()                  | 数组初始化                               |
-| [ ]                 | 条件测试                                 |
-| [[ ]]               | 字符串比较                               |
-| { }                 | 括起一个语句块                           |
-
-* 如果 shell 不是交互式的，则不会展开别名，除非使用 `shopt` 设置 `expand_aliases` shell 选项
-
-
-
-### 基础
-
-#### **shopt**
-
-用于显示和设置shell中的行为选项，通过这些选项以增强shell易用性。shopt命令若不带任何参数选项，则可以显示所有可以设置的shell操作选项。
-
-**-s** 激活指定的shell行为选项；
-
-**-u** 关闭指定的shell行为选项。
+Bash 函数定义的语法有两种。
 
 ```bash
-shopt           #输出所有可以设置的shell操作选项
-cdable_vars     off
-cdspell         off
-checkhash       off
-checkwinsize    on
-cmdhist         on
-dotglob         off
-execfail        off
-expand_aliases  on
-extdebug        off
-...
+# 第一种
+fn() {
+  # codes
+}
+
+# 第二种
+function fn() {
+  # codes
+}
+
+declare -f     #  查询shell已经定义的函数
 ```
+
+#### 参数变量 
+
+函数体内可以使用参数变量，获取函数参数。函数的参数变量，与脚本参数变量是一致的。
+
+- `$1`~`$9`：函数的第一个到第9个的参数。
+- `$0`：函数所在的脚本名。
+- `$#`：函数的参数总数。
+- `$@`：函数的全部参数，参数之间使用空格分隔。
+- `$*`：函数的全部参数，参数之间使用变量`$IFS`值的第一个字符分隔，默认为空格，但是可以自定义。
+
+#### 变量作用域
+
+Bash 函数体内直接声明的变量，属于全局变量，整个脚本都可以读取。这一点需要特别小心。
+
+函数里面可以用`local`命令声明局部变量。
+
+#### 系统函数
+
+* 系统自建了函数库，可以在脚本中引用 `/etc/init.d/functions`
+* 自建函数库 使用source函数脚本文件**导入**函数
+
+### 计划任务
+
+#### 一次性计划任务
+
+```bash
+at 10:50
+at> echo hello > /tmp/hello.txt
+at> <EOT>     # ctrl+d 提交
+```
+
+#### 周期性计划任务
+
+[crontab](#crontab)
+
+#### 计划任务加锁flock
+
+如果不能按照预期时间运行任务，则
+
+* anacontab  延时计划任务
+* flock锁文件
 
 
 
