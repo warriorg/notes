@@ -570,7 +570,7 @@ netstat -anop|more 		# 查看网络队列
 
 
 
-### 防火墙
+### firewalld
 
 ```bash
 systemctl stop firewalld.service #停止firewall
@@ -592,21 +592,43 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 #### 常用命令
 
 ```bash
-firewall-cmd --list-all						   # 检查新的防火墙规则
-firewall-cmd --state                           ##查看防火墙状态，是否是running
-firewall-cmd --reload                          ##重新载入配置，比如添加规则之后，需要执行此命令
-firewall-cmd --get-zones                       ##列出支持的zone
-firewall-cmd --get-services                    ##列出支持的服务，在列表中的服务是放行的
-firewall-cmd --query-service ftp               ##查看ftp服务是否支持，返回yes或者no
-firewall-cmd --add-service=ftp                 ##临时开放ftp服务
-firewall-cmd --add-service=ftp --permanent     ##永久开放ftp服务
-firewall-cmd --remove-service=ftp --permanent  ##永久移除ftp服务
-firewall-cmd --add-port=80/tcp --permanent     ##永久添加80端口 
-iptables -L -n                                 ##查看规则，这个命令是和iptables的相同的
-man firewall-cmd                               ##查看帮助
+firewall-cmd --list-all						   					 # 检查新的防火墙规则
+firewall-cmd --state                           # 查看防火墙状态，是否是running
+firewall-cmd --reload                          # 重新载入配置，比如添加规则之后，需要执行此命令
+firewall-cmd --get-zones                       # 列出支持的zone
+firewall-cmd --get-services                    # 列出支持的服务，在列表中的服务是放行的
+firewall-cmd --query-service ftp               # 查看ftp服务是否支持，返回yes或者no
+firewall-cmd --add-service=ftp                 # 临时开放ftp服务
+firewall-cmd --add-service=ftp --permanent     # 永久开放ftp服务
+firewall-cmd --remove-service=ftp --permanent  # 永久移除ftp服务
+firewall-cmd --add-port=80/tcp --permanent     # 永久添加80端口 
+iptables -L -n                                 # 查看规则，这个命令是和iptables的相同的
+man firewall-cmd                               # 查看帮助
 ```
 
-## 
+
+
+### iptables
+
+```bash
+iptables -t filter -A INPUT -s 10.0.0.1 -j ACCEPT			# 添加规则
+iptables -L 				# 查看规则
+iptables -nvL				# 详细规则
+```
+
+#### filter
+
+```bash
+
+```
+
+
+
+#### nat表
+
+```bahs
+
+```
 
 
 
@@ -616,8 +638,6 @@ man firewall-cmd                               ##查看帮助
 # 下载oracle jdk
 wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-li
 ```
-
-
 
 
 
@@ -1245,6 +1265,28 @@ usermod -G groupname username  		#已有的用户增加工作组
 * 开和闭 花括号：`{`和`}`
 * 开和闭 小括号：`(`和`)`
 
+### sed
+
+是一种在线编辑器，它一次处理一行内容。处理时，把当前处理的行存储在临时缓冲区中，称为“模式空间”（pattern space），接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕。接着处理下一行，这样不断重复，直到文件末尾。文件内容并没有 改变，除非你使用重定向存储输出。Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作；编写转换程序等。
+
+``` bash
+sed 's/old/new' filename
+sed 's/old/new/g' filename     # 全局替换
+# 数字 第几次出现替换
+# g 每次数显都进行替换
+# p 打印模式空间内容
+# w file 将模式空间的内容写入到文件
+sed 's/old/new/标志位'					
+sed '1,3s/new/old'   						# 特定范围替换
+sed '/regular/s/new/old'          # 使用正则查找替换的行
+sed '/regular/{s/old/new;s/old/new}'    # 分组，匹配多条命令
+sed -f sedscript filename								# sed 脚本
+sed '/regular/d'    										# 删除匹配的行
+
+```
+
+
+
 ### awk
 
 #### 语法
@@ -1286,28 +1328,52 @@ awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑�
 ```bash
 # 结束所有java进程
 ps -ef | grep 'java' | awk '{print $1}' | xargs kill
-# 读取json version节点
-cat package.json | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'version'\042/){print $(i+1)}}}' | tr -d ' "'`
 ```
 
-### sed
+#### 判断与循环
 
-是一种在线编辑器，它一次处理一行内容。处理时，把当前处理的行存储在临时缓冲区中，称为“模式空间”（pattern space），接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕。接着处理下一行，这样不断重复，直到文件末尾。文件内容并没有 改变，除非你使用重定向存储输出。Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作；编写转换程序等。
+```bash
+# if 
+awk '{if($1>80) print $0}' /filename
 
-``` bash
-sed 's/old/new' filename
-sed 's/old/new/g' filename     # 全局替换
-# 数字 第几次出现替换
-# g 每次数显都进行替换
-# p 打印模式空间内容
-# w file 将模式空间的内容写入到文件
-sed 's/old/new/标志位'					
-sed '1,3s/new/old'   						# 特定范围替换
-sed '/regular/s/new/old'          # 使用正则查找替换的行
-sed '/regular/{s/old/new;s/old/new}'    # 分组，匹配多条命令
-sed -f sedscript filename								# sed 脚本
-sed '/regular/d'    										# 删除匹配的行
+# 读取json version节点
+cat package.json | awk -F "[,:}]" '{for(i=1;i<=NF;i++){if($i~/'version'\042/){print $(i+1)}}}' | tr -d ' "'`
+```
 
+#### 数组
+
+
+
+#### 函数
+
+##### 算数函数
+
+* sin
+* cos
+* int
+* rand
+* srand
+
+```bash
+awk 'BEGIN{pi=3.14;print int(pi)}'			
+awk 'BEGIN{print rand()}'
+awk 'BEGIN{srand(); print rand()}'			# 重新获得种子生成随机数
+```
+
+##### 字符串函数
+
+* gsub(r, s, t)
+* index(s, t)
+* length(s)
+* match(s, r)
+* split(s, a, sep)
+* sub(r, s, t)
+* subset(s, p, n)
+
+##### 自定义函数
+
+```bash
+awk 'function fname() {return 0} BEGIN{print fname()}'
 ```
 
 
@@ -2233,6 +2299,7 @@ hostnamectl set-hostname hostname # centos 7
 
 ### DNS
 `/etc/resolv.conf`
+
 ```bash
 DNS1=114.114.114.114
 ```
