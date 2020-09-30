@@ -326,21 +326,6 @@ vgcreate <volume_group> <physical_volume>
 
 * **/run** 是一个临时文件系统，存储系统启动以来的信息
 
-### 安装字体
-
-```bash
-fc-list  # 查看安装的字体
-fc-list :lang=zh   # 查看安装的中文字体
-```
-
-在 `/usr/share/fonts` 中新建 chinese 目录，copy字体去chinese目录
-
-```bash
-cd /usr/share/fonts
-mkdir chinese
-fc-cache # 扫描字体目录并生成字体信息的缓存
-```
-
 
 
 ## 网络管理
@@ -568,11 +553,47 @@ netstat -ltnp  			# 列出端口
 netstat -anop|more 		# 查看网络队列
 ```
 
+### iptables
+
+`/etc/sysconfig/iptables`
+
+```bash
+iptables -t filter -A INPUT -s 10.0.0.1 -j ACCEPT			# 添加规则
+iptables -L 				# 查看规则,会对ip进行反向查询 
+iptables -nvL				# 详细规则
+```
+
+![image-20200926171611652](assets/images/image-20200926171611652.png)
+
+#### filter
+
+```bash
+iptables -A INPUT -s 10.0.0.1 -j ACCEPT	  # 接受数据包
+iptables -A INPUT -s 10.0.0.1/24 -j ACCEPT   # 整个网段可以访问
+iptables -A INPUT -s 10.0.0.1 -j DROP			# 丢弃数据包
+iptables -I INPUT -s 10.0.0.1 -j DROP	    # 插入到规则的第一条
+iptables -P INPUT DROP    	# 默认规则
+iptables -F 								# 清除所有规则
+iptables -D INPUT -s 10.0.0.1 -j DROP      # 删除规则，或者-D后面跟序号
+iptables -t filter -A INPUT -i eth0 -s 10.0.0.2 -p tcp -dport 80 -j ACCEPT # 允许10.0.0.2通过eth0进入，访问本机80端口
+```
+
+#### nat表
+
+```bash
+iptables -t nat -A PREROUTING -i eth0 -d 114.115.116.117 -p tcp --dport 80 -j DNAT --to-destination  10.0.0.1     # 把通过eth0访问114.115.116.117 的数据转发到10.0.0.1
+iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -o eth1 -j SNAT --to-source 111.112.113.114 
+# 内网通过eth1，ip 111.112.113.114的地址上网
+```
+
 
 
 ### firewalld
 
+使用python对iptables的包装，更易用
+
 ```bash
+systemctl status firewalld.service   # 查看状态
 systemctl stop firewalld.service #停止firewall
 systemctl disable firewalld.service #禁止firewall开机启动
 systemctl enable iptables.service #设置防火墙开机启动
@@ -596,6 +617,7 @@ firewall-cmd --list-all						   					 # 检查新的防火墙规则
 firewall-cmd --state                           # 查看防火墙状态，是否是running
 firewall-cmd --reload                          # 重新载入配置，比如添加规则之后，需要执行此命令
 firewall-cmd --get-zones                       # 列出支持的zone
+firewall-cmd --get-active-zones							 # 
 firewall-cmd --get-services                    # 列出支持的服务，在列表中的服务是放行的
 firewall-cmd --query-service ftp               # 查看ftp服务是否支持，返回yes或者no
 firewall-cmd --add-service=ftp                 # 临时开放ftp服务
@@ -608,31 +630,7 @@ man firewall-cmd                               # 查看帮助
 
 
 
-### iptables
-
-```bash
-iptables -t filter -A INPUT -s 10.0.0.1 -j ACCEPT			# 添加规则
-iptables -L 				# 查看规则
-iptables -nvL				# 详细规则
-```
-
-#### filter
-
-```bash
-
-```
-
-
-
-#### nat表
-
-```bahs
-
-```
-
-
-
-### wget
+### wget 
 
 ```bash
 # 下载oracle jdk
@@ -1013,11 +1011,24 @@ localectl set-locale LANG=en_US.utf8
 
 ```bash
 fc-list							# fc-list查看已安装的字体
-fc-list :lang=zh				# 查看中文字体
-fc-cache -vf					# 扫描字体目录并生成字体信息的缓存
+fc-list :lang=zh		# 查看中文字体
+fc-cache -vf				# 扫描字体目录并生成字体信息的缓存
 ```
 
+#### 安装字体
 
+```bash
+fc-list  # 查看安装的字体
+fc-list :lang=zh   # 查看安装的中文字体
+```
+
+在 `/usr/share/fonts` 中新建 chinese 目录，copy字体去chinese目录
+
+```bash
+cd /usr/share/fonts
+mkdir chinese
+fc-cache # 扫描字体目录并生成字体信息的缓存
+```
 
 ### sysctl 
 
@@ -1389,6 +1400,10 @@ awk 'function fname() {return 0} BEGIN{print fname()}'
 * **-q** 查下软件包
 * **-i** 安装软件包
 * **-e** 卸载软件包
+
+```bash
+rpm -ql iptables-services   # 查看iptable-services 有哪些文件
+```
 
 
 
@@ -2149,14 +2164,17 @@ ssh -f -N -R 10000:localhost:22 username@主控端ip
 ssh username@localhost -p 10000
 #username是你被控端的username，10000就是刚才的那个端口号。
 ```
-##### ssh 证书登录
+### ssh 证书登录
 
 ```bash
 ssh-keygen -t rsa
+# 通过ssh-copy-id copy
+ssh-copy-id -i ./.ssh/id_rsa.pub root@xxx.xxx.xxx.xxx   # copy证书去远程主机
+
+# 通过scp拷贝
 # scp ~/.ssh/id_rsa.pub root@xxx.xxx.xxx.xxx:~
-scp -P 26611 /Users/warrior/id_rsa.pub  jinyi@xxx.xxx.xxx.xx:/home/jinyi/id_rsa.pub
-#remote
-cat id_rsa.pub >>~/.ssh/authorized_keys
+# scp -P 26611 ./ssh/id_rsa.pub  jinyi@xxx.xxx.xxx.xx:/home/jinyi/id_rsa.pub
+# cat id_rsa.pub >>~/.ssh/authorized_keys
 /etc/init.d/ssh restart
 
 #连接
@@ -2193,9 +2211,7 @@ expect "*password:*"
 send "$password\r"
 # 等待接受文件结束符
 interact
-
 expect eof
-
 ```
 ### scp
 ### sftp
@@ -2279,6 +2295,7 @@ network:
 
 ### 查看SELinux状态及关闭SELinux
 ```bash
+getsebool -a      # 列出selinux的所有bool值
 sestatus -v 			#如果SELinux status参数为enabled即为开启状态
 getenforce          	#也可以用这个命令检查 Permissive 零时关闭
 setenforce 0       		#设置SELinux 成为permissive模式 零时关闭
