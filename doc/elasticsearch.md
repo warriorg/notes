@@ -193,13 +193,25 @@ http.cors.allow-origin: "*"
 
 
 
+## 基本原理与架构
+
+### 全文检索
+
+### 全文检索的流程
+
+### ES架构
+
+
+
+
+
 ## 基本概念
 
 ### 索引
 
 #### 定义
 
-* Index 索引时文档的容器，是一类文档的结合
+* Index 索引是文档的容器，是一类文档的结合
   * Index 体现了逻辑空间的概念：每个索引都有自己的Mapping定义，用于定义包含的文档的字段和字段类型
   * Shard 体现了物理空间的概念：索引中的数据分散在Shard上
 * 索引的Mapping与Settings
@@ -217,13 +229,14 @@ http.cors.allow-origin: "*"
 
 #### 与传统数据库对比
 
-| RDBMS  | Elasticsearch |
-| ------ | ------------- |
-| Table  | Index(Type)   |
-| Row    | Document      |
-| Column | Field         |
-| Schema | Mapping       |
-| SQL    | DSL           |
+| RDBMS     | Elasticsearch |
+| --------- | ------------- |
+| databases | indices       |
+| Table     | Index(Type)   |
+| Row       | Document      |
+| Column    | Field         |
+| Schema    | Mapping       |
+| SQL       | DSL           |
 
 ```
 GET /_cat/indices?v    # 列出所有的index
@@ -927,7 +940,7 @@ POST users/_search
   * 一个Type又一个Mapping定义
   * 7.0开始，不需要在Mapping定义中指定type信息
 
-#### 什么事Dynamic Mapping
+#### 什么是Dynamic Mapping
 
 * 在写入文档时候，如果索引不存在，会自动创建索引
 * Dynamic Mapping的机制，使得我们无需手动定义Mappings。Elasticsearch会自动根据文档信息，推算出字段的类型
@@ -1604,6 +1617,16 @@ POST blogs/_search
 
 ### 中文分词与检索
 
+```bash
+post _analyze 
+{
+	"text": "elasticsearch 是一个全文检索引擎",
+	"analyzer": "ik_smart"
+}
+```
+
+
+
 ### 实战
 
 ### Search Template 
@@ -1694,6 +1717,8 @@ Beats 平台集合了多种单一用途数据采集器。它们从成百上千�
 ### [cerebro](https://github.com/lmenezes/cerebro)
 
 elasticsearch Web管理工具。
+
+### elasticsearch-head
 
 
 

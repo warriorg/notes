@@ -2141,6 +2141,8 @@ vi /etc/ssh/sshd_config
 service sshd restart
 #or
 service ssh restart
+
+utmpdump /var/log/wtmp | cat   # 列出适用ssh访问的地址和时间
 ```
 
 ```bash
