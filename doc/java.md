@@ -47,6 +47,26 @@
 
 ## NIO
 
+### 原理
+
+#### 正常copy
+
+![Image for post](./assets/images/0_jdpkVNoaeGbIcUdR.png)
+
+#### Zero copy
+
+![copy](./assets/images/0_R8AZ-MG5UhjYpgfD.png)
+
+#### DMZ copy
+
+![0_rUwZo8jtXLYL82w2.png](./assets/images/0_rUwZo8jtXLYL82w2.png)
+
+#### mmap
+
+![0_POBN-YXYgKS8ZHsn.png](./assets/images/0_POBN-YXYgKS8ZHsn.png)
+
+
+
 ### Channel
 
 Java NIO Channels 和 streams 的区别
