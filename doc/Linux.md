@@ -568,14 +568,15 @@ iptables -nvL				# 详细规则
 #### filter
 
 ```bash
+iptables -F 								# 清除所有规则
+iptables -P INPUT DROP    	# 默认规则
 iptables -A INPUT -s 10.0.0.1 -j ACCEPT	  # 接受数据包
 iptables -A INPUT -s 10.0.0.1/24 -j ACCEPT   # 整个网段可以访问
 iptables -A INPUT -s 10.0.0.1 -j DROP			# 丢弃数据包
 iptables -I INPUT -s 10.0.0.1 -j DROP	    # 插入到规则的第一条
-iptables -P INPUT DROP    	# 默认规则
-iptables -F 								# 清除所有规则
 iptables -D INPUT -s 10.0.0.1 -j DROP      # 删除规则，或者-D后面跟序号
-iptables -t filter -A INPUT -i eth0 -s 10.0.0.2 -p tcp -dport 80 -j ACCEPT # 允许10.0.0.2通过eth0进入，访问本机80端口
+iptables -t filter -A INPUT -i eth0 -s 10.0.0.2 -p tcp -dport 80 -j ACCEPT # 允许10.0.0.2通过eth0进入，访问本机80端
+iptables -A OUTPUT -d 10.0.0.2  -j REJECT   # 禁止访问目标IP 10.0.0.2 
 ```
 
 #### nat表
