@@ -1502,6 +1502,15 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 
 #### 文件权限
 
+```bash
+[root@localhost /]ll /bin/bash
+-rwxr-xr-x. 1 root root 964608 Oct 31  2018 /bin/bash
+```
+
+
+
+![](./assets/images/image-20201026165156836.png)
+
 
 
 ![](./assets/images/linux-file-info.jpg)
@@ -1566,16 +1575,40 @@ ln abc cde 		# 建立abc的硬连接，
 
 
 
-#### chown. 
+#### chown
 
 #### chgrp
 
 #### chmod
 
+chmod命令用于更改文件或目录的权限
+
 ```bash
 chmod u+x filename        # 为用户增加执行权限
 chmod u-r filename				# 为组减少读取权限
 ```
+
+```
+rwx rwx rwx = 111 111 111
+rw- rw- rw- = 110 110 110
+rwx --- --- = 111 000 000
+
+and so on...
+
+rwx = 111 in binary = 7
+rw- = 110 in binary = 6
+r-x = 101 in binary = 5
+r-- = 100 in binary = 4
+```
+
+| **Value** | **Meaning**                                                  |
+| --------- | ------------------------------------------------------------ |
+| **777**   | **(rwxrwxrwx)** No restrictions on permissions. Anybody may do anything. Generally not a desirable setting. |
+| **755**   | **(rwxr-xr-x)** The file's owner may read, write, and execute the file. All others may read and execute the file. This setting is common for programs that are used by all users. |
+| **700**   | **(rwx------)** The file's owner may read, write, and execute the file. Nobody else has any rights. This setting is useful for programs that only the owner may use and must be kept private from others. |
+| **666**   | **(rw-rw-rw-)** All users may read and write the file.       |
+| **644**   | **(rw-r--r--)** The owner may read and write a file, while all others may only read the file. A common setting for data files that everybody may read, but only the owner may change. |
+| **600**   | **(rw-------)** The owner may read and write a file. All others have no rights. A common setting for data files that the owner wants to keep private. |
 
 
 
