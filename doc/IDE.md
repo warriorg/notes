@@ -38,7 +38,7 @@ JRebel 是一款热部署插件。当你的 java-web 项目在 tomcat 中 run/de
 
 ## 使用断言
 
-##代码折叠
+## 代码折叠
 快捷键 cmd+opt+t		
 visual studio style		
 
@@ -56,7 +56,7 @@ Your code goes here...
 ```
 
 
-##Intellij IDEA 从数据库生成 JPA Entity
+## Intellij IDEA 从数据库生成 JPA Entity
 
 首先，需要从调用 Database 窗口 `View>Tool Windows>Database`    
 添加到数据库的连接		

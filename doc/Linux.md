@@ -1259,6 +1259,303 @@ usermod -G groupname username  		#已有的用户增加工作组
  gpasswd -d A GROUP
 ```
 
+
+
+## 文件处理
+
+### 文件权限
+
+```bash
+[root@localhost /]ll /bin/bash
+-rwxr-xr-x. 1 root root 964608 Oct 31  2018 /bin/bash
+```
+
+
+
+![](./assets/images/image-20201026165156836.png)
+
+
+
+![](./assets/images/linux-file-info.jpg)
+
+
+
+### ls
+
+#### Options
+
+* **-h** –human-readable 以容易理解的格式列出文件大小
+
+### mkdir
+
+### cd
+
+### pwd
+
+### rmdir
+
+### rm
+
+### cp
+
+### tar 
+
+#### Options
+
+* **c** 打包
+* **x** 解包
+* **f** 指定操作类型的文件
+
+```bash
+tar cf /tmp/etc-backup.tar /etc  # 打包etc目录
+tar czf /tmp/etc-backup.tar.gz /etc   # 打包压缩etc目录
+tar cjf /tmp/etc-backup.tar.bz2 /etc   # 打包压缩etc目录
+tar xf /tmp/etc-backup.tar -C /root    # 解开包到特定目录
+tar zxf /tmp/etc-backup.tar.gz
+tar jxf /tmp/etc-backup.tar.bz2 
+```
+
+
+
+### ln 
+
+* 硬链接(Hard Link) 说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
+
+```bash
+ln [options] existingfile newfile	# sexistingfile 待建立链接文件的文件，newfile是新创建的链接文件
+ln [options] existingfile-list directory
+# -f 建立时，将同档案名删除.
+# -i 删除前进行询问.
+```
+
+- 软链接(Soft Link), 软链接又称为符号链接（Symbolic link）。符号连接相当于Windows下的快捷方式。
+
+```bash
+ln -s abc cde 	# 建立abc 的软连接
+ln abc cde 		# 建立abc的硬连接，
+```
+
+
+
+### tr 
+
+可以对来自标准输入的字符进行替换、压缩和删除。它可以将一组字符变成另一组字符，经常用来编写优美的单行命令，作用很强大
+
+
+
+### chown
+
+### chgrp
+
+### chmod
+
+chmod命令用于更改文件或目录的权限
+
+```bash
+chmod u+x filename        # 为用户增加执行权限
+chmod u-r filename				# 为组减少读取权限
+```
+
+```
+rwx rwx rwx = 111 111 111
+rw- rw- rw- = 110 110 110
+rwx --- --- = 111 000 000
+
+and so on...
+
+rwx = 111 in binary = 7
+rw- = 110 in binary = 6
+r-x = 101 in binary = 5
+r-- = 100 in binary = 4
+```
+
+| **Value** | **Meaning**                                                  |
+| --------- | ------------------------------------------------------------ |
+| **777**   | **(rwxrwxrwx)** No restrictions on permissions. Anybody may do anything. Generally not a desirable setting. |
+| **755**   | **(rwxr-xr-x)** The file's owner may read, write, and execute the file. All others may read and execute the file. This setting is common for programs that are used by all users. |
+| **700**   | **(rwx------)** The file's owner may read, write, and execute the file. Nobody else has any rights. This setting is useful for programs that only the owner may use and must be kept private from others. |
+| **666**   | **(rw-rw-rw-)** All users may read and write the file.       |
+| **644**   | **(rw-r--r--)** The owner may read and write a file, while all others may only read the file. A common setting for data files that everybody may read, but only the owner may change. |
+| **600**   | **(rw-------)** The owner may read and write a file. All others have no rights. A common setting for data files that the owner wants to keep private. |
+
+### chattr
+
+改变 Linux 文件系统中的文件属性（change file attributes on a Linux file system）
+
+```bash
+chattr [ -RVf ] [ -v version ] [ mode ] files...
+
+-R 递归处理，将指定目录下的所有文件及子目录一并处理。
+-V 显示指令执行过程以及展示当前 chattr 的版本号。
+-f Suppress most error messages
+-v<版本编号> 设置文件或目录版本。
+
+mode 格式为  +-=[acdeijstuACDST]
++<属性> 文件或目录的该项属性。
+-<属性> 关闭文件或目录的该项属性。
+=<属性> 指定文件或目录的属性。
+```
+
+mode 常用属性
+
+```bash
+a: append only; 系统只允许在这个文件之后追加数据，不允许任何进程覆盖或截断这个文件。如果目录具有这个属性，系统将只允许在这个目录下建立和修改文件，而不允许删除任何文件。
+c: compressed; 系统以透明的方式压缩这个文件。从这个文件读取时，返回的是解压之后的数据；而向这个文件中写入数据时，数据首先被压缩之后才写入磁盘。
+d: no dump; 在进行文件系统备份时，dump程序将忽略这个文件。
+i: immutable; 系统不允许对这个文件进行任何的修改。如果目录具有这个属性，那么任何的进程只能修改目录之下的文件，不允许建立和删除文件。
+j: data journalling; 如果一个文件设置了该属性，那么它所有的数据在写入文件本身之前，写入到ext3文件系统日志中，如果该文件系统挂载的时候使用了”data=ordered” 或”data=writeback”选项。当文件系统采用”data=journal”选项挂载时，所有文件数据已经记录日志，因此这个属性不起作用。仅仅超级用户或者拥有CAP_SYS_RESOURCE能力的进程可以设置和删除该属性。
+s: secure deletion; 让系统在删除这个文件时，使用0填充文件所在的区域。
+t: no tail-merging; 和其他文件合并时，该文件的末尾不会有部分块碎片(为支持尾部合并的文件系统使用)。
+u: undeletable; 当一个应用程序请求删除这个文件，系统会保留其数据块以便以后能够恢复删除这个文件。
+A: no atime updates; 告诉系统不要修改对这个文件的最后访问时间
+D: synchronous directory updates; 任何改变将同步到磁盘；这等价于mount命令中的dirsync选项：
+S: synchronous updates; 一旦应用程序对这个文件执行了写操作，使系统立刻把修改的结果写到磁盘。
+T: top of directory hierarchy; 如果一个目录设置了该属性，它将被视为目录结构的顶极目录
+```
+
+### lsattr
+
+列出 Linux 第二扩展文件系统上文件属性( list file attributes on a Linux second extended file system)
+
+```bash
+lsattr [ -RVadv ] [ files...  ]
+
+-R: 递归处理，将指定目录下的所有文件及子目录一并处理
+-V 显示当前 lsattr 的版本号。
+-a: 显示所有文件和目录，包括隐藏文件
+-d: 显示目录名称
+-v: 显示文件或目录版本
+```
+
+### 文件搜索
+
+#### locate
+
+- 在后台数据库中按文件名搜索，速度比较快
+
+- 数据保存在`/var/lib/mlocate`后台数据库，每天更新一次
+
+- 可以`updatedb`命令立刻更新数据库
+
+- 只能搜索文件名
+
+- ```
+  /etc/updatedb.conf
+  ```
+
+   建立索引的配置文件
+
+  - PRUNE_BIND_MOUNTS = "yes" 全部生效，开启搜索限制
+  - PRUNEFS 不搜索的文件系统
+  - PRUNENAMES 忽略的文件类型
+  - PRUNEPATHS 忽略的路径 /tmp
+
+
+
+#### whereis
+
+- 搜索命令所在路径以及帮助文档所在位置
+
+- whereis 命令名
+
+  ```
+  whereis ls
+  ```
+
+  - -b 只查找可执行文件
+  - -m 只查找帮助文件
+
+
+
+#### which
+
+- 可以看到别名 `which ls`
+- 能看到的都是外部安装的命令
+- 无法查看Shell自带的命令，如 `which cd`
+
+
+
+#### find
+
+```bash
+find Folder -type d -exec chmod 0777 {} +			# 更改目录权限(不包含文件)
+find /data -mtime +30 -name "*.log" -print -exec rm -rf {} \;    # 将/data 目录下所有30天前带".log"的文件删除
+```
+
+
+
+- 文件搜索命令
+- find [搜索范围] [搜索条件]
+
+
+
+### 文件操作
+
+#### head
+
+显示文件的头n行 ，默认10行
+
+#### tail 
+
+显示文件的尾n行，默认10行
+
+命令从指定点开始将文件写到标准输出.使用tail命令的-f选项可以方便的查阅正在改变的日志文件,tail -f filename会把filename里最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容. 
+
+```bash
+tail notes  				# 显示 notes 文件的最后 10 行
+tail -20 notes				# 指定从 notes 文件结尾开始读取的行数
+tail -c +200 notes | pg		# 第 200 字节开始一次一页地显示 notes 文件
+tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 notes 文件时，tail 命令会继续显示这些行。 显示一直继续，直到您按下（Ctrl-C）组合键停止显示。
+```
+
+#### uniq
+
+用于检查及删除文本文件中重复出现的行列，一般与 sort 命令结合使用
+
+#### wc
+
+统计制定文件中的字节数，字数，行数, 缺省参数 -lcw
+
+**-l** 统计行数
+
+**-w** 统计字数
+
+**-c** 统计字节数
+
+#### grep			
+
+```base
+$grep -5 'parttern' inputfile #打印匹配行的前后5行
+$grep -C 5 'parttern' inputfile #打印匹配行的前后5行
+$grep -A 5 'parttern' inputfile #打印匹配行的后5行
+$grep -B 5 'parttern' inputfile #打印匹配行的前5行
+```
+
+#### xargs
+
+通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数
+
+```bash
+echo '--help' | xargs ls
+```
+
+#### tar
+
+```bash
+unzip filename.zip			# 解压zip
+tar -zxvf filename.tar.gz	# 解压tar.gz
+tar -jxvf filename.tar.bz2  # 解压tar.bz2
+tar -Jxvf filename.tar.xz 	# 解压tar.xz
+tar -Zxvf filename.tar.Z    # 解压tar.Z
+
+# 1.15 版本开始tar可以自动识别版本
+tar -xvf filename.tar.bz2
+```
+
+
+
+
+
 ## 文本处理
 
 ### 元字符
@@ -1495,249 +1792,6 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 #### info
 
 
-
-
-
-### 文件处理命令
-
-#### 文件权限
-
-```bash
-[root@localhost /]ll /bin/bash
--rwxr-xr-x. 1 root root 964608 Oct 31  2018 /bin/bash
-```
-
-
-
-![](./assets/images/image-20201026165156836.png)
-
-
-
-![](./assets/images/linux-file-info.jpg)
-
-
-
-#### ls
-
-##### Options
-
-* **-h** –human-readable 以容易理解的格式列出文件大小
-
-#### mkdir
-#### cd
-#### pwd
-#### rmdir
-#### rm
-#### cp
-
-#### tar 
-
-##### Options
-
-* **c** 打包
-* **x** 解包
-* **f** 指定操作类型的文件
-
-```bash
-tar cf /tmp/etc-backup.tar /etc  # 打包etc目录
-tar czf /tmp/etc-backup.tar.gz /etc   # 打包压缩etc目录
-tar cjf /tmp/etc-backup.tar.bz2 /etc   # 打包压缩etc目录
-tar xf /tmp/etc-backup.tar -C /root    # 解开包到特定目录
-tar zxf /tmp/etc-backup.tar.gz
-tar jxf /tmp/etc-backup.tar.bz2 
-```
-
-
-
-#### ln 
-
-* 硬链接(Hard Link) 说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
-
-```bash
-ln [options] existingfile newfile	# sexistingfile 待建立链接文件的文件，newfile是新创建的链接文件
-ln [options] existingfile-list directory
-# -f 建立时，将同档案名删除.
-# -i 删除前进行询问.
-```
-
-- 软链接(Soft Link), 软链接又称为符号链接（Symbolic link）。符号连接相当于Windows下的快捷方式。
-
-```bash
-ln -s abc cde 	# 建立abc 的软连接
-ln abc cde 		# 建立abc的硬连接，
-```
-
-
-
-#### tr 
-
-可以对来自标准输入的字符进行替换、压缩和删除。它可以将一组字符变成另一组字符，经常用来编写优美的单行命令，作用很强大
-
-
-
-#### chown
-
-#### chgrp
-
-#### chmod
-
-chmod命令用于更改文件或目录的权限
-
-```bash
-chmod u+x filename        # 为用户增加执行权限
-chmod u-r filename				# 为组减少读取权限
-```
-
-```
-rwx rwx rwx = 111 111 111
-rw- rw- rw- = 110 110 110
-rwx --- --- = 111 000 000
-
-and so on...
-
-rwx = 111 in binary = 7
-rw- = 110 in binary = 6
-r-x = 101 in binary = 5
-r-- = 100 in binary = 4
-```
-
-| **Value** | **Meaning**                                                  |
-| --------- | ------------------------------------------------------------ |
-| **777**   | **(rwxrwxrwx)** No restrictions on permissions. Anybody may do anything. Generally not a desirable setting. |
-| **755**   | **(rwxr-xr-x)** The file's owner may read, write, and execute the file. All others may read and execute the file. This setting is common for programs that are used by all users. |
-| **700**   | **(rwx------)** The file's owner may read, write, and execute the file. Nobody else has any rights. This setting is useful for programs that only the owner may use and must be kept private from others. |
-| **666**   | **(rw-rw-rw-)** All users may read and write the file.       |
-| **644**   | **(rw-r--r--)** The owner may read and write a file, while all others may only read the file. A common setting for data files that everybody may read, but only the owner may change. |
-| **600**   | **(rw-------)** The owner may read and write a file. All others have no rights. A common setting for data files that the owner wants to keep private. |
-
-
-
-### 文件搜索
-
-#### locate
-
-- 在后台数据库中按文件名搜索，速度比较快
-
-- 数据保存在`/var/lib/mlocate`后台数据库，每天更新一次
-
-- 可以`updatedb`命令立刻更新数据库
-
-- 只能搜索文件名
-
-- ```
-  /etc/updatedb.conf
-  ```
-
-   建立索引的配置文件
-
-  - PRUNE_BIND_MOUNTS = "yes" 全部生效，开启搜索限制
-  - PRUNEFS 不搜索的文件系统
-  - PRUNENAMES 忽略的文件类型
-  - PRUNEPATHS 忽略的路径 /tmp
-
-
-
-#### whereis
-
-- 搜索命令所在路径以及帮助文档所在位置
-
-- whereis 命令名
-
-  ```
-  whereis ls
-  ```
-
-  - -b 只查找可执行文件
-  - -m 只查找帮助文件
-
-
-
-#### which
-
-- 可以看到别名 `which ls`
-- 能看到的都是外部安装的命令
-- 无法查看Shell自带的命令，如 `which cd`
-
-
-
-#### find
-
-```bash
-find Folder -type d -exec chmod 0777 {} +			# 更改目录权限(不包含文件)
-find /data -mtime +30 -name "*.log" -print -exec rm -rf {} \;    # 将/data 目录下所有30天前带".log"的文件删除
-```
-
-
-
-- 文件搜索命令
-- find [搜索范围] [搜索条件]
-
-
-
-### 文件操作
-
-#### head
-
-显示文件的头n行 ，默认10行
-
-#### tail 
-
-显示文件的尾n行，默认10行
-
-命令从指定点开始将文件写到标准输出.使用tail命令的-f选项可以方便的查阅正在改变的日志文件,tail -f filename会把filename里最尾部的内容显示在屏幕上,并且不但刷新,使你看到最新的文件内容. 
-
-```bash
-tail notes  				# 显示 notes 文件的最后 10 行
-tail -20 notes				# 指定从 notes 文件结尾开始读取的行数
-tail -c +200 notes | pg		# 第 200 字节开始一次一页地显示 notes 文件
-tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 notes 文件时，tail 命令会继续显示这些行。 显示一直继续，直到您按下（Ctrl-C）组合键停止显示。
-```
-
-#### uniq
-
-用于检查及删除文本文件中重复出现的行列，一般与 sort 命令结合使用
-
-#### wc
-
-统计制定文件中的字节数，字数，行数, 缺省参数 -lcw
-
-**-l** 统计行数
-
-**-w** 统计字数
-
-**-c** 统计字节数
-
-#### grep			
-
-```base
-$grep -5 'parttern' inputfile #打印匹配行的前后5行
-$grep -C 5 'parttern' inputfile #打印匹配行的前后5行
-$grep -A 5 'parttern' inputfile #打印匹配行的后5行
-$grep -B 5 'parttern' inputfile #打印匹配行的前5行
-```
-
-#### xargs
-
-通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数
-
-```bash
-echo '--help' | xargs ls
-```
-
-#### 
-
-#### tar
-
-```bash
-unzip filename.zip			# 解压zip
-tar -zxvf filename.tar.gz	# 解压tar.gz
-tar -jxvf filename.tar.bz2  # 解压tar.bz2
-tar -Jxvf filename.tar.xz 	# 解压tar.xz
-tar -Zxvf filename.tar.Z    # 解压tar.Z
-
-# 1.15 版本开始tar可以自动识别版本
-tar -xvf filename.tar.bz2
-```
 
 
 
