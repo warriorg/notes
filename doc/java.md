@@ -527,7 +527,8 @@ java -XX:+PrintCommandLineFlags -version
 java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintNMTStatistics -version
 # java11内存占用
 java -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=summary -XX:+PrintNMTStatistics -version
-
+# 通用启动参数 
+java -server -Xms3g -Xmx3g -XX:NewSize=1g -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=dump.log -jar start.jar
 ```
 
 ### javap
