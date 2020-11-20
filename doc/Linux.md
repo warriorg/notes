@@ -1716,8 +1716,20 @@ yum 的配置文件分为两部分：main 和repository
 
 ```bash
 yum install epel-release  		# 增加epel源
+yum config-manager --set-enabled PowerTools
 yum -y list java*   			# 搜索安装包
 ```
+
+
+
+### dnf
+
+```bash
+dnf install epel-release
+dnf config-manager --set-enabled PowerTools
+```
+
+
 
 ### 源码编译安装
 
