@@ -207,6 +207,16 @@ spring.cloud.nacos.config.namespace=536523ba-4932-45dc-a99f-0efca7f4be02
 
 
 
+### 持久化数据
+
+
+
+### Raft算法
+
+
+
+
+
 # 服务注册&服务发现
 
 
