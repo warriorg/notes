@@ -2316,6 +2316,13 @@ interact
 expect eof
 ```
 ### scp
+
+> OpenSSH 项目表示，他们认为 scp 协议已经过时，不灵活，而且不容易修复，然后他们继而推荐使用 sftp 或 rsync 来进行文件传输。
+
+### rsync
+
+
+
 ### sftp
 ### sshfs
 
