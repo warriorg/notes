@@ -864,7 +864,10 @@ swapoff /swapfile
 report file system disk space usage
 
 ```bash
-df -h      # 	显示包含每个文件名参数的文件系统上的可用磁盘空间
+df -h       # 显示包含每个文件名参数的文件系统上的可用磁盘空间
+df -i   		# 显示indoe使用情况
+df -hi 			# 显示indoe空间大小
+for i in /*; do echo $i; find $i | wc -l; done  # 统计目录下文件的数量
 ```
 
 ### du

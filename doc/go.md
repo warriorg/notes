@@ -1,3 +1,15 @@
+## 调试GO语言
+
+### 中间代码
+
+```bash
+go build -gcflags -S main.go    # Go 语言的源代码编译成汇编语言
+
+GOSSAFUNC=main go build test.go  # Go 语言更详细的编译过程 获取汇编指令的优化过程
+```
+
+
+
 
 
 ## 介绍
