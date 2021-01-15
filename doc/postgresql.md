@@ -39,6 +39,8 @@ host    all            all      192.168.0.1/24    trust  # 需要连接的服务
 
 # 重启
 systemctl restart postgresql-13
+# 设置自启动服务
+systemctl enable postgresql-13   
 
 # 新建数据库
 createdb mydb
