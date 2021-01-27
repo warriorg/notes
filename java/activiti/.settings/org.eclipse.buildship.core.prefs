@@ -1,7 +1,7 @@
 arguments=
 auto.sync=false
 build.scans.enabled=false
-connection.gradle.distribution=GRADLE_DISTRIBUTION(VERSION(6.0))
+connection.gradle.distribution=GRADLE_DISTRIBUTION(LOCAL_INSTALLATION(/usr/local/Cellar/gradle/6.7/libexec))
 connection.project.dir=
 eclipse.preferences.version=1
 gradle.user.home=

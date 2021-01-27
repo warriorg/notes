@@ -1,0 +1,130 @@
+{
+  "main": {
+    "id": "0c81332ad08031e9",
+    "type": "split",
+    "children": [
+      {
+        "id": "b59a155a008f4541",
+        "type": "leaf",
+        "active": true,
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "activiti.md",
+            "mode": "source"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8d1d89f85c801904",
+    "type": "split",
+    "children": [
+      {
+        "id": "cad9709fed9b60cf",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d7f6941c53aefbe9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "bd1d2a48ccaefebd",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#Animation",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "768cebe64727301e",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 201,
+    "collapsed": true
+  },
+  "right": {
+    "id": "fd127a1f526fd181",
+    "type": "split",
+    "children": [
+      {
+        "id": "ce600a9adbfe8b6e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5c72b39ed1f0524c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "activiti.md",
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "backlinkCollapsed": true,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "21763de02d1ace07",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "alphabetical",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "6f1fd3446659b47a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "activiti.md"
+              }
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "horizontal",
+    "width": 297
+  },
+  "lastOpenFiles": [
+    "activiti.md",
+    "vim.md",
+    "Spring Cloud Alibaba.md",
+    "cd.md",
+    "consul.md",
+    "c.md",
+    "shell.md",
+    "kafka.md",
+    "Untitled.md",
+    "java.md"
+  ]
+}

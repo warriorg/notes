@@ -145,7 +145,7 @@ ln a.txt b.txt
 ls -li			
 ```
 
-![image-20200822183647708](assets/images/image-20200822183647708.png)
+![image-20200822183647708](./assets/images/image-20200822183647708.png)
 
 源文件与目标文件的inode号码相同，都指向同一个inode。inode信息中有一项叫做"链接数"，记录指向该inode的文件名总数，这时就会增加1。
 
@@ -883,7 +883,7 @@ report file system disk space usage
 
 ```bash
 df -h       # 显示包含每个文件名参数的文件系统上的可用磁盘空间
-df -i   		# 显示indoe使用情况
+df -i   		# 显示inode使用情况
 df -hi 			# 显示indoe空间大小
 for i in /*; do echo $i; find $i | wc -l; done  # 统计目录下文件的数量
 ```

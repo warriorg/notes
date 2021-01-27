@@ -25,8 +25,6 @@
 - `boolean` - 只有 true 和 false 两个取值。
 
 
-
-
 #### 引用类型 （reference types）
 
 1. 类
