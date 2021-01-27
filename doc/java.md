@@ -311,7 +311,8 @@ d. **探测器(Profiler)** – 一个特殊的组件，负责寻找被多次调�
 
 9、`[Times: user=0.02 sys=0.01, real=0.00 secs]`  分别表示，用户态占用时长，内核用时，真实用时。
 
-
+##### 日志分析工具
+[gceasy](https://gceasy.io/)
 
 ## JIT
 

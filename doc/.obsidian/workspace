@@ -10,8 +10,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "activiti.md",
-            "mode": "source"
+            "file": "java.md",
+            "mode": "preview"
           }
         }
       }
@@ -78,7 +78,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "activiti.md",
+                "file": "java.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "activiti.md"
+                "file": "java.md"
               }
             }
           }
@@ -116,6 +116,7 @@
     "width": 297
   },
   "lastOpenFiles": [
+    "java.md",
     "activiti.md",
     "vim.md",
     "Spring Cloud Alibaba.md",
@@ -124,7 +125,6 @@
     "c.md",
     "shell.md",
     "kafka.md",
-    "Untitled.md",
-    "java.md"
+    "Untitled.md"
   ]
 }
