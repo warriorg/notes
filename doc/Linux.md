@@ -2336,6 +2336,20 @@ send "$password\r"
 interact
 expect eof
 ```
+
+#### 调试SSH
+在服务器上运行 `/usr/sbin/sshd -d -p 2222` 开启调试模式
+在客户端上使用 `ssh -vvT -p 2222 root@192.168.1.2`连接
+
+
+#### 配置证书后无法访问
+```bash
+chown root /root
+chown root /root/.ssh
+```
+
+
+
 ### scp
 
 > OpenSSH 项目表示，他们认为 scp 协议已经过时，不灵活，而且不容易修复，然后他们继而推荐使用 sftp 或 rsync 来进行文件传输。

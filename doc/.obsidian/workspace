@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "b59a155a008f4541",
+        "id": "498a49347f7f1339",
         "type": "leaf",
         "active": true,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "java.md",
+            "file": "linux.md",
             "mode": "preview"
           }
         }
@@ -78,7 +78,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "java.md",
+                "file": "linux.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "java.md"
+                "file": "linux.md"
               }
             }
           }
@@ -116,6 +116,7 @@
     "width": 297
   },
   "lastOpenFiles": [
+    "linux.md",
     "java.md",
     "activiti.md",
     "vim.md",
@@ -124,7 +125,6 @@
     "consul.md",
     "c.md",
     "shell.md",
-    "kafka.md",
-    "Untitled.md"
+    "kafka.md"
   ]
 }
