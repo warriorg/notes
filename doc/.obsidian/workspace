@@ -8,11 +8,8 @@
         "type": "leaf",
         "active": true,
         "state": {
-          "type": "markdown",
-          "state": {
-            "file": "linux.md",
-            "mode": "preview"
-          }
+          "type": "graph",
+          "state": {}
         }
       }
     ],
@@ -61,8 +58,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 201,
-    "collapsed": true
+    "width": 201
   },
   "right": {
     "id": "fd127a1f526fd181",
@@ -78,7 +74,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "linux.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,9 +98,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "linux.md"
-              }
+              "state": {}
             }
           }
         ],
@@ -116,6 +109,8 @@
     "width": 297
   },
   "lastOpenFiles": [
+    "数据结构与算法.md",
+    "vue.md",
     "linux.md",
     "java.md",
     "activiti.md",
@@ -123,8 +118,6 @@
     "Spring Cloud Alibaba.md",
     "cd.md",
     "consul.md",
-    "c.md",
-    "shell.md",
-    "kafka.md"
+    "c.md"
   ]
 }

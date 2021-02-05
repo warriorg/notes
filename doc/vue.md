@@ -32,6 +32,11 @@ Angular 采取的脏检查机制，当发生了某种事件（例如输入），
 Vue 的实现方式，对数据（Model）进行劫持，当数据变动时，数据会出发劫持时绑定的方法，对视图进行更新。
 
 
+## VUE 3.0
+
+
+
+
 ## Vue 技术栈
 
 ### [ES6](http://es6.ruanyifeng.com/)
@@ -111,3 +116,5 @@ npm install -g @vue/cli
   background: #fff;
 }
 ```
+
+
