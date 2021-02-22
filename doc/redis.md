@@ -1,4 +1,9 @@
+## 简介
+
+
+
 ## 安装
+
 ### osx
 ```bash
 brew install redis
@@ -10,7 +15,8 @@ redis-cli 							#进去cli客户端
 wget http://download.redis.io/releases/redis-5.0.2.tar.gz
 tar zxf redis-5.0.2.tar.gz
 make PREFIX=/usr/local/redis install
-ln -s /usr/local/redis/bin/redis-cli /usr/local/bin/redis-cli   # 建立软连接
+# 建立软连接
+ln -s /usr/local/redis/bin/redis-cli /usr/local/bin/redis-cli   
 ```
 
 解决错误
@@ -36,18 +42,21 @@ cd deps
 make hiredis lua jemalloc linenoise
 ```
 
-
-## 命令工具
-
-* redis-server	服务端
-* redis-cli    客户端
-
 ### redis.conf
-```
-requirepass 123456  # 开启密码验证
+
+```bash
+# 开启密码验证
+requirepass 123456  
+# 守护程序设置
+daemonize no
 ```
 
-### 常用命令
+
+
+## 客户端
+
+### redis-cli
+
 ```bash
 redis-cli -h host -p port -a password   # 连接指定服务器的数据库
 redis-cli -a 123456  # 登录验证
@@ -145,9 +154,9 @@ hgetall key
 hdel key field [field ...]
 ```
 ### 5. ZSET (有序集合)
-> 字符串成员与浮点数分值之间的有序映射，元素的排列顺序由分值的大小决定      
-> 添加、获取、删除单个元素；根据分值范围(range)或者成员来获取元素
+> 字符串成员与浮点数分值之间的有序映射，元素的排列顺序由分值的大小决定    
 > 
+> 添加、获取、删除单个元素；根据分值范围(range)或者成员来获取元素
 ```bash
 # 将一个给定分值的成员添加到有序集合里面
 zadd key [NX|XX] [CH] [INCR] score member [score member ...]
