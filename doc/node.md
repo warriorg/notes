@@ -32,6 +32,8 @@ set HTTPS_PROXY=null
 npm root -g  # 查看全局包位置
 npm config set prefix '目标目录'  # 修改全局包位置 
 npm uninstall -g xxx   # 卸载命令 
+# 检查过是的npm包
+npm outdated 
 ```
 
 Webpack4 和 Babel
