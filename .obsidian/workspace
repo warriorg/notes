@@ -10,7 +10,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/理财.md",
+            "file": "doc/redis.md",
             "mode": "source"
           }
         }
@@ -49,7 +49,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -69,8 +70,8 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/理财.md",
-                "collapseAll": false,
+                "file": "doc/redis.md",
+                "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "backlinkCollapsed": false,
@@ -84,7 +85,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/理财.md"
+                "file": "doc/redis.md"
               }
             }
           }
@@ -96,12 +97,15 @@
     "width": 300
   },
   "lastOpenFiles": [
+    "doc/redis.md",
+    "doc/ReadingNotes.md",
+    "doc/linux.md",
+    "doc/Vagrant.md",
+    "linux>od.md",
     "doc/理财.md",
     "doc/Untitled.md",
     "doc/数据结构与算法.md",
     "doc/机器学习实战.md",
-    "doc/vue.md",
-    "doc/架构整洁之道.md",
-    "blog/2021/整洁架构.md"
+    "doc/vue.md"
   ]
 }
