@@ -89,3 +89,21 @@ mysql proxy 读写分离
 
 
 
+## 常用sql
+
+### 分组后取出最新的记录
+
+```sql
+
+
+
+-- 实战
+select t.head_id, t.note from (
+	select row_number() over (partition by head_id order by insert_time desc) num, 	
+  head_id, 
+  note, 
+  insert_time from t_pre_dec_erp_approve t) t
+where t.num = 1
+```
+
+https://stackoverflow.com/questions/3800551/select-first-row-in-each-group-by-group
