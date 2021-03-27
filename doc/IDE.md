@@ -9,9 +9,9 @@
 ### 文件信息
 **Editor -> File and Code Templates -> Files -> Class **
 
+![image-20210325164130167](./assets/images/image-20210325164130167.png)
 
-
-
+​	
 
 
 ## 插件
