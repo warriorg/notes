@@ -1,3 +1,35 @@
+# SBT
+
+sbt is built for Scala and Java projects.
+
+## INSTALL
+
+### macOS
+
+```bash
+brew install sbt
+```
+
+
+
+## sbt by example
+
+### create new project
+
+```bash
+sbt new scala/scala-seed.g8
+```
+
+
+
+https://www.scala-sbt.org/1.x/docs/sbt-by-example.html
+
+
+
+
+
+
+
 # syntax
 
 ## Variable types
@@ -106,6 +138,8 @@ def concatenate(s1: String, s2: String) = s1 + s2
 ```
 
 ### Traits
+
+One way to use a Scala `trait` is like the original Java `interface`, where you define the desired interface for some piece of functionality, but you don’t implement any behavior.
 
 ```scala
 trait Speaker {
