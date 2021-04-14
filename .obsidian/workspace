@@ -6,12 +6,11 @@
       {
         "id": "e03070ccb4a3332a",
         "type": "leaf",
-        "active": true,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/redis.md",
-            "mode": "source"
+            "file": "doc/Hadoop.md",
+            "mode": "preview"
           }
         }
       }
@@ -49,12 +48,12 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "68ec1b547c39adeb",
@@ -70,10 +69,12 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/redis.md",
+                "file": "doc/Hadoop.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -85,7 +86,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/redis.md"
+                "file": "doc/Hadoop.md"
               }
             }
           }
@@ -96,7 +97,9 @@
     "direction": "horizontal",
     "width": 300
   },
+  "active": "e03070ccb4a3332a",
   "lastOpenFiles": [
+    "doc/Hadoop.md",
     "doc/redis.md",
     "doc/ReadingNotes.md",
     "doc/linux.md",
@@ -105,7 +108,6 @@
     "doc/理财.md",
     "doc/Untitled.md",
     "doc/数据结构与算法.md",
-    "doc/机器学习实战.md",
-    "doc/vue.md"
+    "doc/机器学习实战.md"
   ]
 }

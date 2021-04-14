@@ -149,6 +149,10 @@ ping 		 	# 检测 redis 服务是否启动
 
 ## 数据结构
 
+
+
+![image-20210402152910624](./assets/images/image-20210402152910624.png)
+
 ### STRING
 
 Redis没有直接使用C语言传统的字符串表示（以空字符结尾的字符数组，以下简称C字符串），而是自己构建了一种名为简单动态字符串（simpledynamicstring，SDS）的抽象类型，并将SDS用作Redis的默认字符串表示。

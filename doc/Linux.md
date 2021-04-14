@@ -2393,7 +2393,7 @@ echo "ForwardAgent yes" >> /etc/ssh/ssh_config
 # 用户级修改
 vim ~/.ssh/config
 Host *
-ForwardAgent yes
+	ForwardAgent yes
 　　
 # 增加全局脚本 /etc/profile.d/ssh-agent.sh 
 #!/bin/sh
@@ -3238,7 +3238,7 @@ at> <EOT>     # ctrl+d 提交
 #### JAVA Application start
 
 ```bash
-nohup java -jar frameworkapi.jar --spring.config.local=E:/app/jg/application-test.yml --spring.profiles.active=test >/dev/null 2>&1 &
+nohup java -Xms1024M -Xmx1024M -XX:MetaspaceSize=128M -XX:MaxMetaspaceSize=128M -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintGCCause -Xloggc:gc.log -jar  frameworkapi.jar --spring.config.local=E:/app/jg/application-test.yml --spring.profiles.active=test >/dev/null 2>&1 &
 echo $!>pid
 ```
 
@@ -3295,8 +3295,6 @@ chmod +x ~/crontab/mongodb_backup.sh       # 增加执行权限
 vi /etc/crontab
 0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的脚本
 ```
-
-
 
 
 
