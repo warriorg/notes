@@ -12,10 +12,10 @@ brew link mysql
 
 # 设置mysql密码
 mysql -uroot
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '12345678';
 FLUSH PRIVILEGES;
 # MySQL 8.0.4前，执行：SET PASSWORD=PASSWORD('[新密码]');
-# MySQL 8.0.4开始，MySQL的密码认证插件由“mysql_native_password”改为“caching_sha2_password”。
+# MySQL 8.0.4开始，MySQL的密码认证插件由“mysql_native_password”改为“caching_sha2_password”
 ```
 
 ### Centos 7 安装
@@ -45,11 +45,19 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 > gpgcheck=0  
 
 ```bash
+yum repolist enabled | grep mysql    # 
+yum module disable mysql # Disabling the Default MySQL Module
 yum install mysql-community-server			# 安装数据库
 systemctl start mysqld.service				# 启动数据库服务
 grep 'temporary password' /var/log/mysqld.log		# 查看数据库默认密码
 mysql -uroot -p										# 登录数据库
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!';	# 修改密码
+
+# 查看密码规则
+select @@validate_password_policy;
+SHOW VARIABLES LIKE 'validate_password%';  
+# 修改为简单密码规则
+set global validate_password_policy=0;
 ```
 
 

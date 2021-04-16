@@ -4,12 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "e03070ccb4a3332a",
+        "id": "9e8502e876b8f725",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/Hadoop.md",
+            "file": "doc/hive.md",
             "mode": "preview"
           }
         }
@@ -52,8 +52,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "68ec1b547c39adeb",
@@ -69,14 +68,14 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/Hadoop.md",
+                "file": "doc/hive.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
-                "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
+                "backlinkCollapsed": true,
+                "unlinkedCollapsed": false
               }
             }
           },
@@ -86,28 +85,27 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/Hadoop.md"
+                "file": "doc/hive.md"
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
     "width": 300
   },
-  "active": "e03070ccb4a3332a",
+  "active": "9e8502e876b8f725",
   "lastOpenFiles": [
+    "doc/hive.md",
+    "blog/2019/RMI.md",
+    "doc/flink.md",
     "doc/Hadoop.md",
-    "doc/redis.md",
-    "doc/ReadingNotes.md",
-    "doc/linux.md",
-    "doc/Vagrant.md",
-    "linux>od.md",
-    "doc/理财.md",
-    "doc/Untitled.md",
-    "doc/数据结构与算法.md",
-    "doc/机器学习实战.md"
+    "doc/README.md",
+    "doc/android.md",
+    "doc/activiti.md",
+    "doc/ActiveMQ.md",
+    "doc/maven.md",
+    "doc/redis.md"
   ]
 }

@@ -1,5 +1,7 @@
 # Install
 
+==hive不支持java8以上的版本==
+
 ## mac standalone
 
 ```bash
@@ -14,7 +16,7 @@ brew install hadoop
 
 ```bash
 # 放开并设置
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-1.8.jdk/Contents/Home"
 export HADOOP_OPTS="-Djava.net.preferIPv4Stack=true -Dsun.security.krb5.debug=true -Dsun.security.spnego.debug"
 ```
 
@@ -161,7 +163,7 @@ ssh-copy-id node01
 推荐使用手工方式安装jdk
 
 ```bash
-yum install -y java-11-openjdk.x86_64   # 安装JDK
+yum install -y java-8-openjdk.x86_64   # 安装JDK hive 不支持11
 alternatives --config java  # 配置当前使用的jdk
 
 # /etc/bashrc
@@ -198,6 +200,7 @@ hadoop/etc/hadoop/
 
 ```bash
 export JAVA_HOME=$(alternatives --display java | grep current | sed 's/ link currently points to //' | sed 's|/bin/java||'
+# export JAVA_HOME=/opt/jdk1.8
 ```
 
 #### core-site.xml
