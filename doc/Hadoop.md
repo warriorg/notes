@@ -717,7 +717,7 @@ Usage: hdfs dfsadmin [-safemode enter | leave | get | wait]
 
 ##  NameNode和SecondaryNameNode功能剖析
 
-##### 1. namenode与secondaryName解析
+#### 1. namenode与secondaryName解析
 
 - NameNode主要负责集群当中的元数据信息管理，而且元数据信息需要经常随机访问，因为元数据信息必须高效的检索
   - 元数据信息保存在哪里能够==快速检索==呢？
@@ -767,7 +767,7 @@ Usage: hdfs dfsadmin [-safemode enter | leave | get | wait]
 | dfs.namenode.checkpoint.txns         | 1000000         | The Secondary NameNode or CheckpointNode will create a checkpoint of the namespace every 'dfs.namenode.checkpoint.txns' transactions, regardless of whether 'dfs.namenode.checkpoint.period' has expired. |
 | dfs.namenode.checkpoint.check.period | 60(1分钟)       | The SecondaryNameNode and CheckpointNode will poll the NameNode every 'dfs.namenode.checkpoint.check.period' seconds to query the number of uncheckpointed transactions. |
 
-##### 2. FSImage与edits详解
+#### 2. FSImage与edits详解
 
 - 所有的元数据信息都保存在了FsImage与Eidts文件当中，这两个文件就记录了所有的数据的元数据信息，元数据信息的保存目录配置在了hdfs-site.xml当中
 
@@ -798,7 +798,7 @@ Usage: hdfs dfsadmin [-safemode enter | leave | get | wait]
 
   fsimage内容包含了namenode管理下的所有datanode中文件及文件block及block所在的datanode的元数据信息。随着edits内容增大，就需要在一定时间点和fsimage合并。
 
-##### 3. FSimage文件当中的文件信息查看
+#### 3. FSimage文件当中的文件信息查看
 
 - [官方查看文档](https://hadoop.apache.org/docs/r3.1.4/hadoop-project-dist/hadoop-hdfs/HdfsImageViewer.html)
 
@@ -810,7 +810,7 @@ hdfs oiv    #查看帮助信息
 hdfs oiv -i fsimage_0000000000000000864 -p XML -o /home/hadoop/fsimage1.xml
 ```
 
-##### 4. edits当中的文件信息查看
+#### 4. edits当中的文件信息查看
 
 - [官方查看文档](https://hadoop.apache.org/docs/r3.1.4/hadoop-project-dist/hadoop-hdfs/HdfsEditsViewer.html)
 
@@ -824,7 +824,7 @@ hdfs oev -i edits_0000000000000000865-0000000000000000866 -o /home/hadoop/myedit
 
 
 
-##### 5. namenode元数据信息多目录配置
+#### 5. namenode元数据信息多目录配置
 
 - 为了保证元数据的安全性
 
@@ -841,6 +841,12 @@ hdfs oev -i edits_0000000000000000865-0000000000000000866 -o /home/hadoop/myedit
    <value>file:///home/hadoop/namenode,file:///path/to/another/</value>
 </property>
 ```
+
+
+
+## datanode 工作机制以及数据存储
+
+
 
 
 
