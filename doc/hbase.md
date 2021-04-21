@@ -1,8 +1,4 @@
-# HBASE
-
-## 架构
-
-## 安装
+## Install
 
 ### 单机安装
 
@@ -12,6 +8,141 @@ brew services start hbase
 ```
 
 打开http://localhost:16010查看Hbase的Web UI
+
+### Cluster
+
+## Requirements
+
+* [Hadoop](./Hadoop.md#Install)
+* [Zookeeper](./Zookeeper.md#Install)
+
+#### hbase-env.sh
+
+```bash
+export JAVA_HOME=/opt/jdk1.8/
+export HBASE_MANAGES_ZK=false
+```
+
+#### hbase-site.xml
+
+```xml
+<configuration>
+ 		<!-- 指定hbase在HDFS上存储的路径 -->
+    <property>
+      <name>hbase.rootdir</name>
+      <value>hdfs://node01:8020/hbase</value>
+    </property>
+    <!-- 指定hbase是否分布式运行 -->
+    <property>
+      <name>hbase.cluster.distributed</name>
+      <value>true</value>
+    </property>
+    <!-- 指定zookeeper的地址，多个用“,”分割 -->
+    <property>
+      <name>hbase.zookeeper.quorum</name>
+      <value>node01:2181,node02:2181,node03:2181</value>
+    </property>
+    <!--指定hbase管理页面-->
+    <property>
+      <name>hbase.master.info.port</name>
+      <value>60010</value>
+    </property>
+    <!-- 在分布式的情况下一定要设置，不然容易出现Hmaster起不来的情况 -->
+    <property>
+      <name>hbase.unsafe.stream.capability.enforce</name>
+      <value>false</value>
+    </property>
+</configuration>
+```
+
+#### regionservers
+
+指定HBase集群的从节点；原内容清空，添加如下三行
+
+```bash
+node01
+node02
+node03
+```
+
+#### back-masters
+
+创建back-masters配置文件，里边包含备份HMaster节点的主机名，每个机器独占一行，实现HMaster的高可用
+
+将node02作为备份的HMaster节点，内容如下
+
+```bash
+node02
+```
+
+#### 建立软连接
+
+```bash
+ln -s /opt/hadoop/etc/hadoop/core-site.xml /opt/hbase/conf/core-site.xml
+ln -s /opt/hadoop/etc/hadoop/hdfs-site.xml /opt/hbase/conf/hdfs-site.xml
+```
+
+#### 配置环境变量
+
+/etc/bashrc
+
+```bash
+export HBASE_HOME=/opt/hbase
+export PATH=$PATH:$HBASE_HOME/bin
+```
+
+#### 启动
+
+第一台机器==node01==（HBase主节点）执行以下命令，启动HBase集群
+
+```bash
+start-hbase.sh
+```
+
+启动完后，jps查看HBase相关进程
+
+node01、node02上有进程HMaster、HRegionServer
+
+node03上有进程HRegionServer
+
+##### 单节点启动
+
+```bash
+#HMaster节点上启动HMaster命令
+hbase-daemon.sh start master
+
+#启动HRegionServer命令
+hbase-daemon.sh start regionserver
+```
+
+
+
+####  停止
+
+node01上执行
+
+```bash
+stop-hbase.sh
+```
+
+##### 关闭集群的顺序
+
+* 关闭hbase集群
+
+- 关闭ZooKeeper集群
+- 关闭Hadoop集群
+
+
+
+#### 访问
+
+http://node01:60010
+
+
+
+
+
+
 
 
 ## 操作
