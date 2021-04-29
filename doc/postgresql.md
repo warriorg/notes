@@ -44,7 +44,7 @@ systemctl enable postgresql-13
 
 # 新建数据库
 createdb mydb
-psql dc-entry
+psql mydb
 select version();
 
 # 删除数据库
