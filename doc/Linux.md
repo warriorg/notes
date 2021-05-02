@@ -915,7 +915,8 @@ dd if=/dev/zero bs=4M count=1024 of=/swapfile     # 使用文件制作交换分�
 ### hostname
 
 ```bash
-hostname [new-host-name]     # 设置主机名称
+hostname [new-host-name]     				# 设置主机名称
+hostnamectl set-hostname hostname 			# centos 7
 ```
 
 #### <span id="crontab">crontab 定时</span>
@@ -2333,7 +2334,6 @@ PermitRootLogin no 	#root 登录禁止
 
 ### 反向tunnel
 1. 在被控端运行		
-	
 ```bash
 ssh -f -N -R 10000:localhost:22 username@主控端ip
 #在主控端10000端口和被控端的22端口上建立了一个通道
@@ -2513,11 +2513,6 @@ setenforce 1 			#设置SELinux 成为enforcing模式
 ```base
 SELINUX=enforcing	#开启
 SELINUX=disabled    #关闭
-```
-
-### 主机名
-```bash
-hostnamectl set-hostname hostname # centos 7
 ```
 
 ### DNS

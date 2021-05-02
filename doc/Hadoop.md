@@ -192,6 +192,35 @@ yum -y install openssl-devel
 
 ![image-20210406101513486](./assets/images/image-20210406101513486.png)
 
+#### 手动安装openssl
+
+> hadoop 不支持最新的openssl，在debian下会有兼容问题
+
+```bash
+wget https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz
+tar -zxvf openssl-1.0.2u.tar.gz
+cd openssl-1.0.2u
+./config shared --prefix=/usr/local/openssl --openssldir=/usr/lib/openssl
+make && make install
+vim /etc/profile
+export PATH=$PATH:/usr/local/openssl/bin
+ln -s /usr/local/openssl/lib/libcrypto.so.1.0.0 /usr/lib/x86_64-linux-gnu/libcrypto.so
+
+```
+
+#### 安装snappy
+
+http://pkgs.fedoraproject.org/repo/pkgs/snappy/
+
+```bash
+unzip snappy-1.1.3
+cd snappy-1.1.3
+./configure --prefix=/usr/local/snappy
+make
+make install
+ln -s /usr/local/snappy/lib/libsnappy.so.1.3.0 /lib/libsnappy.so.1 
+```
+
 ### 第三步：修改配置文件
 
 hadoop/etc/hadoop/
