@@ -78,8 +78,11 @@ mv hive-log4j2.properties.template hive-log4j2.properties
 
 ```bash
 cp mysql-connector-java-5.1.49-bin.jar $HIVE_HOME/lib
-mv log4j-slf4j-impl-2.10.0.jar log4j-slf4j-impl-2.10.0.jar.bak
 
+# 根hadoop下的冲突
+mv log4j-slf4j-impl-2.10.0.jar log4j-slf4j-impl-2.10.0.jar.bak
+mv guava-19.0.jar guava-19.0.jar.bak
+cp /opt/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar /opt/hive/lib
 ```
 
  ### 初始化元数据库

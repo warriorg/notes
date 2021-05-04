@@ -539,11 +539,11 @@ YARN_NODEMANAGER_USER=root
 
 ### 第八步：验证集群是否搭建成功
 
-- hdfs http://192.168.0.94:9870/
+- hdfs http://node01:9870/
 
-- yarnhttp://192.168.0.94:8088
+- yarnhttp://node01:8088
 
-- jobhistory http://192.168.0.94:19888
+- jobhistory http://node01:19888
 
 
 

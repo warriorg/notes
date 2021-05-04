@@ -72,6 +72,10 @@ set global validate_password_policy=0;
 > select host, user from user;
 > flush privileges;
 # 授权所用IP访问
+# mysql 5.7
+# SELECT user,authentication_string,plugin,host FROM mysql.user;
+# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Current-Root-Password';
+# FLUSH PRIVILEGES;
 > GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'pass' WITH GRANT OPTION;
 > flush privileges;
 ```
