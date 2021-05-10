@@ -1,7 +1,13 @@
 #!/bin/bash
 
-params=$@
-for (( i=1 ; i <= 3 ; i = $i + 1 )) ; do
-    echo ============= node0$i $params =============
-    ssh node0$i "source /etc/profile;$params"
+pcount=$#
+if ((pcount==0)); then
+	echo no args;
+	exit;
+fi
+
+
+for ((host=1; host<4; host++)); do
+	echo ------------------node0$host-------------
+	ssh root@node0$host "source /etc/profile;$@"
 done
