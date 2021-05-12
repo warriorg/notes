@@ -9,3 +9,7 @@ target/
 *.class
 bin/
 *.swp
+.settings
+.metals
+.classpath
+.project
