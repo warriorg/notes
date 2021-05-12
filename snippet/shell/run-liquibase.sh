@@ -48,16 +48,16 @@ db_pwd=""
 if [ $db_type = "oracle" ]
 then
     db_driver="oracle.jdbc.OracleDriver"
-    db_url="jdbc:oracle:thin:@192.168.1.232:1521:ORCL"
-    db_user="gwstd"
+    db_url="jdbc:oracle:thin:@192.168.1.2:1521:ORCL"
+    db_user="std"
     db_pwd="dbwork1"
 fi
 
 if [ $db_type = "postgresql" ]
 then
     db_driver="org.postgresql.Driver"
-    db_url="jdbc:postgresql://192.168.1.232:5432/gwstd?useSSL=false"
-    db_user="gwstd"
+    db_url="jdbc:postgresql://192.168.1.3:5432/wstd?useSSL=false"
+    db_user="std"
     db_pwd="dbwork1"
 fi
 
