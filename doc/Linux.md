@@ -1151,7 +1151,41 @@ net.ipv4.ip_local_port_range = 2048 65000
 fs.file-max = 102400
 ```
 
+### strace
 
+strace是一个在类Unix操作系统如Linux上做debugging和trouble shooting的超级好用的工具。它可以捕获和记录进程的所有系统调用，以及这个进程接收的所有信号。
+
+```bash
+# 追踪命令的系统调用
+strace df -h
+# 根据进程PID进行追踪
+strace -p 31890
+# 得到进程的汇总信息
+strace -c 
+-p 31890
+
+# 打印指令指针
+strace -i df -h
+# 显示每一次调用的时间
+strace -t df -h
+# 显示系统调用的耗时
+strace -T df -h
+# 只追踪特定的系统调用
+strace -e trace=write df -h
+# 针对进程管理的追踪:
+strace -q -e trace=process df -h	
+# 对文件系统调用的追踪
+strace -q  -e trace=file df -h
+# 针对内存的追踪
+strace -q -e trace=memory df -h
+# 针对网络和信号的追踪
+strace -e trace=network df -h
+strace -e trace=signal df -h
+# 将追踪结果写入到文件
+strace -o df_debug.txt df -h
+# 显示strace的debug信息
+-d # 可以显示strace的debug信息。
+```
 
 ## 用户管理
 
