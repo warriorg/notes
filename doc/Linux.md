@@ -1317,6 +1317,14 @@ usermod -G groupname username  		#已有的用户增加工作组
 
 
 
+### chsh
+
+change login shell
+
+![image-20210524161702215](assets/images/image-20210524161702215.png)
+
+
+
 ## 文件处理
 
 ### 文件权限
