@@ -122,6 +122,8 @@ Java线程可能的状态：
        public void run() {
            System.out.println("Hello from a thread!");
        }
+     
+      	public static void main(String[] args) {
            (new HelloThread()).start();
        }
    }
