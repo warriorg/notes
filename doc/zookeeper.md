@@ -330,6 +330,18 @@ delete /brokers  																# 删除节点
 rmr    /brokers  																# 删除节点及子节点
 ```
 
+### 问题
+
+#### Cannot assign requested address
+
+在`zoo.cfg`增加配置，然后重启
+
+```bash
+quorumListenOnAllIPs=true
+```
+
+
+
 ### Session
 
 Session 是指客户端会话。ZooKeeper 对外的服务端口默认是 2181，客户端启动时，首 先会与 zk 服务器建立一个 TCP 长连接，从第一次连接建立开始，客户端会话的生命周期也 开始了。通过这个长连接，客户端能够通过心跳检测保持与服务器的有效会话，也能够向 ZooKeeper 服务器发送请求并接受响应，同时还能通过该连接接收来自服务器的 Watcher 事 件通知。 
@@ -348,3 +360,8 @@ zk 通过 Watcher 机制实现了发布订阅模式。zk 提供了分布式数�
 
 ACL 全称为 Access Control List(访问控制列表)，用于控制资源的访问权限，是 zk 数据安全的保障。zk 利用 ACL 策略控制 znode 节点的访问权限，如节点数据读写、节点创建、节点删除、读取子节点列表、设置节点权限等。
 
+
+
+## 参考
+
+https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
