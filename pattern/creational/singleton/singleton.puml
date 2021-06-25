@@ -1,0 +1,14 @@
+@startuml
+
+class Singleton {
+	- INSTANCE : Singleton {static}
+    - Singleton()
+	+ getInstance() : Singleton {static}
+}
+
+class StaticSingleton {
+	- StaticSingletonHolder()
+    + getInstance() : StaticSingleton {static}
+}	
+
+@enduml
