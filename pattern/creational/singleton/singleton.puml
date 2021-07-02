@@ -3,6 +3,7 @@
 class Singleton {
 	- INSTANCE : Singleton {static}
     - Singleton()
+
 	+ getInstance() : Singleton {static}
 }
 
