@@ -1,5 +1,3 @@
-
-
 # 介绍
 
 ## 集群架构
@@ -54,12 +52,9 @@ OpenStack是一个云操作系统，通过数据中心可控制大型的计算�
 
 ## 容器编排
 
+# INSTALL
 
-
-
-# 开始使用Kubernetes 和 Docker
-
-## Install
+## 学习环境
 
 
 
@@ -305,6 +300,201 @@ ENTRYPOINT ["node", "app.js"] # 运行node命令
 ##### 镜像分层
 
 ![image-20200512190920937](assets/images/image-20200512190920937.png)
+
+## 集群
+
+### 安装容器运行时
+
+1. 安装和配置的先决条件	
+
+   ```bash
+   cat <<EOF | tee /etc/modules-load.d/containerd.conf
+   overlay
+   br_netfilter
+   EOF
+   
+   modprobe overlay
+   modprobe br_netfilter
+   
+   # 设置必需的 sysctl 参数，这些参数在重新启动后仍然存在。
+   cat <<EOF | tee /etc/sysctl.d/99-kubernetes-cri.conf
+   net.bridge.bridge-nf-call-iptables  = 1
+   net.ipv4.ip_forward                 = 1
+   net.bridge.bridge-nf-call-ip6tables = 1
+   EOF
+   
+   # 应用 sysctl 参数而无需重新启动
+   sudo sysctl --system
+   ```
+
+2. 从官方Docker仓库安装 `containerd.io` 软件包 [安装 Docker 引擎](./docker.md#INSTALL)
+
+3. 配置 containerd
+
+   ```bash
+   mkdir -p /etc/containerd
+   containerd config default | tee /etc/containerd/config.toml
+   ```
+
+4. 重新启动 containerd
+
+   ```bash
+   systemctl restart containerd
+   ```
+
+
+### kubeadm
+
+#### 确保每个节点上 MAC 地址和 product_uuid 的唯一性 
+
+#### 允许 iptables 检查桥接流量
+
+```bash
+cat <<EOF | tee /etc/modules-load.d/k8s.conf
+br_netfilter
+EOF
+
+cat <<EOF | tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sysctl --system
+```
+
+#### 检查所需端口
+
+##### 控制平面节点
+
+| 协议 | 方向 | 端口范围  | 作用                    | 使用者                       |
+| ---- | ---- | --------- | ----------------------- | ---------------------------- |
+| TCP  | 入站 | 6443      | Kubernetes API 服务器   | 所有组件                     |
+| TCP  | 入站 | 2379-2380 | etcd 服务器客户端 API   | kube-apiserver, etcd         |
+| TCP  | 入站 | 10250     | Kubelet API             | kubelet 自身、控制平面组件   |
+| TCP  | 入站 | 10251     | kube-scheduler          | kube-scheduler 自身          |
+| TCP  | 入站 | 10252     | kube-controller-manager | kube-controller-manager 自身 |
+
+##### 工作节点
+
+| 协议 | 方向 | 端口范围    | 作用           | 使用者                     |
+| ---- | ---- | ----------- | -------------- | -------------------------- |
+| TCP  | 入站 | 10250       | Kubelet API    | kubelet 自身、控制平面组件 |
+| TCP  | 入站 | 30000-32767 | NodePort 服务† | 所有组件                   |
+
+#### 安装 kubeadm、kubelet 和 kubectl
+
+- `kubeadm`：用来初始化集群的指令。
+- `kubelet`：在集群中的每个节点上用来启动 Pod 和容器等。
+- `kubectl`：用来与集群通信的命令行工具。
+
+```bash
+apt-get update
+
+curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+
+apt-get update
+apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl
+```
+
+#### 创建集群
+
+为了性能考虑，k8s 需要关闭 swap 功能，然后重启主机。在 `/etc/fstab` 中找到带有 `swap` 的那一行，注释掉。
+
+```bash
+# 关闭swap分区【虚拟内存】并且永久关闭虚拟内存
+swapoff -a && sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+```
+
+初始化集群,如果要再次运行 `kubeadm init`，你必须首先卸载集群
+```bash
+# 拉取的时候指定image的仓库
+kubeadm init --image-repository='registry.aliyuncs.com/google_containers'
+```
+
+如果出事化的时候出错,可以使用下面的手工方式
+
+> 手工拉去image
+>
+> ```bash
+> # 查看kubeadm需要镜像
+> kubeadm config images list
+> # 查看镜像
+> docker images
+> # 手工拉去image
+> docker pull coredns/coredns:1.8.0
+> # 打标签，修改名称
+> docker tag coredns/coredns:1.8.0 k8s.gcr.io/coredns:v1.8.0
+> # 删除多余镜像
+> docker rmi coredns/coredns:1.8.0
+> # 重复处理所有的images
+> # 初始化
+> kubeadm init
+> ```
+
+要使非 root 用户可以运行 kubectl，请运行以下命令， 它们也是 `kubeadm init` 输出的一部分：
+
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+或者，如果你是 `root` 用户，则可以运行：
+
+```bash
+export KUBECONFIG=/etc/kubernetes/admin.conf
+```
+
+##### 加入节点
+
+记录 `kubeadm init` 输出的 `kubeadm join` 命令。 你需要此命令将节点加入集群
+
+```bash
+kubeadm join 10.10.10.21:6443 --token j5sl2p.xpewlidks1bd6g1g \
+        --discovery-token-ca-cert-hash sha256:9b4b6b68ae8c4d1080f47758061e157a7cda4177d910b212de00edf3649a81aa
+
+# 如果遗忘这个值
+# 查看有效的token, 默认24小时有效
+kubeadm token list 
+# 获取ca证书sha256编码hash值
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+        
+# 如果这个值失效
+kubeadm token create --print-join-command
+```
+
+##### 删除节点
+
+```bash
+kubectl drain <node name> --delete-local-data --force --ignore-daemonsets
+```
+
+https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+
+##### 网络附加组件
+
+```bash
+# 部署flannel网络插件 --- 只需要在主节点执行
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+
+
+
+##### 错误解决
+
+```bash
+# 查看nodes节点
+kubectl get nodes
+# 查看node详情
+kubectl describe nodes k8s01
+
+# 检查所有pods部署情况
+kubectl get pods -n kube-system 
+# 查看某个pod具体的原因
+kubectl describe pod kube-flannel-ds-qx282 -n kube-system
+```
 
 
 

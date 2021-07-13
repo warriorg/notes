@@ -39,8 +39,32 @@ clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实�
 
 
 
+## INSTALL
 
-## 安装
+
+
+### Debian
+
+```bash
+apt-get update
+apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+apt-get update
+apt-get install -y docker-ce docker-ce-cli containerd.io
+```
+
+#### 参考
+
+https://docs.docker.com/engine/install/debian/
+
+
+
+
 
 ### [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
 
@@ -60,8 +84,6 @@ $ sudo systemctl restart docker
 ```
 
 然后使用`docker info`检查是否生效
-
-
 
 
 
