@@ -431,9 +431,24 @@ kubeadm init --image-repository='registry.aliyuncs.com/google_containers'
 > # 重复处理所有的images
 > # 初始化
 > kubeadm init
+> 
+> # 例如
+> docker pull registry.aliyuncs.com/google_containers/kube-proxy:v1.21.2
+> docker tag registry.aliyuncs.com/google_containers/kube-proxy:v1.21.2  k8s.gcr.io/kube-proxy:v1.21.2
+> docker rmi registry.aliyuncs.com/google_containers/kube-proxy:v1.21.2
+> 
+> 
+> docker pull registry.aliyuncs.com/google_containers/pause:3.4.1
+> docker tag registry.aliyuncs.com/google_containers/pause:3.4.1  k8s.gcr.io/pause:3.4.1
+> docker rmi registry.aliyuncs.com/google_containers/pause:3.4.1 
 > ```
 
 要使非 root 用户可以运行 kubectl，请运行以下命令， 它们也是 `kubeadm init` 输出的一部分：
+
+> ```
+> 如果不设置,会出现如下的错误
+> The connection to the server localhost:8080 was refused - did you specify the right host or port?
+> ```
 
 ```bash
 mkdir -p $HOME/.kube
@@ -480,9 +495,36 @@ https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/create-
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
+安装完后,发现kube-flannel相关的pod启动报错,关键信息如下`Error registering network: failed to acquire lease: node "k8s01" pod cidr not assigned`
+
+修改集群配置 configmap, 在 `networking` 下 增加 `podSubnet: 10.244.0.0/16`
+
+```bash
+kubectl edit cm kubeadm-config -n kube-system
+```
+
+![image-20210713173917053](assets/images/image-20210713173917053.png)
+
+修改 controller-manager 静态 pod 的启动参数，增加 --allocate-node-cidrs=true --cluster-cidr=10.244.0.0/16
+
+```bash
+vim /etc/kubernetes/manifests/kube-controller-manager.yaml 
+```
+
+![image-20210713174338224](assets/images/image-20210713174338224.png)
+
+```bash
+# 检查配置是否生效
+kubectl cluster-info dump | grep -m 1 cluster-cidr
+```
+
+如果更新较慢，可以手动删除相关 pod，如 `kubectl delete pod -n kube-system kube-flannel-ds-***`
 
 
-##### 错误解决
+
+
+
+##### 查看部署
 
 ```bash
 # 查看nodes节点
@@ -494,9 +536,17 @@ kubectl describe nodes k8s01
 kubectl get pods -n kube-system 
 # 查看某个pod具体的原因
 kubectl describe pod kube-flannel-ds-qx282 -n kube-system
+
+# 查看pod日志
+kubectl logs kube-flannel-ds-vxsq2 -n kube-system
+
+# 查询工作空间中pod容器的详细信息,输出节点信息
+kubectl get pod -n kube-system -o wide
 ```
 
+完成图如下
 
+![image-20210713210119576](assets/images/image-20210713210119576.png)
 
 
 
