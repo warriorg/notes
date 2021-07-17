@@ -550,6 +550,20 @@ kubectl get pod -n kube-system -o wide
 
 
 
+### ingress-nginx
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+
+docker pull registry.aliyuncs.com/google_containers/controller:v0.46.0
+docker tag registry.aliyuncs.com/google_containers/pause:3.4.1  k8s.gcr.io/ingress-nginx/controller:v0.46.0
+docker rmi registry.aliyuncs.com/google_containers/pause:3.4.1 
+```
+
+
+
+
+
 # 概念
 
 ## Kubernetes 对象
