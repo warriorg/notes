@@ -18,7 +18,36 @@ FLUSH PRIVILEGES;
 # MySQL 8.0.4开始，MySQL的密码认证插件由“mysql_native_password”改为“caching_sha2_password”
 ```
 
+### Ubuntu
+
+[APT install](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)
+
+```bash
+wget https://repo.mysql.com//mysql-apt-config_0.8.18-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.18-1_all.deb
+sudo apt-get update
+sudo apt-get install mysql-server
+systemctl status mysql
+
+sudo mysql_secure_installation
+
+sudo mysql
+
+# mysql cli执行
+UPDATE mysql.user SET 
+ plugin = 'mysql_native_password',
+ Host = '%',
+ authentication_string = CONCAT('*', UPPER(SHA1(UNHEX(SHA1('12345678'))))) 
+WHERE User = 'root';
+FLUSH PRIVILEGES;
+```
+
+
+
+
+
 ### Centos 7 安装
+
 [Yum 安装](https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/#repo-qg-yum-installing)
 /etc/yum.repos.d/mysql-community.repo
 

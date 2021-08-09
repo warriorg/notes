@@ -552,12 +552,13 @@ kubectl get pod -n kube-system -o wide
 
 ### ingress-nginx
 
-```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+```bash
+wget kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.48.1/deploy/static/provider/cloud/deploy.yaml
 
-docker pull registry.aliyuncs.com/google_containers/controller:v0.46.0
-docker tag registry.aliyuncs.com/google_containers/pause:3.4.1  k8s.gcr.io/ingress-nginx/controller:v0.46.0
-docker rmi registry.aliyuncs.com/google_containers/pause:3.4.1 
+kubectl apply -f deploy.ymal
+
+# ingress-nginx/controller 这个包无法下载的时候,可以去docker hub搜索别人下载好,推送上去的
+# 然后手动拉去,打tag使用
 ```
 
 
@@ -593,8 +594,6 @@ docker rmi registry.aliyuncs.com/google_containers/pause:3.4.1
 ## Pod
 
 *Pod* 是 Kubernetes 应用程序的基本执行单元，即它是 Kubernetes 对象模型中创建或部署的最小和最简单的单元。Pod 表示在集群上运行的进程。
-
-
 
 
 
@@ -736,6 +735,89 @@ cat pod.json | kubectl apply -f -
 
 
 
+### get
+
+查看和查找资源 
+
+```bash
+# get 命令的基本输出
+kubectl get services                          # 列出当前命名空间下的所有 services
+kubectl get pods --all-namespaces             # 列出所有命名空间下的全部的 Pods
+kubectl get pods -o wide                      # 列出当前命名空间下的全部 Pods，并显示更详细的信息
+kubectl get deployment my-dep                 # 列出某个特定的 Deployment
+kubectl get pods                              # 列出当前命名空间下的全部 Pods
+kubectl get pod my-pod -o yaml                # 获取一个 pod 的 YAML
+
+# describe 命令的详细输出
+kubectl describe nodes my-node
+kubectl describe pods my-pod
+
+# 列出当前名字空间下所有 Services，按名称排序
+kubectl get services --sort-by=.metadata.name
+
+# 列出 Pods，按重启次数排序
+kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'
+
+# 列举所有 PV 持久卷，按容量排序
+kubectl get pv --sort-by=.spec.capacity.storage
+
+# 获取包含 app=cassandra 标签的所有 Pods 的 version 标签
+kubectl get pods --selector=app=cassandra -o \
+  jsonpath='{.items[*].metadata.labels.version}'
+
+# 检索带有 “.” 键值，例： 'ca.crt'
+kubectl get configmap myconfig \
+  -o jsonpath='{.data.ca\.crt}'
+
+# 获取所有工作节点（使用选择器以排除标签名称为 'node-role.kubernetes.io/master' 的结果）
+kubectl get node --selector='!node-role.kubernetes.io/master'
+
+# 获取当前命名空间中正在运行的 Pods
+kubectl get pods --field-selector=status.phase=Running
+
+# 获取全部节点的 ExternalIP 地址
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'
+
+# 列出属于某个特定 RC 的 Pods 的名称
+# 在转换对于 jsonpath 过于复杂的场合，"jq" 命令很有用；可以在 https://stedolan.github.io/jq/ 找到它。
+sel=${$(kubectl get rc my-rc --output=json | jq -j '.spec.selector | to_entries | .[] | "\(.key)=\(.value),"')%?}
+echo $(kubectl get pods --selector=$sel --output=jsonpath={.items..metadata.name})
+
+# 显示所有 Pods 的标签（或任何其他支持标签的 Kubernetes 对象）
+kubectl get pods --show-labels
+
+# 检查哪些节点处于就绪状态
+JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' \
+ && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"
+
+# 不使用外部工具来输出解码后的 Secret
+kubectl get secret my-secret -o go-template='{{range $k,$v := .data}}{{"### "}}{{$k}}{{"\n"}}{{$v|base64decode}}{{"\n\n"}}{{end}}'
+
+# 列出被一个 Pod 使用的全部 Secret
+kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq
+
+# 列举所有 Pods 中初始化容器的容器 ID（containerID）
+# 可用于在清理已停止的容器时避免删除初始化容器
+kubectl get pods --all-namespaces -o jsonpath='{range .items[*].status.initContainerStatuses[*]}{.containerID}{"\n"}{end}' | cut -d/ -f3
+
+# 列出事件（Events），按时间戳排序
+kubectl get events --sort-by=.metadata.creationTimestamp
+
+# 比较当前的集群状态和假定某清单被应用之后的集群状态
+kubectl diff -f ./my-manifest.yaml
+
+# 生成一个句点分隔的树，其中包含为节点返回的所有键
+# 在复杂的嵌套JSON结构中定位键时非常有用
+kubectl get nodes -o json | jq -c 'path(..)|[.[]|tostring]|join(".")'
+
+# 生成一个句点分隔的树，其中包含为pod等返回的所有键
+kubectl get pods -o json | jq -c 'path(..)|[.[]|tostring]|join(".")'
+
+# 假设你的 Pods 有默认的容器和默认的名字空间，并且支持 'env' 命令，可以使用以下脚本为所有 Pods 生成 ENV 变量。
+# 该脚本也可用于在所有的 Pods 里运行任何受支持的命令，而不仅仅是 'env'。 
+for pod in $(kubectl get po --output=jsonpath={.items..metadata.name}); do echo $pod && kubectl exec -it $pod env; done
+```
+
 
 
 ### run
@@ -816,5 +898,16 @@ kubectl run pi --image=perl --restart=OnFailure -- perl -Mbignum=bpi -wle 'print
   -t, --tty[=false]: Allocated a TTY for each container in the pod.
 ```
 
-#### 
+### scale 
+
+对资源进行伸缩
+
+```bash
+kubectl scale --replicas=3 rs/foo            		# 将名为 'foo' 的副本集伸缩到 3 副本
+kubectl scale --replicas=3 -f foo.yaml          # 将在 "foo.yaml" 中的特定资源伸缩到 3 个副本
+kubectl scale --current-replicas=2 --replicas=3 deployment/mysql  # 如果名为 mysql 的 Deployment 的副本当前是 2，那么将它伸缩到 3
+kubectl scale --replicas=5 rc/foo rc/bar rc/baz # 伸缩多个副本控制器
+```
+
+ 
 

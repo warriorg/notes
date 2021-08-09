@@ -75,7 +75,7 @@ logback 配置
     }
 ```
 
-#安装 elasticsearch
+# 安装 elasticsearch
 
 `docker pull elasticsearch`
 
@@ -84,7 +84,7 @@ logback 配置
 >测试  http://127.0.0.1:9200
 
 
-#安装 kibana
+# 安装 kibana
 
 `docker pull kibana`
 `docker run --rm -it --link some-elasticsearch:elasticsearch -p 5601:5601 kibana`

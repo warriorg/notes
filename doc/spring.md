@@ -207,8 +207,8 @@ Exchange 的类型
 
 * afterCompletion(..): 请求完成之后
 
-## AOP(Aspect-Oriented Programming)
-#### AOP concepts
+# AOP(Aspect-Oriented Programming)
+## AOP concepts
 * *Aspect*： 指的是横切多个类的一种模块。在Spring中，切面用的就是普通的类（xml或者带@Aspect注解配置）
 * *Joint point*：连接点,表示要横切的方法。
 * *Advice*：通知，想要的功能，例如安全，事物，日志等。先定义好，然后在想用的地方用一下
@@ -218,25 +218,25 @@ Exchange 的类型
 * *AOP proxy*：AOP框架实现切面，用JDK代理或者CGLIB代理
 * *Weaving*：织入， 将切面与其他应用程序类型或对象链接以创建advised对象。 在编译时（例如使用AspectJ编译器），加载时,或在运行时完成。 与其他纯Java AOP框架一样，Spring AOP在运行时执行编织。
 
-##### advice类型
+### advice类型
 * *Before advice*：连接点运行之前通知
 * *After returning advice*：在连接点正常完成之后执行的通知，例如，方法返回时没有抛出异常
 * *After throwing advice*：方法抛出异常而退出，则执行通知。
 * *After (finally) advice*：无论连接点以何种方式退出(正常或异常返回)，都要执行通知。
 * *Around advice*：围绕连接点方法调用的通知，最给力的方法，Around通知可以在方法调用前后执行自定义行为，它还负责选择是继续到连接点，还是通过返回自己的返回值或抛出异常来缩短建议的方法执行。
 
-#### SpringAOP的能力和目标
+## SpringAOP的能力和目标
 
 Spring AOP目前只支持方法执行连接点(建议在Spring bean上执行方法)。没有实现字段拦截。
 
 Spring AOP 不同于其他AOP框架（例如AspectJ），目标不是提供最完整的AOP实现，而是提供AOP实现与Spring IoC之间的紧密集成，以帮助解决企业应用程序中的常见问题。
 
-#### AOP Proxies
+## AOP Proxies
 Spring AOP默认为AOP代理使用标准J2SE动态代理。
 
-### @AspectJ support
+## @AspectJ support
 通过类注解@AspectJ来声明一个切面， AspectJ 5 引入了 @AspectJ 风格，Spring 2.0使用AspectJ提供的用于切入点解析和匹配的库，与AspectJ 5相同的注解。AOP运行时仍然是纯粹的Spring AOP，并且不依赖于AspectJ编译器或weaver。
-#### Enabling @AspectJ Support
+## Enabling @AspectJ Support
 java代码配置方式开启
 ```java
 @Configuration
@@ -264,7 +264,7 @@ public class NotVeryUsefulAspect {
 <bean id="myAspect" class="me.warriorg.spring.aop.example.NotVeryUsefulAspect"></bean>
 ```
 
-####  Declaring a pointcut
+##  Declaring a pointcut
 
 切入点表达式由@Pointcut注解实现
 
@@ -298,25 +298,25 @@ bean(tradeService) //在名为tradeService的Spring bean上的任何连接点(�
 bean(*Service) //Spring bean上的任何连接点(仅在Spring AOP中执行方法)，其名称与通配符表达式*Service匹配
 ```
 
-#### Declaring advice
+## Declaring advice
 
 建议与切入点表达式相关联，并在切入点匹配的方法执行之前，之后或周围运行。 切入点表达式可以是对命名切入点的简单引用，也可以是在适当位置声明的切入点表达式。
 
 
 
-## Spring Boot
+# Spring Boot
 
-### 发布后启动
+## 发布后启动
 ```bash
 # 启动时指定环境变量
 java -jar xxx.jar --spring.profiles.active=prod
 ```
-#### Linux start 脚本
+### Linux start 脚本
 ```bash
 nohup java -jar frameworkapi.jar --spring.config.local=E:/app/jg/application-test.yml --spring.profiles.active=test >/dev/null 2>&1 &
 echo $!>pid
 ```
-#### Linux stop 脚本
+### Linux stop 脚本
 ```bash
 kill `cat pid`
 ```
@@ -324,13 +324,13 @@ kill `cat pid`
 
 [Manual](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/)
 
-### Spring Boot Actuator
+## Spring Boot Actuator
 
 [Manual](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready)
 
 使用HTTP或JMX端点来管理和监视应用程序、审计、健康
 
-#### Endpoints
+### Endpoints
 
 * `auditevents` 公开当前应用程序的审计事件信息。
 
@@ -375,7 +375,7 @@ Spring MVC, Spring WebFlux, or Jersey
 * `logfile`
 * `prometheus`
 
-### Spring Security
+## Spring Security
 
 - security.basic.authorize-mode 要使用权限控制模式.
 - security.basic.enabled 是否开启基本的鉴权，默认为true
@@ -425,9 +425,9 @@ Spring MVC, Spring WebFlux, or Jersey
 - security.user.password 默认的用户密码.
 - security.user.role 默认用户的授权角色.
 
-## Spring Cloud 
+# Spring Cloud 
 
-### 版本说明
+## 版本说明
 
 Finchley 与 Spring Boot 2.0.x, 兼容，不支持 Spring Boot 1.5.x. 
 Dalston 和 Edgware 与 Spring Boot 1.5.x, 兼容，不支持 Spring Boot 2.0.x. 
@@ -438,7 +438,7 @@ Angel 是构建在 Spring Boot 1.2.x, 之上，但也兼容 Spring Boot 1.3.x.
 
 
 
-## Spring Microservices IN ACTION
+# Spring Microservices IN ACTION
 
 * YAML （Yet another Markup Language) 
 
@@ -460,35 +460,35 @@ Angel 是构建在 Spring Boot 1.2.x, 之上，但也兼容 Spring Boot 1.3.x.
 * @HystrixCommand 使用Hystrix断路器包装方法
 * @EnableZuulProxy 注册成为 Zuul服务器
 
-### 2
-#### 2.3 用Spring boot 和 Java构建微服务
+## 2
+### 2.3 用Spring boot 和 Java构建微服务
 
 
 
-### 第3章  配置服务器控制配置
+## 第3章  配置服务器控制配置
 * EnableConfigServer 使服务成为Spring Cloud Config 服务
-#### 3.1 管理配置
+### 3.1 管理配置
 1. 分离
 2. 抽象
 3. 集中
 4. 稳定
 
-### 第4章 服务发现
-#### 4.1 我的服务在哪里
+## 第4章 服务发现
+### 4.1 我的服务在哪里
 非云服务的缺点
 * 单点故障
 * 有限的水平可伸缩性
 * 静态管理
 * 复杂
 
-#### 4.2 云中的服务发现
+### 4.2 云中的服务发现
 * 高可用
 * 点对点
 * 负载均衡
 * 有弹性
 * 容错
 
-##### 4.2.1 服务发现架构
+#### 4.2.1 服务发现架构
 * 服务注册
 * 服务地址的客户端查找
 * 信息共享
@@ -500,7 +500,7 @@ Angel 是构建在 Spring Boot 1.2.x, 之上，但也兼容 Spring Boot 1.3.x.
 * Spring Cloud 配置服务可以使用基于文件或基于Git的应用程序撇脂存储库来存储应用程序属性
 * Spring Cloud配置服务允许使用对称加密和非对称加密对敏感属性文件进行加密。
 
-#### 4 .6 
+### 4 .6 
 * 服务发现模式用于抽象服务的物理位置
 * 诸如Eureka这样的服务发现引擎可以在不影响服务客户端的情况下，无缝地向环境中添加和从环境中移除服务实例
 * 通过在进行服务调用的客户端中缓存服务的物理位置，客户端负载均衡可以提供额外的性能和弹性
@@ -512,9 +512,9 @@ Angel 是构建在 Spring Boot 1.2.x, 之上，但也兼容 Spring Boot 1.3.x.
 
 
 
-### 第5章 使用Spring Cloud 和 Netflix Hystrix 的客户端弹性模式
+## 第5章 使用Spring Cloud 和 Netflix Hystrix 的客户端弹性模式
 
-#### 5.1 什么是客户端弹性模式
+### 5.1 什么是客户端弹性模式
 
 1. 客户端负载均衡（client load balance）模式
 2. 断路器（circuit breaker）模式
@@ -524,7 +524,7 @@ Angel 是构建在 Spring Boot 1.2.x, 之上，但也兼容 Spring Boot 1.3.x.
 
 
 
-#### 5.2 为什么客户端弹性很重要
+### 5.2 为什么客户端弹性很重要
 
 
 
