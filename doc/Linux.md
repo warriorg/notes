@@ -507,12 +507,6 @@ tcpdump ip and not net localnet
 - ss: 连接查看工具
 - 其他: dstat, slurm, nload, bmon
 
-### netstat
-
-```bash
-netstat -ntlp  					# 
-```
-
 ### ss
 
 ```bash
@@ -545,7 +539,7 @@ $nc -n 127.0.0.1 3000 > file.txt		# client
 
 ### netstat
 
-`yum install -y net-tools` 
+需要安装`net-tools`包
 
 ```bash
 netstat -ltnp  			# 列出端口	

@@ -2,6 +2,18 @@
 
 ## 单机部署4节点
 
+FISCO BCOS提供了`build_chain.sh`脚本帮助用户快速搭建FISCO BCOS联盟链.
+
+`build_chain.sh`脚本用于快速生成一条链中节点的配置文件，脚本依赖于`openssl`请根据自己的操作系统安装`openssl 1.0.2`以上版本。脚本的源码位于[github源码](https://github.com/FISCO-BCOS/FISCO-BCOS/blob/master/tools/build_chain.sh) 或者使用最新发布的[release](https://github.com/FISCO-BCOS/FISCO-BCOS/releases)版本
+
+```bash
+./build_chain.sh -l 127.0.0.1:4 				# 部署一个4节点的联盟链 			
+```
+
+[参考](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/manual/build_chain.html)
+
+
+
 ```bash
 sudo apt install -y openssl curl
 cd ~ && mkdir -p fisco && cd fisco
@@ -37,29 +49,23 @@ cp -r nodes/127.0.0.1/sdk/* console/conf/
 cd ~/fisco/console && bash start.sh
 ```
 
+# Java SDK
+
+## 常见问题
+
+### Algorithm constraints check failed on key EC with size of 256bits
+
+在`JAVA_HOME\conf\security\java.security`中修改`jdk.certpath.disabledAlgorithms`和`jdk.certpath.disabledAlgorithms`
 
 
 
 
-# 工具
-
-## build_chain.sh
-
-FISCO BCOS提供了`build_chain.sh`脚本帮助用户快速搭建FISCO BCOS联盟链.
-
-`build_chain.sh`脚本用于快速生成一条链中节点的配置文件，脚本依赖于`openssl`请根据自己的操作系统安装`openssl 1.0.2`以上版本。脚本的源码位于[github源码](https://github.com/FISCO-BCOS/FISCO-BCOS/blob/master/tools/build_chain.sh) 或者使用最新发布的[release](https://github.com/FISCO-BCOS/FISCO-BCOS/releases)版本
-
-```bash
-./build_chain.sh -l 127.0.0.1:4 				# 部署一个4节点的联盟链 			
-```
-
-[参考](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/manual/build_chain.html)
 
 
 
-## webbase 
+# webbase 
 
-### install
+## install
 
 > ubuntu
 
@@ -110,3 +116,20 @@ http://localhost:5000
 登陆界面没有验证码，登陆界面提示WeBASE-Node-Manager系统异常
 
 因为数据库使用mysql8 修改 `/webase-node-mgr/conf/application.yml` 文件中的`url`字段，在最后添加`&useSSL=false`
+
+
+
+# WeEvent
+
+## Bash Install
+
+https://weeventdoc.readthedocs.io/zh_CN/latest/install/quickinstall.html
+
+```bash
+wget https://github.com/WeBankFinTech/WeEvent/releases/download/v1.6.0/weevent-1.6.0.tar.gz
+tar -zxf weevent-1.6.0.tar.gz
+
+```
+
+
+
