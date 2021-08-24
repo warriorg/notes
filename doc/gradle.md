@@ -1,10 +1,10 @@
-## 简介
+# 简介
 
 是一个开源构建自动化系统，它基于Apache Ant和Apache Maven的概念，并引入了基于Groovy的特定于域的语言（DSL），而不是Apache Maven用于声明项目配置的XML形式。
 
 
 
-## [The Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_usage)
+# [The Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_usage)
 
 The following graph describes the main configurations setup when the Java Library plugin is in use.
 
@@ -31,25 +31,58 @@ And the next graph describes the test configurations setup:
 | `testCompileOnly`    | Declaring test compile only dependencies | yes         | yes         | This is where you should declare dependencies which are only required at test compile time, but should not leak into the runtime. This typically includes dependencies which are shaded when found at runtime. |
 | `testRuntimeOnly`    | Declaring test runtime dependencies      | no          | no          | This is where you should declare dependencies which are only required at test runtime, and not at test compile time. |
 
-### implementation
+## implementation
 
  编译项目的生产源所需的依赖项，这些依赖项不是项目公开的API的一部分。 例如，该项目使用Hibernate进行内部持久层实现。
 
-### api
+## api
 
 编译项目的生产源所需的依赖项，这是项目公开的API的一部分。 例如，项目使用Guava并在方法签名中公开具有Guava类的公共接口。
 
-### testImplementation
+## testImplementation
 
 编译和运行项目的测试源所需的依赖项。例如，项目决定使用测试框架JUnit编写测试代码。
 
 
 
-## Managing Dependencies
+# Managing Dependencies
 
-### Declaring Dependencies
+## View Dependencies
 
-#### [Declaring a dependency without version](https://docs.gradle.org/current/userguide/declaring_dependencies.html#declaring_a_dependency_without_version)
+### dependencyInsight
+
+每个Gradle项目都提供了任务dependencyInsight来从命令行渲染所谓的依赖分析报告
+
+#### 参数
+
+`--dependency <dependency>`** (mandatory)**
+
+指示要关注的依赖项。它可以是一个完整的`group:name`或一部分。如果多个依赖项匹配，它们都将打印在报告中。
+
+`--configuration <name>` **(mandatory)**
+
+Indicates which configuration to resolve for showing the dependency information (*camelCase* also supported like in `dependencies` task). Note that the [Java plugin](https://docs.gradle.org/current/userguide/java_plugin.html#java_plugin) wires a convention with the value `compileClasspath`, making the parameter optional.
+
+`--singlepath`** (optional)**
+
+Indicates to render only a single path to the dependency. This might be useful to trim down the output in large graphs.
+
+
+
+#### Example
+
+```bash
+gradle -q dependencyInsight --dependency commons-codec --configuration scm
+gradle dependencyInsight --dependency poi-ooxml
+```
+
+
+
+
+
+## Declaring Dependencies
+
+### [Declaring a dependency without version](https://docs.gradle.org/current/userguide/declaring_dependencies.html#declaring_a_dependency_without_version)
 
 ```groovy
 build.gradle
@@ -64,7 +97,7 @@ dependencies {
 }
 ```
 
-#### [Declaring a dynamic version](https://docs.gradle.org/current/userguide/declaring_dependencies.html#sub:declaring_dependency_with_dynamic_version)
+### [Declaring a dynamic version](https://docs.gradle.org/current/userguide/declaring_dependencies.html#sub:declaring_dependency_with_dynamic_version)
 
 快照版本包含后缀-SNAPSHOT
 
