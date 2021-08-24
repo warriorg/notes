@@ -96,3 +96,55 @@ string memory a = unicode"Hello 😃";
 function (<parameter types>) {internal|external} [pure|constant|view|payable] [returns (<return types>)]
 ```
 
+
+
+# 合约
+
+## 函数
+
+### View 函数
+
+可以将函数声明为 `view` 类型，这种情况下要保证不修改状态。
+
+```solidity
+pragma solidity ^0.4.16;
+
+contract C {
+    function f(uint a, uint b) public view returns (uint) {
+        return a * (b + 42) + now;
+    }
+}
+```
+
+> `constant` 是 `view` 的别名。
+>
+> Getter 方法被标记为 `view`。
+>
+> ==编译器没有强制 `view` 方法不能修改状态。==
+
+### **Pure** 函数
+
+函数可以声明为 `pure` ，在这种情况下，承诺不读取或修改状态。
+
+```solidity
+pragma solidity ^0.4.16;
+
+contract C {
+    function f(uint a, uint b) public pure returns (uint) {
+        return a * (b + 42);
+    }
+}
+```
+
+> ==编译器没有强制 `pure` 方法不能读取状态。==
+
+### Fallback 函数
+
+合约可以有一个未命名的函数。这个函数不能有参数也不能有返回值。 如果在一个到合约的调用中，没有其他函数与给定的函数标识符匹配（或没有提供调用数据），那么这个函数（fallback 函数）会被执行。
+
+### 函数重载
+
+合约可以具有多个不同参数的同名函数。这也适用于继承函数。
+
+
+

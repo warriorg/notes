@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/flink.md",
+            "file": "doc/etcd.md",
             "mode": "preview"
           }
         }
@@ -39,7 +39,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#网站",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/flink.md",
+                "file": "doc/etcd.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -85,7 +85,30 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/flink.md"
+                "file": "doc/etcd.md"
+              }
+            }
+          },
+          {
+            "id": "6a896cd8ff91835c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "doc/etcd.md",
+                "linksCollapsed": true,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "ee4713428b363d38",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
               }
             }
           }
@@ -97,15 +120,15 @@
   },
   "active": "f4dcc9b6667a8034",
   "lastOpenFiles": [
+    "doc/etcd.md",
+    "doc/数据结构与算法.md",
+    "doc/web.md",
+    "doc/awesome.md",
+    "doc/ios.md",
+    "doc/blockchain.md",
+    "go/README.md",
     "doc/flink.md",
     "doc/FISCO BCOS.md",
-    "doc/FastDFS.md",
-    "blog/2020/macos连接cisco vpn.md",
-    "doc/ELK.md",
-    "doc/docker.md",
-    "doc/kubernetes.md",
-    "doc/hive.md",
-    "doc/spark.md",
-    "doc/flume.md"
+    "doc/FastDFS.md"
   ]
 }

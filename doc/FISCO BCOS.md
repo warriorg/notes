@@ -55,13 +55,7 @@ cd ~/fisco/console && bash start.sh
 
 ### Algorithm constraints check failed on key EC with size of 256bits
 
-在`JAVA_HOME\conf\security\java.security`中修改`jdk.certpath.disabledAlgorithms`和`jdk.certpath.disabledAlgorithms`
-
-
-
-
-
-
+在`JAVA_HOME\conf\security\java.security`中修改`jdk.certpath.disabledAlgorithms`和`jdk.disabled.namedCurves`
 
 # webbase 
 
@@ -133,3 +127,8 @@ tar -zxf weevent-1.6.0.tar.gz
 
 
 
+# 源码
+
+## libethcore
+
+区块的核心代码

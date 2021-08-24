@@ -9,9 +9,9 @@
 * BlocksKit：block工具包。将很多需要用delegate实现的方法整合成了block的形式
 * ReactiveCocoa：基于响应式编程思想的oc实践（是个好东西呢）
 
-#TabBar
+# TabBar
 ---
-###[RDVTabBarController](https://github.com/robbdimitrov/RDVTabBarController)
+### [RDVTabBarController](https://github.com/robbdimitrov/RDVTabBarController)
 >Highly customizable tabBar and tabBarController for iOS
 
 >![image](assets/images/RDVTabBarController.png)
@@ -34,9 +34,9 @@ self.viewController = tabBarController;
 ```
 
 
-#Message Alert
+# Message Alert
 ---
-###[TSMessages](https://github.com/KrauseFx/TSMessages)
+### [TSMessages](https://github.com/KrauseFx/TSMessages)
 >This library provides an easy to use class to show little notification views on the top of the screen
 
 >![image](assets/images/TSMessages_1.png)
@@ -45,12 +45,12 @@ self.viewController = tabBarController;
 
 -
 
-###[WaveLoadingView](https://github.com/liuzhiyi1992/WaveLoadingView)
+### [WaveLoadingView](https://github.com/liuzhiyi1992/WaveLoadingView)
 >波浪进度指示器
 >![image](assets/images/WaveLoadingView.gif)
 
 
-#UITextField
+# UITextField
 ----
 ###[TextFieldEffects](https://github.com/raulriera/TextFieldEffects)
 >*你不觉得标准的UITextField有些枯燥么？我也这样想——来认识一下TextFieldEffects吧！废话不多说，只要看几个例子*
@@ -63,7 +63,7 @@ self.viewController = tabBarController;
 
 -
 
-###[WTReTextField](https://github.com/warriorg/WTReTextField)
+### [WTReTextField](https://github.com/warriorg/WTReTextField)
 
 >*RegEx input validation and formatting as you type*
 
@@ -73,14 +73,14 @@ self.viewController = tabBarController;
 
 -
 
-###[JVFloatLabeledTextField](https://github.com/jverdi/JVFloatLabeledTextField)
+### [JVFloatLabeledTextField](https://github.com/jverdi/JVFloatLabeledTextField)
 >*JVFloatLabeledTextField is the first implementation a UX pattern that has come to be known the "Float Label Pattern".*
 
 >![image](assets/images/JVFloatLabeledTextField.gif)
 
 -
 
-###[DemoInPutPasswordView](https://github.com/lqcjdx/DemoInPutPasswordView)
+### [DemoInPutPasswordView](https://github.com/lqcjdx/DemoInPutPasswordView)
 
 >*仿微信支付密码输入框*
 
@@ -94,9 +94,9 @@ self.viewController = tabBarController;
 
 -
 
-#Segment
+# Segment
 ---
-###[ARSegmentPager](https://github.com/AugustRush/ARSegmentPager)
+### [ARSegmentPager](https://github.com/AugustRush/ARSegmentPager)
 
 >![image](assets/images/ARSegmentPager_1.png)
 
@@ -108,7 +108,7 @@ self.viewController = tabBarController;
 
 -
 
-#UITableView
+# UITableView
 ---
 ###[DZNEmptyDataSet](https://github.com/dzenbot/DZNEmptyDataSet)
 >*DZNEmptyDataSet算是一个很标准的iOS内建方式，适合用来处理空的table view和collection view。默认情况下，如果你的table view为空，屏幕就为空，这样一来用户体验并不理想。*
@@ -116,15 +116,15 @@ self.viewController = tabBarController;
 
 -
 
-###[RETableViewManager](https://github.com/romaonthego/RETableViewManager)
+### [RETableViewManager](https://github.com/romaonthego/RETableViewManager)
 >*可以帮助你进行动态创建与管理table views。它给我们提供了预定义cells（bool类型、文本、日期等等——请看下面的截图），但是你还可以创建自定义views，并与默认视图一同使用。*
 ![image](assets/images/RETableViewManager.png)
 
 -
 
-##UITableViewCell
+## UITableViewCell
 
-###[MGSwipeTableCell](https://github.com/MortimerGoro/MGSwipeTableCell)
+### [MGSwipeTableCell](https://github.com/MortimerGoro/MGSwipeTableCell)
 >*这是另一个常见于很多应用中的UI组件，苹果应该考虑在标准的iOS SDK中加入一些类似的内容。Swipeable表格cell是这个pod的最佳描述，也是最好的。*
 
 >![image](assets/images/MGSwipeTableCell_1.gif)
@@ -134,7 +134,7 @@ self.viewController = tabBarController;
 >![image](assets/images/MGSwipeTableCell_3.gif)
 
 -
-###[UIView-FDCollapsibleConstraints](https://github.com/forkingdog/UIView-FDCollapsibleConstraints)
+### [UIView-FDCollapsibleConstraints](https://github.com/forkingdog/UIView-FDCollapsibleConstraints)
 >*Builds to collapse a view and its relevant layout constraints, simulating a "Flow Layout" mode*
 >![image](assets/images/UIView-FDCollapsibleConstraints-1.gif)
 
@@ -142,35 +142,35 @@ self.viewController = tabBarController;
 
 -
 
-###[Greedo Layout](https://github.com/500px/greedo-layout-for-ios)
+### [Greedo Layout](https://github.com/500px/greedo-layout-for-ios)
 >*Full aspect ratio grid layout for iOS*
 >
 
 >![image](assets/images/greedo-layout-for-ios.png)
 
-#Image
+# Image
 ----
-###[Concorde](https://github.com/contentful-labs/Concorde) `Swift`
+### [Concorde](https://github.com/contentful-labs/Concorde) `Swift`
 
 >你在应用中载入了一堆jpeg吗？有了Concorde，你可以用更好的方式来解决，这是一个很大的进步。
 >![image](assets/images/Concorde.gif)
 
 -
 
-###[ETFoursquareImages](https://github.com/EugeneTrapeznikov/ETFoursquareImages)
+### [ETFoursquareImages](https://github.com/EugeneTrapeznikov/ETFoursquareImages)
 >When you scroll, image's shown area will become bigger. Like it appears on places' page in Foursquare app.
 >![image](assets/images/ETFoursquareImages.gif)
 
 -
 
-###[RSKImageCropper](https://github.com/ruslanskorb/RSKImageCropper)
+### [RSKImageCropper](https://github.com/ruslanskorb/RSKImageCropper)
 
 >RSKImageCropper通过剪切图片作为头像。通过移动图片，剪切圆形框所显示的部分。
 >![image](assets/images/RSKImageCropper.png)
 
 -
 
-###[ImagePickerSheetController](https://github.com/larcus94/ImagePickerSheetController)`swift`
+### [ImagePickerSheetController](https://github.com/larcus94/ImagePickerSheetController)`swift`
 
 >ImagePickerSheetController is similar to UIAlertController in its usage.
 
@@ -196,7 +196,7 @@ presentViewController(controller, animated: true, completion: nil)
 ```
 -
 
-###[SDCycleScrollView](https://github.com/gsdios/SDCycleScrollView)
+### [SDCycleScrollView](https://github.com/gsdios/SDCycleScrollView)
 >无限循环自动图片轮播器
 
 >![image](assets/images/SDCycleScrollView-1.gif)
@@ -224,15 +224,15 @@ presentViewController(controller, animated: true, completion: nil)
 >cycleScrollView.autoScrollTimeInterval = ;// 自定义轮播时间间隔
 
 
-#Calendar
+# Calendar
 ---
-###[PDTSimpleCalendar](https://github.com/jivesoftware/PDTSimpleCalendar)
+### [PDTSimpleCalendar](https://github.com/jivesoftware/PDTSimpleCalendar)
  >*PDTSimpleCalendar也许可以算是iOS最棒的日历组件了。你可以在各个方面对它进行定制，无论是运行逻辑还是外观方面。*
 >![image](assets/images/PDTSimpleCalendar.png)
 
 -
 
-#Font
+# Font
 ---
 ###[FontAwesomeKit](https://github.com/PrideChung/FontAwesomeKit)
 >*有了它你可以很容易地给项目加字体，使用方式繁多。*
@@ -250,9 +250,9 @@ presentViewController(controller, animated: true, completion: nil)
 
 -
 
-#Button
+# Button
 ---
-###[RadioButton](https://github.com/onegray/RadioButton-ios)`Objective-c`
+### [RadioButton](https://github.com/onegray/RadioButton-ios)`Objective-c`
 ##### CocoaPods
 
 	pod 'RadioButton'
@@ -284,8 +284,8 @@ And a helpful method to select button by tag:
 
 	[radio1 setSelectedWithTag:kTagRadio3];
 
-#Text
-###[cbpowell/MarqueeLabel](https://github.com/cbpowell/MarqueeLabel)`Objective-c`
+# Text
+### [cbpowell/MarqueeLabel](https://github.com/cbpowell/MarqueeLabel)`Objective-c`
 >*实现跑马灯效果
 >
 >MarqueeLabel is a UILabel subclass adds a scrolling marquee effect when the text of the label outgrows the available width. The label scrolling direction and speed/rate can be specified as well. All standard UILabel properties (where it makes sense) are available in MarqueeLabel and it behaves just like a UILabel.*
