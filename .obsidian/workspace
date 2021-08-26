@@ -4,12 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "f4dcc9b6667a8034",
+        "id": "da46fa7f6d862609",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/etcd.md",
+            "file": "doc/make.md",
             "mode": "preview"
           }
         }
@@ -48,7 +48,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -68,13 +69,13 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/etcd.md",
+                "file": "doc/make.md",
                 "collapseAll": true,
-                "extraContext": true,
+                "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
-                "backlinkCollapsed": false,
+                "backlinkCollapsed": true,
                 "unlinkedCollapsed": false
               }
             }
@@ -85,7 +86,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/etcd.md"
+                "file": "doc/make.md"
               }
             }
           },
@@ -95,7 +96,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/etcd.md",
+                "file": "doc/make.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": false
               }
@@ -118,17 +119,17 @@
     "direction": "horizontal",
     "width": 300
   },
-  "active": "f4dcc9b6667a8034",
+  "active": "da46fa7f6d862609",
   "lastOpenFiles": [
+    "doc/make.md",
+    "doc/vim.md",
+    "blog/2020/Gin Swagger.md",
+    "doc/windows.md",
+    "doc/skywalking.md",
+    "doc/blockchain.md",
+    "doc/c.md",
     "doc/etcd.md",
     "doc/数据结构与算法.md",
-    "doc/web.md",
-    "doc/awesome.md",
-    "doc/ios.md",
-    "doc/blockchain.md",
-    "go/README.md",
-    "doc/flink.md",
-    "doc/FISCO BCOS.md",
-    "doc/FastDFS.md"
+    "doc/web.md"
   ]
 }
