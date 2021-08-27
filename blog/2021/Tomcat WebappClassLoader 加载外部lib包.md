@@ -46,7 +46,7 @@
 
 
 
-# 修改Tomcat WebAppLoader使其能加载外部Lib
+# 修改Tomcat源码使WebAppLoader能加载外部Lib
 
 1. 下载Tomcat源码，准备开发环境
 
@@ -70,59 +70,48 @@
    `org/apache/catalina/webresources/StandardRoot.java`
 
    ```java
-       /***
-        * loader xdo custom libs
-        * @throws LifecycleException
-        */
-       protected void processWebInfXdoLib() {
-           try {
-               Properties properties = new Properties();
-               properties.load(getResource("/WEB-INFO/classes/application.properties").getInputStream());
-               String xdoLibs = properties.getProperty("xdo.libs");
-               if (xdoLibs == null || "".equals(xdoLibs.trim())) {
-                   return;
-               }
-               String[] libsArray = xdoLibs.split(",");
-               for (String lib : libsArray) {
-                   List<Path> pathList = Files.list(Paths.get(lib))
-                     .filter(path -> path.getFileName().endsWith(".jar")).collect(Collectors.toList());
-                   for (Path path : pathList) {
-                       createWebResourceSet(ResourceSetType.CLASSES_JAR, "/WEB-INF/classes", path.toUri().toURL(), "/");
-                   }
-               }
-           } catch (IOException ex) {
-               log.error("xdo custom loader jar error!", ex);
+   /***
+   * loader xdo custom libs
+   * @throws LifecycleException
+   */
+   protected void processWebInfXdoLib() {
+   	WebResource webResource = getResource("/WEB-INF/classes/application.properties", false, false);
+     if (webResource.exists() && webResource.isFile()) {
+       try {
+         Properties properties = new Properties();
+         properties.load(webResource.getInputStream());
+         String xdoLibs = properties.getProperty("xdo.libs");
+         log.info("xdo lib value: " + xdoLibs);
+         if (xdoLibs == null || "".equals(xdoLibs.trim())) {
+           return;
+         }
+         String[] libsArray = xdoLibs.split(",");
+         for (String lib : libsArray) {
+           File file = new File(lib);
+           if (file.isDirectory()) {
+             List<File> fileList = Arrays.stream(file.listFiles())
+               .filter(it -> it.getName().endsWith(".jar")).collect(Collectors.toList());
+             log.info("xdo lib: " + lib + " size: " + fileList.size());
+             for (File jarFile : fileList) {
+               createWebResourceSet(ResourceSetType.CLASSES_JAR,
+                                    "/WEB-INF/classes", jarFile.toURI().toURL(), "/");
+             }
            }
-   
-   //        String xdoLibs = CatalinaProperties.getProperty("xdo.loader");
-   //        if (xdoLibs == null || "".equals(xdoLibs)) {
-   //            return;
-   //        }
-   //
-   //        Arrays.stream(xdoLibs.split(",")).forEach(it -> {
-   //            try {
-   //                Files.list(Paths.get(it))
-   //                    .filter(path -> path.getFileName().endsWith(".jar"))
-   //                    .forEach(jar -> {
-   //                        try {
-   //                            createWebResourceSet(ResourceSetType.CLASSES_JAR, "/WEB-INF/classes", jar.toUri().toURL(), "/");
-   //                        } catch (MalformedURLException e) {
-   //                           log.error("load [" + jar.getFileName().toString() + "] failure", e);
-   //                        }
-   //                    });
-   //            } catch (IOException e) {
-   //                log.error("xdo custom loader jar error!", e);
-   //            }
-   //        });
+         }
+       }catch (IllegalArgumentException | IllegalStateException ex) {
+         log.info("xdo not load application.properties. \n" + ex.getMessage());
+       } catch (IOException ex) {
+         log.error("xdo custom loader jar error!", ex);
        }
+   }
    ```
-
+   
    `org/apache/catalina/webresources/StandardRoot.java`
-
+   
    ![tomcat-class-standard-root](../assets/tomcat-class-standard-root.png)
-
+   
    `org/apache/catalina/loader/WebappClassLoaderBase.java`
-
+   
    ```java
    /**
         * Start the class loader.
@@ -149,49 +138,105 @@
        }
      }
    
-   	// 新增代码
-     try {
-       Properties properties = new Properties();
-       properties.load(resources.getResource("/WEB-INFO/classes/application.properties").getInputStream());
-       String xdoLibs = properties.getProperty("xdo.libs");
-       if (xdoLibs == null || "".equals(xdoLibs.trim())) {
-         return;
-       }
-       String[] libsArray = xdoLibs.split(",");
-       for (String lib : libsArray) {
-         List<Path> pathList = Files.list(Paths.get(lib))
-           .filter(path -> path.getFileName().endsWith(".jar")).collect(Collectors.toList());
-         for (Path path : pathList) {
-           localRepositories.add(path.toUri().toURL());
+   	WebResource resource = resources.getResource("/WEB-INF/classes/application.properties");
+     if (resource.exists() && resource.isFile()) {
+       try {
+         Properties properties = new Properties();
+         properties.load(resource.getInputStream());
+         String xdoLibs = properties.getProperty("xdo.libs");
+         if (xdoLibs != null && !"".equals(xdoLibs.trim())) {
+           String[] libsArray = xdoLibs.split(",");
+           for (String lib : libsArray) {
+             File file = new File(lib);
+             if (file.isDirectory()) {
+               List<File> fileList = Arrays.stream(file.listFiles())
+                 .filter(it -> it.getName().endsWith(".jar")).collect(Collectors.toList());
+               log.info("xdo lib: " + lib + " size: " + fileList.size());
+               for (File jarFile : fileList) {
+                 localRepositories.add(jarFile.toURI().toURL());
+               }
+             }
+           }
+         } else {
+           log.info("not setting xdo loader");
          }
+       } catch (IllegalArgumentException | IllegalStateException ex) {
+         log.info("xdo not load application.properties. \n" + ex.getMessage());
+       } catch (IOException ex) {
+         log.error("xdo loader jar error!", ex);
        }
-     } catch (IOException ex) {
-       log.error("xdo loader jar error!", ex);
      }
-   
-   
-     //        String xdoJars = CatalinaProperties.getProperty("xdo.loader");
-     //        if (null != xdoJars && !"".equals(xdoJars.trim())) {
-     //            Arrays.stream(xdoJars.split(",")).forEach(it -> {
-     //                try {
-     //                    Files.list(Paths.get(it))
-     //                        .filter(path -> path.getFileName().endsWith(".jar"))
-     //                        .forEach(jar -> {
-     //                            try {
-     //                                localRepositories.add(jar.toUri().toURL());
-     //                            } catch (MalformedURLException e) {
-     //                                log.error("load [" + jar.getFileName().toString() + "] failure", e);
-     //                            }
-     //                        });
-     //                } catch (IOException e) {
-     //                    log.error("xdo loader jar error!", e);
-     //                }
-     //            });
-     //        }
    
      state = LifecycleState.STARTED;
    }
    ```
+
+
+
+# 修改项目，打包时分离LIb
+
+## bootWar
+
+```groovy
+task clearLib(type: Delete) {
+    delete "$buildDir/libs/lib"
+}
+
+task copyLib(type: Copy) {
+    from configurations.compileClasspath
+  	// 这边的关系跟bootWar中的是反的，如果war中排出，这边就需要包含，如果war是包含，这边就需要排出
+//    exclude("*xdo*.jar")
+//    include("*.jar")
+    into "$buildDir/libs/lib"
+
+    from configurations.runtimeClasspath
+    into "$buildDir/libs/lib"
+}
+
+bootWar {
+
+//    rootSpec.include("*xdo*.jar")
+  	// 指定排除的jar包
+    rootSpec.exclude("*.jar")
+
+    // lib目录的清除和复制任务
+    dependsOn clearLib
+    dependsOn copyLib
+}
+```
+
+
+
+## bootJar
+
+```groovy
+// 清除lib
+task clearLib(type: Delete) {
+    delete "$buildDir/libs/lib"
+}
+
+// 拷贝lib
+task copyLib(type: Copy) {
+    from configurations.compileClasspath
+    into "$buildDir/libs/lib"
+}
+
+bootJar {
+    excludes = ["*.jar"]
+
+    // lib目录的清除和复制任务
+    dependsOn clearLib
+    dependsOn copyLib
+
+    // 指定依赖包的路径，运行时不再需要指定 java.ext.dir 或 loader.path 参数。
+    manifest {
+        attributes "Manifest-Version": 1.0,
+                'Class-Path': configurations.compileClasspath.files.collect { "lib/$it.name" }.join(' ')
+    }
+}
+```
+
+> 这种不需要修改tomcat，直接打包即可
 
 # 参考
 
