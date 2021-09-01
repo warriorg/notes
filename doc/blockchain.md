@@ -124,15 +124,25 @@ FISCO BCOS非常重视使用者的部署体验，提供了一键部署的命令�
 
 
 
-# [FISCO BCOS](./fisco bcos.md)
+# [FISCO BCOS](./fisco\ bcos.md)
 
 
 
 
 
-# 比特币
+# Bitcoin
 
 ## 基础设计
+
+### 区块结构
+
+![](./assets/images/image-20210901130356707.png)
+
+
+
+![bitcoin-block-structure](./assets/images/bitcoin-block-structure.jpg)
+
+
 
 ### Setting the mining difficulty
 没2周计算一次复杂度
@@ -166,6 +176,255 @@ $$
 ### 零知识证明
 
 零知识证明是指一方（证明方）向另一方（验证方）证明一个陈述是正确的，而无需透露该陈述是正确外的任何信息。
+
+
+
+# Ethereum
+
+## 基础设计
+
+### 数据结构 
+
+[go-ethereum/core/types/block.go](https://github.com/ethereum/go-ethereum/blob/5441a8fa47/core/types/block.go)
+
+```go
+// Header represents a block header in the Ethereum blockchain.
+type Header struct {
+	ParentHash  common.Hash    `json:"parentHash"       gencodec:"required"`
+	UncleHash   common.Hash    `json:"sha3Uncles"       gencodec:"required"`
+	Coinbase    common.Address `json:"miner"            gencodec:"required"`
+	Root        common.Hash    `json:"stateRoot"        gencodec:"required"`
+	TxHash      common.Hash    `json:"transactionsRoot" gencodec:"required"`
+	ReceiptHash common.Hash    `json:"receiptsRoot"     gencodec:"required"`
+	Bloom       Bloom          `json:"logsBloom"        gencodec:"required"`
+	Difficulty  *big.Int       `json:"difficulty"       gencodec:"required"`
+	Number      *big.Int       `json:"number"           gencodec:"required"`
+	GasLimit    uint64         `json:"gasLimit"         gencodec:"required"`
+	GasUsed     uint64         `json:"gasUsed"          gencodec:"required"`
+	Time        uint64         `json:"timestamp"        gencodec:"required"`
+	Extra       []byte         `json:"extraData"        gencodec:"required"`
+	MixDigest   common.Hash    `json:"mixHash"`
+	Nonce       BlockNonce     `json:"nonce"`
+
+	// BaseFee was added by EIP-1559 and is ignored in legacy headers.
+	BaseFee *big.Int `json:"baseFeePerGas" rlp:"optional"`
+}
+
+// Block represents an entire block in the Ethereum blockchain.
+type Block struct {
+	header       *Header
+	uncles       []*Header
+	transactions Transactions
+
+	// caches
+	hash atomic.Value
+	size atomic.Value
+
+	// Td is used by package core to store the total difficulty
+	// of the chain up to and including the block.
+	td *big.Int
+
+	// These fields are used by package eth to track
+	// inter-peer block relay.
+	ReceivedAt   time.Time
+	ReceivedFrom interface{}
+}
+
+// NewBlock creates a new block. The input data is copied,
+// changes to header and to the field values will not affect the
+// block.
+//
+// The values of TxHash, UncleHash, ReceiptHash and Bloom in header
+// are ignored and set to values derived from the given txs, uncles
+// and receipts.
+func NewBlock(header *Header, txs []*Transaction, uncles []*Header, receipts []*Receipt, hasher TrieHasher) *Block {
+	b := &Block{header: CopyHeader(header), td: new(big.Int)}
+
+	// TODO: panic if len(txs) != len(receipts)
+	if len(txs) == 0 {
+		b.header.TxHash = EmptyRootHash
+	} else {
+    // 计算出交易的根hash值
+		b.header.TxHash = DeriveSha(Transactions(txs), hasher)
+		b.transactions = make(Transactions, len(txs))
+		copy(b.transactions, txs)
+	}
+
+	if len(receipts) == 0 {
+		b.header.ReceiptHash = EmptyRootHash
+	} else {
+    // 计算出回执的根hash值
+		b.header.ReceiptHash = DeriveSha(Receipts(receipts), hasher)
+    // 创建bloom filter
+    // 由当前区块中所有receipts的Bloom Filter组合得到
+		b.header.Bloom = CreateBloom(receipts)
+	}
+
+	if len(uncles) == 0 {
+		b.header.UncleHash = EmptyUncleHash
+	} else {
+		b.header.UncleHash = CalcUncleHash(uncles)
+		b.uncles = make([]*Header, len(uncles))
+		for i := range uncles {
+			b.uncles[i] = CopyHeader(uncles[i])
+		}
+	}
+
+	return b
+}
+```
+
+1. 交易树：记录交易的状态和变化。每个块都有各自的交易树，且不可更改
+2. 收据树(交易收据)：交易收据的存储
+3. 状态树(账户信息)：帐户中各种状态的保存。如余额等。
+4. Storage Trie 存储树 ：存储只能合约状态 ，每个账号有自己的Storage Trie 。
+
+[go-ethereum/core/types/receipt.go](https://github.com/ethereum/go-ethereum/blob/master/core/types/receipt.go)
+
+```go
+// Receipt represents the results of a transaction.
+type Receipt struct {
+	// Consensus fields: These fields are defined by the Yellow Paper
+	Type              uint8  `json:"type,omitempty"`
+	PostState         []byte `json:"root"`
+	Status            uint64 `json:"status"`
+	CumulativeGasUsed uint64 `json:"cumulativeGasUsed" gencodec:"required"`
+	Bloom             Bloom  `json:"logsBloom"         gencodec:"required"`
+	Logs              []*Log `json:"logs"              gencodec:"required"`
+
+	// Implementation fields: These fields are added by geth when processing a transaction.
+	// They are stored in the chain database.
+	TxHash          common.Hash    `json:"transactionHash" gencodec:"required"`
+	ContractAddress common.Address `json:"contractAddress"`
+	GasUsed         uint64         `json:"gasUsed" gencodec:"required"`
+
+	// Inclusion information: These fields provide information about the inclusion of the
+	// transaction corresponding to this receipt.
+	BlockHash        common.Hash `json:"blockHash,omitempty"`
+	BlockNumber      *big.Int    `json:"blockNumber,omitempty"`
+	TransactionIndex uint        `json:"transactionIndex"`
+}
+
+```
+
+
+
+`trie` 的数据结构是[MPT](./DSA.md#"MPT TREE")
+
+```go
+// Trie is a Merkle Patricia Trie.
+// The zero value is an empty trie with no database.
+// Use New to create a trie that sits on top of a database.
+//
+// Trie is not safe for concurrent use.
+type Trie struct {
+	db   *Database
+	root node
+	// Keep track of the number leafs which have been inserted since the last
+	// hashing operation. This number will not directly map to the number of
+	// actually unhashed nodes
+	unhashed int
+}
+```
+
+
+
+
+
+## 智能合约
+
+### 什么是智能合约
+
+* 智能合约是运行在区块链上的一段代码，代码的逻辑定义了合约的内容
+* 智能合约的账户保存了合约当前的运行状态
+  * **balance** 当前余额
+  * **nonce** 交易次数
+  * **code** 合约代码
+  * **storage** 存储，数据结构是一棵MPT
+
+### 智能合约的创建和运行
+
+* 智能合约的代码写完后，需要编译成 `bytecode`
+* 创建合约: 外部账户发起一个转账交易到`0x0`的地址
+  * 转账的金额是0，但是要支付汽油费
+  * 合约的代码放在data域里
+* 智能合约运行在 EVM(Ethereum Virtual Machine) 上
+* 以太坊是一个交易驱动的状态机
+  * 调用智能合约的交易发布到区块链上后，每个矿工都会执行这个交易，从当前状态确定性地转移到下一个状态
+
+### Gas fee (汽油费)
+
+* 智能合约是个 Turing-complete Programming Model
+
+* 执行合约中的指令要收取汽油费，由发起交易的人来支付
+
+  ```go
+  // TxData is the underlying data of a transaction.
+  //
+  // This is implemented by DynamicFeeTx, LegacyTx and AccessListTx.
+  type TxData interface {
+  	txType() byte // returns the type ID
+  	copy() TxData // creates a deep copy and initializes all fields
+  
+  	chainID() *big.Int
+  	accessList() AccessList
+  	data() []byte
+  	gas() uint64
+  	gasPrice() *big.Int
+  	gasTipCap() *big.Int
+  	gasFeeCap() *big.Int
+  	value() *big.Int
+  	nonce() uint64
+  	to() *common.Address			// nil means contract creation
+  
+  	rawSignatureValues() (v, r, s *big.Int)
+  	setSignatureValues(chainID, v, r, s *big.Int)
+  }
+  ```
+
+* EVM中不同指令消耗的汽油费是不一样的
+
+  * 简单的指令很便宜，复杂的活着需要存储状态的指令就很贵
+
+### 错误处理
+
+* 智能合约中不存在自定义的`try-catch`结构
+* 一旦遇到异常，除了特殊情况外，本次执行操作全部回滚
+* 可以抛出错误的语句:
+  * `assert(bool condition)` 如果条件不满足就抛出 -- 用于内部错误
+  * `require(bool condition)` 如果条件不满足就抛掉 -- 用于输入或者外部组件引起的错误
+  * `revert()` 终止运行并回滚状态变动
+
+### 嵌套调用
+
+* 智能合约的执行具有原子性：执行过程中出现错误，会导致回滚
+* 嵌套调用是指一个合约调用另一个合约中的函数
+* 嵌套调用是否会触发连锁式的回滚？
+  * 如果被调用的合约执行过程中发生异常，会不会导致发起调用的这个合约也跟着一起回滚？
+  * 有些调用方法会引起连锁式的回滚，有些则不会
+* 一个合约直接指向一个合约账户里转账，没有指明调用那个函数，仍然会引起嵌套调用
+
+### 智能合约可以获得区块、交易、调用者信息
+
+- `blockhash(uint blockNumber) returns (bytes32)`: hash of the given block when `blocknumber` is one of the 256 most recent blocks; otherwise returns zero
+- `block.basefee` (`uint`): current block’s base fee ([EIP-3198](https://eips.ethereum.org/EIPS/eip-3198) and [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559))
+- `block.chainid` (`uint`): current chain id
+- `block.coinbase` (`address payable`): current block miner’s address
+- `block.difficulty` (`uint`): current block difficulty
+- `block.gaslimit` (`uint`): current block gaslimit
+- `block.number` (`uint`): current block number
+- `block.timestamp` (`uint`): current block timestamp as seconds since unix epoch
+- `gasleft() returns (uint256)`: remaining gas
+- `msg.data` (`bytes calldata`): complete calldata
+- `msg.sender` (`address`): sender of the message (current call)
+- `msg.sig` (`bytes4`): first four bytes of the calldata (i.e. function identifier)
+- `msg.value` (`uint`): number of wei sent with the message
+- `tx.gasprice` (`uint`): gas price of the transaction
+- `tx.origin` (`address`): sender of the transaction (full call chain)
+
+### 智能合约语言
+
+[Solidity](./Solidity.md)
 
 
 
@@ -220,7 +479,7 @@ $$
 2. 参与者采用不可否认和不能篡改的算法，进行多层面验证后，采纳Leader给出的记账。
 3. 通过数据同步和分布式一致性协作，保证所有参与者最终收到的结果都是一致的，无错的。
 
-区块链领域常见的共识算法有公链常用的工作量证明（Proof of Work）,权益证明（Proof of Stake），委托权益证明（Delegated Proof of Stake），以及联盟链常用的实用性拜占庭容错共识PBFT（Practical Byzantine Fault Tolerance），Raft等，另外一些前沿性的共识算法通常是将随机数发生器和上述几个共识算法进行有机组合，以改善安全、能耗以及性能和规模问题。
+区块链领域常见的共识算法有公链常用的[工作量证明（Proof of Work）](./DSA.md#POW),[权益证明（Proof of Stake）](./DSA.md#POS)，[委托权益证明（Delegated Proof of Stake）](./DSA.md#DPOS)，以及联盟链常用的实用性拜占庭容错共识[PBFT（Practical Byzantine Fault Tolerance)](./DSA.md#PBFT)，[Raft（Replication and Fault Tolerant）](./DSA.md#Raft)等，另外一些前沿性的共识算法通常是将随机数发生器和上述几个共识算法进行有机组合，以改善安全、能耗以及性能和规模问题。
 
 ## 智能合约
 

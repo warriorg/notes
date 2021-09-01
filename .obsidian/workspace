@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/make.md",
+            "file": "doc/blockchain.md",
             "mode": "preview"
           }
         }
@@ -53,7 +53,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "68ec1b547c39adeb",
@@ -69,7 +70,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/make.md",
+                "file": "doc/blockchain.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -86,7 +87,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/make.md"
+                "file": "doc/blockchain.md"
               }
             }
           },
@@ -96,7 +97,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/make.md",
+                "file": "doc/blockchain.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": false
               }
@@ -113,7 +114,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -121,15 +123,15 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
+    "doc/blockchain.md",
+    "doc/DSA.md",
     "doc/make.md",
     "doc/vim.md",
     "blog/2020/Gin Swagger.md",
     "doc/windows.md",
     "doc/skywalking.md",
-    "doc/blockchain.md",
     "doc/c.md",
     "doc/etcd.md",
-    "doc/数据结构与算法.md",
-    "doc/web.md"
+    "doc/数据结构与算法.md"
   ]
 }
