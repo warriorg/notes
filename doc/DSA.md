@@ -233,6 +233,8 @@ Merkle Tree，通常也被称作Hash Tree，顾名思义，就是存储hash值�
 
 Merkle Tree的主要作用是当我拿到Top Hash的时候，这个hash值代表了整颗树的信息摘要，当树里面任何一个数据发生了变动，都会导致Top Hash的值发生变化。
 
+![image-20210901170554405](./assets/images/image-20210901170554405.png)
+
 
 
 ## Trie Tree
@@ -335,7 +337,24 @@ PoS（Proof-of-Stake）权益证明机制，在PoS共识中，节点争夺记账
 
 
 
+# DHT
+分布式哈希表（distributed hash tables ，DHT）技术是去中心化 P2P 网络中最核心的一种路由寻址技术，可以在无中心服务器（trackerless）的情况下，在网络中快速找到目标节点。
 
+## Kademlia
+Kademlia 协议（以下简称 Kad）是美国纽约大学的 P. Maymounkov 和 D. Mazieres 在2002年发布的一项研究结果 [Kademlia: A peerto-peer information system based on the XOR metric](https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf)。
+
+简单的说，Kad 是一种分布式哈希表（DHT）技术，不过和其他 DHT 实现技术比较，如 Chord、CAN、Pastry 等，Kad 通过独特的以异或算法（XOR）为距离度量基础，建立了一种全新的 DHT 拓扑结构，相比于其他算法，大大提高了路由查询速度。
+
+在2005年5月著名的 BiTtorrent 在 4.1.0 版实现基于 Kademlia 协议的 DHT 技术后，很快国内的 BitComet 和 BitSpirit 也实现了和 BitTorrent 兼容的 DHT 技术，实现 trackerless下载方式。
+
+另外，emule 中也很早就实现了基于 Kademlia 类似的技术（BT 中叫 DHT，emule 中也叫 Kad，注意和本文简称的 Kad 区别），和 BT 软件使用的 Kad 技术的区别在于 key、value 和 node ID 的计算方法不同。
+
+### 参考
+http://www.yeolar.com/note/2010/03/21/kademlia/
+
+## Chord
+
+## Pastry
 
 
 

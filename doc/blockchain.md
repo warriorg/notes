@@ -120,13 +120,11 @@ FISCO BCOS非常重视使用者的部署体验，提供了一键部署的命令�
 
 ## Link
 
-## Merkle tree
+![An-example-of-blockchain-which-consists-of-a-continuous-sequence-of-blocks](./assets/images/An-example-of-blockchain-which-consists-of-a-continuous-sequence-of-blocks.png)
 
 
 
-# [FISCO BCOS](./fisco\ bcos.md)
-
-
+## [Merkle tree](./DSA.md#Merkle\ Tree)
 
 
 
@@ -134,7 +132,7 @@ FISCO BCOS非常重视使用者的部署体验，提供了一键部署的命令�
 
 ## 基础设计
 
-### 区块结构
+### 数据结构 
 
 ![](./assets/images/image-20210901130356707.png)
 
@@ -142,6 +140,7 @@ FISCO BCOS非常重视使用者的部署体验，提供了一键部署的命令�
 
 ![bitcoin-block-structure](./assets/images/bitcoin-block-structure.jpg)
 
+### 网络
 
 
 ### Setting the mining difficulty
@@ -172,6 +171,8 @@ $$
 * 无法检测网上发布的区块的正确性
 * 可以验证挖矿的难度
 * 只能检测那个是最长链，不知道那个是最长合法链
+
+### UTXO
 
 ### 零知识证明
 
@@ -328,6 +329,17 @@ type Trie struct {
 ```
 
 
+### GHOST 
+
+### P2P 网络
+[Kademlia](./DSA.md#Kademlia)
+
+在以太坊中，节点之间数据的传输是通过 tcp 来完成的。但是节点如何找到可以进行数据传输的节点？这就涉及到 P2P 的核心部分节点发现了。每个节点会维护一个 table，table 中会存储可供连接的其他节点的地址。这个 table 通过基于 udp 的节点发现机制来保持更新和可用。当一个节点需要更多的 TCP 连接用于数据传输时，它就会从这个 table 中获取待连接的地址并建
+立 TCP 连接。
+
+为了防止节点之间的 tcp 互联形成信息孤岛，每个以太坊节点间的连接都分为两种类型：bound_in 和 bound_out。bound_in 指本节点接收到别人发来的请求后建立的 tcp 连接，bound_out 指本节点主动发起的 tcp 连接。假设一个节点最多只能与 6 个节点互联，那么在默认的设置中，节点最多只能主动和 4 个节点连接，剩余的必须留着给其它节点接入用。对于 bound_in 连接的数量则不做限制。
+
+#### 
 
 
 
@@ -426,7 +438,7 @@ type Trie struct {
 
 [Solidity](./Solidity.md)
 
-
+# [FISCO BCOS](./fisco\ bcos.md)
 
 
 # Term

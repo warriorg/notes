@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/blockchain.md",
+            "file": "doc/Solidity.md",
             "mode": "preview"
           }
         }
@@ -48,13 +48,11 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "68ec1b547c39adeb",
@@ -70,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/blockchain.md",
+                "file": "doc/Solidity.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -87,7 +85,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/blockchain.md"
+                "file": "doc/Solidity.md"
               }
             }
           },
@@ -97,7 +95,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/blockchain.md",
+                "file": "doc/Solidity.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": false
               }
@@ -123,6 +121,7 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
+    "doc/Solidity.md",
     "doc/blockchain.md",
     "doc/DSA.md",
     "doc/make.md",
@@ -131,7 +130,6 @@
     "doc/windows.md",
     "doc/skywalking.md",
     "doc/c.md",
-    "doc/etcd.md",
-    "doc/数据结构与算法.md"
+    "doc/etcd.md"
   ]
 }
