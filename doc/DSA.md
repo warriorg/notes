@@ -356,6 +356,69 @@ http://www.yeolar.com/note/2010/03/21/kademlia/
 
 ## Pastry
 
+# Gossip 协议
+
+Gossip 最早由[施乐公司](https://en.wikipedia.org/wiki/Xerox)（Xerox，现在可能很多人不了解施乐了，或只把施乐当一家复印产品公司看待，这家公司是计算机许多关键技术的鼻祖，图形界面的发明者、以太网的发明者、激光打印机的发明者、MVC 架构的提出者、RPC 的提出者、BMP 格式的提出者……） Palo Alto 研究中心在论文《[Epidemic Algorithms for Replicated Database Maintenance](http://bitsavers.trailing-edge.com/pdf/xerox/parc/techReports/CSL-89-1_Epidemic_Algorithms_for_Replicated_Database_Maintenance.pdf)》中提出的一种用于分布式数据库在多节点间复制同步数据的算法。除此以外，它还有“流言算法”、“八卦算法”、“瘟疫算法”等别名。
+
+Gossip是一种分布式一致性协议，在 Cassandra、Akka、Redis 都有用到，也是P2P网络的核心技术。Gossip是一种去中心化、容错而又最终一致性的算法。
+
+## 工作过程
+
+- 如果有某一项信息需要在整个网络中所有节点中传播，那从信息源开始，选择一个固定的传播周期（譬如 1 秒），随机选择它相连接的 k 个节点（称为 Fan-Out）来传播消息。
+- 每一个节点收到消息后，如果这个消息是它之前没有收到过的，将在下一个周期内，选择除了发送消息给它的那个节点外的其他相邻 k 个节点发送相同的消息，直到最终网络中所有节点都收到了消息，尽管这个过程需要一定时间，但是理论上最终网络的所有节点都会拥有相同的消息。
+
+
+
+Gossip 传播示意图（[图片来源](https://managementfromscratch.wordpress.com/2016/04/01/introduction-to-gossip/)）
+
+![gossip](assets/images/gossip.gif)
+
+
+
+
+
+## 优点
+
+1. 扩展性
+
+   网络可以允许节点的任意增加和减少，新增加的节点的状态最终会与其他节点一致。
+
+2. 容错
+
+   网络中任何节点的宕机和重启都不会影响 Gossip 消息的传播，Gossip 协议具有天然的分布式系统容错特性。
+
+3. 去中心化
+
+   Gossip 协议不要求任何中心节点，所有节点都可以是对等的，任何一个节点无需知道整个网络状况，只要网络是连通的，任意一个节点就可以把消息散播到全网。
+
+4. 一致性收敛
+
+   Gossip 协议中的消息会以一传十、十传百一样的指数级速度在网络中快速传播，因此系统状态的不一致可以在很快的时间内收敛到一致。消息传播速度达到了 logN。
+
+5. 简单
+
+   Gossip 协议的过程极其简单，实现起来几乎没有太多复杂性。
+
+## 缺点
+
+1. 消息的延迟
+
+   由于 Gossip 协议中，节点只会随机向少数几个节点发送消息，消息最终是通过多个轮次的散播而到达全网的，因此使用 Gossip 协议会造成不可避免的消息延迟。不适合用在对实时性要求较高的场景下。
+
+2. 消息冗余
+
+   Gossip 协议规定，节点会定期随机选择周围节点发送消息，而收到消息的节点也会重复该步骤，因此就不可避免的存在消息重复发送给同一节点的情况，造成了消息的冗余，同时也增加了收到消息的节点的处理压力。而且，由于是定期发送，因此，即使收到了消息的节点还会反复收到重复消息，加重了消息的冗余。
+
+
+
+## 参考
+
+https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf
+
+http://icyfenix.cn/distribution/consensus/gossip.html
+
+https://zhuanlan.zhihu.com/p/41228196
+
 
 
 # 加密算法
