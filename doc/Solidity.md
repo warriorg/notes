@@ -4,6 +4,257 @@ Solidity 是一门面向合约的、为实现智能合约而创建的高级编�
 
 
 
+## EVM
+
+从在 Solidity 中编写代码到在 EVM 中执行代码
+
+![image-20210909161728632](./assets/images/image-20210909161728632.png)
+
+## 合约的结构
+
+```solidity
+pragma solidity 0.4.19;
+
+// contract definition
+contract GeneralStructure {
+	// state variables
+	int public stateIntVariable;
+	string stateStringVariable;
+	address personIdentifier;
+	MyStruct human;
+	bool constant hasIncome = true;
+	
+	// structure definition
+	struct MyStruct {
+		string name;
+		uint age;
+		bool isMarried;
+		uint[] bankAccountsNumbers;
+	}
+	
+	// modifier declaration
+	modifier onlyBy() {
+		if (msg.sender == personIdentifier) {
+			_;
+		}
+	}
+	
+	// event declaration
+	event ageRead(address, int)
+	
+	// enumeration declaration
+	enum gender {male, female}
+	
+	function getAge(address _personIdentifier) onlyBy() payable external return(uint) {
+		human = myStruct("zhang san", 10, true, new unit[](3));
+		gender _gender = gender.male;
+		ageRead(personIdentifier, stateIntVariable)
+	}
+}
+```
+
+### 1. 状态变量
+
+​	状态变量是 Solidity 合约最重要的特性之一。状态变量由矿工永久存储在区块链/以太坊账本中。在合约中，任何函数内声明的变量都不能称为状态变量。状态变量存储合约的当前值。状态变量的内存是静态分配的，并且在合约生命周期内不能更改（分配的内存大小）。Solidity编译器必须确定每个状态变量的内存分配细节，因此必须声明状态变量的数据类型。
+
+状态变量的限定符
+
+* internal 默认情况，智能在当前合约和继承它的合约中使用, 不能被外部修改，但可以访问。
+
+   ```solidity
+   int internal state;
+   ```
+
+* private 只能在声明它的合约中使用
+
+  ```solidity
+  int private state;
+  ```
+
+* public 可以直接访问。Solidity 编译器为每个公共状态变量生成一个 getter 函数
+
+  ```solidity
+  int public state;
+  ```
+
+* constant 变量声明时必须赋初值。实际上，编译器会在所有代码中将变量引用替换为指定的值。
+
+  ```solidity
+  int constant state = 1;
+  ```
+
+
+
+### 2. 结构
+
+​	结构是一种复合数据类型，由多个不同数据类型的变量组成。他们与合约非常相似，但是，他们不包含任何代码。他们只包含变量。
+
+​	创建结构实例，不需要显示调用关键字 `new` 关键字 `new` 只用于创建合约或数组的实例。
+
+```solidity
+human = myStruct("zhang san", 10, true, new unit[](3));
+```
+
+
+
+### 3. 修改器
+
+修改器总是与函数关联。编程语言中的修改器是指改变执行代码行为的结构。可以将其视为执行目标函数之前执行的函数。
+
+修改器使用 modifier 关键字后面根修改器标识符。修改器中的`_`表示执行目标函数。可以视为 `_` 被內联的目标函数替换。 payable 是一种由 Solidity 提供的开箱即用的修改器，应用与函数时允许该函数接收以太币。
+
+```solidity
+modifier onlyBy() {
+	if (msg.sender == personIdentifier) {
+		_;
+	}
+}
+```
+
+
+
+### 4. 事件
+
+事件主要用于通过 EVM 的日志工具向调用应用程序通知合约的当前状态。
+
+事件信息及其值作为交易的一部分存储在区块内。位于LogsBloom
+
+
+
+### 5. 枚举
+
+枚举用于在 Solidity 中声明用户自定义的数据类型。
+
+###  6. 函数
+
+函数机制时为了从状态变量读值和向状态变量写入值。函数时一个按需调用执行的代码单元。函数可以接受参数，执行其逻辑，并可选地将值返回给调用者。在合约中只能有一个称为 `fallback` 函数的未命名函数。
+
+#### 可见性
+
+* **public** 合约接口，可以在内部和外部调用
+* **internal** 默认情况，当前合约和从其继承的合约。不能从外部访问
+* **private** 只能在声明他们的合约中使用
+* **external** 合约接口的一部分，只能从外部访问，不能从内部访问
+
+函数还可以附加一下限定符，这些限定符能够更改合约状态变量：
+
+* **constant** 这些函数不具有修改区块链的能力。他们可以读取状态变量并返回给调用者，但不能修改任何变量、触发事件、创建另一个合约、调用其他可以改变状态的函数等。将常函数看作可以读取和返回当前状态变量值的函数。
+* **view** 常量函数的别名。
+* **pure** 函数既不能读取也不能写入。承诺不读取或修改状态。
+* **payable** 使用payable关键字声明的函数能够接受来自调用者的以太币。如果发送者没有提供以太币，则调用将会失败。如果一个函数被标记为`payable`，该函数只能接受以太币。
+
+
+
+## 数据类型
+
+### 值类型
+
+* Bool 可以保存true或false作为其值的布尔值
+* uint 无符号整数
+* int 有符号整数
+* address 表示以太坊环境中的账户地址, 20个字节
+* byte 表示固定大小的字节数据 (byte1 ~ bytes32)
+* enum 可以保存预定义的常量值的枚举
+
+### 引用类型
+
+* 数组 
+* 结构
+* 字符串 字符串最终被存储位字节
+* 映射 键值对
+
+## 存储和内存数据位置
+
+* **存储** 可以被合约內所有函数访问的全局内存变量。以太坊将其存储在环境中的每个节点上永久存储
+* **内存** 合约中每个函数都可以访问的本地内存。它是生命周期短暂的内存，当函数执行完成后被销毁
+* **调用数据** 存储所有传入的函数执行数据，包括函数参数。这是一个不可修改的内存位置
+* **堆栈** EVM 维护用于加载变量和使用以太坊指令集的变量和中间值的堆栈。在EVM中，堆栈深度为1024层
+
+变量的数据位置取决于以下两个因素
+
+* 变量声明的位置
+* 变量的数据类型
+
+
+
+
+
+## 地址全局变量
+
+* `<address>.transfer(uint256 amount)` 该函数向 address 发送给定的以 `wei` 为单位的以太币，如果执行失败则引发异常，并且所有更改都将被还原。
+* `<address>.send(uint256 amount)` 该函数向 address 发送给定的以 `wei` 为单位的以太币，并在失败时返回false。只提供 2300 个 `gas` 的固定费用。如果 send 和合约地址一起使用，它将调用合约的 fallback 函数。send 是一个低级函数，应该谨慎使用，因为它可以调用 fallback 函数，可以在合约中一次又一次地递归调用。
+* `<address>.call(...) returns (bool)` 此函数调用低级别的 call 函数，并在失败时返回 false
+* `<address>.callcode(...) returns (bool)` 此函数调用低级别的 callcode 函数，并在失败时返回 false
+* `<address>.delegatecall(...) returns (bool)`  此函数调用低级别的 delegatecall 函数，并在失败时返回 false
+
+## fallback 函数
+
+当调用智能合约中不存在的函数时，fallback函数将自动被调用
+
+fallback 函数没有标识符或函数名称。它是定义的无名函数。由于无法显示调用，因此无法接受任何参数或返回任何值。
+
+```solidity
+contract FallbackFunction {
+	function() {
+		var a = 1;
+	}
+}
+```
+
+由于无法明确调用，因此无法将 gas 发送到此函数。相反，EVM为此功能提供了 2300 个 gas 的固定费用。
+
+
+
+# 异常、事件与日志
+
+## 错误处理
+
+### require 语句
+
+require 语句接受一个参数，一个执行结果为true或 false 的语句。如果该语句的执行结果为 false，异常会被抛出并且程序执行会被刮起，未消耗的 gas 会被退回给合约调用者并且合约状态会被回退到初始状态。
+
+require 语句应该勇于校验所有传入函数的参数或数值。
+
+
+
+### assert 语句
+
+assert 语句和 require 有类似的语法。它接受一个结果为 true 或 false 的语句。基于这个结果来确定继续执行还是抛出异常。并且未消耗的 gas 不会被退回给调用者而是被 assert 语句完全消费掉，合约会被回退到初始状态。  Assert 语句会产生一个 invalid 指令来负责回退状态与耗尽 gas
+
+```solidity
+contract AssertContract {
+	function ValidInt8(uint _data) public return(uint8) {
+		require(_data >= 0)
+		require(_data <= 255)
+		uint8 value = 20;
+		
+		// checking datatype overflow
+		assert (value + _data <= 255)
+		
+		return uint8(value + _data)
+	}
+}
+```
+
+可以把 assert 当作是专门用来处理无法预测的运行时异常。你应该在认为当前状态已经变得不一致而不适合继续运行时 assert
+
+### revert 语句
+
+碰到 revert 语句意味着异常会被抛出，未消耗的 gas 被退回，同时合约状态被恢复
+
+```solidity
+contract RevertContract {
+	function ValidInt8(int _data) public returns (uint8) {
+		if (_data < 0 || _data > 255) {
+			revert();
+		}
+		return uint8(_data)
+	}
+}
+```
+
+
+
 # 最佳实践
 
 ## EVM栈溢出
