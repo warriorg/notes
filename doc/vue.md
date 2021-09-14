@@ -118,3 +118,18 @@ npm install -g @vue/cli
 ```
 
 
+
+# nginx
+
+```bash
+location ~ ^/api/ {
+	proxy_pass http://127.0.0.1:8080
+}
+
+location / {
+	root   /mnt/vdb1/nginx/html;
+	try_files $uri $uri/ /index.html;
+}
+
+```
+

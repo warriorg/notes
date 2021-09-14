@@ -107,11 +107,37 @@ http://localhost:5000
 
 #### 问题
 
-登陆界面没有验证码，登陆界面提示WeBASE-Node-Manager系统异常
+##### 登陆界面没有验证码，登陆界面提示WeBASE-Node-Manager系统异常
 
 因为数据库使用mysql8 修改 `/webase-node-mgr/conf/application.yml` 文件中的`url`字段，在最后添加`&useSSL=false`
 
+##### 无效的token
 
+node-manager.out 报错如下：
+
+```bash
+Servlet.service() for servlet [dispatcherServlet] in context with path [/WeBASE-Node-Manager] threw exception [Handler dispatch failed; nested exception is java.lang.InternalError: java.lang.reflect.InvocationTargetException] with root cause
+java.lang.NullPointerException
+        at java.desktop/sun.awt.FontConfiguration.getVersion(FontConfiguration.java:1262)
+        at java.desktop/sun.awt.FontConfiguration.readFontConfigFile(FontConfiguration.java:225)
+        at java.desktop/sun.awt.FontConfiguration.init(FontConfiguration.java:107)
+        at java.desktop/sun.awt.X11FontManager.createFontConfiguration(X11FontManager.java:719)
+        at java.desktop/sun.font.SunFontManager$2.run(SunFontManager.java:377)
+        at java.base/java.security.AccessController.doPrivileged(Native Method)
+        at java.desktop/sun.font.SunFontManager.<init>(SunFontManager.java:322)
+        at java.desktop/sun.awt.FcFontManager.<init>(FcFontManager.java:35)
+        at java.desktop/sun.awt.X11FontManager.<init>(X11FontManager.java:56)
+        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+        at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+```
+
+Centos7,通过安装字体解决的
+
+```
+yum install fontconfig
+fc-cache --force
+```
 
 # WeEvent
 
