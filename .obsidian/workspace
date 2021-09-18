@@ -9,8 +9,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/Solidity.md",
-            "mode": "preview"
+            "file": "doc/blockchain.md",
+            "mode": "source"
           }
         }
       }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/Solidity.md",
+                "file": "doc/blockchain.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -85,7 +85,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/Solidity.md"
+                "file": "doc/blockchain.md"
               }
             }
           },
@@ -95,7 +95,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/Solidity.md",
+                "file": "doc/blockchain.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": false
               }
@@ -112,8 +112,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -121,15 +120,15 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
-    "doc/Solidity.md",
     "doc/blockchain.md",
+    "doc/Solidity.md",
+    "doc/README.md",
+    "doc/ActiveMQ.md",
+    "doc/activiti.md",
+    "doc/java.md",
+    "doc/python.md",
     "doc/DSA.md",
     "doc/make.md",
-    "doc/vim.md",
-    "blog/2020/Gin Swagger.md",
-    "doc/windows.md",
-    "doc/skywalking.md",
-    "doc/c.md",
-    "doc/etcd.md"
+    "doc/vim.md"
   ]
 }
