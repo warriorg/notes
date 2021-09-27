@@ -20,6 +20,10 @@ cd ~ && mkdir -p fisco && cd fisco
 curl -#LO https://github.com/FISCO-BCOS/FISCO-BCOS/releases/download/v2.7.2/build_chain.sh && chmod u+x build_chain.sh
 bash build_chain.sh -l 127.0.0.1:4 -p 30300,20200,8545
 # 其中-p选项指定起始端口，分别是p2p_port,channel_port,jsonrpc_port
+# 部署国密版本
+# bash build_chain.sh -l 127.0.0.1:4 -p 30300,20200,8545 -g -G
+# -g 表示生成国密配置
+# -G 表示使用国密SSL连接
 
 # 启动所有节点
 bash nodes/127.0.0.1/start_all.sh

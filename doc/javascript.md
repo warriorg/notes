@@ -23,12 +23,10 @@
 
 
 
-## 原型
+# 原型
 
 * 如果所有对象都有私有字段 [[prototype]]，就是对象的原型；
 * 读一个属性，如果对象本身没有，则会继续访问对象的原型，直到原型为空或者找到为止。
-
-
 
 * Object.create 根据指定的原型创建新对象，原型可以是 null；
 * Object.getPrototypeOf 获得一个对象的原型；
@@ -38,4 +36,21 @@
 
 > 1. 每个函数都是 Function 类型的实例
 > 2. 原型 而实例的 __proto__ 和 [[Prototype]] 都是指向原型，感觉5.1、5.2部分增加了知识的复杂度。
+
+
+
+## 继承
+
+```javascript
+function BaseAPI() {
+  this.http = fetch
+}
+
+function UserAPI() {
+  BaseAPI.call(this)
+}
+
+UserAPI.prototype = Object.create(BaseAPI.prototype)
+UserAPI.prototype.constructor = UserAPI
+```
 
