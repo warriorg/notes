@@ -56,6 +56,12 @@ dropdb mydb
 
 # SQL Language
 
+## Populating a Table With Rows
+
+```sql
+COPY weather FROM '/home/user/weather.txt';
+```
+
 
 
 
