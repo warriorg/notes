@@ -213,7 +213,7 @@ contract FallbackFunction {
 
 require 语句接受一个参数，一个执行结果为true或 false 的语句。如果该语句的执行结果为 false，异常会被抛出并且程序执行会被刮起，未消耗的 gas 会被退回给合约调用者并且合约状态会被回退到初始状态。
 
-require 语句应该勇于校验所有传入函数的参数或数值。
+require 语句应该用于校验所有传入函数的参数或数值。
 
 
 

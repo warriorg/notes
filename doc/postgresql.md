@@ -64,6 +64,38 @@ COPY weather FROM '/home/user/weather.txt';
 
 
 
+## Indexes
+
+```sql
+CREATE INDEX name ON table USING HASH (column);		-- 默认创建B-tree, 可以使用USING制定索引的类型
+```
+
+### Index Type
+
+#### B-Tree
+
+#### Hash
+
+#### GiST
+
+#### SP-GiST
+
+#### GIN
+
+#### BRIN
+
+
+
+## 性能
+
+### EXPLAIN
+
+
+
+### EXPLAIN ANALYZE 
+
+EXPLAIN实际执行查询，然后显示每个计划节点中积累的真实行数和真实运行时间，以及普通EXPLAIN所显示的相同估算值
+
 
 # Server Administration
 
