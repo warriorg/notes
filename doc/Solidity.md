@@ -215,8 +215,6 @@ require 语句接受一个参数，一个执行结果为true或 false 的语句�
 
 require 语句应该用于校验所有传入函数的参数或数值。
 
-
-
 ### assert 语句
 
 assert 语句和 require 有类似的语法。它接受一个结果为 true 或 false 的语句。基于这个结果来确定继续执行还是抛出异常。并且未消耗的 gas 不会被退回给调用者而是被 assert 语句完全消费掉，合约会被回退到初始状态。  Assert 语句会产生一个 invalid 指令来负责回退状态与耗尽 gas
