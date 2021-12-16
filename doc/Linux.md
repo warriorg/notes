@@ -1,6 +1,6 @@
-## 理论基础
+# 理论基础
 
-### 系统
+## 系统
 
 **CPU上下文切换**
 先把前一个任务的CPU上下文（也就是CPU寄存器和程序计数器)保存起来，然后加载新任务的上下文到这些寄存器和程序计数器，最后在跳转到程序计数器所指的新位置，运行新任务。
@@ -17,11 +17,9 @@
 
 **会话** 指共享同一个控制终端的一个或多个进程组
 
+### 进程
 
-
-#### 进程
-
-##### 状态
+#### 状态
 
 * **R**  是 Running 或 Runnable 的缩写，表示进程在 CPU 的就绪队列中，正在运行或者正在等待运行。
 * **D**  是 Disk Sleep 的缩写，也就是不可中断状态睡眠（Uninterruptible Sleep），一般表示进程正在跟硬件交互，并且交互过程不允许被其他进程或中断打断。
@@ -40,9 +38,9 @@
 * **l** 是多线程的（使用CLONE_THREAD，就像NPTL pthreads那样）
 * **+** 前台进程组
 
-### inode
+## inode
 
-#### 什么是inode
+### 什么是inode
 
 文件储存在硬盘上，硬盘的最小存储单位叫做"扇区"（Sector）。每个扇区储存512字节（相当于0.5KB）。
 
@@ -52,7 +50,7 @@
 
 每一个文件都有对应的inode，里面包含了与该文件有关的一些信息。
 
-#### inode 内容
+### inode 内容
 
 inode包含文件的元信息，具体来说有以下内容：
 
@@ -80,7 +78,7 @@ stat a.txt
 
 除了文件名以外的所有文件信息，都存在inode之中。至于为什么没有文件名，下文会有详细解释。
 
-#### inode的大小
+### inode的大小
 
 inode也会消耗硬盘空间，所以硬盘格式化的时候，操作系统自动将硬盘分成两个区域。一个是数据区，存放文件数据；另一个是inode区（inode table），存放inode所包含的信息。
 
@@ -104,7 +102,7 @@ dumpe2fs -h /dev/vdb1 | grep "Inode size"
 
 由于每个文件都必须有一个inode，因此有可能发生inode已经用光，但是硬盘还未存满的情况。这时，就无法在硬盘上创建新文件。
 
-#### inode号码
+### inode号码
 
 每个inode都有一个号码，操作系统用inode号码来识别不同的文件。
 
@@ -118,7 +116,7 @@ dumpe2fs -h /dev/vdb1 | grep "Inode size"
 ls -i example.txt
 ```
 
-#### 目录文件
+### 目录文件
 
 Unix/Linux系统中，目录（directory）也是一种文件。打开目录，实际上就是打开目录文件。
 
@@ -133,7 +131,7 @@ ls -i /etc  # 列出整个目录文件，即文件名和inode号码
 
 理解了上面这些知识，就能理解目录的权限。目录文件的读权限（r）和写权限（w），都是针对目录文件本身。由于目录文件内只有文件名和inode号码，所以如果只有读权限，只能获取文件名，无法获取其他信息，因为其他信息都储存在inode节点中，而读取inode节点内的信息需要目录文件的执行权限（x）。
 
-#### 硬链接
+### 硬链接
 
 一般情况下，文件名和inode号码是"一一对应"关系，每个inode号码对应一个文件名。但是，Unix/Linux系统允许，多个文件名指向同一个inode号码。
 
@@ -153,7 +151,7 @@ ls -li
 
 创建目录时，默认会生成两个目录项："."和".."。前者的inode号码就是当前目录的inode号码，等同于当前目录的"硬链接"；后者的inode号码就是当前目录的父目录的inode号码，等同于父目录的"硬链接"。所以，任何一个目录的"硬链接"总数，总是等于2加上它的子目录总数（含隐藏目录）。
 
-#### 软链接
+### 软链接
 
 文件A和文件B的inode号码虽然不一样，但是文件A的内容是文件B的路径。读取文件A时，系统会自动将访问者导向文件B。因此，无论打开哪一个文件，最终读取的都是文件B。这时，文件A就称为文件B的"软链接"（soft link）或者"符号链接（symbolic link）。
 
@@ -167,7 +165,7 @@ ls -li
 
 ![image-20200822184530961](assets/images/image-20200822184530961.png)
 
-#### inode的特殊作用
+### inode的特殊作用
 
 由于inode号码与文件名分离，这种机制导致了一些Unix/Linux系统特有的现象。
 
@@ -179,15 +177,15 @@ ls -li
 
 第3点使得软件更新变得简单，可以在不关闭软件的情况下进行更新，不需要重启。因为系统通过inode号码，识别运行中的文件，不通过文件名。更新的时候，新版文件以同样的文件名，生成一个新的inode，不会影响到运行中的文件。等到下一次运行这个软件的时候，文件名就自动指向新版文件，旧版文件的inode则被回收。
 
-#### 来源
+### 来源
 
 https://www.ruanyifeng.com/blog/2011/12/inode.html
 
 
 
-### LVM
+## LVM
 
-#### LVM基本组成
+### LVM基本组成
 
 LVM利用Linux内核的[device-mapper](http://sources.redhat.com/dm/)功能来实现存储系统的虚拟化（系统分区独立于底层硬件）。 通过LVM，你可以实现存储空间的抽象化并在上面建立虚拟分区（virtual partitions），可以更简便地扩大和缩小分区，可以增删分区时无需担心某个硬盘上没有足够的连续空间，避免为正在使用的磁盘重新分区的麻烦、为调整分区而不得不移动其他分区的不便。
 
@@ -238,7 +236,7 @@ LVM逻辑卷
   |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|_ _ _ _ _ _ _ _ _ _ _ _ _|
 ```
 
-#### 优点
+### 优点
 
 比起普通的硬盘分区管理方式，LVM更富于灵活性：
 
@@ -251,7 +249,7 @@ LVM逻辑卷
 - 允许创建快照，可以保存文件系统的备份，同时使服务的下线时间（downtime）降低到最小。
 - 支持各种设备映射目标（device-mapper targets），包括透明文件系统加密和缓存常用数据（caching of frequently used data）。这将允许你创建一个包含一个或多个磁盘、并用LUKS加密的系统，使用[LVM on top](https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#LVM_on_LUKS) 可轻松地管理和调整这些独立的加密卷 （例如. `/`, `/home`, `/backup`等) 并免去开机时多次输入密钥的麻烦。
 
-#### 缺点
+### 缺点
 
 - 在系统设置时需要更复杂的额外步骤。
 - Windows系统并不支持LVM，若使用双系统，你将无法在Windows上访问LVM分区。
@@ -270,7 +268,7 @@ vgcreate <volume_group> <physical_volume>
 
 
 
-### 目录结构
+## 目录结构
 
 * **/bin** 最经常使用的命令
 
@@ -328,11 +326,11 @@ vgcreate <volume_group> <physical_volume>
 
 
 
-## 网络管理
+# 网络管理
 
-### net-tools vs iproute
+## net-tools vs iproute
 
-### 网络接口命名修改
+## 网络接口命名修改
 
 网卡命名规则受 `biosdevname `和`net.ifnames`两个参数影响
 
@@ -348,7 +346,7 @@ vgcreate <volume_group> <physical_volume>
 
 
 
-### ifconfig
+## ifconfig
 
 ```bash
 ifconfig <接口> <IP地址> <子网掩码>
@@ -356,7 +354,7 @@ ifconfig <接口> <IP地址> <子网掩码>
 
 
 
-### ifup
+## ifup
 
 ```bash
 ifup <接口>     # 启用网卡
@@ -364,7 +362,7 @@ ifup <接口>     # 启用网卡
 
 
 
-### ifdown
+## ifdown
 
 ```bash
 ifdown <接口>     # 禁用网卡
@@ -372,13 +370,13 @@ ifdown <接口>     # 禁用网卡
 
 
 
-### mii-tool 
+## mii-tool 
 
 ```bash
 mii-tool eth0 						# 查看物理连接情况 
 ```
 
-### route
+## route
 
 ```bash
 route 										# 查看路由
@@ -389,7 +387,7 @@ route add -net <指定网段> netmask <子网掩码>  gw <网关ip>
 
 
 
-### ip
+## ip
 
 ```bash
 ip add ls      # ifconfig
@@ -398,31 +396,31 @@ ip addr add 10.0.0.1/24 dev eth1    # ifconfig eth1 10.0.0.1 netmask 255.255.255
 ip route add 10.0.0/24 via 192.168.0.1   # route add -net 10.0.0.0 netmask 255.255.255.0 gw 192.168.0.1
 ```
 
-### ping
+## ping
 
-### traceroute
+## traceroute
 
 ```bash
 traceroute -w 1 www.bing.com   
 ```
 
-### mtr
+## mtr
 
 
 
-### nslookup
+## nslookup
 
 ```bash
 nslookup www.bing.com
 ```
 
-### dig
+## dig
 
 即Domain Information Groper。
 
 `yum install bind-utils`
 
-### telnet
+## telnet
 
 ```bash
 telnet www.bing.com 80 				# 检查目标端口是否打开
@@ -430,13 +428,13 @@ telnet www.bing.com 80 				# 检查目标端口是否打开
 
 
 
-### tcpdump
+## tcpdump
 
 `apt install tcpdump`
 
 一个常用的网络抓包工具，常用来分析各种网络问题。 
 
-#### Options
+### Options
 
 ```
 -a：尝试将网络和广播地址转换成名称；
@@ -466,7 +464,7 @@ telnet www.bing.com 80 				# 检查目标端口是否打开
 -w <数据包文件>：把数据包数据写入指定的文件。
 ```
 
-#### 实例
+### 实例
 
 ```bash
 # 监视指定网络接口的数据包 如果不指定网卡，默认tcpdump只会监视第一个网络接口，一般是eth0，下面的例子都没有指定网络接口。
@@ -507,7 +505,7 @@ tcpdump ip and not net localnet
 - ss: 连接查看工具
 - 其他: dstat, slurm, nload, bmon
 
-### ss
+## ss
 
 ```bash
 ss -plat 					# -u 则检查 UDP 端口
@@ -516,11 +514,11 @@ ss -ntpl
 
 
 
-### nethogs
+## nethogs
 
 按进程查看流量占用
 
-### nc
+## nc
 
 ```bash
 # 端口扫描
@@ -537,7 +535,7 @@ $nc -l 3000 < file.txt							# server
 $nc -n 127.0.0.1 3000 > file.txt		# client
 ```
 
-### netstat
+## netstat
 
 需要安装`net-tools`包
 
@@ -547,7 +545,7 @@ netstat -ltnp  			# 列出端口
 netstat -anop|more 		# 查看网络队列
 ```
 
-### iptables
+## iptables
 
 `/etc/sysconfig/iptables`
 
@@ -559,7 +557,7 @@ iptables -nvL				# 详细规则
 
 ![image-20200926171611652](assets/images/image-20200926171611652.png)
 
-#### filter
+### filter
 
 ```bash
 iptables -F 								# 清除所有规则
@@ -573,7 +571,7 @@ iptables -t filter -A INPUT -i eth0 -s 10.0.0.2 -p tcp -dport 80 -j ACCEPT # 允
 iptables -A OUTPUT -d 10.0.0.2  -j REJECT   # 禁止访问目标IP 10.0.0.2 
 ```
 
-#### nat表
+### nat表
 
 ```bash
 iptables -t nat -A PREROUTING -i eth0 -d 114.115.116.117 -p tcp --dport 80 -j DNAT --to-destination  10.0.0.1     # 把通过eth0访问114.115.116.117 的数据转发到10.0.0.1
@@ -583,7 +581,7 @@ iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -o eth1 -j SNAT --to-source 111.11
 
 
 
-### firewalld
+## firewalld
 
 使用python对iptables的包装，更易用
 
@@ -595,7 +593,7 @@ systemctl enable iptables.service #设置防火墙开机启动
 systemctl restart iptables.service #重启防火墙使配置生效
 ```
 
-#### 开启端口
+### 开启端口
 
 ```bash
 firewall-cmd --zone=public --add-port=80/tcp --permanent
@@ -605,7 +603,7 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 * **--add-port=80/tcp**  添加端口，格式为：端口/通讯协议
 * **--permanent** 永久生效，没有此参数重启后失效
 
-#### 常用命令
+### 常用命令
 
 ```bash
 firewall-cmd --list-all						   					 # 检查新的防火墙规则
@@ -625,7 +623,7 @@ man firewall-cmd                               # 查看帮助
 
 
 
-### wget 
+## wget 
 
 ```bash
 # 下载oracle jdk
@@ -634,7 +632,7 @@ wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://down
 
 
 
-## 进程管理
+# 进程管理
 
 进程有5种状态
 
@@ -644,9 +642,9 @@ wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://down
 4. 僵死(进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放)
 5. 停止(进程收到SIGSTOP, SIGTSTP, SIGTTIN, SIGTTOU信号后停止运行运行)
 
-### ps (process status)
+## ps (process status)
 
-#### Options
+### Options
 
 - a 显示所有进程
 - -a 显示同一终端下的所有程序
@@ -677,18 +675,18 @@ ps -e -o "%C : %p : %z : %a"|sort -k5 -nr 		# 查看进程，按内存从大到�
 ps -e -o "%C : %p : %z : %a"|sort -nr					# 查看进程，按CPU利用率从大到小排序
 ```
 
-### pstree
+## pstree
 
 
 
-### top
+## top
 
 ```bash
 top -c -b -o +%MEM | head -n 20 | tail -15		# 查看内存占用并且排序
 top -H -p pid          # 显示进程的所有线程
 ```
 
-### lsof
+## lsof
 
 来查看开启的套接字和文件。
 
@@ -698,19 +696,19 @@ lsof -p pid 				# 查看进程打开了那些文件
 lsof -i:8700 或者 lsof -i | grep 8700  # 查找被占用的端口
 ```
 
-### 
+## 
 
-### nice
+## nice
 
 调整进程优先级
 
-### renice
+## renice
 
 重新调整进程优先级
 
 
 
-### &、ctrl + z、fg、bg、jobs
+## &、ctrl + z、fg、bg、jobs
 
 进程作业控制
 
@@ -735,40 +733,472 @@ htop
 $ fg %jobnumber  # jobnumber jobs查询到的命令的序号
 ```
 
-### kill
+## kill
 
 ```bash
 kill -l  				# 查看系统支持的所有信号
 ```
 
-### nohup
+## nohup
 
 
 
-### disown
+## disown
 
-### supervisor 
+## supervisor 
 
 > 一个管理进程的工具，可以随系统启动而启动服务，它还时刻监控服务进程，如果服务进程意外退出，Supervisor可以自动重启服务。
 
 
 
-## 系统管理
+# 系统管理
 
-### systemctl
+## Systemd
 
-服务集中管理工具
+Systemd 是 Linux 系统工具，用来启动守护进程，已成为大多数发行版的标准配置。
 
-服务文件的默认路径`/lib/systemd/system`
+Systemd 并不是一个命令，而是一组命令，涉及到系统管理的方方面面。
 
-### update-alternatives
+### 管理系统
+
+#### systemctl
+
+Systemd 的主命令，用于管理系统。
+
+```bash
+# 重启系统
+$ sudo systemctl reboot
+
+# 关闭系统，切断电源
+$ sudo systemctl poweroff
+
+# CPU停止工作
+$ sudo systemctl halt
+
+# 暂停系统
+$ sudo systemctl suspend
+
+# 让系统进入冬眠状态
+$ sudo systemctl hibernate
+
+# 让系统进入交互式休眠状态
+$ sudo systemctl hybrid-sleep
+
+# 启动进入救援状态（单用户状态）
+$ sudo systemctl rescue
+```
+
+#### systemd-analyze
+
+查看启动耗时
+
+```bash
+# 查看启动耗时
+$ systemd-analyze                                                                                       
+
+# 查看每个服务的启动耗时
+$ systemd-analyze blame
+
+# 显示瀑布状的启动过程流
+$ systemd-analyze critical-chain
+
+# 显示指定服务的启动流
+$ systemd-analyze critical-chain atd.service
+```
+
+#### hostnamectl
+
+用于查看本地化设置。
+
+```bash
+# 显示当前主机的信息
+$ hostnamectl
+
+# 设置主机名。
+$ sudo hostnamectl set-hostname rhel7
+```
+
+#### localectl
+
+用于查看本地化设置。
+
+```bash
+# 查看本地化设置
+$ localectl
+
+# 设置本地化参数。
+$ sudo localectl set-locale LANG=en_GB.utf8
+$ sudo localectl set-keymap en_GB
+```
+
+#### timedatectl
+
+用于查看当前时区设置。
+
+```bash
+# 查看当前时区设置
+$ timedatectl
+
+# 显示所有可用的时区
+$ timedatectl list-timezones                                                                                   
+
+# 设置当前时区
+$ sudo timedatectl set-timezone America/New_York
+$ sudo timedatectl set-time YYYY-MM-DD
+$ sudo timedatectl set-time HH:MM:SS
+```
+
+#### loginctl
+
+用于查看当前登录的用户。
+
+```bash
+
+# 列出当前session
+$ loginctl list-sessions
+
+# 列出当前登录用户
+$ loginctl list-users
+
+# 列出显示指定用户的信息
+$ loginctl show-user root
+```
+
+### Unit
+
+Systemd 可以管理所有系统资源。不同的资源统称为 Unit（单位）。
+
+Unit 一共分成12种。
+
+```bash
+Service unit：系统服务
+Target unit：多个 Unit 构成的一个组
+Device Unit：硬件设备
+Mount Unit：文件系统的挂载点
+Automount Unit：自动挂载点
+Path Unit：文件或路径
+Scope Unit：不是由 Systemd 启动的外部进程
+Slice Unit：进程组
+Snapshot Unit：Systemd 快照，可以切回某个快照
+Socket Unit：进程间通信的 socket
+Swap Unit：swap 文件
+Timer Unit：定时器
+```
+
+```bash
+# 列出正在运行的 Unit
+$ systemctl list-units
+
+# 列出所有Unit，包括没有找到配置文件的或者启动失败的
+$ systemctl list-units --all
+
+# 列出所有没有运行的 Unit
+$ systemctl list-units --all --state=inactive
+
+# 列出所有加载失败的 Unit
+$ systemctl list-units --failed
+
+# 列出所有正在运行的、类型为 service 的 Unit
+$ systemctl list-units --type=service
+
+# 显示系统状态
+$ systemctl status
+
+# 显示单个 Unit 的状态
+$ sysystemctl status bluetooth.service
+
+# 显示远程主机的某个 Unit 的状态
+$ systemctl -H root@rhel7.example.com status httpd.service
+
+# 显示某个 Unit 是否正在运行
+$ systemctl is-active application.service
+
+# 显示某个 Unit 是否处于启动失败状态
+$ systemctl is-failed application.service
+
+# 显示某个 Unit 服务是否建立了启动链接
+$ systemctl is-enabled application.service
+
+# 立即启动一个服务
+$ sudo systemctl start apache.service
+
+# 立即停止一个服务
+$ sudo systemctl stop apache.service
+
+# 重启一个服务
+$ sudo systemctl restart apache.service
+
+# 杀死一个服务的所有子进程
+$ sudo systemctl kill apache.service
+
+# 重新加载一个服务的配置文件
+$ sudo systemctl reload apache.service
+
+# 重载所有修改过的配置文件
+$ sudo systemctl daemon-reload
+
+# 显示某个 Unit 的所有底层参数
+$ systemctl show httpd.service
+
+# 显示某个 Unit 的指定属性的值
+$ systemctl show -p CPUShares httpd.service
+
+# 设置某个 Unit 的指定属性
+$ sudo systemctl set-property httpd.service CPUShares=500
+
+# 列出一个 Unit 的所有依赖
+systemctl list-dependencies nginx.service
+
+# 列出一个 Unit 的所有依赖并展开 Target 
+systemctl list-dependencies --all nginx.service
+```
+
+#### Unit的配置文件
+
+每一个 Unit 都有一个配置文件，告诉 Systemd 怎么启动这个 Unit 。
+
+Systemd 默认从目录`/etc/systemd/system/`读取配置文件。但是，里面存放的大部分文件都是符号链接，指向目录`/usr/lib/systemd/system/`，真正的配置文件存放在那个目录。
+
+systemctl enable命令用于在上面两个目录之间，建立符号链接关系
+
+```bash
+sudo systemctl enable xxx.service
+# 等同于
+$ sudo ln -s '/usr/lib/systemd/system/xxx.service' '/etc/systemd/system/multi-user.target.wants/xxxx.service'
+```
+
+如果配置文件里面设置了开机启动，`systemctl enable`命令相当于激活开机启动。
+
+与之对应的，`systemctl disable`命令用于在两个目录之间，撤销符号链接关系，相当于撤销开机启动。
+
+配置文件的后缀名，就是该 Unit 的种类，比如`sshd.socket`。如果省略，Systemd 默认后缀名为`.service`，所以sshd会被理解成`sshd.service`。
+
+#### 配置文件的状态
+
+systemctl list-unit-files命令用于列出所有配置文件。
+
+```bash
+
+# 列出所有配置文件
+$ systemctl list-unit-files
+
+# 列出指定类型的配置文件
+$ systemctl list-unit-files --type=service
+```
+
+配置文件的状态，一共有四种。
+
+* enabled：已建立启动链接
+* disabled：没建立启动链接
+* static：该配置文件没有[Install]部分（无法执行），只能作为其他配置文件的依赖
+* masked：该配置文件被禁止建立启动链接
+
+一旦修改配置文件，就要让 SystemD 重新加载配置文件，然后重新启动，否则修改不会生效。
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart httpd.service
+```
+
+#### 配置文件的格式
+
+```bash
+[Unit]
+Description=OpenBSD Secure Shell server
+Documentation=man:sshd(8) man:sshd_config(5)
+After=network.target auditd.service
+ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
+
+[Service]
+EnvironmentFile=-/etc/default/ssh
+ExecStartPre=/usr/sbin/sshd -t
+ExecStart=/usr/sbin/sshd -D $SSHD_OPTS
+ExecReload=/usr/sbin/sshd -t
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=notify
+RuntimeDirectory=sshd
+RuntimeDirectoryMode=0755
+
+[Install]
+WantedBy=multi-user.target
+Alias=sshd.service
+
+```
+
+##### [Unit]
+
+通常是配置文件的第一个区块，用来定义 Unit 的元数据，以及配置与其他 Unit 的关系。它的主要字段如下。
+
+* Description：简短描述
+* Documentation：文档地址
+* Requires：当前 Unit 依赖的其他 Unit，如果它们没有运行，当前 Unit 会启动失败
+* Wants：与当前 Unit 配合的其他 Unit，如果它们没有运行，当前 Unit 不会启动失败
+* BindsTo：与Requires类似，它指定的 Unit 如果退出，会导致当前 Unit 停止运行
+* Before：如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之后启动
+* After：如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之前启动
+* Conflicts：这里指定的 Unit 不能与当前 Unit 同时运行
+* Condition...：当前 Unit 运行必须满足的条件，否则不会运行
+* Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
+
+##### [Service]
+
+用来 Service 的配置，只有 Service 类型的 Unit 才有这个区块。它的主要字段如下。
+
+* Type：定义启动时的进程行为。它有以下几种值。
+  * Type=simple：默认值，执行ExecStart指定的命令，启动主进程
+  * Type=forking：以 fork 方式从父进程创建子进程，创建后父进程会立即退出
+  * Type=oneshot：一次性进程，Systemd 会等当前服务退出，再继续往下执行
+  * Type=dbus：当前服务通过D-Bus启动
+  * Type=notify：当前服务启动完毕，会通知Systemd，再继续往下执行
+  * Type=idle：若有其他任务执行完毕，当前服务才会运行
+* ExecStart：启动当前服务的命令
+* ExecStartPre：启动当前服务之前执行的命令
+* ExecStartPost：启动当前服务之后执行的命令
+* ExecReload：重启当前服务时执行的命令
+* ExecStop：停止当前服务时执行的命令
+* ExecStopPost：停止当其服务之后执行的命令
+* RestartSec：自动重启当前服务间隔的秒数
+* Restart：定义何种情况 Systemd 会自动重启当前服务，可能的值包括always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog
+* TimeoutSec：定义 Systemd 停止当前服务之前等待的秒数
+* Environment：指定环境变量
+
+##### [Install]
+
+通常是配置文件的最后一个区块，用来定义如何启动，以及是否开机启动。它的主要字段如下。
+
+* WantedBy：它的值是一个或多个 Target，当前 Unit 激活时（enable）符号链接会放入/etc/systemd/system目录下面以 Target 名 + .wants后缀构成的子目录中
+* RequiredBy：它的值是一个或多个 Target，当前 Unit 激活时，符号链接会放入/etc/systemd/system目录下面以 Target 名 + .required后缀构成的子目录中
+* Alias：当前 Unit 可用于启动的别名
+* Also：当前 Unit 激活（enable）时，会被同时激活的其他 Unit
+
+### Target
+
+启动计算机的时候，需要启动大量的 Unit。如果每一次启动，都要一一写明本次启动需要哪些 Unit，显然非常不方便。Systemd 的解决方案就是 Target。
+
+简单说，Target 就是一个 Unit 组，包含许多相关的 Unit 。启动某个 Target 的时候，Systemd 就会启动里面所有的 Unit。从这个意义上说，Target 这个概念类似于"状态点"，启动某个 Target 就好比启动到某种状态。
+
+```bash
+# 查看当前系统的所有 Target
+$ systemctl list-unit-files --type=target
+
+# 查看一个 Target 包含的所有 Unit
+$ systemctl list-dependencies multi-user.target
+
+# 查看启动时的默认 Target
+$ systemctl get-default
+
+# 设置启动时的默认 Target
+$ sudo systemctl set-default multi-user.target
+
+# 切换 Target 时，默认不关闭前一个 Target 启动的进程，
+# systemctl isolate 命令改变这种行为，
+# 关闭前一个 Target 里面所有不属于后一个 Target 的进程
+$ sudo systemctl isolate multi-user.target
+```
+
+### 日志管理
+
+Systemd 统一管理所有 Unit 的启动日志。带来的好处就是，可以只用`journalctl`一个命令，查看所有日志（内核日志和应用日志）。日志的配置文件是`/etc/systemd/journald.conf`。
+
+```bash
+# 查看所有日志（默认情况下 ，只保存本次启动的日志）
+$ sudo journalctl
+
+# 查看内核日志（不显示应用日志）
+$ sudo journalctl -k
+
+# 查看系统本次启动的日志
+$ sudo journalctl -b
+$ sudo journalctl -b -0
+
+# 查看上一次启动的日志（需更改设置）
+$ sudo journalctl -b -1
+
+# 查看指定时间的日志
+$ sudo journalctl --since="2012-10-30 18:17:16"
+$ sudo journalctl --since "20 min ago"
+$ sudo journalctl --since yesterday
+$ sudo journalctl --since "2015-01-10" --until "2015-01-11 03:00"
+$ sudo journalctl --since 09:00 --until "1 hour ago"
+
+# 显示尾部的最新10行日志
+$ sudo journalctl -n
+
+# 显示尾部指定行数的日志
+$ sudo journalctl -n 20
+
+# 实时滚动显示最新日志
+$ sudo journalctl -f
+
+# 查看指定服务的日志
+$ sudo journalctl /usr/lib/systemd/systemd
+
+# 查看指定进程的日志
+$ sudo journalctl _PID=1
+
+# 查看某个路径的脚本的日志
+$ sudo journalctl /usr/bin/bash
+
+# 查看指定用户的日志
+$ sudo journalctl _UID=33 --since today
+
+# 查看某个 Unit 的日志
+$ sudo journalctl -u nginx.service
+$ sudo journalctl -u nginx.service --since today
+
+# 实时滚动显示某个 Unit 的最新日志
+$ sudo journalctl -u nginx.service -f
+
+# 合并显示多个 Unit 的日志
+$ journalctl -u nginx.service -u php-fpm.service --since today
+
+# 查看指定优先级（及其以上级别）的日志，共有8级
+# 0: emerg
+# 1: alert
+# 2: crit
+# 3: err
+# 4: warning
+# 5: notice
+# 6: info
+# 7: debug
+$ sudo journalctl -p err -b
+
+# 日志默认分页输出，--no-pager 改为正常的标准输出
+$ sudo journalctl --no-pager
+
+# 以 JSON 格式（单行）输出
+$ sudo journalctl -b -u nginx.service -o json
+
+# 以 JSON 格式（多行）输出，可读性更好
+$ sudo journalctl -b -u nginx.serviceqq
+ -o json-pretty
+
+# 显示日志占据的硬盘空间
+$ sudo journalctl --disk-usage
+
+# 指定日志文件占据的最大空间
+$ sudo journalctl --vacuum-size=1G
+
+# 指定日志文件保存多久
+$ sudo journalctl --vacuum-time=1years
+```
+
+### 参考
+
+https://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html
+
+## update-alternatives
+
 管理linux 默认程序
+
 ```bash
 sudo update-alternatives --config editor # 切换默认的编辑程序
 ```
 
-
-### SELinux
+## SELinux
 
 ```bash
 # 查看SELinux
@@ -779,17 +1209,15 @@ ls -Z
 id -Z
 
 # 关闭SELinux
-setenforce 0									# 临时
-/etc/selinux/sysconfig				# 持久
+setenforce 0  # 临时
+/etc/selinux/sysconfig  # 持久
 ```
 
-### free
+## free
 
 查看内存使用率
 
-
-
-### fdisk
+## fdisk
 
 ```bash
 fdisk -l 
@@ -801,7 +1229,7 @@ fdisk  /dev/sdb       # 对磁盘进行分区，进入分区页面
 
 > 磁盘容量>2T,需要使用parted进行分区
 
-### mkfs  
+## mkfs  
 
 ```bash
 mkfs.xfs /dev/sdb1     # 使用xfs文件系统格式化分区
@@ -809,9 +1237,7 @@ mkfs.xfs /dev/sdb1     # 使用xfs文件系统格式化分区
 
 ![image-20200830173446697](./assets/images/image-20200830173446697.png)
 
-
-
-### mount
+## mount
 
 ```bash
 mount /dev/vdb1 /mnt/vdb1
@@ -819,7 +1245,7 @@ mount -o uquota,gquota /dev/vdb1/ /mnt/vdb1    # 让挂载的磁盘支持用户�
 df -h
 ```
 
-##### 开机自动挂在
+### 开机自动挂在
 
 `edit /etc/fstab`
 
@@ -829,16 +1255,14 @@ df -h
 mount -a
 ```
 
-- 第一列为设备号或该设备的卷标 	
-- 第二列为挂载点 	
-- 第三列为文件系统 	
-- 第四列为文件系统参数 	
-- 第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
-- 第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
+* 第一列为设备号或该设备的卷标
+* 第二列为挂载点
+* 第三列为文件系统
+* 第四列为文件系统参数
+* 第五列为是否可以用demp命令备份。0：不备份，1：备份，2：备份，但比1重要性小。设置了该参数后，Linux中使用dump命令备份系统的时候就可以备份相应设置的挂载点了。
+* 第六列为是否在系统启动的时候，用fsck检验分区。因为有些挂载点是不需要检验的，比如：虚拟内存swap、/proc等。0：不检验，1：要检验，2要检验，但比1晚检验，一般根目录设置为1，其他设置为2就可以了
 
-
-
-### umount
+## umount
 
 ```bash
 # 卸载磁盘
@@ -847,11 +1271,7 @@ umount /dev/vdb1
 losf /挂载目录
 ```
 
-
-
-
-
-### parted 
+## parted 
 
 ```bash
 # 列出所有块设备上的分区布局,显示磁盘文档类型
@@ -862,7 +1282,7 @@ parted /dev/sdd    # 对磁盘分区
 
 
 
-### 交换分区
+## 交换分区
 
 ```bash
 mkswap /dev/sdd1			# 标记分区为swap
@@ -876,7 +1296,7 @@ swapon /swapfile
 swapoff /swapfile
 ```
 
-### df
+## df
 
 report file system disk space usage
 
@@ -887,7 +1307,7 @@ df -hi 			# 显示indoe空间大小
 for i in /*; do echo $i; find $i | wc -l; done  # 统计目录下文件的数量
 ```
 
-### du
+## du
 
 ```bash
 ls -lh /etc/passwd    # 文件的大小
@@ -897,7 +1317,7 @@ du -h --max-depth=1						# 查看各文件夹大小命令
 
 
 
-### dd
+## dd
 
 ```bash
 dd if=afile bs=4M count=10 of=bfile    
@@ -911,21 +1331,21 @@ dd if=/dev/zero bs=4M count=1024 of=/swapfile     # 使用文件制作交换分�
 
 
 
-### hostname
+## hostname
 
 ```bash
 hostname [new-host-name]     				# 设置主机名称
 hostnamectl set-hostname hostname 			# centos 7
 ```
 
-#### <span id="crontab">crontab 定时</span>
+### <span id="crontab">crontab 定时</span>
 
 ```bash
 crontab -e 						# 编辑
 crontab -l 						# 查看
 ```
 
-##### 格式
+#### 格式
 
 `秒 分 小时 日 月 星期 年`
 
@@ -942,7 +1362,7 @@ crontab -l 						# 查看
 * 月 用0-11 或用字符串 `JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV and DEC` 表示
 * 星期 数字1-7（1 ＝ 星期日），或用字符口串`SUN, MON, TUE, WED, THU, FRI and SAT`
 
-##### 符号
+#### 符号
 
 * **`*`** 代表整个时间段
 * **`?`** 表示不确定的值
@@ -953,7 +1373,7 @@ crontab -l 						# 查看
 * **`W`** 指定离给定日期最近的工作日(周一到周五)
 * **`#`** 表示该月第几个周X。6#3表示该月第3个周五
 
-##### 实例
+#### 实例
 
 ```bash
 */5 * * * * ?  	# 每隔5秒执行一次
@@ -980,7 +1400,7 @@ crontab -l 						# 查看
 0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的
 ```
 
-### uname 
+## uname 
 
 显示内核信息
 
@@ -993,7 +1413,7 @@ lsb_release -a
 cat /etc/redhat-release
 ```
 
-### uptime 系统平均负载
+## uptime 系统平均负载
 
 系统总共运行了多长时间和系统的平均负载
 
@@ -1007,7 +1427,7 @@ up 188 days,  4:27   # 主机已运行时间,时间越大，说明你的机器�
 load average: 0.00, 0.00, 0.00         # 系统平均负载，统计最近1，5，15分钟的系统平均负载, 如果是1 的话，说明在1核CPU上，使用率是100%， 在2核心CPU上，50%！
 ```
 
-### 时间
+## 时间
 
 设置时区 
 
@@ -1020,7 +1440,7 @@ sudo ntpdate cn.pool.ntp.org        #命令更新时间
 ntpdate -u ntp.api.bz       # 同步时间
 ```
 
-### 语言
+## 语言
 
 配置文件地址 **/etc/locale.conf**
 
@@ -1029,7 +1449,7 @@ ntpdate -u ntp.api.bz       # 同步时间
 localectl set-locale LANG=en_US.utf8
 ```
 
-### Font
+## Font
 
 ```bash
 fc-list							# fc-list查看已安装的字体
@@ -1037,7 +1457,7 @@ fc-list :lang=zh		# 查看中文字体
 fc-cache -vf				# 扫描字体目录并生成字体信息的缓存
 ```
 
-#### 安装字体
+### 安装字体
 
 ```bash
 fc-list  # 查看安装的字体
@@ -1052,7 +1472,7 @@ mkdir chinese
 fc-cache # 扫描字体目录并生成字体信息的缓存
 ```
 
-### sysctl 
+## sysctl 
 
 用于在内核运行时动态地修改内核的运行参数，可用的内核参数在目录`/proc/sys`中。它包含一些tcp/ip堆栈和虚拟内存系统的高级选项。用sysctl可以读取设置超过五百个系统变量。正常可以通过修改`/etc/sysctl.conf` 来修改配置。
 
@@ -1064,7 +1484,7 @@ sysctl variable
 sysctl variable=1
 ```
 
-#### 参数
+### 参数
 
 variable 变量，例如 `kernel.ostype` 也可以是`kernel/ostype`
 variable=value 设置变量的值
@@ -1150,7 +1570,7 @@ net.ipv4.ip_local_port_range = 2048 65000
 fs.file-max = 102400
 ```
 
-### strace
+## strace
 
 strace是一个在类Unix操作系统如Linux上做debugging和trouble shooting的超级好用的工具。它可以捕获和记录进程的所有系统调用，以及这个进程接收的所有信号。
 
@@ -1186,9 +1606,9 @@ strace -o df_debug.txt df -h
 -d # 可以显示strace的debug信息。
 ```
 
-## 用户管理
+# 用户管理
 
-### useradd
+## useradd
 
 会自动为创建的用户指定主目录、系统shell版本，会在创建时输入用户密码。
 
@@ -1200,7 +1620,7 @@ tail -10 /etc/passwd   #
 tail -10 /etc/shadow    # 用户密码相关
 ````
 
-### userdel
+## userdel
 
 删除用户
 
@@ -1208,7 +1628,7 @@ tail -10 /etc/shadow    # 用户密码相关
 userdel -r test    # -r参数删除时一起删除用户目录 
 ```
 
-### passwd
+## passwd
 
 修改用户密码
 
@@ -1217,7 +1637,7 @@ passwd test  					# 为test用户设置密码
 passwd    						# 更改当前用户密码
 ```
 
-### usermod
+## usermod
 
 修改用户属性
 
@@ -1225,7 +1645,7 @@ passwd    						# 更改当前用户密码
 usermod -d /home/xxx test    # 修改用户test的home目录
 ```
 
-### chage
+## chage
 
 修改用户密码过期信息
 
@@ -1233,7 +1653,7 @@ usermod -d /home/xxx test    # 修改用户test的home目录
 
 ```
 
-### groupadd
+## groupadd
 
 ```bash
 groupadd group1											# 新增组
@@ -1243,15 +1663,15 @@ useradd -g group1 user2  						# 新增用户并指定组
 id user1														# 查看用户的信息
 ```
 
-### groupdel
+## groupdel
 
 
 
-### 用户和组的配置文件
+## 用户和组的配置文件
 
 
 
-#### /etc/passwd
+### /etc/passwd
 
 文件存放的是用户的信息，由6个分号组成的7个信息，解释如下
 
@@ -1263,7 +1683,7 @@ id user1														# 查看用户的信息
 6. 开始目录
 7. 登录使用的Shell，就是对登录命令进行解析的工具。
 
-#### /etc/shadow
+### /etc/shadow
 
 存放的普通帐号信息如下：
 
@@ -1277,7 +1697,7 @@ id user1														# 查看用户的信息
 8. 帐号取消日期
 9. 保留条目，目前没用
 
-#### /etc/group
+### /etc/group
 
 存放用户组的所有信息
 
@@ -1316,7 +1736,7 @@ usermod -G groupname username  		#已有的用户增加工作组
 
 
 
-### chsh
+## chsh
 
 change login shell
 
@@ -1324,9 +1744,9 @@ change login shell
 
 
 
-## 文件处理
+# 文件处理
 
-### 文件权限
+## 文件权限
 
 ```bash
 [root@localhost /]ll /bin/bash
@@ -1343,27 +1763,27 @@ change login shell
 
 
 
-### ls
+## ls
 
-#### Options
+### Options
 
 * **-h** –human-readable 以容易理解的格式列出文件大小
 
-### mkdir
+## mkdir
 
-### cd
+## cd
 
-### pwd
+## pwd
 
-### rmdir
+## rmdir
 
-### rm
+## rm
 
-### cp
+## cp
 
 
 
-### od 
+## od 
 ```bash
 -c  以ASCII编码的方式打印输入文件
 -x 以十六进制的方式打印输入文件
@@ -1371,13 +1791,13 @@ change login shell
 
 od（Octal Dump）命令用于将指定文件内容以八进制、十进制、十六进制、浮点格式或 ASCII 编码字符方式显示，通常用于显示或查看文件中不能直接显示在终端的字符。od 命令系统默认的显示方式是八进制。
 
-### hexdump
+## hexdump
 
 用来查看“二进制”文件的十六进制编码，但实际上它能查看任何文件，而不只限于二进制文件。
 
-### tar 
+## tar 
 
-#### Options
+### Options
 
 * **c** 打包
 * **x** 解包
@@ -1394,7 +1814,7 @@ tar jxf /tmp/etc-backup.tar.bz2
 
 
 
-### ln 
+## ln 
 
 * 硬链接(Hard Link) 说白了是一个指针，指向文件索引节点，系统并不为它重新分配inode
 
@@ -1414,17 +1834,17 @@ ln abc cde 		# 建立abc的硬连接，
 
 
 
-### tr 
+## tr 
 
 可以对来自标准输入的字符进行替换、压缩和删除。它可以将一组字符变成另一组字符，经常用来编写优美的单行命令，作用很强大
 
 
 
-### chown
+## chown
 
-### chgrp
+## chgrp
 
-### chmod
+## chmod
 
 chmod命令用于更改文件或目录的权限
 
@@ -1455,7 +1875,7 @@ r-- = 100 in binary = 4
 | **644**   | **(rw-r--r--)** The owner may read and write a file, while all others may only read the file. A common setting for data files that everybody may read, but only the owner may change. |
 | **600**   | **(rw-------)** The owner may read and write a file. All others have no rights. A common setting for data files that the owner wants to keep private. |
 
-### chattr
+## chattr
 
 改变 Linux 文件系统中的文件属性（change file attributes on a Linux file system）
 
@@ -1490,7 +1910,7 @@ S: synchronous updates; 一旦应用程序对这个文件执行了写操作，�
 T: top of directory hierarchy; 如果一个目录设置了该属性，它将被视为目录结构的顶极目录
 ```
 
-### lsattr
+## lsattr
 
 列出 Linux 第二扩展文件系统上文件属性( list file attributes on a Linux second extended file system)
 
@@ -1504,9 +1924,9 @@ lsattr [ -RVadv ] [ files...  ]
 -v: 显示文件或目录版本
 ```
 
-### 文件搜索
+## 文件搜索
 
-#### locate
+### locate
 
 - 在后台数据库中按文件名搜索，速度比较快
 
@@ -1529,7 +1949,7 @@ lsattr [ -RVadv ] [ files...  ]
 
 
 
-#### whereis
+### whereis
 
 - 搜索命令所在路径以及帮助文档所在位置
 
@@ -1544,7 +1964,7 @@ lsattr [ -RVadv ] [ files...  ]
 
 
 
-#### which
+### which
 
 - 可以看到别名 `which ls`
 - 能看到的都是外部安装的命令
@@ -1552,7 +1972,7 @@ lsattr [ -RVadv ] [ files...  ]
 
 
 
-#### find
+### find
 
 ```bash
 find Folder -type d -exec chmod 0777 {} +			# 更改目录权限(不包含文件)
@@ -1566,13 +1986,13 @@ find /data -mtime +30 -name "*.log" -print -exec rm -rf {} \;    # 将/data 目�
 
 
 
-### 文件操作
+## 文件操作
 
-#### head
+### head
 
 显示文件的头n行 ，默认10行
 
-#### tail 
+### tail 
 
 显示文件的尾n行，默认10行
 
@@ -1585,11 +2005,11 @@ tail -c +200 notes | pg		# 第 200 字节开始一次一页地显示 notes 文�
 tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 notes 文件时，tail 命令会继续显示这些行。 显示一直继续，直到您按下（Ctrl-C）组合键停止显示。
 ```
 
-#### uniq
+### uniq
 
 用于检查及删除文本文件中重复出现的行列，一般与 sort 命令结合使用
 
-#### wc
+### wc
 
 统计制定文件中的字节数，字数，行数, 缺省参数 -lcw
 
@@ -1599,7 +2019,7 @@ tail -f notes				# 跟踪 notes 文件的增长情况,当将某些行添加至 n
 
 **-c** 统计字节数
 
-#### grep			
+### grep			
 
 ```base
 $grep -5 'parttern' inputfile #打印匹配行的前后5行
@@ -1608,7 +2028,7 @@ $grep -A 5 'parttern' inputfile #打印匹配行的后5行
 $grep -B 5 'parttern' inputfile #打印匹配行的前5行
 ```
 
-#### xargs
+### xargs
 
 通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数
 
@@ -1616,7 +2036,7 @@ $grep -B 5 'parttern' inputfile #打印匹配行的前5行
 echo '--help' | xargs ls
 ```
 
-#### tar
+### tar
 
 ```bash
 unzip filename.zip			# 解压zip
@@ -1633,9 +2053,9 @@ tar -xvf filename.tar.bz2
 
 
 
-## 文本处理
+# 文本处理
 
-### 元字符
+## 元字符
 
 元字符（Metacharacter），指SHELL直译器或正则表达式（regex）引擎等计算机程序中具有特殊意义的字符。它们被作为一般的字符使用时，必须要通过“转义”（前面加一个反斜杠“\”）来去除他们本身的特殊意义，这些元字符包括：
 
@@ -1651,7 +2071,7 @@ tar -xvf filename.tar.bz2
 * 开和闭 花括号：`{`和`}`
 * 开和闭 小括号：`(`和`)`
 
-### sed
+## sed
 
 是一种在线编辑器，它一次处理一行内容。处理时，把当前处理的行存储在临时缓冲区中，称为“模式空间”（pattern space），接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕。接着处理下一行，这样不断重复，直到文件末尾。文件内容并没有 改变，除非你使用重定向存储输出。Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作；编写转换程序等。
 
@@ -1673,15 +2093,15 @@ sed '/regular/d'    										# 删除匹配的行
 
 
 
-### awk
+## awk
 
-#### 语法
+### 语法
 
 ```bash
 awk '{pattern + action}' {filenames}
 ```
 
-#### 内建变量
+### 内建变量
 
 | 变量        | 描述                                                       |
 | :---------- | :--------------------------------------------------------- |
@@ -1707,7 +2127,7 @@ awk '{pattern + action}' {filenames}
 | RSTART      | 由match函数所匹配的字符串的第一个位置                      |
 | SUBSEP      | 数组下标分隔符(默认值是/034)                               |
 
-#### 基本用法
+### 基本用法
 
 awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。awk有3个不同版本: awk、nawk和gawk，未作特别说明，一般指gawk，gawk 是 AWK 的 GNU 版本。
 
@@ -1716,7 +2136,7 @@ awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑�
 ps -ef | grep 'java' | awk '{print $1}' | xargs kill
 ```
 
-#### 判断与循环
+### 判断与循环
 
 ```bash
 # if 
@@ -1726,13 +2146,13 @@ awk '{if($1>80) print $0}' /filename
 cat package.json | awk -F "[,:}]" '{for(i=1;i<=NF;i++){if($i~/'version'\042/){print $(i+1)}}}' | tr -d ' "'`
 ```
 
-#### 数组
+### 数组
 
 
 
-#### 函数
+### 函数
 
-##### 算数函数
+#### 算数函数
 
 * sin
 * cos
@@ -1746,7 +2166,7 @@ awk 'BEGIN{print rand()}'
 awk 'BEGIN{srand(); print rand()}'			# 重新获得种子生成随机数
 ```
 
-##### 字符串函数
+#### 字符串函数
 
 * gsub(r, s, t)
 * index(s, t)
@@ -1756,7 +2176,7 @@ awk 'BEGIN{srand(); print rand()}'			# 重新获得种子生成随机数
 * sub(r, s, t)
 * subset(s, p, n)
 
-##### 自定义函数
+#### 自定义函数
 
 ```bash
 awk 'function fname() {return 0} BEGIN{print fname()}'
@@ -1766,11 +2186,11 @@ awk 'function fname() {return 0} BEGIN{print fname()}'
 
 
 
-## 包管理
+# 包管理
 
-### rpm
+## rpm
 
-#### Options
+### Options
 
 * **-q** 查下软件包
 * **-i** 安装软件包
@@ -1782,7 +2202,7 @@ rpm -ql iptables-services   # 查看iptable-services 有哪些文件
 
 
 
-### yum
+## yum
 
 `/etc/yum.repos.d/CentOS-base.repo`
 
@@ -1799,7 +2219,7 @@ yum -y list java*   			# 搜索安装包
 
 
 
-### dnf
+## dnf
 
 ```bash
 dnf install epel-release
@@ -1808,7 +2228,7 @@ dnf config-manager --set-enabled PowerTools
 
 
 
-### 源码编译安装
+## 源码编译安装
 
 ```bash
 wget xxx.tar.gz
@@ -1819,18 +2239,18 @@ make -j2				# 用两个逻辑的CPU去编译
 make install
 ```
 
-### 内核升级
+## 内核升级
 
 ```bash
 uname -r 		# 查看内核版本
 yum install kernel-3.10.0    # 升级内核版本
 ```
 
-### grub文件
+## grub文件
 
 GNU GRUB（GRand Unified Bootloader简称“GRUB”）是一个来自GNU项目的多操作系统启动程序。GRUB是多启动规范的实现，它允许用户可以在计算机内同时拥有多个操作系统，并在计算机启动时选择希望运行的操作系统。GRUB可用于选择操作系统分区上的不同内核，也可用于向这些内核传递启动参数。
 
-#### grub配置文件
+### grub配置文件
 
 * /etc/default/grub
 
@@ -1850,7 +2270,7 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 
 
 
-## 常用技巧
+# 常用技巧
 
 **ctrl + u** 清除当前输入的命令
 
@@ -1870,27 +2290,27 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 
 
 
-## 命令
+# 命令
 
-### 帮助命令
+## 帮助命令
 
-#### man 
+### man 
 
-#### help
+### help
 
-#### info
-
-
+### info
 
 
 
-## 性能
 
-### 根据指标找工具对应表
+
+# 性能
+
+## 根据指标找工具对应表
 
 ![](http://www.brendangregg.com/Perf/linux_perf_tools_full.png)
 
-#### CPU
+### CPU
 
 | 性能指标          | 工具             | 说明                                                   |
 | ----------------- | ---------------- | ------------------------------------------------------ |
@@ -1922,7 +2342,7 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 | 事件剖析          | perf             | 分析cpu的缓存以及内核调用链                            |
 |                   | execsnoop        | 监控短时进程                                           |
 
-#### memory
+### memory
 
 | 内存指标                         | 性能工具         |
 | -------------------------------- | ---------------- |
@@ -1950,7 +2370,7 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 |                                  | valgrind         |
 | 指定文件的缓存大小               | pcstat           |
 
-#### I/O
+### I/O
 
 | 性能指标                                                     | 工具                        | 说明                                     |
 | ------------------------------------------------------------ | --------------------------- | ---------------------------------------- |
@@ -1967,7 +2387,7 @@ grep ^menu /boot/grub2/grub.cfg    # 列出当前系统的所有引导内核
 
 ​	
 
-### perf 
+## perf 
 
 分析cpu性能问题
 
@@ -1999,7 +2419,7 @@ $ perf report # 展示类似于 perf top 的报告
 
 > perf top 和 perf record 加上 -g 参数，开启调用关系的采样，方便我们根据调用链来分析性能问题
 
-### vmstat
+## vmstat
 
 vmstat工具的使用是通过两个数字参数来完成的，第一个参数是采样的时间间隔数，单位是秒，第二个参数是采样的次数
 
@@ -2012,35 +2432,35 @@ $ vmstat 1
 # 每隔 5 秒输出 1 组数据, 共输出2组
 $ vmstat 5 2
 ```
-#### procs
+### procs
 * **r** 表示运行队列(就是说多少个进程真的分配到CPU)，我测试的服务器目前CPU比较空闲，没什么程序在跑，当这个值超过了CPU数目，就会出现CPU瓶颈了。这个也和top的负载有关系，一般负载超过了3就比较高，超过了5就高，超过了10就不正常了，服务器的状态很危险。top的负载类似每秒的运行队列。如果运行队列过大，表示你的CPU很繁忙，一般会造成CPU使用率很高。
 * **b** 表示阻塞的进程,这个不多说，进程阻塞。
 
-#### memory
+### memory
 
 * **swpd** 虚拟内存已使用的大小，如果大于0，表示你的机器物理内存不足了，如果不是程序内存泄露的原因，那么你该升级内存了或者把耗内存的任务迁移到其他机器。
 * **free**   空闲的物理内存的大小，我的机器内存总共8G，剩余3415M。
 * **buff**   Linux/Unix系统是用来存储，目录里面有什么内容，权限等的缓存，我本机大概占用300多M
 * **cache** cache直接用来记忆我们打开的文件,给文件做缓冲，我本机大概占用300多M(这里是Linux/Unix的聪明之处，把空闲的物理内存的一部分拿来做文件和目录的缓存，是为了提高 程序执行的性能，当程序使用内存时，buffer/cached会很快地被使用。)
 
-#### swap
+### swap
 
 * **si**  每秒从磁盘读入虚拟内存的大小，如果这个值大于0，表示物理内存不够用或者内存泄露了，要查找耗内存进程解决掉。。
 * **so**  每秒虚拟内存写入磁盘的大小，如果这个值大于0，同上。
 
-#### IO
+### IO
 
 * **bi**  块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte，我本机上没什么IO操作，所以一直是0，但是我曾在处理拷贝大量数据(2-3T)的机器上看过可以达到140000/s，磁盘写入速度差不多140M每秒
 
 * **bo** 块设备每秒发送的块数量，例如我们读取文件，bo就要大于0。bi和bo一般都要接近0，不然就是IO过于频繁，需要调整。
 
-#### system
+### system
 
 * **in** 每秒CPU的中断次数，包括时间中断
 
 * **cs** 每秒上下文切换次数，例如我们调用系统函数，就要进行上下文切换，线程的切换，也要进程上下文切换，这个值要越小越好，太大了，要考虑调低线程或者进程的数目,例如在apache和nginx这种web服务器中，我们一般做性能测试时会进行几千并发甚至几万并发的测试，选择web服务器的进程可以由进程或者线程的峰值一直下调，压测，直到cs到一个比较小的值，这个进程和线程数就是比较合适的值了。系统调用也是，每次调用系统函数，我们的代码就会进入内核空间，导致上下文切换，这个是很耗资源，也要尽量避免频繁调用系统函数。上下文切换次数过多表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，CPU没有充分利用，是不可取的。
 
-#### cpu
+### cpu
 
 * **us** 用户CPU时间
 * **sy** 系统CPU时间，如果太高，表示系统调用时间长，例如是IO操作频繁。
@@ -2048,7 +2468,7 @@ $ vmstat 5 2
 * **wa** IO等待时间百分比。
 * **st** 虚拟 CPU 等待实际 CPU 的时间的百分比
 
-### pidstat
+## pidstat
 实时查看进程的 CPU、内存、I/O 以及上下文切换等性能指标
 * -w 输出进程切换指标
 * -wt 输出线程上下文切换指标
@@ -2079,7 +2499,7 @@ $ pidstat -u 5 1
 * cswch/s (voluntary context switches) 每秒自愿上下文切换的次数
 * nvcswch/s (non voluntary context switches) 每秒非自愿上下文切换的次数 
 
-### stress
+## stress
 
 ```bash
 $ apt install stress
@@ -2087,7 +2507,7 @@ $ apt install stress
 
 
 
-### sysstat
+## sysstat
 
 系统压力测试工具
 
@@ -2095,9 +2515,9 @@ $ apt install stress
 # ubuntu 安装
 $ apt install sysstat
 ```
-#### mpstat
+### mpstat
 多核 CPU 性能分析工具，用来实时查看每个 CPU 的性能指标，以及所有 CPU 的平均指标。
-#### sar
+### sar
 
 ```bash
 # ubuntu
@@ -2118,7 +2538,7 @@ systemctl enable sysstat.service
 - 怀疑内存存在瓶颈，可用sar -B、sar -r 和 sar -W 等来查看
 - 怀疑I/O存在瓶颈，可用 sar -b、sar -u 和 sar -d 等来查看
 
-#### 参数
+### 参数
 
 - -A 汇总所有的报告
 - -a 报告文件读写使用情况
@@ -2140,7 +2560,7 @@ systemctl enable sysstat.service
 - -w 报告系统交换活动状况
 - -y 报告TTY设备活动状况
 
-#### 查看CPU使用率
+### 查看CPU使用率
 
 ```bash
 sar -u 1 3
@@ -2160,7 +2580,7 @@ Average:        all      0.25      0.00      0.50      0.00      0.00     99.25
 - %steal 利用Xen等操作系统虚拟化技术，等待其它虚拟CPU计算占用的时间比例；
 - %idle CPU空闲时间比例；
 
-#### 查看平均负载
+### 查看平均负载
 
 ```bash
 sar -q 1 3
@@ -2178,7 +2598,7 @@ Average:            0       204      0.07      0.05      0.04         0
 - ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载
 - ldavg-15：过去15分钟的系统平均负载
 
-#### 查看内存使用状况
+### 查看内存使用状况
 
 ```bash
 sar -r 1 3
@@ -2198,7 +2618,7 @@ Average:      4932260   7430684   3071392     38.37    159248   2346044    76257
 - kbcommit：保证当前系统所需要的内存,即为了确保不溢出而需要的内存(RAM+swap).
 - %commit：这个值是kbcommit与内存总量(包括swap)的一个百分比.
 
-#### 查看页面交换发生状况
+### 查看页面交换发生状况
 
 ```bash
 sar -W 1 3
@@ -2214,7 +2634,7 @@ Average:         0.00      0.00
 - pswpin/s：每秒系统换入的交换页面（swap page）数量
 - pswpout/s：每秒系统换出的交换页面（swap page）数量
 
-#### 查看网络收发报告
+### 查看网络收发报告
 
 ```bash
 sar -n DEV 1 1
@@ -2233,13 +2653,13 @@ Linux 4.15.0-47-generic (ubuntu) 	05/03/19 	_x86_64_	(4 CPU)
 * **rxkB/s** 每秒接收的千字节数，也就是  BPS
 * **txkB/s** 每秒发送的千字节数，也就是  BPS
 
-### dstat
+## dstat
 
 `apt instll dstat`
 
 个新的性能工具，它吸收了 vmstat、iostat、ifstat 等几种工具的优点，可以同时观察系统的 CPU、磁盘 I/O、网络以及内存使用情况
 
-### hping3
+## hping3
 
 `apt install hping3`
 
@@ -2256,9 +2676,9 @@ $ hping3 -S -p 80 -i u100 192.168.0.30
 
 
 
-## 其它命令
+# 其它命令
 
-### socat
+## socat
 
 **[Socket CAT]**
 
@@ -2300,20 +2720,20 @@ socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
 
 
 
-### tldr 
+## tldr 
 一个简洁的社区驱动的帮助手册
-### autojump
+## autojump
 一键直达
 
 
 
-## BCC-tools
+# BCC-tools
 
 
 
-## 时钟同步
+# 时钟同步
 
-### 通过网络进行时钟同步
+## 通过网络进行时钟同步
 
 ```bash
 yum -y install ntpdate  # 安装ntpdate
@@ -2323,7 +2743,7 @@ crontab -e								# 三台机器定时任务
 */1 * * * * /usr/sbin/ntpdate ntp4.aliyun.com;
 ```
 
-### 内网某机器作为时钟同步服务器
+## 内网某机器作为时钟同步服务器
 
 ```bash
 yum -y install ntp 	# 安装ntp
@@ -2355,7 +2775,7 @@ crontab -e
 
 
 
-## SSH
+# SSH
 
 ```bash
 vi /etc/ssh/sshd_config
@@ -2373,7 +2793,7 @@ Port 22		#端口
 PermitRootLogin no 	#root 登录禁止
 ```
 
-### 反向tunnel
+## 反向tunnel
 1. 在被控端运行		
 ```bash
 ssh -f -N -R 10000:localhost:22 username@主控端ip
@@ -2386,7 +2806,7 @@ ssh -f -N -R 10000:localhost:22 username@主控端ip
 ssh username@localhost -p 10000
 #username是你被控端的username，10000就是刚才的那个端口号。
 ```
-### ssh 证书登录
+## ssh 证书登录
 
 ```bash
 ssh-keygen -t rsa
@@ -2436,12 +2856,12 @@ interact
 expect eof
 ```
 
-#### 调试SSH
+### 调试SSH
 在服务器上运行 `/usr/sbin/sshd -d -p 2222` 开启调试模式
 在客户端上使用 `ssh -vvT -p 2222 root@192.168.1.2`连接
 
 
-#### 配置证书后无法访问
+### 配置证书后无法访问
 ```bash
 chown root /root
 chown root /root/.ssh
@@ -2449,24 +2869,24 @@ chown root /root/.ssh
 
 
 
-### scp
+## scp
 
 > OpenSSH 项目表示，他们认为 scp 协议已经过时，不灵活，而且不容易修复，然后他们继而推荐使用 sftp 或 rsync 来进行文件传输。
 
-### rsync
+## rsync
 
 
 
-### sftp
-### sshfs
+## sftp
+## sshfs
 
 挂载远程目录到本地
 
-### ssh-agent
+## ssh-agent
 
 ssh-agent是一种控制用来保存公钥身份验证所使用的私钥的程序，其实ssh-agent就是一个密钥管理器，运行ssh-agent以后，使用ssh-add将私钥交给ssh-agent保管，其他程序需要身份验证的时候可以将验证申请交给ssh-agent来完成整个认证过程。通过使用ssh-agent就可以很方便的在不的主机间进行漫游了，假如我们手头有三台server：host1、host2、host3且每台server上到保存了本机(owner)的公钥，因此我可以通过公钥认证登录到每台主机,但是这三台server之间并没有并没有保存彼此的公钥，而且我也不可能将自己的私钥存放到server上(不安全)，因此彼此之间没有公钥进行认证（可以密码认证，但是这样慢，经常输密码，烦且密码太多容易忘）。但是如果我们启用ssh-agent，问题就可以迎刃而解了
 
-#### 实战
+### 实战
 
 ```bash
 eval `ssh-agent`  # 启动
@@ -2500,22 +2920,22 @@ fi
 
 
 
-## PACMAN
+# PACMAN
 
 
 
-## Ubuntu
+# Ubuntu
 ```bash
 update-manager # 升级系统 图形界面
 sudo do-release-upgrade  # 升级系统
 ```
-#### 启用root
+### 启用root
 ```bash
 sudo passwd root       # 设置密码
 su
 ```
 
-#### 网络配置
+### 网络配置
 
 /etc/netplan/50-cloud-init.yaml
 
@@ -2537,10 +2957,10 @@ network:
 ```
 
 
-## Centos
+# Centos
 
 
-### 查看SELinux状态及关闭SELinux
+## 查看SELinux状态及关闭SELinux
 ```bash
 getsebool -a      # 列出selinux的所有bool值
 sestatus -v 			#如果SELinux status参数为enabled即为开启状态
@@ -2556,7 +2976,7 @@ SELINUX=enforcing	#开启
 SELINUX=disabled    #关闭
 ```
 
-### DNS
+## DNS
 `/etc/resolv.conf`
 
 ```bash
@@ -2593,7 +3013,8 @@ NETMASK=255.255.255.0
 systemctl restart network  # 重启网络,使设置生效
 ```
 
-### 升级vim
+## 升级vim
+
 ```bash
 yum install ncurses-devel
 wget https://github.com/vim/vim/archive/master.zip
@@ -2605,11 +3026,11 @@ make
 sudo make install
 vim
 ```
-## [Sheel编程](./Shell.md)
+# [Sheel编程](./Shell.md)
 
 
-## 实战
+# 实战
 
-## 参考资料
+# 参考资料
 
 [命令行的艺术](https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md)
