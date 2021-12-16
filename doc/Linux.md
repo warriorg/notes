@@ -761,6 +761,11 @@ kill -l  				# 查看系统支持的所有信号
 
 服务文件的默认路径`/lib/systemd/system`
 
+### update-alternatives
+管理linux 默认程序
+```bash
+sudo update-alternatives --config editor # 切换默认的编辑程序
+```
 
 
 ### SELinux
@@ -2600,12 +2605,10 @@ make
 sudo make install
 vim
 ```
-
-
-
 ## [Sheel编程](./Shell.md)
 
 
+## 实战
 
 ## 参考资料
 

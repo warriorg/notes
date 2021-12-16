@@ -191,8 +191,6 @@ $ docker ps -a  # Lists all containers
 $ docker ps --size  # 大小
 ```
 
-
-
 ### network
 
 管理网络
@@ -200,11 +198,6 @@ $ docker ps --size  # 大小
 ```bash
 docker network ls    # 列出当前的网络
 ```
-
-
-
-
-
 ### Committing (saving) a container state
 
 ```base
