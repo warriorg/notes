@@ -1,10 +1,10 @@
-## 基础知识
+# 基础知识
 
 **容器** 一种沙盒技术
 
 ![docker architecture](./assets/images/docker architecture.svg)
 
-### Namespace
+## Namespace
 
 Docker 和虚拟机技术一样，从操作系统级上实现了资源的隔离，它本质上是宿主机上的进程（容器进程），所以资源隔离主要就是指进程资源的隔离。实现资源隔离的核心技术就是 Linux namespace。
 
@@ -31,19 +31,19 @@ clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实�
 
 一个容器进程也可以再 clone() 出一个容器进程，这是容器的嵌套。
 
-### Cgroups
+## Cgroups
 
-### rootfs
-
-
+## rootfs
 
 
 
-## INSTALL
+
+
+# INSTALL
 
 
 
-### Debian
+## Debian
 
 ```bash
 apt-get update
@@ -58,7 +58,7 @@ apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 ```
 
-#### 参考
+### 参考
 
 https://docs.docker.com/engine/install/debian/
 
@@ -66,7 +66,7 @@ https://docs.docker.com/engine/install/debian/
 
 
 
-### [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
+## [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
 
 修改 `/etc/docker/daemon.json` 文件并添加上 registry-mirrors 键值。
 
@@ -87,7 +87,7 @@ $ sudo systemctl restart docker
 
 
 
-## 常用命令
+# 常用命令
 
 ```bash
 #运行一个容器
@@ -121,12 +121,12 @@ docker rmi $(docker image ls -q)
 
 ```
 
-### 参数
+## 参数
 ```bash
 -m 限制内存
 ```
 
-#### 删除无用的docker实例及镜像
+### 删除无用的docker实例及镜像
 ```bash
 # 删除停止或一直处于已创建状态的实例
 docker ps --filter "status=exited"|sed -n -e '2,$p'|awk '{print $1}'|xargs docker rm
@@ -139,7 +139,7 @@ docker images | sed -n -e '2,$p'|awk '{if($1 ~ /[0-9a-f]{32}/) print $1":"$2}'|x
 docker images | sed -n -e '2,$p'|awk '{if($2 ~ /[0-9a-f]{64}/) print $1":"$2}'|xargs docker rmi
 ```
 
-### volume
+## volume
 
 [Use volumes](https://docs.docker.com/storage/volumes/)
 
@@ -170,7 +170,7 @@ docker volume inspect my-vol
 docker volume rm my-vol
 ```
 
-#### 在macos上
+### 在macos上
 
 在macos上，`/var/lib/docker/volumes` 是没有的，需要以以下方式进入虚拟机查看
 
@@ -183,7 +183,7 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 
 `screen -dr` to re-attach the screen again
 
-### ps
+## ps
 
 ```bash
 $ docker ps # Lists only running containers
@@ -191,21 +191,21 @@ $ docker ps -a  # Lists all containers
 $ docker ps --size  # 大小
 ```
 
-### network
+## network
 
 管理网络
 
 ```bash
 docker network ls    # 列出当前的网络
 ```
-### Committing (saving) a container state
+## Committing (saving) a container state
 
 ```base
 # Commit your container to a new named image
 $ docker commit <container> <some_name>
 ```
 
-## Dockerfile
+# Dockerfile
 
 1. Docker从基础镜像运行一个容器
 2. 执行一条指令，对容器修改
@@ -215,13 +215,15 @@ $ docker commit <container> <some_name>
 
 >docker build 执行时, Dockerfile 中的所有指令都被执行并且提交，并且在该命令成功结束后返回一个新镜像。
 
-### Dockerfile指令
+## Dockerfile指令
 
-## Docker Compose
+# Docker-Compose
 
-### 环境变量
+Compose是一个用于定义和运行多容器Docker应用程序的工具。
 
-#### COMPOSE_PROJECT_NAME
+## 环境变量
+
+### COMPOSE_PROJECT_NAME
 
 设置项目名称。在启动时，此值连同服务名称一起组成容器名称。
 
@@ -231,11 +233,7 @@ COMPOSE_PROJECT_NAME=zk_test docker-compose up
 docker-compose -p zk_test up
 ```
 
-
-
-
-
-### build
+## build
 
 ```
 --compress              Compress the build context using gzip.
@@ -247,7 +245,7 @@ docker-compose -p zk_test up
 --parallel              Build images in parallel.
 ```
 
-### bundle
+## bundle
 
 ```
 --push-images              Automatically push images for any services
@@ -257,15 +255,13 @@ docker-compose -p zk_test up
                            Defaults to "<project name>.dab".
 ```
 
-### up
+## up
 
 构建、(重新)创建、启动和附加到服务的容器
 
+# 实战
 
-
-## 实战
-
-### 在一台主机上测试Consul集群
+## 在一台主机上测试Consul集群
 ```bash
 $ docker run -d --name node1 -h node1 progrium/consul -server -bootstrap-expect 3
 $ JOIN_IP="$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' node1)"
@@ -278,7 +274,7 @@ $ docker run -d --name node3 -h node3 progrium/consul -server -join $JOIN_IP
 $ docker run -d -p 8400:8400 -p 8500:8500 -p 8600:53/udp -h node4 progrium/consul -join $JOIN_IP
 ```
 
-### ubuntu 上安装 Java8
+## ubuntu 上安装 Java8
 ```base
 # Pull base image. if you use "latest" instead of "trusty",
 # you will use latest ubuntu images as base image
@@ -297,7 +293,7 @@ RUN apt-get update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 RUN apt-get install -y oracle-java8-installer
 ```
-### ubuntu安装tomcat8
+## ubuntu安装tomcat8
 ```bash
 FROM ubuntu:14.04
 
@@ -357,7 +353,7 @@ WORKDIR /opt/tomcat
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 ```
 
-### FTP
+## FTP
 
 ```bash
 docker run -d -v /Users/warriorg/Downloads:/home/vsftpd -p 20:20 -p 21:21 \
@@ -370,9 +366,9 @@ docker run -d -v /Users/warriorg/Downloads:/home/vsftpd -p 20:20 -p 21:21 \
 
 
 
-## 常见问题
+# 常见问题
 
-### Layer already being pulled by another client. Waiting.
+## Layer already being pulled by another client. Waiting.
 
 ```bash
 $ docker-machine stop default
@@ -380,13 +376,13 @@ $ docker images -q | xargs docker rmi
 $ docker-machine start default
 ```
 
-### Cannot connect to the Docker daemon. Is the docker daemon running on this host?
+## Cannot connect to the Docker daemon. Is the docker daemon running on this host?
 >*重启*
 
 在命令行直接启动
 >` /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh`
 
-### 改变docker存储位置
+## 改变docker存储位置
 You can change Docker's storage base directory (where container and images go) using the -g option when starting the Docker daemon.
 
 * Ubuntu/Debian: edit your /etc/default/docker file with the -g option: DOCKER_OPTS="-dns 8.8.8.8 -dns 8.8.4.4 -g /mnt"
@@ -408,6 +404,6 @@ Using a symlink is another method to change image storage.
 
 
 
-## 参考
+# 参考
 
 [Kubernetes](kubernetes.md)
