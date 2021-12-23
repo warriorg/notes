@@ -2659,6 +2659,10 @@ Linux 4.15.0-47-generic (ubuntu) 	05/03/19 	_x86_64_	(4 CPU)
 
 个新的性能工具，它吸收了 vmstat、iostat、ifstat 等几种工具的优点，可以同时观察系统的 CPU、磁盘 I/O、网络以及内存使用情况
 
+```bash
+dstat -nf      # 显示网络接口的状态
+```
+
 ## hping3
 
 `apt install hping3`
