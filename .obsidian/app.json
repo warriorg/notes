@@ -1,4 +1,6 @@
 {
   "vimMode": true,
-  "showLineNumber": true
+  "showLineNumber": true,
+  "legacyEditor": false,
+  "livePreview": true
 }
