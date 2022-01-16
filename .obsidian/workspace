@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/activiti.md",
+            "file": "doc/README.md",
             "mode": "source",
             "source": false
           }
@@ -69,14 +69,14 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/activiti.md",
+                "file": "doc/README.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
-                "backlinkCollapsed": true,
-                "unlinkedCollapsed": false
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
               }
             }
           },
@@ -86,7 +86,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/activiti.md"
+                "file": "doc/README.md"
               }
             }
           },
@@ -96,7 +96,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/activiti.md",
+                "file": "doc/README.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": false
               }
@@ -121,15 +121,15 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
+    "doc/README.md",
+    "doc/azkaban.md",
+    "doc/awesome.md",
+    "doc/android.md",
     "doc/activiti.md",
     "doc/ActiveMQ.md",
     "doc/DSA.md",
     "doc/关务.md",
     "doc/剑指Offer.md",
-    "doc/理论.md",
-    "doc/深入理解并行编程.md",
-    "doc/游戏日志数据仓库之数据采集.md",
-    "doc/理财.md",
-    "blog/2021/SQL Window Functions.md"
+    "doc/理论.md"
   ]
 }
