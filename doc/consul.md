@@ -16,7 +16,7 @@ Diego Ongaro和 John Ousterhout 大神的论文原文
 
 
 
-###Consul优点
+### Consul优点
 
 1.   使用 Raft 算法来保证一致性, 比复杂的 Paxos 算法更直接. 相比较而言, zookeeper 采用的是 Paxos, 而 etcd 使用的则是 Raft.
 2. 支持多数据中心，内外网的服务采用不同的端口进行监听,多数据中心集群可以避免单数据中心的单点故障,而其部署则需要考虑网络延迟, 分片等情况等. zookeeper 和 etcd 均不提供多数据中心功能的支持.
@@ -30,7 +30,7 @@ windows 下启动一个测试接点
 `consul.exe agent -data-dir=consul-data -client=192.168.17.108 -bootst
 rap-expect 1 -server -ui`
 
-###consul启动参数理解
+### consul启动参数理解
 
 >Agent 
 >

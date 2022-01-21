@@ -1,33 +1,36 @@
-## FastDFS简介
+# FastDFS
 
-FastDFS 是一个用C编写额开源的高性能==分布式文件系统（Distributed File System， 简称DFS）==
+## 简介
+
+FastDFS 是一个用C编写额开源的高性能分布式文件系统（Distributed File System， 简称DFS）
 
 ### FastDFS组成
-**tracker server**
+
+#### tracker server
 
 跟踪服务器：用来调度来自客户端的请求。且在内存中记录所有存储组和存储服务器的信息状态。
 
-#### **storage server** 
+#### storage server
 
 存储服务器：用来存储文件(data)和文件属性(metadata)
 
-#### **client** 
+#### client
 
 客户端：业务请求发起方，通过专用接口基于TCP协议与tracker以及storage server进行交互
 
-**group**
+#### group
 
 组，也可称为卷：同组内上的文件是完全相同的
 
-#### **文件标识** 
+#### 文件标识
 
 包括两部分：组名和文件名(包含路径)
 
-#### **meta data** 
+#### meta data
 
 文件相关属性：键值对(Key Value Pair)方式
 
-#### fid 
+#### fid
 
 文件标识符： （例如： group1/M00/00/00/wKgCD1yU7_uAaEtmAAADHo8n7u00097846 ）
 
@@ -182,7 +185,7 @@ unzip fastdfs-nginx-module-1.20.zip -d ~
 
 ```
 
-**修改 fastdfs-nginx-module-1.20/src/config**
+##### 修改 fastdfs-nginx-module-1.20/src/config**
 
 > 修改6行和15行的内容 针对1.20的版本
 

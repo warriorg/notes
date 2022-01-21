@@ -105,8 +105,19 @@ EXPLAIN实际执行查询，然后显示每个计划节点中积累的真实行�
 ## 查看
 
 ```sql
-\l  -- 查看所有数据库
+-- 命令行执行sql文件
+pssql -U postgres -f xxx.sql
 
+-- 连接数据库
+psql -U postgres 
+-- 查看所有数据库
+\l
 SELECT datname FROM pg_database;
+-- 选择数据库
+\c demo
+-- 显示所有表
+\d
+-- 显示表的结构
+\d tablename
 ```
 

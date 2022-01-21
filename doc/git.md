@@ -204,6 +204,15 @@ git stash branch testchanges
 git log -L start,end:file   # 使用 log 来查看某一行的所有操作
 ```
 
+### whatchange
+```
+git whatchange
+```
+
+### cherry-pick
+```
+git cherry-pick <commit sha> --no-commit
+```
 
 
 ### blame

@@ -1203,6 +1203,10 @@ CopyOnWriteArraySet相对CopyOnWriteArrayList用来存储不重复的对象，�
 在并发编程中很容易出现并发安全的问题，有一个很简单的例子就是多线程更新变量i=1,比如多个线程执行i++操作，就有可能获取不到正确的值，而这个问题，最常用的方法是通过Synchronized进行控制来达到线程安全的目的。但是由于synchronized是采用的是悲观锁策略，并不是特别高效的一种解决方案。实际上，在J.U.C下的atomic包提供了一系列的操作简单，性能高效，并能保证线程安全的类去更新基本类型变量，数组元素，引用类型以及更新对象中的字段类型。atomic包下的这些类都是采用的是乐观锁策略去原子更新数据，在java中则是使用CAS操作具体实现。
 
 
+# 新特性
+
+## 模块
+[Java 9 modules cheat sheet](./assets/images/java-9-modules-cheat-sheet.pdf)
 
 # JVM
 
