@@ -87,7 +87,7 @@ $ sudo systemctl restart docker
 
 
 
-# 常用命令
+# CLI
 
 ```bash
 #运行一个容器
@@ -122,11 +122,13 @@ docker rmi $(docker image ls -q)
 ```
 
 ## 参数
+
 ```bash
 -m 限制内存
 ```
 
 ### 删除无用的docker实例及镜像
+
 ```bash
 # 删除停止或一直处于已创建状态的实例
 docker ps --filter "status=exited"|sed -n -e '2,$p'|awk '{print $1}'|xargs docker rm
@@ -139,7 +141,38 @@ docker images | sed -n -e '2,$p'|awk '{if($1 ~ /[0-9a-f]{32}/) print $1":"$2}'|x
 docker images | sed -n -e '2,$p'|awk '{if($2 ~ /[0-9a-f]{64}/) print $1":"$2}'|xargs docker rmi
 ```
 
-## volume
+
+## save
+
+
+## load
+
+
+## ps
+
+```bash
+$ docker ps # Lists only running containers
+$ docker ps -a  # Lists all containers
+$ docker ps --size  # 大小
+```
+
+## network
+
+管理网络
+
+```bash
+docker network ls    # 列出当前的网络
+```
+## Committing (saving) a container state
+
+```base
+# Commit your container to a new named image
+$ docker commit <container> <some_name>
+```
+
+# 生产环境
+
+## volums
 
 [Use volumes](https://docs.docker.com/storage/volumes/)
 
@@ -170,6 +203,43 @@ docker volume inspect my-vol
 docker volume rm my-vol
 ```
 
+### 备份、恢复、迁移数据卷
+
+已 nexus3 的数据卷备份和还原来说明如何备份和还原卷。
+
+```yml
+version: "3"
+
+services:
+  nexus:
+    restart: always
+    container_name: nexus
+    image: sonatype/nexus3
+    volumes:
+      - nexus-data:/nexus-data
+    ports:
+      - "8081:8081"
+
+volumes:
+  nexus-data:
+```
+
+
+#### Backup
+
+```bash
+docker run --rm --volumes-from nexus -v $(pwd):/backup alpine tar cvf /backup/backup.tar /nexus-data
+
+# 使用时间输出备份文件名
+docker run --rm --volumes-from nexus -v $(pwd):/backup alpine tar cvf /backup/nexus-$(date +"%Y%m%d%H%M").tar /nexus-data
+```
+
+#### Restore
+
+```bash
+docker run --rm --volumes-from nexus -v $(pwd):/backup alpine bash -c "cd /nexus-data && tar xvf /backup/backup.tar --strip 1"
+```
+
 ### 在macos上
 
 在macos上，`/var/lib/docker/volumes` 是没有的，需要以以下方式进入虚拟机查看
@@ -183,27 +253,6 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 
 `screen -dr` to re-attach the screen again
 
-## ps
-
-```bash
-$ docker ps # Lists only running containers
-$ docker ps -a  # Lists all containers
-$ docker ps --size  # 大小
-```
-
-## network
-
-管理网络
-
-```bash
-docker network ls    # 列出当前的网络
-```
-## Committing (saving) a container state
-
-```base
-# Commit your container to a new named image
-$ docker commit <container> <some_name>
-```
 
 # Dockerfile
 

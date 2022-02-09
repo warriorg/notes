@@ -1,6 +1,6 @@
 
 
-# 实战
+# 实践
 
 ```bash
 # 生成CA证书
@@ -36,7 +36,7 @@ EOF
 
 # 使用v3.ext为主机签发证书
 openssl x509 -req -sha512 -days 3650 \
-		-extfile v3.ext \
+    -extfile v3.ext \
     -CA ca.crt -CAkey ca.key -CAcreateserial \
     -in yourdomain.com.csr \
     -out yourdomain.com.crt
@@ -47,10 +47,6 @@ openssl rsa -in ca.key -text -noout
 openssl rsa -in ca.key -text -noout -inform der
     
 ```
-
-
-
-
 
 # 专业术语
 
