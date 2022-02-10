@@ -733,10 +733,12 @@ htop
 $ fg %jobnumber  # jobnumber jobs查询到的命令的序号
 ```
 
-## kill
-
+## kill 
+    send signal to a process
+    
 ```bash
-kill -l  				# 查看系统支持的所有信号
+kill -l  		# 查看系统支持的所有信号
+kill -3 pid     # 在 JVM 中 thread dump 到标准错误
 ```
 
 ## nohup

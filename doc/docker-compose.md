@@ -3,6 +3,7 @@
 Compose是一个用于定义和运行多容器Docker应用程序的工具。
 
 ## 编写 Docker Compose 模板文件
+
 在使用 Docker Compose 启动容器时， Docker Compose 会默认使用 docker-compose.yml 文件， docker-compose.yml 文件的格式为 yaml。
 
 Docker Compose 文件主要分为三部分：services（服务）、networks（网络）和 volumes（数据卷）。
@@ -46,9 +47,7 @@ docker-compose -p zk_test up
 ## bundle
 
 ```
---push-images              Automatically push images for any services
-													 which have a `build` option specified.
-
+--push-images              Automatically push images for any services which have a `build` option specified.
 -o, --output PATH          Path to write the bundle file to.
                            Defaults to "<project name>.dab".
 ```
