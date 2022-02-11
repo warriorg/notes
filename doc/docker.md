@@ -245,7 +245,7 @@ docker run --rm --volumes-from nexus -v $(pwd):/backup alpine tar cvf /backup/ne
 #### Restore
 
 ```bash
-docker run --rm --volumes-from nexus -v $(pwd):/backup alpine bash -c "cd /nexus-data && tar xvf /backup/backup.tar --strip 1"
+docker run --rm --volumes-from nexus -v $(pwd):/backup alpine sh -c "cd /nexus-data && tar xvf /backup/backup.tar --strip 1"
 ```
 
 ### 在macos上

@@ -235,8 +235,6 @@ Merkle Tree的主要作用是当我拿到Top Hash的时候，这个hash值代表
 
 ![image-20210901170554405](./assets/images/image-20210901170554405.png)
 
-
-
 ## Trie Tree
 
 Trie树，又称字典树，单词查找树或者前缀树，是一种用于快速检索的多叉树结构，如英文字母的字典树是一个26叉树，数字的字典树是一个10叉树。
@@ -246,7 +244,6 @@ Trie树的基本性质可以归纳为：
 - 根节点不包含字符，除根节点以外每个节点只包含一个字符。
 - 从根节点到某一个节点，路径上经过的字符连接起来，为该节点对应的字符串。
 - 每个节点的所有子节点包含的字符串不相同。
-
 
 
 ## MPT Tree
@@ -316,9 +313,9 @@ Raft 算法不是强一致性算法，而是最终一致性算法。
 
 Raft将系统中的角色分为领导者（Leader）、跟从者（Follower）和候选人（Candidate）：
 
--   **Leader**：接受客户端请求，并向Follower同步请求日志，当日志同步到大多数节点上后告诉Follower提交日志。
--   **Follower**：接受并持久化Leader同步的日志，在Leader告之日志可以提交之后，提交日志。
--   **Candidate**：Leader选举过程中的临时角色。
+- **Leader**：接受客户端请求，并向Follower同步请求日志，当日志同步到大多数节点上后告诉Follower提交日志。
+- **Follower**：接受并持久化Leader同步的日志，在Leader告之日志可以提交之后，提交日志。
+- **Candidate**：Leader选举过程中的临时角色。
 
 Raft算法角色状态转换如下：
 ![](./assets/images/raft-role-state.jpg)
@@ -330,20 +327,25 @@ Raft 使用心跳（heartbeat）触发Leader选举。当服务器启动时，初
 #### 准备选举
 
 若 follower 在心跳超时范围内没有接受到来自于leader的心跳，则认为leader挂了。若在一下步骤还未发生时，接收到了其他candidate的投票请求，则会先向其投票，然后follower会完成一下步骤：
+
 * 使其本地term增一
 * 由 follower 转变为 candidate
 * 向自己投一票,  一个term内，一个节点只能投出一票
 * 向其它节点发出投票请求，然后等待响应
 
 ####  开始选举
+
 flollower 在接受到投票请求后，其会根据一下情况来判断是否投票：
+
 * 发来投票请求的 candidate 的term不能小于我的term
 * 在我当前 term 内，我的选票换没有投出去
 * 发来投票请求的 candidate 拥有的 log 编号要不能小于我的 log 编号
 * 在我的选票尚未透出时，接受到多个 candidate 的请求，我将采用 first-come-first-served方式投票
 
 #### 选举结果
+
 当一个 candidate 发出投票请求后会等待其他节点的响应结果。这个响应结果可能有三种情况：
+
 * 收到过半选票，成为新的 leader。然后会将消息广播给所有其它节点，以告诉大家我是新的 leader 了（其中包含了当前的term）
 * 接受到别的 candidate 发来的新的 leader 通知，比较了新 leader 的 term 并不比我的 term 小，则自己转变为 follower。
 * 经过一段时间后，没有收到过半选票，也没有受到新 leader 通知，则重新发出选举
@@ -360,6 +362,7 @@ Raft 算法一致性的实现，是基于日志复制状态机的。状态机的
 ![raft-replicated-state-machine.svg](./assets/images/raft-replicated-state-machine.svg)
 
 #### 处理流程
+
 当 leader 接收到 client 的写操作请求后，大体会经历以下流程：
 * leader 将数据封装为日志
 * 将日志并行发送给follower，然后等待接受follower响应
@@ -368,10 +371,12 @@ Raft 算法一致性的实现，是基于日志复制状态机的。状态机的
 * leader 通知所有 follower 将日志 apply 到他们本地的状态机，日志状态变为 applied
 
 #### AP支持
+
 ![raft-log-struct.jpg](./assets/images/raft-log-struct.jpg)
 Log 由 term index、log index 及 command 构成。为了保证可用性，各个节点中的日志可以不完全相同，但 leader 会不断给 follower 发送 log，以使各个节点的log最终达到相同。
 
 ### 脑裂
+
 在多机房部署中，由于网络连接的问题，很容易形成多个分区。而多个分区的形成，很容易产生脑裂，从而导致数据不一致。
 
 
@@ -396,6 +401,7 @@ client 发送且操作请求到 Leader， Leader 在接收到过半节点接收�
 
 
 ### 应用
+
 [Etcd](./etcd.md)
 [Nacos](https://nacos.io)
 
@@ -413,8 +419,6 @@ SHA(Secure Hash Algorithm) 在统计学和概率上以[无记忆性（memoryless
 
 在指定时间内，给定一个难度，找到答案的概率*唯一地由所有参与者能够迭代哈希的速度决定*。与之前的历史无关，与数据无关，只跟算力有关。
 
-
-
 ## PoS
 
 PoS（Proof-of-Stake）权益证明机制，在PoS共识中，节点争夺记账权依靠的不是算力而是权益（代币）。PoS同样需要计算哈希值，但与PoW不同的是，不需要持续暴力计算寻找nonce值
@@ -426,9 +430,11 @@ PoS（Proof-of-Stake）权益证明机制，在PoS共识中，节点争夺记账
 
 
 # DHT
+
 分布式哈希表（distributed hash tables ，DHT）技术是去中心化 P2P 网络中最核心的一种路由寻址技术，可以在无中心服务器（trackerless）的情况下，在网络中快速找到目标节点。
 
 ## Kademlia
+
 Kademlia 协议（以下简称 Kad）是美国纽约大学的 P. Maymounkov 和 D. Mazieres 在2002年发布的一项研究结果 [Kademlia: A peerto-peer information system based on the XOR metric](https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf)。
 
 简单的说，Kad 是一种分布式哈希表（DHT）技术，不过和其他 DHT 实现技术比较，如 Chord、CAN、Pastry 等，Kad 通过独特的以异或算法（XOR）为距离度量基础，建立了一种全新的 DHT 拓扑结构，相比于其他算法，大大提高了路由查询速度。

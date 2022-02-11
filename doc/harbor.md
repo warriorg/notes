@@ -9,6 +9,62 @@ wget https://github.com/goharbor/harbor/releases/download/v2.4.1/harbor-online-i
 tar zxvf harbor-online-installer-v2.4.1.tgz
 ```
 
+## 配置证书
+```bash
+# Generate a CA certificate private key
+openssl genrsa -out ca.key 4096
+
+# Generate the CA certificate
+openssl req -x509 -new -nodes -sha512 -days 3650 \
+ -subj "/C=CN/ST=Jiangsu/L=Suzhou/O=Longnows/OU=Company/CN=192.168.0.101" \
+ -key ca.key \
+ -out ca.crt
+
+# Generate a private key
+openssl genrsa -out 192.168.0.1010.key 4096
+# Generate a certificate signing request (CSR)
+openssl req -sha512 -new \
+    -subj "/C=CN/ST=Jiangsu/L=Suzhou/O=Longnows/OU=Company/CN=192.168.0.101" \
+    -key 192.168.0.101.key \
+    -out 192.168.0.101.csr
+
+# Generate an x509 v3 extension file
+cat > v3.ext <<-EOF
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1=harbor.longnows.cn
+IP.1=192.168.0.101
+EOF
+
+# Use the `v3.ext` file to generate a certificate for your Harbor host
+openssl x509 -req -sha512 -days 3650 \
+    -extfile v3.ext \
+    -CA ca.crt -CAkey ca.key -CAcreateserial \
+    -in 192.168.0.101.csr \
+    -out 192.168.0.101.crt
+    
+# Copy the server certificate and key into the certficates folder on your Harbor host.
+cp 192.168.0.101.crt ../cert/
+cp 192.168.0.101.key ../cert/
+
+# 为Docker准备证书
+# Docker守护进程将.crt文件解释为CA证书，将.cert文件解释为客户端证书
+openssl x509 -inform PEM -in 192.168.0.101.crt -out 192.168.0.101.cert
+
+# Copy the server certificate, key and CA files into the Docker certificates folder
+cp 192.168.0.101.cert /etc/docker/certs.d/192.168.0.101/
+cp 192.168.0.101.key /etc/docker/certs.d/192.168.0.101/
+cp ca.crt /etc/docker/certs.d/192.168.0.101/
+
+# Restart Docker Engine
+systemctl restart docker
+```
+
 ## 配置 harbor.yml
 
 设置 harbor.yml 文件，配置 harbor 的各项参数，如下：
@@ -17,7 +73,7 @@ tar zxvf harbor-online-installer-v2.4.1.tgz
 
 # The IP address or hostname to access admin UI and registry service.
 # DO NOT use localhost or 127.0.0.1, because Harbor needs to be accessed by external clients.
-hostname: harbor.example.com
+hostname: 192.168.0.101
 
 # http related config
 http:
@@ -26,12 +82,12 @@ http:
 
 # 如果没有证书，整体注释下面的部分
 # https related config
-# https:
+https:
   # https port for harbor, default is 443
-  # port: 443
+  port: 443
   # The path of cert and key files for nginx
-  # certificate: /your/certificate/path
-  # private_key: /your/private/key/path
+  certificate: /data/harbor/cert/192.168.0.101.crt
+  private_key: /data/harbor/cert/192.168.0.101.key
 
 # Uncomment external_url if you want to enable external proxy
 # And when it enabled the hostname will no longer used
@@ -51,7 +107,7 @@ harbor_admin_password: Harbor12345
 ./install.sh
 ```
 
-`http://harbor.example.com/` 登录，管理员账号 admin 密码 Harbor12345
+`http://192.168.0.101/` 登录，管理员账号 admin 密码 Harbor12345
 
 
 # 设置
@@ -83,9 +139,9 @@ harbor_admin_password: Harbor12345
 
 ```bash
 # 登录harbor
-docker login http://192.168.2.138:80    
+docker login 192.168.0.101
 # 为 image 设置 tag
-docker tag busybox 192.168.2.138:80/library/busybox:1.0
+docker tag busybox 192.168.0.101/library/busybox:1.0
 # push 镜像到harbor
-push 192.168.2.138:80/library/busybox:1.0
+docker push 192.168.0.101/library/busybox:1.0
 ```
