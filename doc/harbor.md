@@ -123,7 +123,7 @@ harbor_admin_password: Harbor12345
 ```json
 {
 	"registry-mirrors":["https://registry.cn-hangzhou.aliyuncs.com"],
-	"insecure-registries":["192.168.2.138:80"]
+	"insecure-registries":["192.168.0.101"]
 }
 ```
 
