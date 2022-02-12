@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/nacos.md",
+            "file": "doc/nexus.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/nacos.md",
+                "file": "doc/nexus.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -86,7 +86,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/nacos.md"
+                "file": "doc/nexus.md"
               }
             }
           },
@@ -96,7 +96,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/nacos.md",
+                "file": "doc/nexus.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": false
               }
@@ -121,15 +121,15 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
+    "doc/nexus.md",
     "doc/nacos.md",
+    "doc/node.md",
+    "doc/harbor.md",
+    "doc/ca.md",
+    "doc/android.md",
     "doc/DSA.md",
     "doc/macos.md",
     "doc/blockchain.md",
-    "doc/Spring Cloud Alibaba.md",
-    "doc/spring boot.md",
-    "doc/spring.md",
-    "doc/Sql.md",
-    "doc/submit_app_store.md",
-    "doc/svn.md"
+    "doc/Spring Cloud Alibaba.md"
   ]
 }

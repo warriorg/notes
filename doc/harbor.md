@@ -9,7 +9,7 @@ wget https://github.com/goharbor/harbor/releases/download/v2.4.1/harbor-online-i
 tar zxvf harbor-online-installer-v2.4.1.tgz
 ```
 
-## 配置证书
+## [配置证书](./ca.md)
 ```bash
 # Generate a CA certificate private key
 openssl genrsa -out ca.key 4096
