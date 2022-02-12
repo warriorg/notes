@@ -360,32 +360,26 @@ ifconfig <接口> <IP地址> <子网掩码>
 ifup <接口>     # 启用网卡
 ```
 
-
-
 ## ifdown
 
 ```bash
 ifdown <接口>     # 禁用网卡
 ```
 
-
-
-## mii-tool 
+## mii-tool
 
 ```bash
-mii-tool eth0 						# 查看物理连接情况 
+mii-tool eth0 # 查看物理连接情况 
 ```
 
 ## route
 
 ```bash
-route 										# 查看路由
-route add default gw <网关ip>				# 添加网关
+route # 查看路由
+route add default gw <网关ip> # 添加网关
 route add -host <指定ip> gw <网关ip>
 route add -net <指定网段> netmask <子网掩码>  gw <网关ip>
 ```
-
-
 
 ## ip
 
@@ -396,9 +390,63 @@ ip addr add 10.0.0.1/24 dev eth1    # ifconfig eth1 10.0.0.1 netmask 255.255.255
 ip route add 10.0.0/24 via 192.168.0.1   # route add -net 10.0.0.0 netmask 255.255.255.0 gw 192.168.0.1
 ```
 
-## ping
+### debain
 
-## traceroute
+* `/etc/network/interfaces` 配置IP和网关
+
+```bash
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug ens33
+iface ens33 inet static
+address 192.168.157.129/24
+gateway 192.168.157.2
+```
+
+### centos
+
+`vim /etc/sysconfig/network-scripts/ifcfg-ens33`
+
+```bash
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=static  # 设置为static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=5aa4d499-39ff-43dc-86c9-e049ec71e2bc
+DEVICE=ens33
+ONBOOT=yes  # 开机启动
+# 设置静态ip地址
+IPADDR=192.168.2.230
+GATEWAY=192.168.2.1
+NETMASK=255.255.255.0
+```
+
+## DNS
+
+`/etc/resolv.conf`
+
+```bash
+nameserver 10.10.10.2 #设置首选dns
+nameserver 114.114.114.114 #设置备用dns
+```
+
+
+
+```bash
+systemctl restart network  # 重启网络,使设置生效
+```
+
+## ping
 
 ```bash
 traceroute -w 1 www.bing.com   
@@ -2184,11 +2232,21 @@ awk 'BEGIN{srand(); print rand()}'			# 重新获得种子生成随机数
 awk 'function fname() {return 0} BEGIN{print fname()}'
 ```
 
-
-
-
-
 # 包管理
+
+## dkpg
+
+dpkg 是Debian Package 的简写，是Debian系列系统下的一个软件安装、更新及移除工具。
+
+```bash
+dpkg -info xxx.deb # 查看软件包信息
+dpkg -L xxx.deb #查看文件拷贝详情
+dpkg -l # 查看已安装软件包信息
+dpkg -i xxx.deb # 安装deb包
+dpkg -r xxx.deb # 卸载软件包
+dpkg -r --purge xxx.deb # 连同配置文件一起卸载
+dpkg-reconfigure xxx # 重新配置软件包
+```
 
 ## rpm
 
@@ -2982,42 +3040,6 @@ SELINUX=enforcing	#开启
 SELINUX=disabled    #关闭
 ```
 
-## DNS
-`/etc/resolv.conf`
-
-```bash
-DNS1=114.114.114.114
-```
-
-设置静态IP
-
-`vim /etc/sysconfig/network-scripts/ifcfg-ens33`
-
-```bash
-TYPE=Ethernet
-PROXY_METHOD=none
-BROWSER_ONLY=no
-BOOTPROTO=static  # 设置为static
-DEFROUTE=yes
-IPV4_FAILURE_FATAL=no
-IPV6INIT=yes
-IPV6_AUTOCONF=yes
-IPV6_DEFROUTE=yes
-IPV6_FAILURE_FATAL=no
-IPV6_ADDR_GEN_MODE=stable-privacy
-NAME=ens33
-UUID=5aa4d499-39ff-43dc-86c9-e049ec71e2bc
-DEVICE=ens33
-ONBOOT=yes			# 开机启动
-# 设置静态ip地址
-IPADDR=192.168.2.230		
-GATEWAY=192.168.2.1		
-NETMASK=255.255.255.0
-```
-
-```bash
-systemctl restart network  # 重启网络,使设置生效
-```
 
 ## 升级vim
 

@@ -17,15 +17,12 @@ Nexus 是一个仓库管理器，并且极大的简化了自己内部仓库和�
 
 # 安装
 ## 手动
-​
 
 安装前检查环境
 [https://help.sonatype.com/repomanager3/product-information/system-requirements](https://help.sonatype.com/repomanager3/product-information/system-requirements)
-​
 
 从一下地址下载最新的安装文件。
 [https://help.sonatype.com/repomanager3/product-information/download](https://help.sonatype.com/repomanager3/product-information/download)
-​
 
 ```bash
 tar xvzf nexus-3.37.3-02-unix.tar.gz -C /opt

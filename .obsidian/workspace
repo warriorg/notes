@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/nexus.md",
+            "file": "doc/Linux.md",
             "mode": "source",
             "source": false
           }
@@ -40,7 +40,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#网站",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/nexus.md",
+                "file": "doc/Linux.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -86,7 +86,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/nexus.md"
+                "file": "doc/Linux.md"
               }
             }
           },
@@ -96,8 +96,8 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/nexus.md",
-                "linksCollapsed": true,
+                "file": "doc/Linux.md",
+                "linksCollapsed": false,
                 "unlinkedCollapsed": false
               }
             }
@@ -113,7 +113,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -121,15 +122,15 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
-    "doc/nexus.md",
+    "doc/Linux.md",
     "doc/nacos.md",
-    "doc/node.md",
-    "doc/harbor.md",
-    "doc/ca.md",
-    "doc/android.md",
-    "doc/DSA.md",
-    "doc/macos.md",
-    "doc/blockchain.md",
-    "doc/Spring Cloud Alibaba.md"
+    "doc/dubbo.md",
+    "doc/web.md",
+    "java/README.md",
+    "go/README.md",
+    "algorithms/interview/readme.md",
+    "algorithms/algorithms/src/datastructures/sort/readme.md",
+    "README.md",
+    "doc/README.md"
   ]
 }

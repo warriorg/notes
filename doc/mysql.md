@@ -18,12 +18,14 @@ FLUSH PRIVILEGES;
 # MySQL 8.0.4开始，MySQL的密码认证插件由“mysql_native_password”改为“caching_sha2_password”
 ```
 
-### Ubuntu
+### Debain
 
-[APT install](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)
+[APT install Guide](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)
+
+[MySQL APT repository](https://dev.mysql.com/downloads/repo/apt/)
 
 ```bash
-wget https://repo.mysql.com//mysql-apt-config_0.8.18-1_all.deb
+wget https://repo.mysql.com/mysql-apt-config_0.8.18-1_all.deb
 sudo dpkg -i mysql-apt-config_0.8.18-1_all.deb
 sudo apt-get update
 sudo apt-get install mysql-server
@@ -37,14 +39,10 @@ sudo mysql
 UPDATE mysql.user SET 
  plugin = 'mysql_native_password',
  Host = '%',
- authentication_string = CONCAT('*', UPPER(SHA1(UNHEX(SHA1('12345678'))))) 
+ authentication_string = CONCAT('*', UPPER(SHA1(UNHEX(SHA1('123456'))))) 
 WHERE User = 'root';
 FLUSH PRIVILEGES;
 ```
-
-
-
-
 
 ### Centos 7 安装
 
@@ -219,3 +217,10 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 
 ## 分库分表
+
+# 运维
+
+## 导入数据文件
+
+* `mysql -h localhost -u root -p123456 < ./schema.sql`
+* 登录进数据库后 `source ./schema.sql`
