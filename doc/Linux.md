@@ -2877,10 +2877,13 @@ ssh-keygen -t rsa
 # 通过ssh-copy-id copy
 ssh-copy-id -i ./.ssh/id_rsa.pub root@xxx.xxx.xxx.xxx   # copy证书去远程主机
 
+# windows
+type $env:USERPROFILE\.ssh\id_rsa.pub | ssh root@192.168.157.129 "cat >> .ssh/authorized_keys"
+
 # 通过scp拷贝
-# scp ~/.ssh/id_rsa.pub root@xxx.xxx.xxx.xxx:~
-# scp -P 26611 ./ssh/id_rsa.pub  jinyi@xxx.xxx.xxx.xx:/home/jinyi/id_rsa.pub
-# cat id_rsa.pub >>~/.ssh/authorized_keys
+scp ~/.ssh/id_rsa.pub root@xxx.xxx.xxx.xxx:~
+scp -P 26611 ./ssh/id_rsa.pub  jinyi@xxx.xxx.xxx.xx:/home/jinyi/id_rsa.pub
+cat id_rsa.pub >>~/.ssh/authorized_keys
 /etc/init.d/ssh restart
 
 #连接

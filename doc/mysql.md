@@ -1,5 +1,5 @@
 ## Install
-### macos下安装         
+### macos下安装
 
 ```bash
 brew install mysql
@@ -36,9 +36,10 @@ sudo mysql_secure_installation
 sudo mysql
 
 # mysql cli执行
+# host = '%' 代表可以从任何地方访问数据库
 UPDATE mysql.user SET 
  plugin = 'mysql_native_password',
- Host = '%',
+ Host = 'localhost',
  authentication_string = CONCAT('*', UPPER(SHA1(UNHEX(SHA1('123456'))))) 
 WHERE User = 'root';
 FLUSH PRIVILEGES;
@@ -57,6 +58,7 @@ enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 ```
+
 ```bash
 # Enable to use MySQL 5.7
 [mysql57-community]
@@ -74,10 +76,10 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 ```bash
 yum repolist enabled | grep mysql    # 
 yum module disable mysql # Disabling the Default MySQL Module
-yum install mysql-community-server			# 安装数据库
-systemctl start mysqld.service				# 启动数据库服务
-grep 'temporary password' /var/log/mysqld.log		# 查看数据库默认密码
-mysql -uroot -p										# 登录数据库
+yum install mysql-community-server	# 安装数据库
+systemctl start mysqld.service	# 启动数据库服务
+grep 'temporary password' /var/log/mysqld.log	# 查看数据库默认密码
+mysql -uroot -p # 登录数据库
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!';	# 修改密码
 
 # 查看密码规则
@@ -87,10 +89,8 @@ SHOW VARIABLES LIKE 'validate_password%';
 set global validate_password_policy=0;
 ```
 
-
-
-
 访问IP
+
 ```bash
 # 更改密码
 > SET PASSWORD = PASSWORD('pass');
