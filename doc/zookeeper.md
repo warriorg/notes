@@ -121,14 +121,14 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
 1. 初始化同步
 
    恢复模式具有两个阶段：Leader选举与初始化同步。当完成Leader选举后，此时的Leader还是一个准Leader，其要经过初始化同步后才能变为真正的Leader。
-   
+
    1. 为了保证Leader向Learner发送的提案有序，Leader会为每一个learner服务器准备一个队列
    2. Leader将那些没有被各个Learner同步的事务封装为Proposal
    3. Leader将这些Proposal逐条发给各个Learner，并在每一个Proposal后都紧跟一个COMMIT消息，表示该事务已经被提交，Learner可以直接接收并执行
    4. Learner接收来自于Leader的Proposal，并将其更新到本地
    5. 当Follower更新成功后，会向准Leader发送ACK信息
    6. Leader服务器在接到来自Follower的ACK后就会将该Follower加入到真正可用的Follower列表。没有反馈ACK，或反馈了但Leader没有收到Follower，Leader不会将其加入到Follower列表
-   
+
 2. 消息广播算法
 
    当集群中已经有过半的Follower完成了初始化状态同步，那么整个zk集群就进入到了正常工作模式了
@@ -139,8 +139,6 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
    2. Leader根据Follower列表获取到所有Follower，然后在将Proposal通过这些Follower的队列将提案发送给各个Follower
    3. 当Follower接收到提案后，会先将提案的zxid与本地记录的事务日志中的最大的zxid进行比较。若当前提案的zxid大于最大的zxid，则将当前提案记录到本地事务日志中，并向Leader返回一个ACK
    4. 当Leader接收到过半的ACKs后，Leader就会向所有Follower的队列发送COMMIT 
-
-   
 
 #### 恢复模式与两个原则
 
@@ -155,74 +153,33 @@ ZAB协议中对zkServer的状态描述有三种模式。这三种模式并没有
 
 1. Leader选举中的概念
    1. myid
-   
+
       这是zk集群中服务器的唯一标识，称为myid。例如，有三个zk服务器，那么编号分别是1，2，3.
-   
+
    2. 逻辑时钟
-   
+
       逻辑时钟，logicalclock，是一个整型数，该概念在选举时称为logicalclock，而在选举结束后称为epoch。即epoch与logicalclock时同一个值，在不同情况下的不同名称。
-   
+
    3. zk状态
-   
+
       zk集群中的每一台主机，在不同阶段会处于不同状态，每一台主机具有四种状态
-   
-      * LOOKING 		选举状态
-      * FOLLOWING 	Follower在正常运行情况下状态
-      * OBSERVING      Observer在正常运行情况下状态
-      * LEADING       Leader在正常运行情况下状态
-   
+
+      * LOOKING 选举状态
+      * FOLLOWING Follower在正常运行情况下状态
+      * OBSERVING Observer在正常运行情况下状态
+      * LEADING Leader在正常运行情况下状态
+
 2. Leader选举算法
   
    ![zookeeper选主过程-1](./assets/images/zookeeper选主过程-1.png)
-   
-   
-   
+
    * 集群启动中的选举过程
-   
+
    ![集群启动中的Leader选举](./assets/images/集群启动中的Leader选举.png)
-   
-   
-   
+
    * 断开后的Leader选举
-   
+
    ![Leader 宕机后的Leader选举示意图](./assets/images/Leader 宕机后的Leader选举示意图.png)
-   
-   
-
-
-### CAP
-
-#### 简介
-
-CAP原则又称CAP定理，指的是在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）。CAP 原则指的是，这三个要素最多只能同时实现两点，不可能三者兼顾。
-
-* 一致性(C): 分布是系统中多个主机之间是否能够保值数据一致的特性。即，当系统数据发生更新操作后，各个主机中的数据仍然处于一致的状态。
-* 可用性(A): 系统提供的服务必须一致处于可用状态，即对于用户的每一次请求，系统总是可以==在有限的时间==内对 用户==做出响应==
-* 分区容错性(P): 分布式系统在遇到任何网络分区故障时，仍能够保证对外提供满足一致性和可用性的服务。
-
-对于分布式系统，网络环境相对时不可控的，出现网络分区时不可避免的，因此系统必须具备分区容错性。但其斌不能同事保证一致性与可用性。CAP原则对于一个分布式系统来说，只能满足两项。
-
-
-
-* CP 系统  Google BigTable, Hbase, MongoDB, Redis, MemCacheDB 
-
-* AP 系统 Amazon Dynamo,Apache Cassandra, Voldemort
-
-* CA 系统 Kafka
-
-  > 严格来说,CAP理论是针对分区副本来定义的，之所以说kafka放弃P，只支持CA，是因为，kafka原理中当出现单个broker宕机，将要出现分区的时候，直接将该broker从集群中剔除，确保整个集群不会出现P现象
-  >
-  > 如果topic仅配置了两个副本且一个失败（即，同步副本中只有一个仍然存在），则指定acks = all的写入将成功。 但是，如果剩余的副本也失败，则这些写入可能会丢失。 
-  >
-  > https://stackoverflow.com/questions/51375187/why-kafka-is-not-p-in-cap-theorem/51379079
-
-[Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services](https://courses.e-ce.uth.gr/CE623/CAP_theorem_proof.pdf)
-
-#### BASE理论
-
-BASE 时 Basically Available(基本可用)、Soft state(软状态)和Eventually consistent(最终一致性)三个短语的简写
-
-BASE理论的核心思想是：即使无法做到强一致性，但每个系统都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性。
 
 #### ZK与CP
 
