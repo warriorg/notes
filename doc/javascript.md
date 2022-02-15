@@ -1,4 +1,7 @@
-# Javascript 
+---
+
+---
+# Javascript ao
 **对象** 是基于原型(prototype-based)
 
 **原型链（作用域链）** 定义了对象到哪查找它的属性定义
@@ -53,4 +56,11 @@ function UserAPI() {
 UserAPI.prototype = Object.create(BaseAPI.prototype)
 UserAPI.prototype.constructor = UserAPI
 ```
+
+# 模块化方案
+* CommonJS: 主要是 **Node.js** 使用，通过 `require` **同步**加载模块，`exports` 导出内容。
+* AMD 主要是**浏览器端**使用，通过 `define` 定义模块和依赖，`require` **异步**加载模块，推崇**依赖前置**。
+* CMD: 和 AMD 比较类似，主要是**浏览器端**使用，通过 `require` **异步**加载模块，`exports` 导出内容，推崇**依赖就近**。
+* UMD: 通用模块规范，是 CommonJS、AMD 两个规范的大融合，是**跨平台**的解决方案。
+* ESM 官方模块化规范，**现代浏览器原生支持**，通过 `import` **异步**加载模块，`export` 导出内容。
 

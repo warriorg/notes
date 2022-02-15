@@ -113,8 +113,7 @@
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
@@ -123,6 +122,7 @@
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
     "doc/nacos.md",
+    "doc/理论.md",
     "doc/Linux.md",
     "doc/dubbo.md",
     "doc/web.md",
@@ -130,7 +130,6 @@
     "go/README.md",
     "algorithms/interview/readme.md",
     "algorithms/algorithms/src/datastructures/sort/readme.md",
-    "README.md",
-    "doc/README.md"
+    "README.md"
   ]
 }
