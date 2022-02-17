@@ -1,6 +1,23 @@
 # Install
-## Centos8
 
+## ubuntu
+```bash
+# Create the file repository configuration:
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+# Import the repository signing key:
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+# Update the package lists:
+sudo apt-get update
+
+# Install the latest version of PostgreSQL.
+# If you want a specific version, use 'postgresql-12' or similar instead of 'postgresql':
+sudo apt-get -y install postgresql
+```
+
+
+## Centos8
 
 ```bash
 # 设置安装源
@@ -67,7 +84,8 @@ COPY weather FROM '/home/user/weather.txt';
 ## Indexes
 
 ```sql
-CREATE INDEX name ON table USING HASH (column);		-- 默认创建B-tree, 可以使用USING制定索引的类型
+CREATE INDEX name ON table USING HASH (column);		
+-- 默认创建B-tree, 可以使用USING制定索引的类型
 ```
 
 ### Index Type
@@ -105,6 +123,8 @@ EXPLAIN实际执行查询，然后显示每个计划节点中积累的真实行�
 ## 查看
 
 ```sql
+sudo su postgres
+
 -- 命令行执行sql文件
 pssql -U postgres -f xxx.sql
 

@@ -324,6 +324,47 @@ vgcreate <volume_group> <physical_volume>
 
 * **/run** 是一个临时文件系统，存储系统启动以来的信息
 
+# 包管理
+## apt
+Advanced Packaging Tool_ (APT)
+
+```bash
+# install a package
+sudo apt install nmap
+# remove a package
+sudo apt remove nmap
+# Update the Package Index
+sudo apt update
+# upgrade package
+sudo apt upgrade
+```
+
+### 常见问题
+
+#### couldn't be verified because the public key is not available: NO_PUBKEY 467B942D3A79BD29
+
+```bash
+# add these key
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 467B942D3A79BD29
+```
+
+## dpkg
+dpkg是一个基于debian系统的包管理器。它可以安装、删除和构建包，但与其他包管理系统不同的是，它不能自动下载和安装包或它们的依赖项。
+```bash
+# To list all packages in the system’s package database, including all packages, installed and uninstalled, from a terminal prompt type
+dpkg -l
+# 列出mysql
+dpkg -l | grep mysql
+# To list the files installed by a package
+dpkg -L mysql-server
+# which package installed a file
+dpkg -S /etc/mysql/mysql.cnf
+# install a local `.deb` file
+sudo dpkg -i zip_3.0-4_amd64.deb
+# uninstall a package
+sudo dpkg -r zip
+
+```
 
 
 # 网络管理

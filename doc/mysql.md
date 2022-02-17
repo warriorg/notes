@@ -31,10 +31,10 @@ sudo apt-get update
 sudo apt-get install mysql-server
 systemctl status mysql
 
+# Improve MySQL Installation Security
 sudo mysql_secure_installation
 
 sudo mysql
-
 # mysql cli执行
 # host = '%' 代表可以从任何地方访问数据库
 UPDATE mysql.user SET 
@@ -121,6 +121,36 @@ symbolic-links=0
 log-error=/var/log/mysqld.log
 pid-file=/var/run/mysqld/mysqld.pid
 ```
+
+### 表名忽略大小写
+
+Add `lower_case_table_names = 1` to the `[mysqld]` section in `/etc/mysql/mysql.conf.d/mysqld.cnf`
+
+```bash
+# stop mysql service
+sudo service mysql stop
+# delete the mysql data directory
+sudo rm -rf /var/lib/mysql
+# recreate the mysql data directory
+sudo mkdir /var/lib/mysql
+sudo chown mysql:mysql /var/lib/mysql
+sudo chmod 700 /var/lib/mysql
+
+# Add `lower_case_table_names = 1` to the `[mysqld]` section in `/etc/mysql/mysql.conf.d/mysqld.cnf`
+
+# re-initialize 
+sudo mysqld --defaults-file=/etc/mysql/my.cnf --initialize --lower_case_table_names=1 --user=mysql --console
+
+sudo service mysql start
+# Retrieve the new generated password for MySQL user `root`
+sudo grep 'temporary password' /var/log/mysql/error.log
+# 修改默认的登录密码，必须修改
+sudo mysql -u root -p
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPa$$w0rd';
+# 检查设置
+SHOW VARIABLES LIKE 'lower_case_%';
+```
+
 
 ## 索引
 
