@@ -122,14 +122,14 @@
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
     "doc/nacos.md",
+    "doc/Spring Cloud Alibaba.md",
+    "doc/Sentinel.md",
+    "doc/skywalking.md",
+    "doc/Sentinel.md.md",
+    "doc/consul.md",
+    "Sentinel.md",
+    "doc/macos.md",
     "doc/理论.md",
-    "doc/Linux.md",
-    "doc/dubbo.md",
-    "doc/web.md",
-    "java/README.md",
-    "go/README.md",
-    "algorithms/interview/readme.md",
-    "algorithms/algorithms/src/datastructures/sort/readme.md",
-    "README.md"
+    "doc/理财.md"
   ]
 }

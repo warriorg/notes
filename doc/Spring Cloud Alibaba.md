@@ -51,7 +51,7 @@ SOA 是 Service-Oriented Architecture 的简写，直译为“面向服务的架
 ### 微服务架构
 
 |            | 传统SOA                     | 微服务                                                       |
-| ---------- | --------------------------- | ------------------------------------------------------------ |
+| --------- | --------------------------- | ------------------------------------------------------------ |
 | 通信方式   | 基于ESB，SOAP、WSDL等重协议 | 点对点通信，开放式协议，如 RESTful、gRPC、或者是轻量级的二进制协议。 |
 | 数据管理   | 全局数据模型以及共享存储    | 每个服务独立模型和存储                                       |
 | 服务粒度   | 较粗                        | 较细                                                         |
@@ -63,11 +63,11 @@ SOA 是 Service-Oriented Architecture 的简写，直译为“面向服务的架
 > The microservice architectural style is an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API. These services are built around business capabilities and independently deployable by fully automated deployment machinery. There is a bare minimum of centralized management of these services, which may be written in different programming languages and use different data storage technologies.?
 
 这里提到几个重要的概念：
-\- 一套小服务
-\- 独立进程
-\- 轻量级通信协议
-\- 可独立部署
-\- 多语言&不同储技术
+- 一套小服务
+- 独立进程
+- 轻量级通信协议
+- 可独立部署
+- 多语言&不同储技术
 
 这个定义对微服务做了一个比较具象化较为易于理解的描述，通常来说我们看到的为服务架构如下图所示：
 
@@ -87,7 +87,7 @@ SOA 是 Service-Oriented Architecture 的简写，直译为“面向服务的架
 
 ![micor_arch_detail.png](./assets/images/micor_arch_detail.png)
 
-#### “微服务”不是银弹
+#### “微服务”不是[银弹](./理论.md#银色子弹)
 
 微服务并不是一劳永逸的解决了所有的问题，相反的，如果不能正确的使用微服务，则有可能被微服务自身的限制拖入另一个泥潭：
 
@@ -165,25 +165,9 @@ Spring Cloud 是什么，没有比官方的定义更能说明问题了：
 
 脚手架的访问地址是 https://start.aliyun.com/bootstrap.html
 
-
-
 # 分布式配置
 
-## Nacos
-
-[官网](https://nacos.io/zh-cn/docs/quick-start.html)
-
-### 安装
-
-下载最新的稳定版
-
-### 启动
-
-```bash
-sh startup.sh -m standalone			# standalone代表着单机模式运行，非集群模式
-```
-
-访问地址 http://localhost:8848/nacos， 默认用户名密码 `nacos/nacos`
+## [Nacos](./nacos.md)
 
 ### 使用 Nacos Config 实现分布式配置
 
@@ -206,17 +190,6 @@ spring.cloud.nacos.config.namespace=536523ba-4932-45dc-a99f-0efca7f4be02
 ```
 
 
-
-### 持久化数据
-
-
-
-### Raft算法
-
-
-
-
-
 # 服务注册&服务发现
 
 
@@ -227,23 +200,7 @@ spring.cloud.nacos.config.namespace=536523ba-4932-45dc-a99f-0efca7f4be02
 
 # 服务熔断和降级
 
-## Sentinel: 高可用护航的利器
-
-[Sentinel](https://github.com/alibaba/Sentinel?spm=a2ck6.20206201.0.0.3c4a1fd6CKgAvf) 是阿里巴巴开源的，面向分布式服务架构的高可用防护组件，主要以流量为切入点，从流量控制、流量整形、熔断降级、系统自适应保护、热点防护等多个维度来帮助开发者保障微服务的稳定性。Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀、冷启动、消息削峰填谷、自适应流量控制、实时熔断下游不可用服务等，是保障微服务高可用的利器，原生支持 Java/Go/C++ 等多种语言，并且提供 Istio/Envoy 全局流控支持来为 Service Mesh 提供高可用防护的能力。
-
-Sentinel 的技术亮点：
-
-- 高度可扩展能力：基础核心 + SPI 接口扩展能力，用户可以方便地扩展流控、通信、监控等功能
-- 多样化的流量控制策略（资源粒度、调用关系、流控指标、流控效果等多个维度），提供分布式集群流控的能力
-- 热点流量探测和防护
-- 对不稳定服务进行熔断降级和隔离
-- 全局维度的系统负载自适应保护，根据系统水位实时调节流量
-- 覆盖 API Gateway 场景，为 Spring Cloud Gateway、Zuul 提供网关流量控制的能力
-- 实时监控和规则动态配置管理能力
-
-![sentinel-arch.png](./assets/images/sentinel-arch.png)
-
-
+## [Sentinel](./Sentinel.md): 高可用护航的利器
 
 # 分布式事务
 
