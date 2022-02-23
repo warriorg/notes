@@ -1,24 +1,14 @@
+# VIM
+
 ## 四种模式
 
 ### 正常模式
 
-
-
 ### 插入模式
-
-
 
 ### 命令模式
 
-
-
 ### 可视模式
-
-
-
-
-
-
 
 ## 基础操作
 
@@ -30,7 +20,43 @@
 
 vim将以前的十个文件存储到文件`~/.viminfo`标记部分。你可以使用`'0`，`'1`，`'2`，... `'9`它们之间跳跃。
 
+
+
 ### Move
+
+#### 动词
+
+```
+d 表示删除（delete） 
+r 表示替换（replace） 
+c 表示修改（change）
+y 表示复制（yank）
+v 表示选取（visual select）
+```
+#### 名词 （文本对象）
+```
+w 表示一个单词（word）
+s 表示一个句子（sentence）
+p 表示一个段落（paragraph）
+t 表示一个 HTML 标签（tag）
+引号或者各种括号所包含的文本称作一个文本块。
+```
+#### 介词
+
+```
+i 表示“在...之内”（inside）
+a 表示“环绕...”（around）
+t 表示“到...位置前”（to）
+f 表示“到...位置上”（forward）
+```
+
+>基本的语法为：动词 介词 名词  
+删除一个段落: （delete inside paragraph）dip  
+选取一个句子: （visual select inside sentence） vis  
+修改一个单词: （change inside word） ciw（change around word） caw  
+删除文本直到字符“x”（不包括字符“x”）: （de  lete to x） dtx  
+删除文本直到字符“x”（包括字符“x”）: （delete forward x） dfx  
+修改三个单词：（change three words） c3w  
 
 ```bash
 h   move one character left
@@ -87,6 +113,7 @@ TX  til previous 'X'
 ,   repeat above, in reverse direction
 ```
 
+
 ### 左右移动
 
 ```bash
@@ -139,75 +166,8 @@ Ctrl-PgDn     # go to next tab
 Ctrl-PgUp     # go to previous tab
 ```
 
-```
-:set number   #→ 设置行号 简写set nu  
-:set nonu   #→ 取消行号  
-gg  #→ 到第一行  
-G   #→ 到最后一行  
-nG  #→ 到第n行  
-:n  #→ 到第n行  
-S   #→ 移至行尾  
-0   #→ 移至行尾  
-hjkl #→ 前下上后  
-
-w   #→ 到下一个单词的开头  
-b   #→ 与w相反  
-e   #→ 到下一个单词的结尾。  
-ge  #→ 与e相反  
-
-0   #→ 到行头  
-^   #→ 到本行的第一个非blank字符  
-$   #→ 到行尾  
-g_  #→ 到本行最后一个不是blank字符的位置。  
-fa  #→ 到下一个为a的字符处，你也可以fs到下一个为s的字符。  
-t,  #→ 到逗号前的第一个字符。逗号可以变成其它字符。  
-3fa #→ 在当前行查找第三个出现的a。  
-F 和 T → 和 f 和 t 一样，只不过是相反方向。  
-
-zz # 将当前行置于屏幕中间（不是转载…）  
-zt # 将当前行置于屏幕顶端（不是猪头~）  
-zb # 底端啦~ 
-```
 
 
-
-
-
-
-
-#### 动词
-
-```
-d 表示删除（delete） 
-r 表示替换（replace） 
-c 表示修改（change）
-y 表示复制（yank）
-v 表示选取（visual select）
-```
-#### 名词 （文本对象）
-
-```
-w 表示一个单词（word）
-s 表示一个句子（sentence）
-p 表示一个段落（paragraph）
-t 表示一个 HTML 标签（tag）
-引号或者各种括号所包含的文本称作一个文本块。
-```
-#### 介词
-
-```
-i 表示“在...之内”（inside）
-a 表示“环绕...”（around）
-t 表示“到...位置前”（to）
-f 表示“到...位置上”（forward）
-```
->基本的语法为：动词 介词 名词  
->删除一个段落: （delete inside paragraph）dip  
-选取一个句子: （visual select inside sentence） vis  
-修改一个单词: （change inside word） ciw；（change around word） caw  
-删除文本直到字符“x”（不包括字符“x”）: （delete to x） dtx  
-删除文本直到字符“x”（包括字符“x”）: （delete forward x） dfx  
-修改三个单词：（change three words） c3w  
 
 ### HEX编辑
 ```bash
@@ -216,12 +176,48 @@ f 表示“到...位置上”（forward）
 :% ! xxd -r # Save
 ```
 
-Replace
+### 查找替换
+Vim有一个命令 `:substitute` ,也可以用于较短的版本 `:s` 
 
+`:substitute`命令的一般语法
 ```bash
-:1,$ s/old/new #替换全部
+:[range]s/{pattern}/{string}/[flags] [count]
+```
+- `range` : 替换行的范围，如果没有，则只替换当前行。
+	- `.` : 当前行
+	- `$` : 最后一行
+	- `%` : 所有行
+	- `x` : 行号
+	- `.,+_x_` : 从当前行到其他x行
+- `pattern` : 要替换的文本
+- `string` : 将替换模式的字符串。
+- `flags` : 
+	- `g` : 替换所有出现的
+	- `i` : 替换的时候忽略大小写
+	- `c` : 替换的时候需要手工确认
+- `count` : 要替换的文本行数
+
+#### 实战
+```vim
+# 替换所有的 Hello 为 HI
+:%s/Hello/HI/g
+
+# 替换所有的 Hello 为 HI, 替换前需要手工确认
+:%s/Hello/HI/gc
+# replace with HI (y/n/a/q/l/^E/^Y)?
+
+# 替换的时候忽略大小写
+:%s/hello/HI/gi
 ```
 
+##### 确认选项说明
+-   y: yes
+-   n: no
+-   a: all
+-   q: quit without substituting, but it does not undo once you have already substituted text
+-   l: substitute this and exit (think of 'last')
+-   ^E: Scroll up (does not work in `vim-tiny`)
+-   ^Y: Scroll down (does not work in `vim-tiny`)
 
 
 ### Fold折叠
@@ -252,9 +248,9 @@ Replace
 
 ```bash
 :set foldmethod=manual  # 启用手工折叠
-zf  			# 折叠选中的文本
-zfa(  		# 折叠括号（比如()、[]、{}、><等）包围的区域
-:mkview  	# 保存当前的折叠状态
+zf # 折叠选中的文本
+zfa( # 折叠括号（比如()、[]、{}、><等）包围的区域
+:mkview # 保存当前的折叠状态
 :loadview # 载入记忆的折叠信息
 :help fold-manual  # 查看关于手工折叠的帮助信息
 ```
@@ -262,7 +258,7 @@ zfa(  		# 折叠括号（比如()、[]、{}、><等）包围的区域
 #### Indent（缩进折叠）
 
 ```bash
-:set foldmethod=indent 	# 启用缩进折叠
+:set foldmethod=indent  # 启用缩进折叠
 :set foldlevel=1        # 指定折叠缩进的级别
 :help fold-indent       # help
 ```
@@ -275,12 +271,14 @@ zfa(  		# 折叠括号（比如()、[]、{}、><等）包围的区域
 ```
 
 
-#### Syntax（语法折叠
+#### Syntax（语法折叠）
 
 ```bash
 :set foldmethod=syntax   # 按照语法结构自动折叠
 :help fold-syntax
 ```
+
+
 
 ## 剪贴板
 
