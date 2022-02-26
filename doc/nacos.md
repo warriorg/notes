@@ -13,7 +13,7 @@ Nacos 的关键特性包括:
 * 服务及其元数据管理
 * ...
 
-## [Raft 算法](./DSA.md#Raft)
+## [Raft 算法](./raft.md)
 
 Nacos Discovery集群为了保证集群中数据的一致性，其采用了Raft算法。这是一种通过对日志进行复制管理来达到一致性的算法。Raft通过选举Leader并由Leader节点负责管理日志复制来实现各个节点间数据的一致性。
 

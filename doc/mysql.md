@@ -30,12 +30,17 @@ wget https://repo.mysql.com/mysql-apt-config_0.8.18-1_all.deb
 sudo dpkg -i mysql-apt-config_0.8.18-1_all.deb
 sudo apt-get update
 sudo apt-get install mysql-server
+
+# The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 467B942D3A79BD29The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 467B942D3A79BD29
+# 如果出现上面问题
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 467B942D3A79BD29apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 467B942D3A79BD29
+
 systemctl status mysql
 
 # Improve MySQL Installation Security
 sudo mysql_secure_installation
 
-sudo mysql
+    sudo mysql
 # mysql cli执行
 # host = '%' 代表可以从任何地方访问数据库
 UPDATE mysql.user SET 
