@@ -156,7 +156,7 @@ namespace 的设计是 nacos 基于此做多环境以及多租户数据(配置�
 
 ### 两种配置中心对比
 
-* Nacos Config 无需i奥西总线系统，系统搭建成本与复杂度比Spring Cloud Config 低很多
+* Nacos Config 无需消息总线系统，系统搭建成本与复杂度比Spring Cloud Config 低很多
 * Nacos Config 不会一窝蜂向配置中心索要配置信息，Nacos Config 是定点更新。
 * Nacos Config 由远程配置更新后，会自动更新到client。其采用了长轮询Pull模型。而Spring Cloud Config 采用了短轮询Push模型。
 
