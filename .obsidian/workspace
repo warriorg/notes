@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/nacos.md",
+            "file": "doc/redis.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/nacos.md",
+                "file": "doc/redis.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -86,7 +86,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/nacos.md"
+                "file": "doc/redis.md"
               }
             }
           },
@@ -96,7 +96,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/nacos.md",
+                "file": "doc/redis.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": false
               }
@@ -121,6 +121,7 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
+    "doc/redis.md",
     "doc/nacos.md",
     "doc/Spring Cloud Alibaba.md",
     "doc/Sentinel.md",
@@ -129,7 +130,6 @@
     "doc/consul.md",
     "Sentinel.md",
     "doc/macos.md",
-    "doc/理论.md",
-    "doc/理财.md"
+    "doc/理论.md"
   ]
 }

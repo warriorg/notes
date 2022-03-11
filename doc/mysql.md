@@ -255,3 +255,7 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 * `mysql -h localhost -u root -p123456 < ./schema.sql`
 * 登录进数据库后 `source ./schema.sql`
+
+## 注意
+* mysql 在Linux下默认不区分大小写
+* mysql 字符集 ci 的在比较字符串是默认忽略大小写

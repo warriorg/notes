@@ -118,7 +118,7 @@ namespace 的设计是 nacos 基于此做多环境以及多租户数据(配置�
 
 * 从多个租户(用户)的角度来看，每个租户(用户)可能会有自己的 namespace,每个租户(用户)的配置数据以及注册的服务数据都会归属到自己的 namespace 下，以此来实现多租户间的数据隔离。例如超级管理员分配了三个租户，分别为张三、李四和王五。分配好了之后，各租户用自己的账户名和密码登录后，创建自己的命名空间。如下图所示：
 
-![nacos_multi_tenant_namespace.jpg](./assets/images/nacos_multi_tenant_namespace.jpg)
+![Image not found: ./assets/images/nacos_multi_tenant_namespace.jpg](./assets/images/nacos_multi_tenant_namespace.jpg "Image not found: ./assets/images/nacos_multi_tenant_namespace.jpg")
 
 ## 实践
 
