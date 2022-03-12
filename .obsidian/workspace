@@ -9,7 +9,11 @@
         "state": {
           "type": "markdown",
           "state": {
+<<<<<<< HEAD
             "file": "Raft.md.md",
+=======
+            "file": "doc/redis.md",
+>>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
             "mode": "source",
             "source": false
           }
@@ -69,7 +73,11 @@
             "state": {
               "type": "backlink",
               "state": {
+<<<<<<< HEAD
                 "file": "Raft.md.md",
+=======
+                "file": "doc/redis.md",
+>>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -86,7 +94,11 @@
             "state": {
               "type": "outline",
               "state": {
+<<<<<<< HEAD
                 "file": "Raft.md.md"
+=======
+                "file": "doc/redis.md"
+>>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
               }
             }
           },
@@ -96,7 +108,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+<<<<<<< HEAD
                 "file": "Raft.md.md",
+=======
+                "file": "doc/redis.md",
+>>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
                 "linksCollapsed": false,
                 "unlinkedCollapsed": false
               }
@@ -122,8 +138,12 @@
   },
   "active": "da46fa7f6d862609",
   "lastOpenFiles": [
+<<<<<<< HEAD
     "Raft.md.md",
     "doc/DSA.md",
+=======
+    "doc/redis.md",
+>>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
     "doc/nacos.md",
     "doc/mysql.md",
     "doc/mongodb.md",
@@ -131,6 +151,13 @@
     "doc/Sentinel.md",
     "doc/skywalking.md",
     "doc/Sentinel.md.md",
+<<<<<<< HEAD
     "doc/consul.md"
+=======
+    "doc/consul.md",
+    "Sentinel.md",
+    "doc/macos.md",
+    "doc/理论.md"
+>>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
   ]
 }
