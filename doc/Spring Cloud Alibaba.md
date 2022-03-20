@@ -196,6 +196,8 @@ spring.cloud.nacos.config.namespace=536523ba-4932-45dc-a99f-0efca7f4be02
 
 # 分布式服务调用
 
+[OpenFeign](./feign.md)
+
 
 
 # 服务熔断和降级
@@ -238,4 +240,16 @@ TCC 方案要求用户根据业务场景实现 try，confirm，cancel三个接�
   分布式事务二阶段执行，在形成globalRollback 决议后执行。RM 收到 branchRollback 请求，取undo_log 表中对应的branchId 记录解析rollback_info 字段，对现有数据和undo log后镜像对比，对比不同则分支事务回滚失败。对比成功则根据前镜像构造sql并执行反向操作和删除undo log。
 
 详细处理过程和原理，可参考官网文档关于AT模式的介绍：https://seata.io/zh-cn/docs/dev/mode/at-mode.html
+
+
+
+# 网关
+
+## 简介
+
+在微服务架构系统下，网关是系统对外的一个入口，介于客户端与服务端之间，用于对请求进行鉴权、限流、路由、监控等功能。
+
+
+
+
 
