@@ -213,7 +213,7 @@ docker volume rm my-vol
 
 ### 备份、恢复、迁移数据卷
 
-已 nexus3 的数据卷备份和还原来说明如何备份和还原卷。
+以 nexus3 的数据卷备份和还原来说明如何备份和还原卷。
 
 ```yml
 version: "3"

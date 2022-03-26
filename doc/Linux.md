@@ -824,7 +824,7 @@ $ fg %jobnumber  # jobnumber jobs查询到的命令的序号
 
 ## kill 
     send signal to a process
-    
+
 ```bash
 kill -l  		# 查看系统支持的所有信号
 kill -3 pid     # 在 JVM 中 thread dump 到标准错误
@@ -1939,7 +1939,15 @@ ln abc cde 		# 建立abc的硬连接，
 
 chmod命令用于更改文件或目录的权限
 
+The available classes are:
+
+- `u` : permissions for owner/user
+- `g` : permissions for group
+- `o` : permissions for others
+- `a` : permissions for everyone
+
 ```bash
+chmod <class>+x <file>
 chmod u+x filename        # 为用户增加执行权限
 chmod u-r filename				# 为组减少读取权限
 ```

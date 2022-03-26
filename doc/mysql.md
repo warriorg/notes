@@ -1,5 +1,108 @@
-
 ## Install
+
+### 主从
+
+#### 环境
+
+* ubuntu
+* mysql 8
+
+
+
+#### 安装数据库
+
+```bash
+wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.22-1_all.deb
+sudo apt-get update
+sudo apt-get install mysql-server
+# stop mysql service
+sudo service mysql stop
+# delete the mysql data directory
+sudo rm -rf /var/lib/mysql
+# recreate the mysql data directory
+sudo mkdir /var/lib/mysql
+sudo chown mysql:mysql /var/lib/mysql
+sudo chmod 700 /var/lib/mys
+# re-initialize 
+sudo mysqld --defaults-file=/etc/mysql/my.cnf --initialize --lower_case_table_names=1 --user=mysql --console
+```
+
+#### 主服务器设置
+
+`/etc/mysql/mysql.conf.d/mysqld.cnf`
+
+```bash
+# 设置服务器编码
+character-set-server=utf8
+# 忽略表名大小写
+lower_case_table_names = 1
+# 主服务器唯一ID
+server-id=1
+# 启用二进制日志
+log-bin=mysql-bin
+# 设置不要复制的数据库
+binlog-ignore-db=sys
+binlog-ignore-db=mysql
+binlog-ignore-db=information_schema
+binlog-ignore-db=performance_schema
+```
+
+#### 从服务器设置
+
+```bash
+# 设置服务器编码
+character-set-server=utf8
+# 忽略表名大小写
+lower_case_table_names = 1
+# 从服务器唯一ID
+server-id=2
+# 启用中继日志
+relay-log=mysql-relay
+```
+
+#### 启动数据库
+
+```bash
+sudo service mysql start
+# Retrieve the new generated password for MySQL user `root`
+sudo grep 'temporary password' /var/log/mysql/error.log
+
+sudo mysql -u root -p
+ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';
+update user set host ='%' where user='root';
+FLUSH PRIVILEGES;
+```
+
+#### 主服务器设置
+
+```bash
+mysql -uroot -p  # 登陆
+
+# 查看正在使用的 Binlog 文件
+show master status\G;
+# 执行 flush logs 操作，生成新的 BINLOG, 方便从服务器从当前开始同步
+flush logs;
+```
+
+#### 从服务器设置
+
+```bash
+mysql -uroot -p # 登陆
+# 设置主数据库参数
+change master to master_host='192.168.0.202',master_port=3306,master_user='root',master_password='password',master_log_file='mysql-bin.000002',master_log_pos=1;
+# 开始同步
+start slave;
+
+# 若出现错误，则停止同步，重置后再次启动
+stop slave;
+reset slave;
+start slave;
+
+# 查询Slave状态
+show slave status\G
+```
+
 ### macos下安装
 
 ```bash
@@ -26,8 +129,8 @@ FLUSH PRIVILEGES;
 [MySQL APT repository](https://dev.mysql.com/downloads/repo/apt/)
 
 ```bash
-wget https://repo.mysql.com/mysql-apt-config_0.8.18-1_all.deb
-sudo dpkg -i mysql-apt-config_0.8.18-1_all.deb
+wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.22-1_all.deb
 sudo apt-get update
 sudo apt-get install mysql-server
 
@@ -36,20 +139,32 @@ sudo apt-get install mysql-server
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 467B942D3A79BD29apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 467B942D3A79BD29
 
 systemctl status mysql
-
+	
 # Improve MySQL Installation Security
 sudo mysql_secure_installation
 
+<<<<<<< HEAD
     sudo mysql
 # mysql cli执行
+||||||| parent of 1414a1f (leanging)
+sudo mysql
+# mysql cli执行
+=======
+sudo mysql
+```
+
+修改root权限，增加远程连接和密码
+
+```mysql
+>>>>>>> 1414a1f (leanging)
 # host = '%' 代表可以从任何地方访问数据库
-UPDATE mysql.user SET 
- plugin = 'mysql_native_password',
- Host = 'localhost',
- authentication_string = CONCAT('*', UPPER(SHA1(UNHEX(SHA1('123456'))))) 
-WHERE User = 'root';
+use mysql
+ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';
+update user set host ='%' where user='root';
 FLUSH PRIVILEGES;
 ```
+
+
 
 ### Centos 7 安装
 
@@ -113,7 +228,10 @@ set global validate_password_policy=0;
 > flush privileges;
 ```
 
+
+
 ### my.cnf
+
 ```bash
 [mysqld]
 # 设置端口
@@ -260,6 +378,37 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 * `mysql -h localhost -u root -p123456 < ./schema.sql`
 * 登录进数据库后 `source ./schema.sql`
+
+## 恢复删除的数据
+
+```mysql
+# 查看正在使用的 Binlog 文件
+show master status\G;
+# 执行 flush logs 操作，生成新的 BINLOG
+flush logs;
+
+#  根据时间确定位置信息
+mysqlbinlog --no-defaults --base64-output=decode-rows -v \
+ --start-datetime  "2022-03-22 02:00:00" \
+ --database test  binlog.000082 | less
+
+# 根据位置导出 SQL 文件
+mysqlbinlog --no-defaults --base64-output=decode-rows -v \
+ --start-position "61332401" --stop-position "61332501" \
+ --database test_binlog binlog.000082 \
+ > /home/mysql_backup/test_binlog_step1.sql
+ 
+mysqlbinlog --no-defaults --base64-output=decode-rows -v \
+ --start-position "61332502" --stop-position "613369001" \
+ --database test_binlog binlog.000082 \
+ > /home/mysql_backup/test_binlog_step2.sql
+ 
+# 使用 mysql 进行恢复
+mysql -u cisco -p < /home/mysql_backup/test_binlog_step1.sql
+mysql -u cisco -p < /home/mysql_backup/test_binlog_step2.sql
+```
+
+
 
 ## 注意
 * mysql 在Linux下默认不区分大小写
