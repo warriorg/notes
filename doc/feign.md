@@ -58,3 +58,8 @@ public IRule loadBanlancer() {
 
 
 ## OpenFeign 原理
+
+
+## 问题
+
+如果返回 `Response` ,则 `errorDecoder` 方法不会背触发
