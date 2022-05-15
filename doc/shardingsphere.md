@@ -10,6 +10,89 @@
 
 
 
+使用配置文件
+
+server.yaml
+
+```yaml
+mode:
+  type: memory
+rules:
+  - !AUTHORITY
+    users:
+      - root@%:root
+    #      - sharding@:sharding
+    provider:
+      type: ALL_PRIVILEGES_PERMITTED
+  - !SQL_PARSER
+    sqlCommentParseEnabled: true
+    sqlStatementCache:
+      initialCapacity: 2000
+      maximumSize: 65535
+      concurrencyLevel: 4
+    parseTreeCache:
+      initialCapacity: 128
+      maximumSize: 1024
+      concurrencyLevel: 4
+
+props:
+  max-connections-size-per-query: 1
+  kernel-executor-size: 16  # Infinite by default.
+  proxy-frontend-flush-threshold: 128  # The default value is 128.
+  proxy-hint-enabled: false
+  sql-show: true
+```
+
+
+
+config-sharding.yaml
+
+```yaml
+schemaName: sharding_db
+dataSources:
+  ds3306:
+    url: jdbc:mysql://127.0.0.1:3306/db3306?serverTimezone=UTC&useSSL=false
+    username: root
+    password: 12345678
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+    minPoolSize: 1
+  ds3307:
+    url: jdbc:mysql://127.0.0.1:3306/db3307?serverTimezone=UTC&useSSL=false
+    username: root
+    password: 12345678
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+    minPoolSize: 1
+
+
+rules:
+- !SHARDING
+  defaultDatabaseStrategy:
+    standard:
+      shardingColumn: site
+      shardingAlgorithmName: databaseInline
+  defaultTableStrategy:
+    none:
+  
+  shardingAlgorithms:
+    databaseInline:
+      type: INLINE
+      props:
+        algorithm-expression: ds${site}
+  tables:
+    NEMS_TR_HEAD:
+      logicTable: NEMS_TR_HEAD
+    NEMS_EMS_HEAD:
+      logicTable: NEMS_EMS_HEAD
+```
+
+
+
 
 
 首先建立一个分库的schema， 
