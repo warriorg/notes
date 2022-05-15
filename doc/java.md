@@ -2067,3 +2067,59 @@ https://docs.oracle.com/javase/tutorial/rmi/overview.html
 | Bounded type parameter  | 限制类型参数     | `<E extends Number>`     |
 | Bounded wildcard type   | 限制通配符类型   | `List<? extends Number>` |
 
+# validator-api
+
+### 空与非空检查
+
+| 注解      | 支持Java类型                         | 说明                                |
+| :-------- | :----------------------------------- | :---------------------------------- |
+| @Null     | Object                               | 为null                              |
+| @NotNull  | Object                               | 不为null                            |
+| @NotBlank | CharSequence                         | 不为null，且必须有一个非空格字符    |
+| @NotEmpty | CharSequence、Collection、Map、Array | 不为null，且不为空（length/size>0） |
+
+### Boolean值检查
+
+| 注解         | 支持Java类型     | 说明    | 备注       |
+| :----------- | :--------------- | :------ | :--------- |
+| @AssertTrue  | boolean、Boolean | 为true  | 为null有效 |
+| @AssertFalse | boolean、Boolean | 为false | 为null有效 |
+
+### 日期检查
+
+| 注解             | 支持Java类型                                                 | 说明                     | 备注       |
+| :--------------- | :----------------------------------------------------------- | :----------------------- | :--------- |
+| @Future          | Date、Calendar、Instant、LocalDate、LocalDateTime、LocalTime、MonthDay、OffsetDateTime、OffsetTime、Year、YearMonth、ZonedDateTime、HijrahDate、JapaneseDate、MinguoDate、ThaiBuddhistDate | 验证日期为当前时间之后   | 为null有效 |
+| @FutureOrPresent | Date、Calendar、Instant、LocalDate、LocalDateTime、LocalTime、MonthDay、OffsetDateTime、OffsetTime、Year、YearMonth、ZonedDateTime、HijrahDate、JapaneseDate、MinguoDate、ThaiBuddhistDate | 验证日期为当前时间或之后 | 为null有效 |
+| @Past            | Date、Calendar、Instant、LocalDate、LocalDateTime、LocalTime、MonthDay、OffsetDateTime、OffsetTime、Year、YearMonth、ZonedDateTime、HijrahDate、JapaneseDate、MinguoDate、ThaiBuddhistDate | 验证日期为当前时间之前   | 为null有效 |
+| @PastOrPresent   | Date、Calendar、Instant、LocalDate、LocalDateTime、LocalTime、MonthDay、OffsetDateTime、OffsetTime、Year、YearMonth、ZonedDateTime、HijrahDate、JapaneseDate、MinguoDate、ThaiBuddhistDate | 验证日期为当前时间或之前 | 为null有效 |
+
+### 数值检查
+
+| 注解                               | 支持Java类型                                                 | 说明                   | 备注              |
+| :--------------------------------- | :----------------------------------------------------------- | :--------------------- | :---------------- |
+| @Max                               | BigDecimal、BigInteger，byte、short、int、long以及包装类     | 小于或等于             | 为null有效        |
+| @Min                               | BigDecimal、BigInteger，byte、short、int、long以及包装类     | 大于或等于             | 为null有效        |
+| @DecimalMax                        | BigDecimal、BigInteger、CharSequence，byte、short、int、long以及包装类 | 小于或等于             | 为null有效        |
+| @DecimalMin                        | BigDecimal、BigInteger、CharSequence，byte、short、int、long以及包装类 | 大于或等于             | 为null有效        |
+| @Negative                          | BigDecimal、BigInteger，byte、short、int、long、float、double以及包装类 | 负数                   | 为null有效，0无效 |
+| @NegativeOrZero                    | BigDecimal、BigInteger，byte、short、int、long、float、double以及包装类 | 负数或零               | 为null有效        |
+| @Positive                          | BigDecimal、BigInteger，byte、short、int、long、float、double以及包装类 | 正数                   | 为null有效，0无效 |
+| @PositiveOrZero                    | BigDecimal、BigInteger，byte、short、int、long、float、double以及包装类 | 正数或零               | 为null有效        |
+| @Digits(integer = 3, fraction = 2) | BigDecimal、BigInteger、CharSequence，byte、short、int、long以及包装类 | 整数位数和小数位数上限 | 为null有效        |
+
+### 其他
+
+| 注解     | 支持Java类型                         | 说明                      | 备注                        |
+| :------- | :----------------------------------- | :------------------------ | :-------------------------- |
+| @Pattern | CharSequence                         | 匹配指定的正则表达式      | 为null有效                  |
+| @Email   | CharSequence                         | 邮箱地址                  | 为null有效，默认正则 `'.*'` |
+| @Size    | CharSequence、Collection、Map、Array | 大小范围（length/size>0） | 为null有效                  |
+
+### hibernate-validator扩展约束（部分）
+
+| 注解    | 支持Java类型     | 说明           |
+| :------ | :--------------- | :------------- |
+| @Length | String           | 字符串长度范围 |
+| @Range  | 数值类型和String | 指定范围       |
+| @URL    |                  | URL地址验证    |

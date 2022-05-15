@@ -55,6 +55,8 @@ make hiredis lua jemalloc linenoise
 requirepass 123456  
 # 守护程序设置
 daemonize no
+# 设置数据存放的目录
+dir /usr/local/redis/data 
 ```
 
 
@@ -93,6 +95,7 @@ protected-mode no
 
 
 pidfile /var/run/redis_6379.pid
+dir /usr/local/redis/data
 dbfilename 6379_dump.rdb
 appendfilename "6379_appendonly.aof"
 ```
@@ -107,8 +110,17 @@ Initializing the cluster
 
 test
 
-```
+```bash
 redis-cli -c -h 192.168.0.201
+
+# redis cluster info
+192.168.0.201:6379> CLUSTER nodes
+373193ab3ad3f8d2fa40045a98fa4bd2264aa2bd 192.168.0.202:6479@16479 slave 
+ae4fe5ebd4bd181a28cbcc8d72cfaafa7a807533 192.168.0.203:6479@16479 slave 
+847f2bbf6aba76ed27081635e53d28b5802088b9 192.168.0.203:6379@16379 master
+13817b06329a305cc253a6b21698072eaf00206f 192.168.0.201:6479@16479 slave 
+3292a4e3d9f88cf791b70749665b8725340c4840 192.168.0.201:6379@16379 myself,master
+26e66234d6b8f5538b92f8554b3a6821e6995287 192.168.0.202:6379@16379 master 
 ```
 
 # 客户端

@@ -1,19 +1,15 @@
 {
   "main": {
-    "id": "4fd56f421c1f20c6",
+    "id": "5a3a32631bc0fff7",
     "type": "split",
     "children": [
       {
-        "id": "da46fa7f6d862609",
+        "id": "a49b96210a818a01",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-<<<<<<< HEAD
-            "file": "Raft.md.md",
-=======
-            "file": "doc/redis.md",
->>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
+            "file": "doc/shardingsphere.md",
             "mode": "source",
             "source": false
           }
@@ -23,15 +19,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "ac613ace6d84b3d8",
+    "id": "59f2c6cea7f56857",
     "type": "split",
     "children": [
       {
-        "id": "43a7cbee74ea1442",
+        "id": "86f90f4302a04d7c",
         "type": "tabs",
         "children": [
           {
-            "id": "578fab470aa44184",
+            "id": "75b8798fb408eae3",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -39,7 +35,7 @@
             }
           },
           {
-            "id": "455340c67cf61cba",
+            "id": "c38df70dac6a29b8",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -60,26 +56,22 @@
     "width": 300
   },
   "right": {
-    "id": "68ec1b547c39adeb",
+    "id": "f3f4abcb5279d3a9",
     "type": "split",
     "children": [
       {
-        "id": "3355d74752b2f306",
+        "id": "b301f9d25a1d5afe",
         "type": "tabs",
         "children": [
           {
-            "id": "d5ff7487bdb24d43",
+            "id": "0d3e6f3780b4e992",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-<<<<<<< HEAD
-                "file": "Raft.md.md",
-=======
-                "file": "doc/redis.md",
->>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
-                "collapseAll": true,
-                "extraContext": true,
+                "file": "doc/shardingsphere.md",
+                "collapseAll": false,
+                "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
@@ -89,37 +81,19 @@
             }
           },
           {
-            "id": "f27db5d721fcc356",
-            "type": "leaf",
-            "state": {
-              "type": "outline",
-              "state": {
-<<<<<<< HEAD
-                "file": "Raft.md.md"
-=======
-                "file": "doc/redis.md"
->>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
-              }
-            }
-          },
-          {
-            "id": "6a896cd8ff91835c",
+            "id": "6621ce1bc64224a5",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-<<<<<<< HEAD
-                "file": "Raft.md.md",
-=======
-                "file": "doc/redis.md",
->>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
+                "file": "doc/shardingsphere.md",
                 "linksCollapsed": false,
-                "unlinkedCollapsed": false
+                "unlinkedCollapsed": true
               }
             }
           },
           {
-            "id": "ee4713428b363d38",
+            "id": "161850639ea09226",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -128,36 +102,31 @@
                 "useHierarchy": true
               }
             }
+          },
+          {
+            "id": "475727cab0735ced",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "doc/shardingsphere.md"
+              }
+            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
-  "active": "da46fa7f6d862609",
+  "active": "a49b96210a818a01",
   "lastOpenFiles": [
-<<<<<<< HEAD
-    "Raft.md.md",
-    "doc/DSA.md",
-=======
-    "doc/redis.md",
->>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
-    "doc/nacos.md",
-    "doc/mysql.md",
+    "doc/shardingsphere.md",
+    "doc/vim.md",
+    "doc/mathematics.md",
     "doc/mongodb.md",
-    "doc/Spring Cloud Alibaba.md",
-    "doc/Sentinel.md",
-    "doc/skywalking.md",
-    "doc/Sentinel.md.md",
-<<<<<<< HEAD
-    "doc/consul.md"
-=======
-    "doc/consul.md",
-    "Sentinel.md",
-    "doc/macos.md",
-    "doc/理论.md"
->>>>>>> abb145f36464ee603558a4c39df3c3f896cfe79d
+    "doc/prometheus.md",
+    "doc/Sentinel.md"
   ]
 }
