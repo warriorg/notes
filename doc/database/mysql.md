@@ -1,3 +1,5 @@
+# MySQL
+
 ## Install
 
 ### 主从
@@ -6,8 +8,6 @@
 
 * ubuntu
 * mysql 8
-
-
 
 #### 安装数据库
 
@@ -143,20 +143,12 @@ systemctl status mysql
 # Improve MySQL Installation Security
 sudo mysql_secure_installation
 
-<<<<<<< HEAD
-    sudo mysql
-# mysql cli执行
-||||||| parent of 1414a1f (leanging)
-sudo mysql
-# mysql cli执行
-=======
 sudo mysql
 ```
 
 修改root权限，增加远程连接和密码
 
 ```mysql
->>>>>>> 1414a1f (leanging)
 # host = '%' 代表可以从任何地方访问数据库
 use mysql
 ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';
@@ -336,7 +328,7 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 ##  架构
 
-![mysql-architecture](./assets/images/mysql-architecture.png)
+![mysql-architecture](../assets/images/mysql-architecture.png)
 
 
 
@@ -354,7 +346,7 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 ### 架构
 
-![innodb-architecture](./assets/images/innodb-architecture.png)
+![innodb-architecture](../assets/images/innodb-architecture.png)
 
 ### 磁盘文件
 

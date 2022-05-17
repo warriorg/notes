@@ -105,11 +105,11 @@ Java NIO Channels 和 streams 的区别
 
 Java线程可能的状态：
 
-![ThreadState0](file:///Users/warriorg/Code/Notes/doc/assets/images/ThreadState0.jpg?lastModify=1621059022)
+![ThreadState0](../assets/images/ThreadState0.jpg?lastModify=1621059022)
 
 线程的状态变迁
 
-![img](file:///Users/warriorg/Code/Notes/doc/assets/images/ThreadState.jpg?lastModify=1621059022)
+![img](../assets/images/ThreadState.jpg?lastModify=1621059022)
 
 #### 实践
 
