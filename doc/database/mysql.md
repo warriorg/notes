@@ -46,6 +46,8 @@ binlog-ignore-db=sys
 binlog-ignore-db=mysql
 binlog-ignore-db=information_schema
 binlog-ignore-db=performance_schema
+
+skip-name-resolve    #  解决连接慢
 ```
 
 #### 从服务器设置
@@ -59,6 +61,8 @@ lower_case_table_names = 1
 server-id=2
 # 启用中继日志
 relay-log=mysql-relay
+
+skip-name-resolve    #  解决连接慢
 ```
 
 #### 启动数据库
