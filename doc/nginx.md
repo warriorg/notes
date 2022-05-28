@@ -81,6 +81,24 @@ http {
 
 
 
+### qps
+
+http://nginx.org/en/docs/http/ngx_http_limit_req_module.html
+
+```bash
+limit_req_zone $binary_remote_addr zone=perip:10m rate=1r/s;
+limit_req_zone $server_name zone=perserver:10m rate=10r/s;
+
+server {
+    limit_req zone=perip burst=5 nodelay;
+    limit_req zone=perserver burst=10;
+}
+```
+
+
+
+
+
 ### 测试 rtmp 推流
 
 `ffmpeg -f avfoundation -framerate 30 -i "0" -c:v libx264 -an -f flv rtmp://localhost/live/hello`
