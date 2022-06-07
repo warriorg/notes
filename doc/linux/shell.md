@@ -1,6 +1,6 @@
 ### Linux启动过程
 
-![99941-20160604163710258-1247432254](./assets/images/99941-20160604163710258-1247432254.jpg)
+![99941-20160604163710258-1247432254](../assets/images/99941-20160604163710258-1247432254.jpg)
 
 BIOS -- MBR -- BootLoader(grub) -- kernel -- systemd -- 系统初始化 -- shell
 
@@ -60,7 +60,7 @@ extdebug        off
 
 ### 重定向
 
-![bash-redirection](./assets/images/bash-redirection.jpeg)
+![bash-redirection](../assets/images/bash-redirection.jpeg)
 
 
 

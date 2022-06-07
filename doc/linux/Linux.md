@@ -1846,11 +1846,11 @@ change login shell
 
 
 
-![](./assets/images/image-20201026165156836.png)
+![](../assets/images/image-20201026165156836.png)
 
 
 
-![](./assets/images/linux-file-info.jpg)
+![](../assets/images/linux-file-info.jpg)
 
 
 
@@ -2954,11 +2954,8 @@ make
 sudo make install
 vim
 ```
-# [Sheel编程](./Shell.md)
+
 
 
 # 实战
 
-# 参考资料
-
-[命令行的艺术](https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md)
