@@ -8,3 +8,26 @@ etcd 以一致和容错的方式存储元数据。分布式系统使用 etcd 作
 
 ## 安装
 
+
+
+
+
+## 快速开始
+
+### 列出所有的KEY
+
+```bash
+etcdctl get --prefix "" --keys-only  
+etcdctl get --prefix aaa --keys-only  	# 列出前缀aaa开始的key
+```
+
+### 删库跑路
+
+```bash
+etcdctl del --prefix ""
+```
+
+
+
+
+

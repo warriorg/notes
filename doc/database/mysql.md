@@ -374,10 +374,42 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 # 运维
 
-## 导入数据文件
+## 备份数据库
 
-* `mysql -h localhost -u root -p123456 < ./schema.sql`
-* 登录进数据库后 `source ./schema.sql`
+```sql
+mysqldump -u root -p --databases 数据库1 数据库2 > xxx.sql
+
+# 备份全部数据库的数据和结构
+mysqldump -uroot -p123456 -A > /data/mysqlDump/mydb.sql
+# 备份全部数据库的结构（加 -d 参数）
+mysqldump -uroot -p123456 -A -d > /data/mysqlDump/mydb.sql
+# 备份全部数据库的数据(加 -t 参数)
+mysqldump -uroot -p123456 -A -t > /data/mysqlDump/mydb.sql
+# 备份单个数据库的数据和结构(,数据库名mydb)
+mysqldump -uroot-p123456 mydb > /data/mysqlDump/mydb.sql
+# 备份单个数据库的结构
+mysqldump -uroot -p123456 mydb -d > /data/mysqlDump/mydb.sql
+# 备份单个数据库的数据
+mysqldump -uroot -p123456 mydb -t > /data/mysqlDump/mydb.sql
+# 备份多个表的数据和结构（数据，结构的单独备份方法与上同）
+mysqldump -uroot -p123456 mydb t1 t2 > /data/mysqlDump/mydb.sql
+```
+
+## 还原数据库
+
+#### 方式一
+
+```sql
+mysql -uroot -p123456 < /data/mysqlDump/mydb.sql
+```
+
+#### 方式二
+
+```sql
+mysql> source /data/mysqlDump/mydb.sql
+```
+
+
 
 ## 恢复删除的数据
 
@@ -407,6 +439,89 @@ mysqlbinlog --no-defaults --base64-output=decode-rows -v \
 mysql -u cisco -p < /home/mysql_backup/test_binlog_step1.sql
 mysql -u cisco -p < /home/mysql_backup/test_binlog_step2.sql
 ```
+
+
+
+## 主从同步
+
+### 查看存库状态
+
+`show slave status\G` 
+
+```sql
+***************************[ 1. row ]***************************
+Slave_IO_State                | Waiting for source to send event
+Master_Host                   | 192.168.0.201
+Master_User                   | root
+Master_Port                   | 3306
+Connect_Retry                 | 60
+Master_Log_File               | mysql-bin.000012
+Read_Master_Log_Pos           | 60657063
+Relay_Log_File                | devjava02-relay-bin.000033
+Relay_Log_Pos                 | 58462
+Relay_Master_Log_File         | mysql-bin.000012
+Slave_IO_Running              | Yes
+Slave_SQL_Running             | Yes
+Replicate_Do_DB               |
+Replicate_Ignore_DB           |
+Replicate_Do_Table            |
+Replicate_Ignore_Table        |
+Replicate_Wild_Do_Table       |
+Replicate_Wild_Ignore_Table   |
+Last_Errno                    | 0
+Last_Error                    |
+Skip_Counter                  | 0
+Exec_Master_Log_Pos           | 60657063
+Relay_Log_Space               | 812317
+Until_Condition               | None
+Until_Log_File                |
+Until_Log_Pos                 | 0
+Master_SSL_Allowed            | No
+Master_SSL_CA_File            |
+Master_SSL_CA_Path            |
+Master_SSL_Cert               |
+Master_SSL_Cipher             |
+Master_SSL_Key                |
+Seconds_Behind_Master         | 0
+Master_SSL_Verify_Server_Cert | No
+Last_IO_Errno                 | 0
+Last_IO_Error                 |
+Last_SQL_Errno                | 0
+Last_SQL_Error                |
+Replicate_Ignore_Server_Ids   |
+Master_Server_Id              | 1
+Master_UUID                   | 27ba121e-aa76-11ec-9461-000c29b2cef7
+Master_Info_File              | mysql.slave_master_info
+SQL_Delay                     | 0
+SQL_Remaining_Delay           | <null>
+Slave_SQL_Running_State       | Replica has read all relay log; waiting for more updates
+Master_Retry_Count            | 86400
+Master_Bind                   |
+Last_IO_Error_Timestamp       |
+Last_SQL_Error_Timestamp      |
+Master_SSL_Crl                |
+Master_SSL_Crlpath            |
+Retrieved_Gtid_Set            |
+Executed_Gtid_Set             |
+Auto_Position                 | 0
+Replicate_Rewrite_DB          |
+Channel_Name                  |
+Master_TLS_Version            |
+Master_public_key_path        |
+Get_master_public_key         | 0
+Network_Namespace             |
+```
+
+* **Slave_IO_Running** 该参数可作为io_thread的监控项，Yes表示io_thread的和主库连接正常并能实施复制工作，No则说明与主库通讯异常，多数情况是由主从间网络引起的问题
+* **Slave_SQL_Running** 该参数代表sql_thread是否正常，YES表示正常，NO表示执行失败，具体就是语句是否执行通过，常会遇到主键重复或是某个表不存在。
+* **Seconds_Behind_Master** 是通过比较sql_thread执行的event的timestamp和io_thread复制好的event的timestamp(简写为ts)进行比较，而得到的这么一个差值
+  *  **NULL** 表示io_thread或是sql_thread有任何一个发生故障，也就是该线程的Running状态是No，而非Yes。
+  * **0** 该值为零，是我们极为渴望看到的情况，表示主从复制良好，可以认为lag不存在。
+  * **正值** 表示主从已经出现延时，数字越大表示从库落后主库越多。
+  * **负值** 几乎很少见，这是一个BUG值，该参数是不支持负值的，也就是不应该出现。
+
+> 1. Slave_IO_Running、Slave_SQL_Running状态值，如果都为YES，则表示主从同步；反之，主从不同步
+> 2. Seconds_Behind_Master的值，如果为0，则表示主从同步不延时，反之同步延时。
 
 
 
