@@ -6,7 +6,7 @@
 
 Spring环境从各个属性源中拉取属性，并让Spring应用上下中的bean可以使用他们
 
-![Spring 环境](./assets/images/1594982522062.jpg)
+![Spring 环境](../assets/images/1594982522062.jpg)
 
 几种spring环境属性的设置
 
@@ -73,7 +73,7 @@ AMQP消息使用Exchange和routing key来寻址，这样消息就与接收者要
 
 Exchange和队列的关系如下
 
-![image-20200730192257175](./assets/images/image-20200730192257175.png)
+![image-20200730192257175](../assets/images/image-20200730192257175.png)
 
 发送到RabbitMQ Exchange的消息会基于routing key和binding被路由到一个或多个队列上
 
@@ -159,13 +159,13 @@ Exchange 的类型
 
 # WebFlux
 
-![image-20200731103829434](./assets/images/image-20200731103829434.png)
+![image-20200731103829434](../assets/images/image-20200731103829434.png)
 
 异步web框架能够以更少的线程获得更高的可扩展性，通常它们只需要与CPU核心数量相同的线程。通过使用时间轮询（event looping）机制，能够用一个线程处理很多请求，这样每次连接的成本会更低。
 
 **Spring 5 通过名为WebFlux的新Web框架来支持反应式Web应用**
 
-![image-20200731111418201](./assets/images/image-20200731111418201.png)
+![image-20200731111418201](../assets/images/image-20200731111418201.png)
 
 
 
@@ -520,7 +520,7 @@ Angel 是构建在 Spring Boot 1.2.x, 之上，但也兼容 Spring Boot 1.3.x.
 2. 断路器（circuit breaker）模式
 3. 后备（fallback）模式
 4. 舱壁（bulkhead）模式
-![image](assets/images/spring-mic-in-action-5.1.jpeg)
+![image](../assets/images/spring-mic-in-action-5.1.jpeg)
 
 
 

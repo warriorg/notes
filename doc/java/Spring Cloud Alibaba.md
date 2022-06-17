@@ -4,7 +4,7 @@
 
 ### 单体架构
 
-![sca_singlg_application_architecture.png](./assets/images/sca_singlg_application_architecture.png)
+![sca_singlg_application_architecture.png](../assets/images/sca_singlg_application_architecture.png)
 
 #### 优点
 
@@ -37,7 +37,7 @@ SOA 是 Service-Oriented Architecture 的简写，直译为“面向服务的架
 
 一个典型的 SOA 架构模式如下图：
 
-![sca_soa.png](./assets/images/sca_soa.png)
+![sca_soa.png](../assets/images/sca_soa.png)
 
 #### 问题
 
@@ -71,7 +71,7 @@ SOA 是 Service-Oriented Architecture 的简写，直译为“面向服务的架
 
 这个定义对微服务做了一个比较具象化较为易于理解的描述，通常来说我们看到的为服务架构如下图所示：
 
-![micor_arch](./assets/images/micor_arch.png)
+![micor_arch](../assets/images/micor_arch.png)
 
 但是事实上，在实际生产环境中，微服务的架构要考虑的问题远比上面的示意图复杂的多，主要包括但不限于如下问题：
 
@@ -85,7 +85,7 @@ SOA 是 Service-Oriented Architecture 的简写，直译为“面向服务的架
 
 以下的是微服务较为完整的架构图（出自[微服务架构模式](https://microservices.io/patterns/microservices.html)）
 
-![micor_arch_detail.png](./assets/images/micor_arch_detail.png)
+![micor_arch_detail.png](../assets/images/micor_arch_detail.png)
 
 #### “微服务”不是[银弹](./理论.md#银色子弹)
 
@@ -129,13 +129,13 @@ Spring Cloud 是什么，没有比官方的定义更能说明问题了：
 
  Spring 官方给出的一个 High Light 的架构图
 
-![sca_sc_arch.png](./assets/images/sca_sc_arch.png)
+![sca_sc_arch.png](../assets/images/sca_sc_arch.png)
 
 
 
 #### Spring Cloud Alibaba
 
-![spring_cloud_alibaba.png](./assets/images/spring_cloud_alibaba.png)
+![spring_cloud_alibaba.png](../assets/images/spring_cloud_alibaba.png)
 
 最外面这一圈，是 Spring Cloud Alibaba 对 Spring Cloud 的实现。右上部分是对于 Spring Cloud 标准的实现。例如，我们通过 Dubbo 实现了 RPC 调用功能，通过 Nacos 实现了“服务注册与发现”、“分布式配置”，通过 Sentinel 实现了断路器等等，这里就不一一列举了。左下部分是我们 Spring Cloud Alibaba 对阿里云各种服务的集成。可能很多同学会有这样的一个问题：为什么要加上这一部分呢？此时回头审视一下 Spring Cloud ，它仅仅是一个微服务的一个框架。但是在实际生产过程中，单独使用微服务框架其实并不足以支撑我们去构建一个完整的系统。所以这部分是用阿里帮助开发者完成微服务以外的云产品集成的功能。
 
@@ -173,9 +173,9 @@ Spring Cloud 是什么，没有比官方的定义更能说明问题了：
 
 #### 新增配置
 
-![image-20200930101018855](./assets/images/image-20200930101018855.png)
+![image-20200930101018855](../assets/images/image-20200930101018855.png)
 
-![image-20200930101059420](./assets/images/image-20200930101059420.png)
+![image-20200930101059420](../assets/images/image-20200930101059420.png)
 
 #### 配置应用 Nacos Config Server 地址
 
@@ -226,7 +226,7 @@ TCC 方案要求用户根据业务场景实现 try，confirm，cancel三个接�
 
 ### AT事务模式
 
-![at-transaction.png](./assets/images/at-transaction.png)
+![at-transaction.png](../assets/images/at-transaction.png)
 
 一个分布式事务有全局唯一的xid，由若干个分支事务构成，每个分支事务有全局唯一的branchId。上图展示了在一个分支事务中RM 与 TC 的交互过程。其中主要包含的交互动作如下：
 \- branchRegister
@@ -258,7 +258,6 @@ TCC 方案要求用户根据业务场景实现 try，confirm，cancel三个接�
 ## 降级
 
 ## 限流
-
 
 
 

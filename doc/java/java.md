@@ -49,19 +49,19 @@
 
 #### 正常copy
 
-![Image for post](./assets/images/0_jdpkVNoaeGbIcUdR.png)
+![Image for post](../assets/images/0_jdpkVNoaeGbIcUdR.png)
 
 #### Zero copy
 
-![copy](./assets/images/0_R8AZ-MG5UhjYpgfD.png)
+![copy](../assets/images/0_R8AZ-MG5UhjYpgfD.png)
 
 #### DMZ copy
 
-![0_rUwZo8jtXLYL82w2.png](./assets/images/0_rUwZo8jtXLYL82w2.png)
+![0_rUwZo8jtXLYL82w2.png](../assets/images/0_rUwZo8jtXLYL82w2.png)
 
 #### mmap
 
-![0_POBN-YXYgKS8ZHsn.png](./assets/images/0_POBN-YXYgKS8ZHsn.png)
+![0_POBN-YXYgKS8ZHsn.png](../assets/images/0_POBN-YXYgKS8ZHsn.png)
 
 
 
@@ -553,7 +553,7 @@ Java线程之间的通信总是隐式进行，整个通信过程对程序员完�
 
 Java内存模型(简称JMM)，JMM决定一个线程对共享变量的写入何时对另一个线程可见。从抽象的角度来看，JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存（main memory）中，每个线程都有一个私有的本地内存（local memory），本地内存中存储了该线程以读/写共享变量的副本。本地内存是JMM的一个抽象概念，并不真实存在。它涵盖了缓存，写缓冲区，寄存器以及其他的硬件和编译器优化。
 
-![](assets/images/3.png)
+![](../assets/images/3.png)
 
 从上图来看，线程A与线程B之间如要通信的话，必须要经历下面2个步骤：
 
@@ -572,35 +572,35 @@ CAS机制当中使用了3个基本操作数：内存地址V，旧的预期值A�
 
 1.在内存地址V当中，存储着值为10的变量。
 
-![img](assets/images/cas0.jpeg)
+![img](../assets/images/cas0.jpeg)
 
 
 
 2.此时线程1想要把变量的值增加1。对线程1来说，旧的预期值A=10，要修改的新值B=11。
 
-![img](assets/images/cas1.png)
+![img](../assets/images/cas1.png)
 
 
 
 3.在线程1要提交更新之前，另一个线程2抢先一步，把内存地址V中的变量值率先更新成了11。
 
-![img](assets/images/cas3.png)
+![img](../assets/images/cas3.png)
 
 4.线程1开始提交更新，首先进行A和地址V的实际值比较（Compare），发现A不等于V的实际值，提交失败。
 
-![img](assets/images/cas4.png)
+![img](../assets/images/cas4.png)
 
 5.线程1重新获取内存地址V的当前值，并重新计算想要修改的新值。此时对线程1来说，A=11，B=12。这个重新尝试的过程被称为自旋。
 
-![img](assets/images/cas5.png)
+![img](../assets/images/cas5.png)
 
 6.这一次比较幸运，没有其他线程改变地址V的值。线程1进行Compare，发现A和地址V的实际值是相等的。
 
-![img](assets/images/cas6.png)
+![img](../assets/images/cas6.png)
 
 7.线程1进行SWAP，把地址V的值替换为B，也就是12。
 
-![img](assets/images/cas7.png)
+![img](../assets/images/cas7.png)
 
 从思想上来说，Synchronized属于悲观锁，悲观地认为程序中的并发情况严重，所以严防死守。CAS属于乐观锁，乐观地认为程序中的并发情况不那么严重，所以让线程不断去尝试更新。
 
@@ -735,15 +735,15 @@ synchronized用的锁存储在Java对象头，如果对象是数组类型，则�
 
 Java对象头的长度
 
-![s1](assets/images/s1.jpg)
+![s1](../assets/images/s1.jpg)
 
 Mark Word的存储结构
 
-![](assets/images/S2.jpg)
+![](../assets/images/S2.jpg)
 
 Mark Word可能的存储结果：
 
-![](assets/images/s3.jpg)
+![](../assets/images/s3.jpg)
 
 **偏向锁**
 
@@ -765,7 +765,7 @@ Mark Word可能的存储结果：
 
 （1）当线程执行代码进入同步块时，若Mark Word为无锁状态，虚拟机先在当前线程的栈帧中建立一个名为Lock Record的空间，用于存储当前对象的Mark Word的拷贝，官方称之为“Dispalced Mark Word”，此时状态如下图：
 
-![img](assets/images/s4.jpg)
+![img](../assets/images/s4.jpg)
 
 （2）复制对象头中的Mark Word到锁记录中。
 
@@ -773,7 +773,7 @@ Mark Word可能的存储结果：
 
 （4）如果更新成功，则这个线程拥有了这个锁，并将锁标志设为00，表示处于轻量级锁状态，此时状态图：
 
-![img](assets/images/s5.jpg)
+![img](../assets/images/s5.jpg)
 
 （5）如果更新失败，则说明有其他线程竞争锁，当前线程便通过自旋来获取锁。轻量级锁就会膨胀为重量级锁，Mark Word中存储重量级锁（互斥锁）的指针，后面等待锁的线程也要进入阻塞状态。
 
@@ -785,7 +785,7 @@ Mark Word可能的存储结果：
 
 64位JVM的存储结构
 
-![64位JVM的存储结构](./assets/images/jvm64head.jpg)
+![64位JVM的存储结构](../assets/images/jvm64head.jpg)
 
 <u>Synchronized同步锁就是从偏向锁开始的，随着竞争越来越激烈，偏向锁升级到轻量级锁，最终升级到重量级锁</u>
 
@@ -826,7 +826,7 @@ volatile修饰的变量不允许线程内部缓存和重排序，即直接修改
 
 Lock 锁的基本操作是通过乐观锁来实现的，但由于 Lock 锁也会在阻塞时被挂起，因此它依然属于悲观锁。
 
-![synchronizedvslock](./assets/images/synchronizedvslock.jpg)
+![synchronizedvslock](../assets/images/synchronizedvslock.jpg)
 
 从性能方面上来说，在并发量不高、竞争不激烈的情况下，Synchronized 同步锁由于具有分级锁的优势，性能上与 Lock 锁差不多；但在高负载、高并发的情况下，Synchronized 同步锁由于竞争激烈会升级到重量级锁，性能则没有 Lock 锁稳定。
 
@@ -1212,7 +1212,7 @@ CopyOnWriteArraySet相对CopyOnWriteArrayList用来存储不重复的对象，�
 
 ## JDK、JRE与JVM的关系
 
-![](./assets/images/jdk-jre-jvm.jpeg)
+![](../assets/images/jdk-jre-jvm.jpeg)
 
 ## JVM 运行模式
 
@@ -1222,7 +1222,7 @@ JVM有两种运行模式Server与Client。两种模式的区别在于，Client�
 
 ## JVM架构
 
-![](./assets/images/jvm arch.png)
+![](../assets/images/jvm arch.png)
 
 ### 1. 类加载器子系统
 
@@ -1312,7 +1312,7 @@ d. **探测器(Profiler)** – 一个特殊的组件，负责寻找被多次调�
 
 ## JVM 程序执行流程
 
-![](./assets/images/java运行流程.jpeg)
+![](../assets/images/java运行流程.jpeg)
 
 
 
@@ -1321,13 +1321,13 @@ d. **探测器(Profiler)** – 一个特殊的组件，负责寻找被多次调�
 ## Java Object Header
 
 ### [32 bit jvm](./assets/files/ObjectHeader32.txt)
-![ObjectHeader32](./assets/images/ObjectHeader32.png)
+![ObjectHeader32](../assets/images/ObjectHeader32.png)
 
 ### [64 bit jvm](./assets/files/ObjectHeader64.txt)
-![ObjectHeader32](./assets/images/ObjectHeader64.png)
+![ObjectHeader32](../assets/images/ObjectHeader64.png)
 
 ### [64 bit jvm with pointer compression](./assets/files/ObjectHeader64Coops.txt)
-![ObjectHeader32](./assets/images/ObjectHeader64Coops.png)
+![ObjectHeader32](../assets/images/ObjectHeader64Coops.png)
 
 
 
@@ -1540,11 +1540,11 @@ ClassFile {
 
 **Class文件字节码结构组织示意图**
 
-![Class文件字节码结构组织示意图](./assets/images/Class文件字节码结构组织示意图.png)
+![Class文件字节码结构组织示意图](../assets/images/Class文件字节码结构组织示意图.png)
 
 ### class文件中的常量池概述
 
-![class文件中的常量池概述](./assets/images/class文件中的常量池概述.png)
+![class文件中的常量池概述](../assets/images/class文件中的常量池概述.png)
 
 
 
@@ -1554,13 +1554,13 @@ ClassFile {
 
 ### Overview
 
-![HeapStructure.png](./assets/images/HeapStructure.png)
+![HeapStructure.png](../assets/images/HeapStructure.png)
 
 The older garbage collectors (serial, parallel, CMS) all structure the heap into three sections: young generation, old generation, and permanent generation of a fixed memory size.
 
 
 
-![G1.png](./assets/images/g1-heap.png)
+![G1.png](../assets/images/g1-heap.png)
 
 The heap is partitioned into a set of equal-sized heap regions, each a contiguous range of virtual memory. Certain region sets are assigned the same roles (eden, survivor, old) as in the older collectors, but there is not a fixed size for them. This provides greater flexibility in memory usage.
 
@@ -1960,7 +1960,7 @@ curl -O https://alibaba.github.io/arthas/arthas-boot.jar
 java -jar arthas-boot.jar
 ```
 
-![image-20200603130743017](assets/images/image-20200603130743017.png)
+![image-20200603130743017](../assets/images/image-20200603130743017.png)
 
 
 
@@ -2048,7 +2048,7 @@ RMI 程序通常包括
 - `rmi server` 创建 remote object，将其注册到 RMI registry
 - `rmi client` 通过 name 向 RMI registry 获取 remote object reference (stub)，调用其方法
 
-![rmi-2](./assets/images/rmi-2.gif)
+![rmi-2](../assets/images/rmi-2.gif)
 
 ### 参考
 

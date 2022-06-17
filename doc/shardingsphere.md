@@ -94,27 +94,52 @@ rules:
 首先建立一个分库的schema， 
 
 ```sql
+create database demo;
+use demo;
 
-create database sharding_db;
-use sharding_db;
+SHOW SCHEMA RESOURCES FROM demo;
+DROP RESOURCE demo1, demo2;
 
-SHOW SCHEMA RESOURCES FROM sharding_db;
-
-ADD RESOURCE nems (
+ADD RESOURCE demo1 (
     HOST=192.168.0.201,
     PORT=3306,
-    DB=nems,
+    DB=demo1,
     USER=root,
-    PASSWORD=Longnows@888
+    PASSWORD=Longnows@888,
+		PROPERTIES("maximumPoolSize"=10,"idleTimeout"="30000")
 );
 
-CREATE SHARDING DATABASE RULE (
-	DATABASE_STRATEGY(
-		TYPE = standard,
-		SHARDING_COLUMN=site,
-		SHARDING_ALGORITHM=(TYPE(NAME=INLINE,PROPERTIES("algorithm-expression"="ds->${site}")))
-	)
+ADD RESOURCE demo2 (
+    HOST=192.168.0.201,
+    PORT=3306,
+    DB=demo2,
+    USER=root,
+    PASSWORD=Longnows@888,
+		PROPERTIES("maximumPoolSize"=10,"idleTimeout"="30000")
 );
+
+SHOW SHARDING ALGORITHMS FROM demo;
+
+DROP DEFAULT SHARDING DATABASE STRATEGY;
+DROP SHARDING ALGORITHM database_inline;
+CREATE SHARDING ALGORITHM database_inline (
+	TYPE(NAME=inline,PROPERTIES("algorithm-expression"="demo${site}"))
+);
+CREATE DEFAULT SHARDING DATABASE STRATEGY (
+	TYPE = standard,SHARDING_COLUMN=site,SHARDING_ALGORITHM=database_inline
+);
+
+SHOW SHARDING TABLE RULES;
+DROP SHARDING TABLE RULE student_info;
+CREATE SHARDING TABLE RULE student_info (
+	DATANODES("demo1.student_info", "demo2.student_info")
+)
+
+SELECT * FROM student_info where site = 1;
+
+SHOW SINGLE TABLES student_info;
+SHOW DEFAULT SHARDING STRATEGY;
+SHOW SHARDING TABLE NODES;
 ```
 
 ## 核心概念

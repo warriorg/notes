@@ -22,7 +22,7 @@ https://blog.shippable.com/our-journey-to-microservices-and-a-mono-repository
 
 #### 实现统一异常处理
 
-![](./assets/images/RESTHowToUseExceptionHandling.png)
+![](../assets/images/RESTHowToUseExceptionHandling.png)
 
 #### DTO和DMO为什么要互转
 
@@ -40,7 +40,7 @@ https://blog.shippable.com/our-journey-to-microservices-and-a-mono-repository
 
 #### 实现基于Feign的强类型接口
 
-![](./assets/images/spring-feign-01.jpg)
+![](../assets/images/spring-feign-01.jpg)
 
 直接使用http status code 来封装消息体，会造成内部调用逻辑变的复杂，要额外去处理内部的各种http的错误。没有直接封装消息体，ResponseDto 这类的简单
 
@@ -75,7 +75,7 @@ https://swagger.io/docs/specification/about/
 
 #### 网关和反向代理的关系
 
-![](./assets/images/gateway_proxy.png)
+![](../assets/images/gateway_proxy.png)
 
 #### 网关设计
 
@@ -186,11 +186,11 @@ JSON Web令牌（JWT）是一个开放标准（[(RFC 7519](https://link.jianshu.
 
 ###### hmac
 
-![jwt-hmac](./assets/images/jwt-hmac.png)
+![jwt-hmac](../assets/images/jwt-hmac.png)
 
 ###### RSA
 
-![jwt-hmac](./assets/images/jwt-rsa.png)
+![jwt-hmac](../assets/images/jwt-rsa.png)
 
 ##### 参考
 
@@ -282,7 +282,7 @@ Applications adopting the principles of Microservicespackaged as Containers orch
 
 ##### 架构
 
-![](./assets/images/k8s-architecture.png)
+![](../assets/images/k8s-architecture.png)
 
 ##### 附录
 
