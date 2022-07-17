@@ -427,22 +427,349 @@ https://goaccess.io/get-started
 ![nginx事件循环](./assets/images/nginx事件循环.png)
 
 1. 当 Nginx 刚刚启动时，在 WAIT FOR EVENTS ON CONNECTIONS部分，也就是打开了 80 或 443 端口。这个时候在等待新的事件进来，比如新的客户端连上了nginx向我们发起了链接，在等这样的事件。此步往往对应 epoll的epoll wait 方法，这个时候的Nginx其实是处于 sleep 这样一个进程状态的。当操作系统收到了一个建立TCP链接的握手报文时并且处理完握手流程以后，操作系统就会通知 epoll wait 这个阻塞方法，告诉它可以往下走了，同时唤醒 Nginx worker进程
-
 2. 往下走完之后，会去找操作系统要事件（上图的 KERNEL 就是操作系统内核）。操作系统会把他准备好的事件，放在事件队列中。从这个事件队列中（RECEIVE A QUEUE OF NEW EVENTS）可以获取到需要处理的事件。比如建立链接、比如收到一个TCP请求报文。
-
 3. 取出以后就会处理这么一个事件（PROCESS THE EVENTS QUEUE IN CYCLE）。上图的最右面就是处理事件的一个循环：当发现队列中不为空，就把事件取出来（DEQUEUE AN EVENT） 开始处理（PROCESS THE EVENT）；在处理事件的过程中，可能又生成新的事件，比如说发现一个链接新建立了，可能要添加一个超时时间，比如默认的60秒，也就是说60秒之内如果浏览器不向我发送请求的话我就会把这个链接关掉；又比如说当我发现已经收完了完整的HTTP请求以后，可以生成HTTP响应了，那么这个生成响应呢是需要我可以向操作系统的写缓存中心里面去把响应写进去，要求操作系统尽快的把这样一段响应内容发到浏览器上（也就是说可能在处理过程中可能会产生新的事件，就是PROCESS THE EVENTS QUEUE IN CYCLE部分 指向的队列部分，等待下一次来处理）。
-
 4. 如果所有的事件都处理完成以后呢，又会返回到 WAIT FOR EVENTS ON CONNECTIONS部分。
-
-
 
 ### epoll的优劣及原理
 
+### Nginx容器
 
+#### 数组
+
+#### 链表
+
+#### 队列
+
+#### 哈希表
+
+#### 红黑树
+
+#### 基数树
 
 
 
 ## 详解HTTP模块
+
+### 配置指令
+
+#### 配置块嵌套
+
+```bash
+# 看事件模块，user,上下文都在main中
+main 
+http {
+	upstream {}
+	split_clients {}
+	map {}
+	geo {}
+	server {
+		if () {}
+		location {
+			limit_except {}
+		}
+		location {
+			location {
+			
+			}
+		}
+	}
+	server {
+	}
+}
+```
+
+#### 指令的Context
+
+```bash
+# 语法
+Syntax:	 access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]]; access_log off;
+# 默认值
+Default: access_log logs/access.log combined;
+# 可以出现的语法块
+Context: http, server, location, if in location, limit_except
+```
+
+#### 指令的合并
+
+##### 值指令： 存储配置项的值
+
+* 可以合并
+
+例如：
+
+* root
+* access_log
+* gzip
+
+###### 继承规则
+
+* 向上覆盖
+
+子配置不存在时，直接使用父配置块，子配置存在时，直接覆盖父配置块
+
+##### 动作类指令：指定行为
+
+* 不可以合并
+
+ 示例：
+
+	* rewrite
+	* proxy_pass
+
+### 处理HTTP请求头部的流程
+
+![](./assets/images/nginx-http-handle.png)
+
+### Nginx中的正则表达式
+
+小括号`()`之间匹配的内容，可以在后面通过`$1`来引用，`$2`表示的是前面第二个`()`里的内容。
+
+### HTTP请求处理时的11个阶段
+
+#### 一个请求是怎样在Nginx中被处理的
+
+![](./assets/images/infographic-Inside-NGINX_request-flow.png)
+
+**一个HTTP请求在Nginx内部的抽象化处理流程：**
+
+1. 当一个请求进入到图中黄色的框 也就是Nginx之中时，先进行 `Read Request Headers`，即读取到请求的头部，并且决定使用哪一个server块的配置去处理这个请求；
+2. 随后进入 `Indentify Configuration Block` 中寻找哪一个 location 的配置生效了;
+3. 在 `Apply Rate Limits` 中去决定是否要对其执行 限速（例如连接数太多了超出了限制，或者每秒发送的速率太高了，需要进行限速）；
+4. 在 `Perform Authentication` 中进行权限验证；
+5. 在 `Generate Content` 中生成HTTP响应，为了生成响应，有时候当Nginx作为反向代理时可能需要跟上游的服务器进行交互，这时就需要进入 `Upstream Services` 中执行，将上游服务器转发给Nginx的内容作为响应内容；
+6. 在向用户返回请求的时候，需要经过 `Response Filters` 过滤模块，比如通过gzip对还没有压缩的文件进行压缩；
+7. 当发送给用户的时候，还会进入 `Log` 中记录一条 access日志；
+8. 在上面的流程中有时可能会产生自请求或者重定向，这时就需要进入 `Internal redirects and subrequests` 这个黄色模块中。
+
+
+
+#### 真实的11个处理阶段
+
+![](./assets/images/nginx-handle-11.png)
+
+1. `POST_READ`：在Read到HTTP请求的头部之后的阶段，由 realip模块 负责本阶段的处理，它的作用是在 刚刚读入HTTP头部、没有做任何加工之前，来获取一些原始的数据（例如获取浏览器客户端的IP地址和端口号等）；
+2. `SERVER_REWRITE`： 由 rewrite模块 负责处理；
+3. `FIND_CONFIG`：负责做 location{ } 的匹配；
+   （注：location{} 配置块可以出现在 server配置块和 location配置块 中，即location配置块可以嵌套；
+   而 server{} 配置块只能出现在 http配置块内，不能嵌套。）
+   （location 的匹配顺序：“=” 完全匹配；“^~” 匹配上后则不再进行正则表达式匹配；“@” 用于内部跳转。）
+4. `REWRITE`：同样由 rewrite模块 来负责处理；
+5. `POST_WRITE`：在 REWRITE阶段后的阶段，目前没有模块处理这个阶段（包括官方模块）；
+6. `PREACCESS`：在ACCCESS之前的访问权限的确认，主要由 limit_conn模块 和 limit_req 模块负责处理：
+   *limit_conn* ：判断是否已经达到了最大连接数的限制；（ngx_http_limit_conn_module：限制同一客户端的并发连接数）
+   *limit_req* ：判断是否已经达到了每秒最大请求数，此时要限制访问速度，并不是客户端就不能访问了；（ngx_http_limit_req_module：把突发的流量限制为恒定的每秒限制多少个请求）
+7. `ACCESS`：用于判断浏览器“能不能访问”它所请求的资源，由以下几个模块负责处理：
+   * *access* ：根据 用户访问的IP 判断访问权限；（模块：ngx_http_access_module；指令：access – 允许某个address访问、deny – 禁止某个address访问）
+   * *auto_basic* ：根据 用户名和密码 判断访问权限；（模块：ngx_http_auth_basic_module）
+   * *auth_request* ：根据一个第三方的服务来判断访问权限（一般是上传到应用服务器上去进行用户名密码验证）；（模块：ngx_http_auth_request_module\
+8. `POST_ACCESS`：在ACCESS之后的处理阶段，在第三部分中没有模块会涉及到这一阶段；
+9. `PRECONTENT`：在CONTENT之前的阶段，如 try_files 模块；
+10. `CONTENT`：包括 index模块、autoindex模块、concat模块；
+11. `LOG`：这一用于打印access日志，由 access_log模块 处理。
+
+#### 11 个阶段的处理顺序
+
+![](./assets/images/nginx-handle-11-sort.png)
+
+#### Postread 阶段
+
+##### realip
+
+#### rewrite 阶段
+
+##### rewrite
+
+###### if
+
+```bash
+if (表达式) {
+}
+```
+
+1. 当表达式只是一个变量时，如果值为空或任何以0开头的字符串都会当做false
+2. 直接比较变量和内容时，使用=或!=
+3. -f和!-f用来判断是否存在文件
+4. -d和!-d用来判断是否存在目录
+5. -e和!-e用来判断是否存在文件或目录
+6. -x和!-x用来判断文件是否可执行
+
+##### find_config
+
+###### location配置规则
+
+| 匹配 | 规则                                                         |
+| ---- | ------------------------------------------------------------ |
+| =    | 严格匹配，如果请求匹配这个location，则停止搜索并且处理这个请求 |
+| ~    | 区分大小写匹配（可用正则表达式）                             |
+| ~*   | 不区分大小写匹配（可用正则表达式）                           |
+| !~   | 区分大小写不匹配                                             |
+| !~*  | 区分大小写不匹配                                             |
+| ^~   | 前缀匹配                                                     |
+| @    | “@” 定义一个命名的location，使用在内部定向时                 |
+| /    | 通用匹配                                                     |
+
+###### location 匹配顺序
+
+- "="精确匹配，如果匹配成功，则停止其他匹配
+- 普通字符串指令匹配，优先级是从长到短（匹配字符越多，则选择该匹配结果），匹配成功location如果使用 ^~，则停止匹配（正则匹配）
+- 正则表达式正则匹配，按照从上到下的原则，匹配成功，则停止匹配
+- 如果正则匹配成功，则使用该结果，否则使用普通字符串匹配
+
+![](./assets/images/nginx-url-match.png)
+
+#### preaccess 阶段
+
+##### limit_conn
+
+##### limit_req
+
+#### access 阶段
+
+##### access
+
+```bash
+location / {
+    deny  192.168.1.1;
+    allow 192.168.1.0/24;
+    allow 10.1.1.0/16;
+    allow 2001:0db8::/32;
+    deny  all;
+}
+```
+
+###### allow
+
+```bash
+Syntax:	allow address | CIDR | unix: | all;
+Default:	—
+Context:	http, server, location, limit_except
+```
+
+###### deny
+
+```bash
+Syntax:	deny address | CIDR | unix: | all;
+Default:	—
+Context:	http, server, location, limit_except
+```
+
+
+
+##### auth_basic
+
+##### auth_request
+
+##### satisfy 指令
+
+```bash
+Syntax:	satisfy all | any;
+Default:	satisfy all;
+Context:	http, server, location
+```
+
+![](./assets/images/nginx-satisfy.png)
+
+**执行一个access模块，会产生三个结果**
+
+* 忽略，没有配置任何的指令关于这个模块，继续执行下一个access模块。
+* 放行，验证通过放行
+  * 判断satisfy开关，如果为any。access阶段放行通过。
+  * 判断satisfy开关，如果为all。继续执行验证下面的一个access模块
+* 拒绝，验证不通过拒绝
+  * 判断satisfy开关，如果为any。继续执行验证下面一个access模块。
+  * 判断satisfy开关，如果为all。拒绝请求.
+
+#### precontent 阶段
+
+##### try_files 指令
+
+```bash
+Syntax:	try_files file ... uri;
+		try_files file ... =code;
+Default:	—
+Context:	server, location
+```
+
+其作用是按顺序检查文件是否存在，返回第一个找到的文件或文件夹(结尾加斜线表示为文件夹)，如果所有的文件或文件夹都找不到，会进行一个内部重定向到最后一个参数。
+
+#### content 阶段
+
+##### root 和 alias 指令
+
+```bash
+Syntax:	root path;
+Default:	root html;
+Context:	http, server, location, if in location
+
+Syntax:	alias path;
+Default:	—
+Context:	location
+```
+
+将url映射为文件路径，以返回静态文件内容
+
+**root 和 alias 的不同点：**
+
+`root ` 会将完整url映射进文件路径中
+
+`alias` 只会将location后的URL映射到文件路径
+
+#### log 阶段
+
+
+
+#### Http 的过滤模块
+
+##### 替换响应中的字符串 sub模块
+
+#####  在响应的前后添加内容 addition 模块
+
+#### 变量
+
+##### 变量运行原理
+
+![image-20220717211813985](./assets/images/image-20220717211813985.png)
+
+##### 变量的特性
+
+* 惰性求值
+* 变量值可以时刻变化，其值为使用的那一时刻的值
+
+##### HTTP请求相关的变量
+
+| 变量              | 说明                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| arg_参数名        | URL中某个具体参数的值                                        |
+| query_string      | 与args变量完全相同                                           |
+| args              | 全部URL参数                                                  |
+| is_args           | 如果请求URL中由参数则返回 ? 否则返回空                       |
+| content_length    | HTTP请求中标识包体长度的Content_Length头部的值               |
+| content_type      | 标识请求包体类型的Content_Type头部的值                       |
+| uri               | 请求URI（不同于URL，不包括 ? 后的参数）                      |
+| document_uri      | 与uri完全相同                                                |
+| request_uri       | 请求的URL（包括URI以及完整的参数）                           |
+| scheme            | 协议名，例如HTTP或者HTTPS                                    |
+| request_method    | 请求方法，例如GET或者POST                                    |
+| request_length    | 所有请求内容的大小，包括请求行、头部、包体等                 |
+| remote_user       | 由HTTP Basic Authentication 协议传入的用户名                 |
+| request_body_file | 临时存放请求包体的文件                                       |
+| request_body      | 请求中的包体，这个变量当且仅当使用反向代理，且设定用内存暂存包体时才有效 |
+| request           | 原始的url请求，含有方法与协议版本，例如 GET /?a=1&b=22 HTTTP/1.1 |
+| host              | 先从请求行中获取，如果含有Host头部，则用其值替换掉请求行中的主机名，如果前两者都取不到，则使用匹配上的server_name |
+| Http_头部名字     | 返回一个具体请求头部的值<br />特殊情况 ` http_host/http_user_agent/http_referer/http_via/http_x_forwarded_for/http_cookie` |
+
+
+
+##### TCP链接相关的变量
+
+##### Nginx 处理请求过程中产生的变量
+
+##### 发送HTTP响应时相关的变量
+
+##### Nginx系统变量
+
+
 
 
 
