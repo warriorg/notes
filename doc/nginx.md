@@ -257,6 +257,9 @@ http://nginx.org/en/docs/http/ngx_http_proxy_module.html
 
 ```bash
 goaccess access.log -o /var/www/html/report.html --log-format=COMBINED --real-time-html
+
+# 使用所有日志生成对应的html
+zcat access.log.*.gz | goaccess access.log -o report.html --log-format=COMBINED --real-time-html
 ```
 
 #### 附录

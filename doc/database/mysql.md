@@ -100,7 +100,7 @@ start slave;
 
 # 若出现错误，则停止同步，重置后再次启动
 stop slave;
-reset slave;
+set global sql_slave_skip_counter=1;
 start slave;
 
 # 查询Slave状态
@@ -367,6 +367,18 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 
 ## 分库分表
+
+
+
+# 类型
+
+## JSON
+
+```sql
+ALTER TABLE nems_inventory_head ADD COLUMN aa VARCHAR(30) GENERATED ALWAYS AS (json_text->>"$.aa");
+alter table nems_inventory_head drop column aa;
+CREATE UNIQUE INDEX nems_inventory_head_aaa ON nems_inventory_head (aa);
+```
 
 
 
