@@ -137,6 +137,9 @@ docker images | sed -n -e '2,$p'|awk '{if($1 ~ /[0-9a-f]{32}/) print $1":"$2}'|x
 docker images | sed -n -e '2,$p'|awk '{if($2 ~ /[0-9a-f]{64}/) print $1":"$2}'|xargs docker rmi
 # 删除指定 TAG 的镜像
 docker images --format "{{.ID}} {{.Tag}}" | grep v1.10.10 | awk '{print $1}' | xargs docker rmi
+
+# 根据 docker name 清理 images
+docker images | grep none | awk '{print $3}' | xargs docker rmi -f
 ```
 ## run
 

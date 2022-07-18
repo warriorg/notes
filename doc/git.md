@@ -322,7 +322,7 @@ git mergetool -t diffmerge .
 `git reset HEAD <file>...`
 
 回退所有内容到上一个版本
-`git reset HEAD^`
+`git reset H
 
 回退a.py这个文件的版本到上一个版本  
 `git reset HEAD^ a.py  `

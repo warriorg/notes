@@ -79,13 +79,20 @@ mysql proxy 读写分离
 
 ## 常用sql
 
-### 分组后取出最新的记录
+### 替换OR, 使用exists
 
 ```sql
+select * from write_off_accounting_bom t1 where EXISTS ( 
+	select 1 from ( 
+	SELECT 'xxxx' material_no, 'yyyy' unit_consumption_version
+	union 
+	SELECT 'xxxxx' material_no, 'yyyy' unit_consumption_version
+) t2 where t1.export_material_no = t2.material_no and t1.unit_consumption_version = t2.unit_consumption_version)
+```
 
+###  分组后取出最新的记录
 
-
--- 实战
+```sql
 select t.head_id, t.note from (
 	select row_number() over (partition by head_id order by insert_time desc) num, 	
   head_id, 

@@ -1,0 +1,81 @@
+{
+  "folders": [
+    {
+      "id": "1YVRisd-",
+      "name": "Default",
+      "defaultLanguage": "typescript",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "createdAt": 1657845487019,
+      "updatedAt": 1657845487019
+    },
+    {
+      "name": "sql",
+      "parentId": null,
+      "isOpen": false,
+      "isSystem": false,
+      "defaultLanguage": "sql",
+      "id": "_b44oTl_",
+      "createdAt": 1657845512899,
+      "updatedAt": 1657845533799
+    }
+  ],
+  "snippets": [
+    {
+      "isDeleted": true,
+      "isFavorites": false,
+      "folderId": "",
+      "tagsIds": [],
+      "description": null,
+      "name": "Untitled snippet",
+      "content": [
+        {
+          "label": "Fragment 1",
+          "language": "plain_text",
+          "value": ""
+        }
+      ],
+      "id": "JsgZMNmx",
+      "createdAt": 1657845507838,
+      "updatedAt": 1657845719935
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "_b44oTl_",
+      "tagsIds": [],
+      "description": null,
+      "name": "替换OR, 使用exists",
+      "content": [
+        {
+          "label": "Fragment 1",
+          "language": "sql",
+          "value": "select * from write_off_accounting_bom t1 where EXISTS ( \n\tselect 1 from ( \n  \tSELECT 'xxxx' material_no, 'yyyy' unit_consumption_version\n  \tunion \n  \tSELECT 'xxxxx' material_no, 'yyyy' unit_consumption_version\n  ) t2 \n  where t1.export_material_no = t2.material_no and t1.unit_consumption_version = t2.unit_consumption_version)"
+        }
+      ],
+      "id": "5aOb6kYY",
+      "createdAt": 1657845535786,
+      "updatedAt": 1657845682308
+    },
+    {
+      "isDeleted": false,
+      "isFavorites": false,
+      "folderId": "_b44oTl_",
+      "tagsIds": [],
+      "description": null,
+      "name": "分组后取出最新的记录",
+      "content": [
+        {
+          "label": "Fragment 1",
+          "language": "sql",
+          "value": "select t.head_id, t.note from (\n\tselect row_number() over (partition by head_id order by insert_time desc) num, \t\n    head_id, \n    note, \n    insert_time from t_pre_dec_erp_approve t) t\nwhere t.num = 1"
+        }
+      ],
+      "id": "WysUexAV",
+      "createdAt": 1657845621876,
+      "updatedAt": 1657845709867
+    }
+  ],
+  "tags": []
+}
