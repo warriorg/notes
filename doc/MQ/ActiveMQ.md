@@ -52,7 +52,7 @@
 
 #### JMS模型
 
-![jmsmodel](./assets/images/jmsmodel.png)
+![jmsmodel](../assets/images/jmsmodel.png)
 
 * 点对点或队列模型
   - 只有一个消费者将获得消息
@@ -145,11 +145,11 @@ Passwort: admin
 
 ### 一条消息的生命周期
 
-![](./assets/images/132032_VE6U_1400519.jpg)
+![](../assets/images/132032_VE6U_1400519.jpg)
 
 
 
-![ActiveMQ消息传送机制](./assets/images/132147_esxo_1400519.jpg)
+![ActiveMQ消息传送机制](../assets/images/132147_esxo_1400519.jpg)
 
 ### 消息重复消费
 
@@ -159,7 +159,7 @@ Passwort: admin
 
 2. 消息超时、重传、确认保证消息必达
 
-![MQ消息必达](./assets/images/MQ消息必达.png)
+![MQ消息必达](../assets/images/MQ消息必达.png)
 
 [消息总线真的能保证幂等](https://www.w3cschool.cn/architectroad/architectroad-message-idempotence.html)
 

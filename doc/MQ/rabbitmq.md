@@ -16,7 +16,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 接受消息，并更具路由键转发消息所绑定的队列
 
-![image-20220515185056486](./assets/images/image-20220515185056486.png)
+![image-20220515185056486](../assets/images/image-20220515185056486.png)
 
 * 蓝色区域 生产消息，经过交换机，到达队列
 * 绿色区域 消费者，从队列中获取并消费消息
@@ -29,7 +29,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 * Direct模式可以使用RabbitMQ自带的Exchange：default Exchange，所以不需要将Exchange进行任何绑定（binding）操作，消息传递是，RouteKey必须完全匹配才会被队列接受，否则该消息会被抛弃
 
-![02-Direct Exchange](./assets/images/02-Direct Exchange.png)
+![02-Direct Exchange](../assets/images/02-Direct Exchange.png)
 
 #### Topic Exchange 主题交换机
 
@@ -39,13 +39,13 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 * `#` 匹配一个或多个词    `hello.# -> hello.mq.rabbit`
 * `*`  匹配一个词 `hello.* -> hello.rabbit`
 
-![03-Topic Exchange](./assets/images/03-Topic Exchange.png)
+![03-Topic Exchange](../assets/images/03-Topic Exchange.png)
 
 #### Fanout Exchange 广播交换机
 
 直接广播，不走路由键，直接将队列绑定到交换机上。发送到交换机的消息，全部会被转发到与该交换机绑定的队列上。转发消息是最快的！
 
-![04-Fanout Exchange](./assets/images/04-Fanout Exchange.png)
+![04-Fanout Exchange](../assets/images/04-Fanout Exchange.png)
 
 #### Headers Exchange  
 
@@ -92,7 +92,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 消息落库，对消息转改进行打标记
 
-![05-消息落库](./assets/images/05-消息落库.png)
+![05-消息落库](../assets/images/05-消息落库.png)
 
 7. 如果重试次数太多就设置标记放弃。
 
@@ -100,7 +100,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 ‎消息的延迟投递，做二次确认，回调检查
 
-![06-消息延迟投递](./assets/images/06-消息延迟投递.png)
+![06-消息延迟投递](../assets/images/06-消息延迟投递.png)
 
 
 
