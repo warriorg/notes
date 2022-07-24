@@ -762,24 +762,173 @@ Context:	location
 | host              | 先从请求行中获取，如果含有Host头部，则用其值替换掉请求行中的主机名，如果前两者都取不到，则使用匹配上的server_name |
 | Http_头部名字     | 返回一个具体请求头部的值<br />特殊情况 ` http_host/http_user_agent/http_referer/http_via/http_x_forwarded_for/http_cookie` |
 
-
-
 ##### TCP链接相关的变量
+
+| 变量                | 说明                                                     |
+| ------------------- | -------------------------------------------------------- |
+| binary_remote_addr  | 客户端地址的整型格式，对于IPv4是4字节，对于IPv6是16字节  |
+| connection          | 递增的链接序号                                           |
+| connection_requests | 当前连接上执行过的请求数，对keepalive连接有意义          |
+| remote_addr         | 客户端地址                                               |
+| remote_port         | 客户端端口                                               |
+| proxy_protocol_addr | 若使用了proxy_protocal协议则返回协议中的地址，否则返回空 |
 
 ##### Nginx 处理请求过程中产生的变量
 
+| 变量               | 说明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| request_time       | 请求处理到现在的耗时，单位为秒，精确到毫秒                   |
+| server_name        | 匹配上请求的server_name值                                    |
+| https              | 如果开启了TLS/SSL,则返回on，否则返回空                       |
+| request_completion | 若请求处理完则返回OK，否则返回空                             |
+| request_id         | 以16进制输出请求标识id，该id共含有16个字节，是随机生成的     |
+| request_filename   | 待访问文件的完整路径                                         |
+| document_root      | 由URI和root/alias规则生成的文件夹路径                        |
+| realpath_root      | 将document_root中的软连接等换成真实路径                      |
+| limit_rate         | 返回客户端响应时的速度上限，单位为每秒字节数。可以通过set指令修改对请求产生效果 |
+
 ##### 发送HTTP响应时相关的变量
+
+| 变量               | 说明                   |
+| ------------------ | ---------------------- |
+| body_bytes_sent    | 响应中body包体的长度   |
+| bytes_sent         | 全部http响应的长度     |
+| status             | http响应中的返回码     |
+| sent_trailer_名字  | 把响应结尾内容里值返回 |
+| sent_http_头部名字 | 响应中某个具体头部的值 |
 
 ##### Nginx系统变量
 
+| 变量          | 说明                                                   |
+| ------------- | ------------------------------------------------------ |
+| time_local    | 以本地时间标准输出大的当前时间                         |
+| time_iso8601  | 使用ISO 8601标准输出当前时间                           |
+| nginx_version | Nginx版本号                                            |
+| pid           | 所属worker进程的进程id                                 |
+| pipe          | 使用了管道则返回`p`，否则返回`.`                       |
+| hostname      | 所在服务器的主机名，与hostname命令输出一致             |
+| msee          | 1970年1月1日到现在的时间，单位为秒，小数点后精确到毫秒 |
+
+#### referer 模块指令
+
+![image-20220723195947281](./assets/images/image-20220723200046165.png)
+
+#### map模块： 通过映射新变量提供更多的可能性
+
+![image-20220724082728051](./assets/images/image-20220724082728051.png)
 
 
+
+#### split_clients 模块：实现AB测试
+
+![image-20220724082532898](./assets/image-20220724082532898.png)
 
 
 
 ## 反向代理与负载均衡
 
+#### Nginx 在 [AKF立方体](./理论.md#AKF 立方体)上的应用
+
+* **Y轴** 基于URL对功能进行分发
+* **X轴** 基于Round-Robin或者least-connected算法分发请求
+* **Z轴** 将用户IP地址或者其他信息映射到某个特定的服务或者集群
+
+#### 支持多种协议的反向代理
+
+![image-20220724103705266](./assets/images/nginx/image-20220724103705266.png)
+
+##### 指定上游服务地址的 upstream 与 server 指令
+
+```bash
+Syntax:	upstream name { ... }
+Default:	—
+Context:	http
+
+Syntax:	server address [parameters];
+Default:	—
+Context:	upstream
+```
+
+##### 对上游服务使用 keepalive
+
+通过服用连接降低nginx与上游服务器建立、关闭连接的消耗，提升吞吐量的同时降低时延
+
+```bash
+proxy_http_version 1.1;
+proxy_set_header Connection "";
+```
+
+##### 
+
+#### 负载均衡算法
+
+##### 加权Round-Robin
+
+在加权轮询的方式访问server指令指定的上游服务。
+
+###### 指令
+
+* **weight**  服务访问的权重，默认是1
+* **max_conns** server的最大并发连接数，仅作用于单worker进程。默认是0，表示没有限制。
+* **max_fails** 在 fail_timeout时间段内，最大的失败次数。当达到最大失败时，会在fail_timeout秒内这台server不允许再次被选择。
+* **fail_timeout** 单位为秒，默认值为10秒。具有2个功能：
+  * 指定一段时间内，最大的失败次数 max_fails。
+  *  到达max_fails后，该server不能访问的时间。
+
+##### ip_hash
+
+以客户端的IP地址作为hash算法的关键字，映射到特定的上游服务器中
+
+* 对IPV4地址使用前3个字节作为关键字，对IPV6则使用完整地址
+* 可以基于realip模块修改用于执行算法的IP地址
+
+```bash
+Syntax:	ip_hash;
+Default:	—
+Context:	upstream
+```
+
+##### hash
+
+通过指定关键字作为 hash key，基于hash算法映射到特定的上游服务器中。
+
+* 关键字可以含有变量、字符串
+
+```bash
+Syntax:	hash key [consistent];
+Default:	—
+Context:	upstream
+```
+
+##### 一致性hash算法
+
+###### hash 算法的问题
+
+![image-20220724172019523](./assets/images/nginx/image-20220724172019523.png)
+
+宕机或者扩容时，hash算法引发大量路由变更，可能导致缓存大范围失效
+
+![image-20220724172432313](./assets/images/nginx/image-20220724172432313.png)
+
+###### 一致性Hash算法：扩容前
+
+![image-20220724172628900](./assets/images/nginx/image-20220724172628900.png)
+
+###### 一致性Hash算法：扩容后
+
+![image-20220724172726705](./assets/images/nginx/image-20220724172726705.png)
+
+
+
+
+
+
+
+
+
 ## Nginx的系统层性能优化
+
+
 
 ##  Nginx 与 OpenResty
 
