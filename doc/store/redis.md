@@ -849,6 +849,14 @@ select 1    # 切换数据库
 
 ## info 查看服务状态
 
-# 补充
+# CHEAT SHEET
+## 在集群上查询KEY
+```bash
+CLUSTER SLOTS   # 查询集群的插槽
+CLUSTER KEYSLOT LOCK::1111 # 查询key所在的服务器
+TYPE LOCK::1111 # 查询key的类型
+GET LOCK::1111  # 查看KEY
+```
 
-redis 集群服务器推荐3主3从
+
+

@@ -4,7 +4,7 @@
 
 ### 基础架构
 
-![prometheus-architecture](./assets/images/prometheus-architecture.svg)
+![prometheus-architecture](../assets/images/prometheus-architecture.svg)
 
 
 

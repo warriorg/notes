@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/理论.md",
+            "file": "doc/make.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/理论.md",
+                "file": "doc/make.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -86,7 +86,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/理论.md",
+                "file": "doc/make.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -109,11 +109,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/理论.md"
+                "file": "doc/make.md"
               }
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -121,15 +122,15 @@
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
-    "doc/理论.md",
-    "doc/nginx.md",
-    "doc/nacos.md",
-    "doc/DSA.md",
-    "doc/blockchain.md",
-    "doc/raft.md",
     "doc/RaspBerryPi.md",
-    "doc/FISCO BCOS.md",
-    "doc/feign.md",
-    "doc/FastDFS.md"
+    "doc/react.md",
+    "doc/ReadingNotes.md",
+    "doc/Sentinel.md",
+    "doc/store/redis.md",
+    "doc/linux/shell.md",
+    "doc/linux/ssh.md",
+    "doc/linux/Linux.md",
+    "doc/linux/curl.md",
+    "doc/linux/catalog.md"
   ]
 }
