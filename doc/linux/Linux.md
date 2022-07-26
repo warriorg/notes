@@ -2076,12 +2076,35 @@ lsattr [ -RVadv ] [ files...  ]
 ```bash
 find Folder -type d -exec chmod 0777 {} +			# 更改目录权限(不包含文件)
 find /data -mtime +30 -name "*.log" -print -exec rm -rf {} \;    # 将/data 目录下所有30天前带".log"的文件删除
+find app/ -iname logs* -exec bash -c 'path="{}"; d=./dest/$(dirname "$path"); mkdir -p "$d"; cp -r "$path" "$d"' \;  # 查找指定的文件，并按照原始的目录copy 
 ```
-
-
 
 - 文件搜索命令
 - find [搜索范围] [搜索条件]
+
+#### [Find and copy files with relative path](https://stackoverflow.com/questions/23915098/find-and-copy-files-with-relative-path)
+
+```bash
+$ tree
+.   
+├── a
+│   └── foo
+└── b
+    └── foo
+
+2 directories, 2 files
+$ find . -type f -exec bash -c 'path={}; d=/tmp/dest/$(dirname $path); mkdir -p $d ; cp $path $d' \;
+$ tree /tmp/dest/
+/tmp/dest/
+├── a
+│   └── foo
+└── b
+    └── foo
+
+2 directories, 2 files
+```
+
+
 
 
 
