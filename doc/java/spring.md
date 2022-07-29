@@ -189,8 +189,10 @@ Exchange 的类型
 * FileSystemXmlapplicationcontext：从文件系统下的一个或多个XML配置文件中加载上下文定义。 
 * XmlWebApplicationContext：从Web应用下的一个或多个XML配置文件中加载上下文定义。
 
+![image-20220728122558149](../assets/images/image-20220728122558149.png)
+
 ### Bean
-[Spring Bean Init](../uml/Spring Bean Init.pu)
+[Spring Bean Init](../../uml/Spring Bean Init.pu)
 
 ## Web MVC
 
