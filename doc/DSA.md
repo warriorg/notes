@@ -227,6 +227,10 @@ An example run of Shellsort with gaps 5, 3 and 1 is shown below.
 
 
 
+# 
+
+
+
 # Tree
 
 ## Merkle Tree
@@ -375,6 +379,14 @@ http://www.yeolar.com/note/2010/03/21/kademlia/
 ## Chord
 
 ## Pastry
+
+
+
+# Consistent  HASH
+
+
+
+
 
 # Gossip 协议
 

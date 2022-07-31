@@ -825,19 +825,19 @@ Context:	location
 
 
 
-## 反向代理与负载均衡
+## 负载均衡
 
-#### Nginx 在 [AKF立方体](./理论.md#AKF 立方体)上的应用
+### Nginx 在 [AKF立方体](./理论.md#AKF 立方体)上的应用
 
 * **Y轴** 基于URL对功能进行分发
 * **X轴** 基于Round-Robin或者least-connected算法分发请求
 * **Z轴** 将用户IP地址或者其他信息映射到某个特定的服务或者集群
 
-#### 支持多种协议的反向代理
+### 支持多种协议的反向代理
 
 ![image-20220724103705266](./assets/images/nginx/image-20220724103705266.png)
 
-##### 指定上游服务地址的 upstream 与 server 指令
+#### 指定上游服务地址的 upstream 与 server 指令
 
 ```bash
 Syntax:	upstream name { ... }
@@ -849,7 +849,7 @@ Default:	—
 Context:	upstream
 ```
 
-##### 对上游服务使用 keepalive
+#### 对上游服务使用 keepalive
 
 通过服用连接降低nginx与上游服务器建立、关闭连接的消耗，提升吞吐量的同时降低时延
 
@@ -858,15 +858,13 @@ proxy_http_version 1.1;
 proxy_set_header Connection "";
 ```
 
-##### 
+### 负载均衡算法
 
-#### 负载均衡算法
-
-##### 加权Round-Robin
+#### 加权Round-Robin
 
 在加权轮询的方式访问server指令指定的上游服务。
 
-###### 指令
+##### 指令
 
 * **weight**  服务访问的权重，默认是1
 * **max_conns** server的最大并发连接数，仅作用于单worker进程。默认是0，表示没有限制。
@@ -875,7 +873,7 @@ proxy_set_header Connection "";
   * 指定一段时间内，最大的失败次数 max_fails。
   *  到达max_fails后，该server不能访问的时间。
 
-##### ip_hash
+#### ip_hash
 
 以客户端的IP地址作为hash算法的关键字，映射到特定的上游服务器中
 
@@ -888,7 +886,7 @@ Default:	—
 Context:	upstream
 ```
 
-##### hash
+#### hash
 
 通过指定关键字作为 hash key，基于hash算法映射到特定的上游服务器中。
 
@@ -900,9 +898,9 @@ Default:	—
 Context:	upstream
 ```
 
-##### 一致性hash算法
+#### 一致性hash算法
 
-###### hash 算法的问题
+##### hash 算法的问题
 
 ![image-20220724172019523](./assets/images/nginx/image-20220724172019523.png)
 
@@ -910,15 +908,209 @@ Context:	upstream
 
 ![image-20220724172432313](./assets/images/nginx/image-20220724172432313.png)
 
-###### 一致性Hash算法：扩容前
+##### 一致性Hash算法：扩容前
 
 ![image-20220724172628900](./assets/images/nginx/image-20220724172628900.png)
 
-###### 一致性Hash算法：扩容后
+##### 一致性Hash算法：扩容后
 
 ![image-20220724172726705](./assets/images/nginx/image-20220724172726705.png)
 
 
+
+
+
+#### 最少连接
+
+upstream_least_conn模块，从所有上游服务器中，找出当前并发连接数最少的一个，将请求转发到它。
+
+* 如果出现多个最少连接服务器的连接数都一样，使用round-robin算法。
+
+```bash
+Syntax:	least_conn;
+Default:	—
+Context:	upstream
+```
+
+### upstream 模块提供的变量
+
+| 变量                     | 说明                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| upstream_addr            | 上游服务器的ip地址，格式为可读字符串，例如127.0.0.1:8012     |
+| upstream_connect_time    | 与上游服务建立连接消耗的时间，单位为秒，精确到毫秒           |
+| upstream_header_time     | 接收上游服务发回响应中http头部所消耗的时间，单位为秒，精确到毫秒 |
+| upstream_response_time   | 接收完整的上游服务响应所消耗的时间，单位为秒，精确到毫秒     |
+| upstream_http_名称       | 从上游服务返回的响应头部的值                                 |
+| upstream_bytes_received  | 从上游服务接收到的响应长度，单位为字节                       |
+| upstream_response_length | 从上游服务返回的响应包体长度，单位为字节                     |
+| upstream_status          | 从上游服务返回的HTTP响应中的状态码，如果未连接上，该变量值为502 |
+| upstream_cookie_名称     | 从上游服务返回的响应头Set-Cookie中取出的cookie值             |
+| upstream_trailer_名称    | 从上游服务的响应尾部取到的值                                 |
+
+## 反向代理
+
+### Http 反向代理
+
+#### 工作流程
+
+![image-20220730133051752](./assets/images/nginx/image-20220730133051752.png)
+
+#### proxy_pass
+
+对上游服务使用http/https协议进行反向代理
+
+ ```bash
+ Syntax:	proxy_pass URL;
+ Default:	—
+ Context:	location, if in location, limit_except
+ ```
+
+##### URL 参数规则
+
+* URL必须以`http://`或者`https://`开头，接下来时域名、IP、unix socket地址或者upstream的名字，前两者可以在域名或者ip后加端口。最后时可选的URI。
+* 当URL参数中携带URI与否，会导致发向上游请求的URL不同
+  * 不携带URI，则将客户端请求中的URL直接转发给上游
+    * location 后使用正则表达式、@名字时，应采用这种方式
+  * 携带URI，则对用户请求中的URL作如下操作
+    * 将location参数中匹配上的一段替换为该URI
+* 该URL参数中可以携带变量
+* 更复杂的URL替换，可以在location内的配置添加rewrite break语句
+
+#### 生成发往上游的http头部及包体
+
+##### proxy_request_buffering
+
+接收客户端请求的包体，收完再转发换时边收边转发
+
+```bash
+Syntax:	proxy_request_buffering on | off;
+Default:	proxy_request_buffering on;
+Context:	http, server, location
+```
+
+###### on
+
+* 客户端网速慢
+
+* 上游服务并发处理能力低
+* 适应高吞吐量场景
+
+###### off
+
+* 更及时的响应
+* 降低nginx读写磁盘消耗
+* 一旦开始发送内容 `proxy_next_upstream`功能失败
+
+##### 客户端包体的接收
+
+```bash
+Syntax:	client_body_buffer_size size;
+Default:	client_body_buffer_size 8k|16k;
+Context:	http, server, location
+
+Syntax:	client_body_in_single_buffer on | off;
+Default:	client_body_in_single_buffer off;
+Context:	http, server, location
+```
+
+存在包体时，接收包体所分配的内存
+
+* 若接收头部时已经接受完全部包体，则不分配
+* 若剩余待接收包体长度小于`client_body_buffer_size`,则仅分配所需大小
+* 分配`client_body_buffer_size`大小内存接收包体
+  * 关闭包体缓存时，该内存上内容及时发送给上游
+  * 打开包体缓存，该段大小内存用完时，写入临时文件，释放内存
+
+##### 最大包体长度限制
+
+```bash
+Syntax:	client_max_body_size size;
+Default:	client_max_body_size 1m;
+Context:	http, server, location
+```
+
+仅对请求头部中含有`Content-Length`有效超出最大长度后，返回413错误
+
+##### 临时文件路径格式
+
+```bash
+Syntax:	client_body_temp_path path [level1 [level2 [level3]]];
+Default:	client_body_temp_path client_body_temp;
+Context:	http, server, location
+
+Syntax:	client_body_in_file_only on | clean | off;
+Default:	client_body_in_file_only off;
+Context:	http, server, location
+```
+
+
+
+#### 向上游服务建立连接
+
+```bash
+# 超时后，会向客户端生成http响应，响应码为502
+Syntax:	proxy_connect_timeout time;
+Default:	proxy_connect_timeout 60s;
+Context:	http, server, location
+
+# 跟上游服务器建立连接失败后的处理方式，更换一台新的服务器什么的
+Syntax:	proxy_next_upstream error | timeout | invalid_header | http_500 | http_502 | http_503 | http_504 | http_403 | http_404 | http_429 | non_idempotent | off ...;
+Default:	proxy_next_upstream error timeout;
+Context:	http, server, location
+```
+
+##### 上游连接启用TCP keepalive
+
+```bash
+Syntax:	proxy_socket_keepalive on | off;
+Default:	proxy_socket_keepalive off;
+Context:	http, server, location
+```
+
+##### 上游连接启用HTTP keepalive
+
+```bash
+Syntax:	keepalive connections;
+Default:	—
+Context:	upstream
+
+Syntax:	keepalive_requests number;
+Default:	keepalive_requests 1000;
+Context:	upstream
+```
+
+设置通过一个keepalive连接可以服务的最大请求数。在发出最大的请求数后，连接被关闭。
+
+为了释放每个连接分配的内存，定期关闭连接是必要的。因此，使用过高的最大请求数可能会导致过多的内存使用，不建议使用。
+
+##### 修改TCP连接中的 local address
+
+```bash
+Syntax:	proxy_bind address [transparent] | off;
+Default:	—
+Context:	http, server, location
+```
+
+* 可以使用变量 `proxy_bind $remote_addr;`
+* 可以使用不属于所在机器的IP地址 `proxy_bind $remote_addr transparent;`
+
+![image-20220731190942253](./assets/images/nginx/image-20220731190942253.png)
+
+##### 当客户端关闭连接时
+
+```bash
+Syntax:	proxy_ignore_client_abort on | off;
+Default:	proxy_ignore_client_abort off;
+Context:	http, server, location
+```
+
+##### 向上游发送HTTP请求
+
+```bash
+Syntax:	proxy_send_timeout time;
+Default:	proxy_send_timeout 60s;
+Context:	http, server, location
+```
 
 
 
