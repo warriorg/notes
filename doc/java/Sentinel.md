@@ -47,6 +47,31 @@ https://sentinelguard.io/zh-cn/docs/startup-configuration.html
 
 
 
+## Spring Cloud Alibaba Sentinel
+
+如果要在您的项目中引入 Sentinel，使用 group ID 为 `com.alibaba.cloud` 和 artifact ID 为 `spring-cloud-starter-alibaba-sentinel` 的 starter。
+
+```groovy
+implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel'
+```
+
+然后在配置文件中增加配置
+
+```yaml
+spring:
+  cloud:
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8080
+```
+
+这里的 `spring.cloud.sentinel.transport.port` 端口配置会在应用对应的机器上启动一个 Http Server，该 Server 会与 Sentinel 控制台做交互。比如 Sentinel 控制台添加了一个限流规则，会把规则数据 push 给这个 Http Server 接收，Http Server 再将规则注册到 Sentinel 中。
+
+
+
+
+
 ## 服务降级
 
 

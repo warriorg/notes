@@ -41,8 +41,19 @@ docker run --log-driver=loki \
 ```yaml
 version: "3"
 
+x-loggin: &default-logging
+  driver: loki
+  options:
+    loki-url: http://192.168.1.94:3100/loki/api/v1/push
+    loki-batch-size: "500"
+    loki-pipeline-stages: |
+      - regex:
+          expression: '(?P<level>(TRACE|DEBUG|INFO|WARN|ERROR))'
+      - labels:
+          level:
+
 services:
-  flog:
+  flog: # 测试日志
     image: mingrammer/flog
     logging:
       driver: loki
