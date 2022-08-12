@@ -2,7 +2,7 @@
 
 **容器** 一种沙盒技术
 
-![docker architecture](./assets/images/docker architecture.svg)
+![docker architecture](../assets/images/docker architecture.svg)
 
 ## Namespace
 
