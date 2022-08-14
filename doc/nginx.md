@@ -1112,9 +1112,146 @@ Default:	proxy_send_timeout 60s;
 Context:	http, server, location
 ```
 
+##### 接收上游的HTTP响应头部
+
+```bash
+Syntax:	proxy_buffer_size size;
+Default:	proxy_buffer_size 4k|8k;
+Context:	http, server, location
+```
+
+这个值限定了上游http response中header的最大值。如果超出限制，会在 `error.log` 中出现 `upstream sent to big header`
+
+##### 处理上游响应的头部
+
+###### 禁用上游响应头部的功能
+
+```bash
+Syntax:	proxy_ignore_headers field ...;
+Default:	—
+Context:	http, server, location
+```
+
+某些响应头部可以改变nginx的行为，使用proxy_ignore_headers可以禁止它们生效
+
+* 可以禁用功能的头部
+
+  * X-Accel-Redirect： 由上游服务指定在nginx内部重定向，控制请求的执行
+  * X-Accel-Limit-Rate：由上游设置发往客户端的速度限制，等同limit_rate指令
+  * X-Accel-Buffering：由上游控制是否缓存上游的响应
+  * X-Accel-Charset：由上游控制Content-Type中的Charset
+
+  * 缓存相关：
+    * X-Accel-Expires： 设置响应在nginx中的缓存时间，单位秒；@开头表示一天内某时刻
+    * Expires：控制nginx缓存时间，优先级低于X-Accel-Expires
+    * Cache-Control：控制nginx缓存时间，优先级低于X-Accel-Expires
+    * Set-Cookie：响应中出现Set-Cookie则不缓存，可通过proxy_ignore_headers禁止生效
+    * Vary：响应中出现Vary：*则不缓存，同样可禁止生效
+
+##### 浏览器缓存
+
+![](./assets/images/861554-20160820111456437-1615310660.png)
+
+* 优点
+  * 使用有效缓存时，没有网络消耗，速度最快
+  * 即使由网络消耗，但对失效缓存使用304响应做到网络流量消耗最小化
+* 缺点
+  * 仅提升一个用户的体验
+
+###### Etag
+
+**`ETag`**HTTP 响应头是资源的特定版本的标识符。这可以让缓存更高效，并节省带宽，因为如果内容没有改变，Web 服务器不需要发送完整的响应。而如果内容发生了变化，使用 ETag 有助于防止资源的同时更新相互覆盖（“空中碰撞”）。
+
+如果给定 URL 中的资源更改，则一定要生成新的 Etag 值。 因此 Etags 类似于指纹，也可能被某些服务器用于跟踪。 比较 etags 能快速确定此资源是否变化，但也可能被跟踪服务器永久存留。
+
+```
+ETag: W/"<etag_value>"
+ETag: "<etag_value>"
+```
+
+`W/` 可选
+
+`'W/'`(大小写敏感) 表示使用[弱验证器](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Conditional_requests#weak_validation)。 弱验证器很容易生成，但不利于比较。 强验证器是比较的理想选择，但很难有效地生成。 相同资源的两个弱`Etag`值可能语义等同，但不是每个字节都相同。
+
+"<etag_value>"
+
+实体标签唯一地表示所请求的资源。 它们是位于双引号之间的 ASCII 字符串（如“675af34563dc-tr34”）。 没有明确指定生成 ETag 值的方法。 通常，使用内容的散列，最后修改时间戳的哈希值，或简单地使用版本号。 例如，MDN 使用 wiki 内容的十六进制数字的哈希值。
 
 
 
+###### If-None-Match
+
+**`If-None-Match`** 是一个条件式请求首部。对于 GET[`GET`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET) 和 [`HEAD`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/HEAD) 请求方法来说，当且仅当服务器上没有任何资源的 [`ETag`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag) 属性值与这个首部中列出的相匹配的时候，服务器端才会返回所请求的资源，响应码为 [`200`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/200) 。对于其他方法来说，当且仅当最终确认没有已存在的资源的 [`ETag`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag) 属性值与这个首部中所列出的相匹配的时候，才会对请求进行相应的处理。
+
+对于 [`GET`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET) 和 [`HEAD`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/HEAD) 方法来说，当验证失败的时候，服务器端必须返回响应码 304（Not Modified，未改变）。对于能够引发服务器状态改变的方法，则返回 412（Precondition Failed，前置条件失败）。需要注意的是，服务器端在生成状态码为 304 的响应的时候，必须同时生成以下会存在于对应的 200 响应中的首部：Cache-Control、Content-Location、Date、ETag、Expires 和 Vary 。
+
+[`ETag`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag) 属性之间的比较采用的是**弱比较算法**，即两个文件除了每个字节都相同外，内容一致也可以认为是相同的。例如，如果两个页面仅仅在页脚的生成时间有所不同，就可以认为二者是相同的。
+
+当与 [`If-Modified-Since`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/If-Modified-Since) 一同使用的时候，If-None-Match 优先级更高（假如服务器支持的话）。
+
+以下是两个常见的应用场景：
+
+- 采用 [`GET`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET) 或 [`HEAD`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/HEAD) 方法，来更新拥有特定的[`ETag`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag) 属性值的缓存。
+- 采用其他方法，尤其是 [`PUT`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/PUT)，将 `If-None-Match` used 的值设置为 * ，用来生成事先并不知道是否存在的文件，可以确保先前并没有进行过类似的上传操作，防止之前操作数据的丢失。这个问题属于[更新丢失问题](https://www.w3.org/1999/04/Editing/#3.1)的一种。
+
+###### If-Modified-Since
+
+**`If-Modified-Since`** 是一个条件式请求首部，服务器只在所请求的资源在给定的日期时间之后对内容进行过修改的情况下才会将资源返回，状态码为 [`200`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/200) 。如果请求的资源从那时起未经修改，那么返回一个不带有消息主体的 [`304`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/304) 响应，而在 [`Last-Modified`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Last-Modified) 首部中会带有上次修改时间。 不同于 [`If-Unmodified-Since`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/If-Unmodified-Since), `If-Modified-Since` 只可以用在 [`GET`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET) 或 [`HEAD`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/HEAD) 请求中。
+
+当与 [`If-None-Match`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/If-None-Match) 一同出现时，它（**`If-Modified-Since`**）会被忽略掉，除非服务器不支持 `If-None-Match`。
+
+最常见的应用场景是来更新没有特定 [`ETag`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag) 标签的缓存实体。
+
+##### nginx 缓存
+
+* 有点
+  * 提升所有用户的体验
+  * 相比浏览器缓存，有效降低上游服务的负载
+  * 通过304响应减少nginx与上游服务间的流量消耗
+* 缺点
+  * 用户仍然保持网络消耗
+
+###### 决策浏览器国企缓存是否有效
+
+**expires 指令**
+
+```bash
+Syntax:			expires [modified] time;
+				expires epoch | max | off;
+Default:		expires off;
+Context:		http, server, location, if in location
+```
+
+* max 
+
+  * Expires: Thu, 31 Dec 2037 23:55:55 GMT
+
+  * Cache-Control: max-age=315360000(10年)
+
+* off： 不添加或者修改`Expires`和`Cache-Control`字段
+
+* epoch：
+
+  * Expires：Thu, 01 Jan 1970 00:00:01 GMT
+  * Cache-Control： no-cache
+
+* time：设定具体时间，可以携带单位
+
+  * 一天内的具体时刻可以加@，比如下午六点半：@18h30m
+    * 设定号Expires，自动计算Cache-Control
+    * 如果当前时间未超过当前的time时间，则Expires到当天time，否则时第二天的time时刻
+  * 正数
+    * 设定Cache-Control时间，计算出Expires
+  * 负数
+    * Cache-Control：no-cache，计算出Expires
+
+
+
+
+
+
+
+ 
 
 
 
