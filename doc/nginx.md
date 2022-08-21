@@ -1148,6 +1148,8 @@ Context:	http, server, location
     * Set-Cookie：响应中出现Set-Cookie则不缓存，可通过proxy_ignore_headers禁止生效
     * Vary：响应中出现Vary：*则不缓存，同样可禁止生效
 
+#### 缓存
+
 ##### 浏览器缓存
 
 ![](./assets/images/861554-20160820111456437-1615310660.png)
@@ -1222,16 +1224,164 @@ HTTP 协议中的 **`If-Unmodified-Since`** 消息头用于请求之中，使得
 - 与 non-[safe](https://developer.mozilla.org/zh-CN/docs/Glossary/Safe) 方法如 [`POST`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/POST) 搭配使用，可以用来[优化并发控制](https://en.wikipedia.org/wiki/Optimistic_concurrency_control)，例如在某些 wiki 应用中的做法：假如在原始副本获取之后，服务器上所存储的文档已经被修改，那么对其作出的编辑会被拒绝提交。
 - 与含有 [`If-Range`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/If-Range) 消息头的范围请求搭配使用，用来确保新的请求片段来自于未经修改的文档。
 
+
+
 ##### nginx 缓存
 
-* 有点
+* 优点
   * 提升所有用户的体验
   * 相比浏览器缓存，有效降低上游服务的负载
   * 通过304响应减少nginx与上游服务间的流量消耗
 * 缺点
   * 用户仍然保持网络消耗
 
-###### 决策浏览器国企缓存是否有效
+
+
+![image-20220820111612101](./assets/images/nginx/image-20220820111612101.png)
+
+![](./assets/images/image-20200727110409789.png))
+
+##### 缓存设置
+
+```bash
+Syntax:		proxy_cache zone | off;
+Default:	proxy_cache off;
+Context:	http, server, location
+```
+
+```bash
+Syntax:		proxy_cache_path path [levels=levels] [use_temp_path=on|off] keys_zone=name:size [inactive=time] [max_size=size] 				[min_free=size] [manager_files=number] [manager_sleep=time] [manager_threshold=time] [loader_files=number] 						[loader_sleep=time] [loader_threshold=time] [purger=on|off] [purger_files=number] [purger_sleep=time] 							[purger_threshold=time];
+Default:	—
+Context:	http
+```
+
+* **path** 定义缓存文件存放位置
+
+* **levels** 定义缓存路径的目录层级，最多3级，每层目录长度为1或者2字节
+
+* **use_temp_path** 
+
+  * **on** 使用prxoy_temp_path定义的临时目录
+  * **off** 直接使用path路径存放临时文件
+
+* **keys_zone** 
+
+  * **name**  是共享内存名字，由`proxy_cache`指令使用
+  * **size** 是共享内存大小，1MB大约可以存放8000个KEY
+
+* **inactive** 
+
+  * 在inactive时间内没有被访问的缓存，会被淘汰掉
+  * 默认10分钟
+
+* **max_size** 设置最大的缓存文件大小，超出后由cache manager进程按LRU链表淘汰
+
+* **min_free** 最小可用空间量
+
+* **manager_files** 
+
+  * cache manager进程在1次淘汰过程中，淘汰的最大文件数
+  * 默认100
+
+* **manager_sleep** 
+
+  * 执行一次淘汰循环后cache manager 进程的休眠时间
+  * 默认200ms
+
+* **manager_threshold** 
+
+  * 执行一次淘汰循环的最大耗时
+  * 默认 50ms
+
+* **loader_files**
+
+  * cache loader 进程载入磁盘中缓存文件至共享内存，每批最多处理的文件数
+  * 默认100
+
+* **loader_sleep** 
+
+  * 执行一次缓存文件至共享内存后，进程休眠的时间
+
+  * 载入默认200ms
+
+* **loader_threahold**
+
+  * 每次载入缓存文件至共享内存的最大耗时
+  * 默认50ms
+
+
+
+**对那写method方法使用缓存返回响应**
+
+```bash
+Syntax:		proxy_cache_methods GET | HEAD | POST ...;
+Default:	proxy_cache_methods GET HEAD;
+Context:	http, server, location
+```
+
+
+
+**设置缓存的key**
+
+```bash
+Syntax:		proxy_cache_key string;
+Default:	proxy_cache_key $scheme$proxy_host$request_uri;
+Context:	http, server, location
+```
+
+**设定缓存什么样的响应**
+
+```bash
+Syntax:		proxy_cache_valid [code ...] time;
+Default:	—
+Context:	http, server, location
+```
+
+* 对不同的响应码缓存不等的时长
+  * 例如： code 404 5m
+* 只标识时间
+  * 仅对一下响应码缓存
+    * 200
+    * 301
+    * 302
+* 通过上游响应头部控制缓存时长
+  * `X-Accel-Expires` 单位秒
+    * 为0时表示禁止nginx缓存内容
+    * 通过@设置缓存到一天中的某一时刻
+  * 响应头若含有`Set-Cookie`则不缓存
+  * 响应头含有`Vary:*`则不缓存
+
+**参数为真时，响应不存入缓存**
+
+```bash
+Syntax:		proxy_no_cache string ...;
+Default:	—
+Context:	http, server, location
+```
+
+定义不将响应保存到缓存中的条件。如果字符串参数中至少有一个值不为空且不等于0，则响应将不被保存
+
+**参数为真时，不使用缓存内容**
+
+```bash
+Syntax:		proxy_cache_bypass string ...;
+Default:	—
+Context:	http, server, location
+```
+
+定义不会从缓存中获取响应的条件。如果字符串参数的至少一个值不是空的，并且不等于“ 0”，则不会从缓存中获取响应
+
+**变更HEAD方法**
+
+```bash
+Syntax:		proxy_cache_convert_head on | off;
+Default:	proxy_cache_convert_head on;
+Context:	http, server, location
+```
+
+启用或禁用将HEAD方法转换为用于缓存的GET。当转换被禁用时，缓存键应该配置为包含$request方法。
+
+##### 决定浏览器缓存是否有效
 
 **expires 指令**
 
@@ -1281,11 +1431,140 @@ Context:	http, server, location
 * exact 精确匹配`if_modified_since` 头部与 `last_modified` 的值
 * before 若 `if_modified_since` 大于等于 `last_modified` 的值，则返回 304
 
+##### 合并回源请求--减轻峰值流量下的压力
+
+ ```bash
+ Syntax:		proxy_cache_lock on | off;
+ Default:	proxy_cache_lock off;
+ Context:	http, server, location
+ ```
+
+同一时间，仅第1个请求发向上游，其他请求等待第1个响应返回或者超时后，使用缓存响应客户端
+
+```bash
+Syntax:		proxy_cache_lock_age time;
+Default:	proxy_cache_lock_age 5s;
+Context:	http, server, location
+```
+
+上一个请求返回响应的超时时间，到达后在放行一个请求发向上游
+
+```bash
+Syntax:		proxy_cache_lock_timeout time;
+Default:	proxy_cache_lock_timeout 5s;
+Context:	http, server, location
+```
+
+等待第一个请求返回响应的最大时间，到达后直接向上游发送请求，但不缓存响应。
+
+```bash
+Syntax:		proxy_cache_use_stale error | timeout | invalid_header | updating | http_500 | http_502 | http_503 | http_504 | 				http_403 | http_404 | http_429 | off ...;
+Default:	proxy_cache_use_stale off;
+Context:	http, server, location
+```
+
+确定在哪些情况下可以在与代理服务器通信期间使用过时的缓存响应。
+
+###### 定义陈旧缓存的用法
+
+* **updateing**
+
+  * 当缓存内容过期，由一个请求正在访问上游试图更新缓存时，其他请求直接使用过期内容返回客户端
+  * stale-while-revalidate 
+    * 缓存呢绒过期后，定义一段时间，在这段时间`updating`设置有效，否则请求仍然访问上游服务
+    * 例如： `Cache-Control:max-age=600;stale-while-revalidate=30`
+  * stale-if-error
+    * 缓存内容过期后，定义一段时间，在这段时间内上游服务出错后就继续使用缓存，否则请求仍然访问上游服务。`stale-while-revalidate`包括`stale-if-error`场景
+    * 例如：`Cache-Control:max-age=600,stale-if-error=1200`
+
+* **error** 当与上游建立连接、发送请求、读取响应头部等情况出错时，使用缓存
+
+* **timeout** 当与上游建立连接、发送请求、读取响应头部等情况出现定时器超时，使用缓存
+
+* **Http_(500|502|503|504|403|404|429)** 缓存以上错误响应码的内容
+
+  
+
+```bash
+Syntax:		proxy_cache_background_update on | off;
+Default:	proxy_cache_background_update off;
+Context:	http, server, location
+```
+
+允许启动一个后台子请求来更新过期的缓存项，同时返回一个过时的缓存响应给客户端。注意，有必要在更新响应时允许使用过期的缓存响应。
+
+```bash
+Syntax:		proxy_cache_revalidate on | off;
+Default:	proxy_cache_revalidate off;
+Context:	http, server, location
+```
+
+更新缓存时，使用 `If-Modified-Since`和`If-None-Match` 作为请求头部，预期内容未发生变更时通过304来减少传输的内容
+
+##### 清除缓存
+
+商业版本由对应的指令，开源版本需要使用第三方模块
+
+https://github.com/FRiCKLE/ngx_cache_purge
 
 
 
+### 七层反向代理对照
 
- 
+* **uwsgi** 
+* **fastcgi**
+* **scgi**
+
+
+
+#### 构造请求内容
+
+|                  | uwsgi                      | fastcgi                      | scgi                      | http                       |
+| ---------------- | -------------------------- | ---------------------------- | ------------------------- | -------------------------- |
+| 指定上游         | uwsgi_pass                 | fastcgi_pass                 | scgi_pass                 | proxy_pass                 |
+| 是否传递请求头部 | uwsgi_pass_request_headers | fastcgi_pass_request_headers | scgi_pass_request_headers | proxy_pass_request_headers |
+| 是否船体请求包体 | uwsgi_pass_request_body    | fastcgi_pass_request_body    | scgi_pass_request_body    | proxy_pass_request_body    |
+| 指定请求方法名   |                            |                              |                           | proxy_method               |
+| 指定请求协议     |                            |                              |                           | proxy_http_version         |
+| 增改请求头部     |                            |                              |                           | proxy_set_header           |
+| 设置请求包体     |                            |                              |                           | proxy_set_body             |
+| 是否缓存请求包体 | uwsgi_request_buffering    | fastcgi_request_buffering    | scgi_request_buffering    | proxy_request_buffering    |
+
+#### 建立连接并发送请求
+
+|                          | uwsgi                     | fastcgi                     | scgi                     | http                           |
+| ------------------------ | ------------------------- | --------------------------- | ------------------------ | ------------------------------ |
+| 连接上游超时时间         | uwsgi_connect_timeout     | fastcgi_connect_timeout     | scgi_connect_timeout     | proxy_connect_timeout          |
+| 连接绑定地址             | uwsgi_bind                | fastcgi_bind                | scgi_bind                | proxy_bindshi                  |
+| 使用TCP keepalive        | uwsgi_socket_keepalive    | fastcgi_socket_keepalive    | scgi_socket_keepalive    | proxy_socket_keepalive         |
+| 忽略客户端关连接         | uwsgi_ignore_client_abort | fastcgi_ignore_client_abort | scgi_ignore_client_abort | proxy_ignore_client_abort      |
+| 设置HTTP头部用到的哈希表 |                           |                             |                          | proxy_headers_hash_bucket_size |
+| 设置HTTP头部用到的哈希表 |                           |                             |                          | proxy_headers_hash_max_size    |
+| 发送请求超时时间         | uwsgi_send_timeout        | fastcgi_send_timeout        | scgi_send_timeout        | proxy_send_timeout             |
+
+#### 接收上游响应
+
+![image-20220821200436979](assets/images/nginx/image-20220821200436979.png)
+
+#### 转发响应
+
+![image-20220821200506295](assets/images/nginx/image-20220821200506295.png)
+
+#### SSL
+
+![image-20220821201155371](assets/images/nginx/image-20220821201155371.png)
+
+
+
+#### 缓存
+
+![image-20220821201308057](assets/images/nginx/image-20220821201308057.png)
+
+![image-20220821201323946](assets/images/nginx/image-20220821201323946.png)
+
+#### 独有配置
+
+![image-20220821201349456](assets/images/nginx/image-20220821201349456.png)
 
 
 
