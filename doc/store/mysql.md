@@ -405,6 +405,8 @@ mysqldump -uroot -p123456 mydb -d > /data/mysqlDump/mydb.sql
 mysqldump -uroot -p123456 mydb -t > /data/mysqlDump/mydb.sql
 # 备份多个表的数据和结构（数据，结构的单独备份方法与上同）
 mysqldump -uroot -p123456 mydb t1 t2 > /data/mysqlDump/mydb.sql
+# 连接数据库并备份数据库表
+mysqldump -u root -h 192.168.1.23 -P 2306 -p --databases pub_param --tables tt  > tt.sql
 ```
 
 ## 还原数据库
