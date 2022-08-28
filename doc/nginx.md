@@ -1568,6 +1568,206 @@ https://github.com/FRiCKLE/ngx_cache_purge
 
 
 
+### websocket
+
+开启websocket反向代理配置
+
+```bash
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+```
+
+#### websocket协议帧
+
+WebSocket客户端与服务端通信的最小单位是帧（frame），由1个或多个帧组成一条完整的消息（message）。即：发送端将消息切割成多个帧，并发送给服务端；服务端接收消息帧，并将关联的帧重新组装成完整的消息。
+
+```text
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-------+-+-------------+-------------------------------+
+ |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+ |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+ |N|V|V|V|       |S|             |   (if payload len==126/127)   |
+ | |1|2|3|       |K|             |                               |
+ +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+ |     Extended payload length continued, if payload len == 127  |
+ + - - - - - - - - - - - - - - - +-------------------------------+
+ |                               |Masking-key, if MASK set to 1  |
+ +-------------------------------+-------------------------------+
+ | Masking-key (continued)       |          Payload Data         |
+ +-------------------------------- - - - - - - - - - - - - - - - +
+ :                     Payload Data continued ...                :
+ + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+ |                     Payload Data continued ...                |
+ +---------------------------------------------------------------+
+```
+
+第一行0、1、2、3表示4个字节，第二行表示比特。
+
+通过上图得知，一帧WebSocket数据=头 + Payload载荷，头的消息最小为2字节，最大为14字节（基本2个字节 + Extended payload length 8字节 + Masking-key 4字节 ）。
+
+
+
+##### 数据帧格式详解
+
+摘选自： [RFC 6455](https://datatracker.ietf.org/doc/rfc6455/)
+
+###### FIN: 1 bit
+
+如果是1，表示这是消息（message）的最后一个分片（fragment），如果是0，表示不是是消息（message）的最后一个分片（fragment）。
+
+###### RSV1, RSV2, RSV3: 1 bit each
+
+一般情况下全为0。当客户端、服务端协商采用WebSocket扩展时，这三个标志位可以非0，且值的含义由扩展进行定义。如果出现非零的值，且并没有采用WebSocket扩展，连接出错
+
+###### Opcode: 4 bits
+
+操作代码，Opcode的值决定了应该如何解析后续的数据载荷（data payload）。如果操作代码是不认识的，那么接收端应该断开连接（fail the connection）。
+
+```cpp
+%x0：表示一个延续帧。当Opcode为0时，表示本次数据传输采用了数据分片，当前收到的数据帧为其中一个数据分片。
+%x1：表示这是一个文本帧（frame）
+%x2：表示这是一个二进制帧（frame）
+%x3-7：保留的操作代码，用于后续定义的非控制帧。
+%x8：表示连接断开。
+%x9：表示这是一个ping操作。
+%xA：表示这是一个pong操作。
+%xB-F：保留的操作代码，用于后续定义的控制帧。
+12345678
+```
+
+通常，我们可以定一个枚举来表示帧类型
+
+```cpp
+enum WebSocketFrameType {
+  ERROR_FRAME = 0xFF00,       // 帧错误
+  INCOMPLETE_FRAME = 0xFE00,  // 不完整的帧
+
+  OPENING_FRAME = 0x3300,     // 握手
+  CLOSING_FRAME = 0x3400,
+
+  INCOMPLETE_TEXT_FRAME = 0x01,   // 不完整的文本
+  INCOMPLETE_BINARY_FRAME = 0x02, // 不完整的二进制数据
+
+  TEXT_FRAME = 0x81,      // 文本数据
+  BINARY_FRAME = 0x82,    // 二进制数据
+
+  PING_FRAME = 0x19,  // ping
+  PONG_FRAME = 0x1A   // pong
+};
+12345678910111213141516
+```
+
+###### Mask: 1 bit
+
+表示是否要对数据载荷进行掩码操作。**从客户端向服务端发送数据时，需要对数据进行掩码操作；从服务端向客户端发送数据时，不需要对数据进行掩码操作**。
+
+如果服务端接收到的数据没有进行过掩码操作，服务端需要断开连接。
+
+如果Mask是1，那么在Masking-key中会定义一个掩码键（masking key），并用这个掩码键来对数据载荷进行反掩码。**所有客户端发送到服务端的数据帧，Mask都是1**。
+
+###### Payload length
+
+数据载荷的长度，单位是字节。为7位，或7+16位，或1+64位。
+
+假设数Payload length === x，如果
+
+- x为0~126：数据的长度为x字节。
+- x为126：后续2个字节代表一个16位的无符号整数，该无符号整数的值为数据的长度。
+- x为127：后续8个字节代表一个64位的无符号整数（最高位为0），该无符号整数的值为数据的长度。
+  此外，如果payload length占用了多个字节的话，payload length的二进制表达采用网络序（big endian，重要的位在前）。
+
+###### Masking-key：0或4字节（32位）
+
+所有从客户端传送到服务端的数据帧，数据载荷都进行了掩码操作，Mask为1，且携带了4字节的Masking-key。如果Mask为0，则没有Masking-key。
+
+备注：载荷数据的长度，不包括mask key的长度。
+
+###### Payload data：(x+y) 字节
+
+载荷数据：包括了扩展数据、应用数据。其中，扩展数据x字节，应用数据y字节。
+
+扩展数据：如果没有协商使用扩展的话，扩展数据数据为0字节。所有的扩展都必须声明扩展数据的长度，或者可以如何计算出扩展数据的长度。此外，扩展如何使用必须在握手阶段就协商好。如果扩展数据存在，那么载荷数据长度必须将扩展数据的长度包含在内。
+
+应用数据：任意的应用数据，在扩展数据之后（如果存在扩展数据），占据了数据帧剩余的位置。载荷数据长度 减去 扩展数据长度，就得到应用数据的长度。
+
+
+
+##### 参考
+
+https://datatracker.ietf.org/doc/rfc6455/
+
+
+
+####  websocket协议的缺点
+
+* 数据分片有序
+  * 不支持多路复用
+* 不支持压缩
+
+> 都有对应的扩展实现
+
+
+
+### Open file cache
+
+Nginx 的 open_file_cache 相关配置可以缓存静态文件的元信息，在这些静态文件被频繁访问时可以显著提升性能。
+
+![](./assets/images/nginx/161605508571565061.png)
+
+####  实战
+
+可以使用 `strace -p nginx-worker-pid` 跟踪进程
+
+
+
+### Http2
+
+#### 主要特性
+
+* 传输数据量大幅减少
+  * 以二进制方式传输
+  * 标头压缩
+* 多路复用及相关功能
+  * 消息优先级
+* 服务器消息推送
+  * 并行推送
+
+### grpc
+
+
+
+### stream四层反向代理
+
+#### stream 模块处理请求的7个阶段
+
+##### POST_ACCEPT: realip模块
+
+通过proxy_protocol协议去除客户端真实地址，并写入remote_addr及remote_port变量。同时使用realip_remote_addr和realip_remote_port保留TCP连接中获得的原始地址。
+
+##### PREACCESS
+
+限制客户端的并发连接数。使用变量自定义限制依据，基于共享内存所有workder进程同时生效
+
+##### ACCESS
+
+根据客户端地址（realip模块可以修改地址）决定连接的访问权限
+
+##### SSL
+
+##### PREREAD
+
+##### CONTENT
+
+##### LOG
+
+
+
+
+
+
+
 ## Nginx的系统层性能优化
 
 
