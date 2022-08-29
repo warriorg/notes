@@ -1,0 +1,8 @@
+# The md5sum is designed to verify data integrity using MD5 (Message Digest Algorithm 5).
+
+# print file MD5(128-bit) checksum.
+md5sum filename
+
+# check file md5 checksum
+md5sum filename > md5sum.md5
+md5sum -c md5sum.md5

@@ -1,0 +1,16 @@
+# 输出文件的八进制、十六进制等格式编码的字节
+
+# To dump a file in octal format:
+od <binary-file>
+od -o <binary-file>
+od -t o2 <binary-file>
+
+# To dump a file in hexadecimal format:
+od -x <binary-file>
+od -t x2 <binary-file>
+
+# To dump a file in hexadecimal format, with hexadecimal offsets and a space between each byte:
+od -A x -t x1 <binary-file>
+
+# 使用单字节八进制和ASCII码进行输出，注意其中包括转义字符
+od -bc {filename} | head
