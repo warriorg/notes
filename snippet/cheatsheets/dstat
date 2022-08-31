@@ -1,0 +1,8 @@
+# dstat 是一个用来替换vmstat、iostat、netstat、nfsstat和ifstat的全能系统信息统计工具，支持数据实时刷新，输出直观易懂
+
+# 输出接下来10秒内每秒的网络数据
+dstat -tn 1 10
+
+
+# 输出接下来10秒内每秒的系统统计数据
+dstat -tnf 1 10
