@@ -1,0 +1,18 @@
+# 查看所有进程的  CPU 使用情况
+pidstat
+pidstat -u -p ALL
+
+# cpu使用情况统计
+pidstat -u
+
+# 内存使用情况统计(-r)
+pidstat -r
+
+# 显示各个进程的IO使用情况
+pidstat -d
+
+# 显示每个进程的上下文切换情况
+pidstat -w -p 2831
+
+# 显示选择任务的线程的统计信息外的额外信息
+pidstat -t -p 2831

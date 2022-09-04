@@ -1756,19 +1756,396 @@ Nginx 的 open_file_cache 相关配置可以缓存静态文件的元信息，在
 
 ##### SSL
 
+###### ssl 指令对比http模块
+
+![image-20220903200305607](./assets/images/nginx/image-20220903200305607.png)
+
 ##### PREREAD
 
 ##### CONTENT
 
 ##### LOG
 
+#### stream 方向代理指令
+
+![image-20220903202339671](./assets/images/nginx/image-20220903202339671.png)
 
 
 
+#### UDP 方向代理
 
+##### 工作原理
 
+![image-20220903203341400](./assets/images/nginx/image-20220903203341400.png)
+
+```bash
+Syntax:	proxy_requests number;
+Default:	proxy_requests 0;
+Context:	stream, server
+```
+
+* 指定一次会话 session 中最多从客户端接收到多少报文就结束session。
+  * 仅会话结束时才会记录access日志
+  * 同一个会话中，nginx使用同一端口连接上游服务
+  * 设置为0表示不限制，每次请求都会记录access日志
+
+```bash
+Syntax:	proxy_responses number;
+Default:	—
+Context:	stream, server
+```
+
+* 指定对应一个请求报文，上游返回多少个响应报文
+
+  * 与proxy_timeout结合使用，控制上游服务是否不可用
+
+  
 
 ## Nginx的系统层性能优化
+
+### 优化方法论
+
+* 从软件层面提升硬件使用效率
+  * 增大CPU的利用率
+  * 增大内存的利用率
+  * 增大磁盘IO的利用率
+  * 增大网络带宽的利用率
+* 提升硬件规格
+  * 网卡： 万兆网卡，
+  * 磁盘： 固态硬盘，关注IOPS和BPS指标
+  * CPU：更快的主频，更多的核心，更大的缓存，更优的架构
+  * 内存：更快的访问速度
+* 超出硬件性能上限后使用DNS
+
+
+
+### CPU
+
+#### 如何增大Nginx使用CPU的有效时长
+
+* 能够使用全部CPU资源
+  * master-workder多进程架构
+  * workder进程数量应当大于等于CPU核数
+* Nginx进程间不做无用功浪费CPU资源
+  * worker京城不应在繁忙时，主动让出CPU
+    * workder进程间不应该由于争抢造成资源耗散
+      * wokder进程数量应当等于CPU核数
+    * workder进程不应调用一些API导致主动让出CPU
+      * 拒绝类似的第三方模块
+* 不被其他进程争抢资源
+  * 提升优先级占用CPU更长时间
+  * 减少操作洗头膏上耗资源的非Nginx进程
+
+##### 设置workder进程的数量
+
+```bash
+Syntax:	worker_processes number | auto;
+Default:	worker_processes 1;
+Context:	main
+```
+
+#### 为什么一个CPU可以同时运行多个进程
+
+* 宏观上并行，微观上串行
+
+  * 把进程的运行时间分为一段段的时间片
+  * OS调度系统一次选择每个进程，最多执行时间片指定的时长
+
+  ![image-20220904100403694](./assets/images/nginx/image-20220904100403694.png)
+
+* 阻塞API引发的时间片内主动让出CPU
+  * 速度不一致引发的阻塞API
+    * 硬件执行速度不一致，例如CPU和磁盘
+  * 业务场景产生的阻塞API
+    * 例如同步读网络报文
+
+
+
+#### 减少进程间切换
+
+* Nginx workder 尽可能的处于R状态
+  * R状态的进程数量大于CPU核心时，负载急速增高
+* 尽可能的减少进程间切换
+  * 进程间切换是指CPU从一个进程或线程切换到另一个进程或线程
+    * 主动切换
+    * 被动切换：时间片耗尽
+  * Cost：<5us
+  * 减少主动切换
+  * 减少被动切换
+    * 增大进程优先级
+* 绑定CPU
+
+#### 延迟处理新连接
+
+![image-20220904101450893](./assets/images/nginx/image-20220904101450893.png)
+
+#### 如何查看上下文切换次数
+
+##### vmstat
+
+![image-20220904101754647](assets/images/nginx/image-20220904101754647.png)
+
+##### dstat
+
+![image-20220904101935439](assets/images/nginx/image-20220904101935439.png)
+
+##### pidstat -w
+
+```bash
+pidstat -w -p 1 1 
+```
+
+
+
+![image-20220904102057896](./assets/images/nginx/image-20220904102057896.png)
+
+#### 什么决定CPU时间片的大小
+
+* Nice静态优先级：-29 ~ 19
+* Priority动态优先级： 0-139
+
+![image-20220904102829052](./assets/images/nginx/image-20220904102829052.png)
+
+
+
+#### 设置workder进程的静态优先级
+
+```bash
+Syntax:	worker_priority number;
+Default:	worker_priority 0;
+Context:	main
+```
+
+定义工作进程的调度优先级，就像nice命令一样：负数表示更高的优先级。允许范围通常在-20到20之间。
+
+#### 多核间的负载均衡
+
+##### worker进程间负载均衡
+
+![image-20220904162357638](./assets/images/nginx/image-20220904162357638.png)
+
+ ##### 多队列网卡对多核CPU的优化
+
+![image-20220904162654677](./assets/images/nginx/image-20220904162654677.png)
+
+##### 提升CPU缓存命中率： worker_cpu_affinity
+
+![image-20220904162837024](./assets/images/nginx/image-20220904162837024.png)
+
+> /sys/devices/system/cpu/cpu0/cache/index1/size   查看CPU缓存大小
+>
+> /sys/devices/system/cpu/cpu0/cache/index1/shared_cpu_list   查看CPU缓存共享的列表
+
+##### 绑定worker到指定CPU
+
+```bash
+Syntax:	worker_cpu_affinity cpumask ...;
+		worker_cpu_affinity auto [cpumask];
+Default:	—
+Context:	main
+```
+
+##### NUMA架构
+
+![image-20220904163521007](./assets/images/nginx/image-20220904163521007.png)
+
+> numactl --hardware
+>
+> numastat				# 查看numa架构缓存命中
+
+### 网络
+
+#### 控制TCP三次握手参数
+
+![image-20220904163957363](./assets/images/nginx/image-20220904163957363.png)
+
+ ##### SYN_SENT状态
+
+* net.ipv4.tcp_syn_retries=6
+  * 主动建立连接时，发SYN的重试次数
+* net.ipv4.ip_local_port_range=32768 60999
+  * 建立连接时的本地端口可用范围
+
+##### SYN_RCVD状态
+
+* net.ipv4.tcp_max_syn_backlog
+  * SYN_RCVD状态连接的最大个数
+* net.ipv4.tcp_synack_retries
+  * 被动建立连接时，发SYN/ACK的重试次数
+
+
+
+##### LInux处理三次握手
+
+![image-20220904165943115](./assets/images/nginx/image-20220904165943115.png)
+
+
+
+##### 主动建立连接时应用层超时时间
+
+```bash
+Syntax:	proxy_connect_timeout time;
+Default:	proxy_connect_timeout 60s;
+Context:	http, server, location
+```
+
+#### TCP连接的优化
+
+##### 如何应对SYN攻击
+
+攻击者短时间伪造不同IP地址的SYN报文，快速占满backlog队列，使服务器不饿能为正常用户服务
+
+* net.core.netdev_max_backlog
+  * 接收子网卡、但未被内核协议栈处理的报文队列长度
+* net.ipv4.tcp_max_syn_backlog
+  * SYN_RCVD状态连接的最大个数
+* net.ipv4.tcp_abort_on_overflow
+  * 超出处理能力时，对新来的SYN直接回包RST，丢弃连接
+
+
+
+###### tcp_syncookies
+
+![image-20220904170901538](./assets/images/nginx/image-20220904170901538.png)
+
+##### 一切皆文件：句柄数的上限
+
+* 操作系统全局
+
+  * fs.file-max
+    * 操作系统可使用的最大句柄数
+  * 使用fs.file-nr可以查看当前已分配、正使用、上限
+    * fs.file-nr=21632 0 40000500
+
+  ```bash
+  sysctl -a | grep file-max  
+  sysctl -a | grep file-nr
+  ```
+
+* 限制用户
+
+  * /etc/security/limits.conf
+    * root soft nofile 65535
+    * root hard nofile 65535
+
+* 限制进程
+
+  ```bash
+  Syntax:	worker_rlimit_nofile number;
+  Default:	—
+  Context:	main
+  ```
+
+  
+
+##### 设置worker进程最大连接数量
+
+```bash
+Syntax:	worker_connections number;
+Default:	worker_connections 512;
+Context:	events
+```
+
+包括nginx与上游、下游间的连接
+
+##### 两个队列的长度
+
+* SYN 队列未完成握手
+  * net.ipv4.tcp_max_syn_backlog=262144
+* ACCEPT队列已完成握手
+  * net.core.somaxconn
+    * 系统级最大backlog队列长度
+
+```bash
+Syntax:	listen address[:port] [backlog=number] 				[
+Default:	listen *:80 | *:8000;
+Context:	server
+```
+
+
+
+##### Tcp Fast Open
+
+![image-20220904172146691](./assets/images/nginx/image-20220904172146691.png)
+
+* net.ipv4.tcp_fastopen：系统开启TFO功能
+  * 0： 关闭
+  * 1：作为客户端时可以使用TFO
+  * 2：作为服务器时可以使用TFO
+  * 3：无论作为客户端还时服务器，都可以使用TFO
+
+```bash\
+Syntax:	listen address[:port] [fastopen=number] 				[
+Default:	listen *:80 | *:8000;
+Context:	server
+```
+
+* fastopen=number 
+  * 为防止带数据的SYN攻击，限制最大长度，指定TFO连接队列的最大长度
+
+
+
+#### 滑动窗口与缓冲区
+
+![image-20220904184652496](./assets/images/nginx/image-20220904184652496.png)
+
+##### 通告窗口
+
+![image-20220904184737449](./assets/images/nginx/image-20220904184737449.png)
+
+##### 发送TCP消息
+
+![image-20220904190438209](./assets/images/nginx/image-20220904190438209.png)
+
+##### TCP消息接收
+
+![image-20220904190520634](./assets/images/nginx/image-20220904190520634.png)
+
+##### TCP消息接收发生CS
+
+![image-20220904190606840](./assets/images/nginx/image-20220904190606840.png)
+
+##### TCP消息接收时新报文到达
+
+![image-20220904190852730](./assets/images/nginx/image-20220904190852730.png)
+
+##### nginx 的超时指令与滑动窗口
+
+```bash
+Syntax:	client_body_timeout time;
+Default:	
+client_body_timeout 60s;
+Context:	http, server, location
+```
+
+* 两次读操作间的超时
+
+```bash
+Syntax:	send_timeout time;
+Default:	send_timeout 60s;
+Context:	http, server, location
+```
+
+* 两次写操作间的超时
+
+```bash
+Syntax:	proxy_timeout timeout;
+Default:	proxy_timeout 10m;
+Context:	stream, server
+```
+
+* 以上两者兼具
+
+##### 丢包重传
+
+* 限制重传次数
+  * net.ipv4.tcp_retries1 = 3
+    * 达到上限后，更新路由缓存
+  * net.ipv4.tcp_retries2 = 15
+    * 达到上限后，关闭TCP连接
+  * 仅作近似理解，实际以超时时间为准，可能少于retries次数就认定达到上限
+
+
 
 
 
