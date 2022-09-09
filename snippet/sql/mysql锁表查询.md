@@ -84,6 +84,19 @@ SELECT * FROM performance_schema.data_lock_waits\G;
 SELECT * FROM performance_schema.innodb_lock_waits\G;
 
 
+-- 查看超时时间 单位为秒
+show variables like '%wait_timeout%'
++--------------------------+----------+
+| Variable_name            | Value    |
++--------------------------+----------+
+| innodb_lock_wait_timeout | 50       |
+| lock_wait_timeout        | 31536000 |
+| mysqlx_wait_timeout      | 28800    |
+| wait_timeout             | 28800    |
++--------------------------+----------+
+
+
+
 -- 关闭线程,释放事务
 kill 73430;
 
