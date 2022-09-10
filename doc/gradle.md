@@ -4,6 +4,28 @@
 
 
 
+## 包依赖
+
+```groovy
+// 引入当前项目中的jar
+api fileTree(dir: 'libs', include: ['*.jar']
+// 引入其他项目
+api project(":infrastructure")
+```
+
+### copy 依赖
+
+```groovy
+sourceSets.main.resources {
+    srcDirs = ['src/main/java']
+    include '**/*.xml'
+}
+```
+
+
+
+
+
 # [The Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_usage)
 
 The following graph describes the main configurations setup when the Java Library plugin is in use.

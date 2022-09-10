@@ -1,0 +1,2 @@
+# print currect project version
+gradle properties -q | grep "version:" | awk '{print $2}'
