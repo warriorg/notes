@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "doc/make.md",
+            "file": "doc/web.md",
             "mode": "source",
             "source": false
           }
@@ -40,7 +40,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#news",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -49,7 +49,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -69,7 +70,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/make.md",
+                "file": "doc/web.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -86,7 +87,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/make.md",
+                "file": "doc/web.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -109,12 +110,20 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/make.md"
+                "file": "doc/web.md"
               }
+            }
+          },
+          {
+            "id": "c54193f6fb8ffd71",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {}
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -122,15 +131,15 @@
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
+    "doc/DSA.md",
+    "doc/store/sqlite.md",
+    "doc/store/etcd.md",
+    "doc/ca.md",
     "doc/RaspBerryPi.md",
-    "doc/react.md",
-    "doc/ReadingNotes.md",
-    "doc/Sentinel.md",
-    "doc/store/redis.md",
-    "doc/linux/shell.md",
-    "doc/linux/ssh.md",
-    "doc/linux/Linux.md",
-    "doc/linux/curl.md",
-    "doc/linux/catalog.md"
+    "algorithms/leetcode/2. Add Two Numbers/readme.md",
+    "algorithms/algorithms/src/datastructures/sort/readme.md",
+    "post/2021/整洁架构.md",
+    "doc/monitor/loki.md",
+    "doc/make.md"
   ]
 }
