@@ -5,7 +5,7 @@
 * 主节点 承载着Kubernetes控制和管理整个集群系统的控制面板
 * 工作节点 运行用户实际部署的应用
 
-![image-20200512185216239](assets/images/image-20200512185216239.png)
+![image-20200512185216239](../assets/images/image-20200512185216239.png)
 
 ### 控制面板
 
@@ -81,7 +81,7 @@ brew cask install minikube
 
 #### 启用k8s 
 
-![macos_docker_k8s_install](./assets/images/macos_docker_k8s_install.png)
+![macos_docker_k8s_install](../assets/images/macos_docker_k8s_install.png)
 
 安装完毕后，如果勾选了 Show system containers 选项，那么使用如下的 Docker 命令，能看到自动安装的 Kubernetes 相关容器
 
@@ -259,7 +259,7 @@ spec:
 kubectl get service -n rook-ceph
 ```
 
-![rook-ceph-mgr-dashboard](./assets/images/rook-ceph-mgr-dashboard.jpg)
+![rook-ceph-mgr-dashboard](../assets/images/rook-ceph-mgr-dashboard.jpg)
 
 访问地址`http://localhost:31695`, Rook 创建了一个默认的用户 admin，并在运行 Rook 的命名空间中生成了一个名为 `rook-ceph-dashboard-admin-password` 的 Secret，运行以下命令获取密码。
 
@@ -277,7 +277,7 @@ kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['dat
 
 ##### 背后的原理
 
-![image-20200512190107940](assets/images/image-20200512190107940.png)
+![image-20200512190107940](../assets/images/image-20200512190107940.png)
 
 #### 为镜像创建Dockerfile
 
@@ -289,7 +289,7 @@ ENTRYPOINT ["node", "app.js"] # 运行node命令
 
 #### 构建容器镜像
 
-![image-20200512190647676](assets/images/image-20200512190647676.png)
+![image-20200512190647676](../assets/images/image-20200512190647676.png)
 
 ##### 镜像的构建过程
 
@@ -299,7 +299,7 @@ ENTRYPOINT ["node", "app.js"] # 运行node命令
 
 ##### 镜像分层
 
-![image-20200512190920937](assets/images/image-20200512190920937.png)
+![image-20200512190920937](../assets/images/image-20200512190920937.png)
 
 ## 集群
 
@@ -503,7 +503,7 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 kubectl edit cm kubeadm-config -n kube-system
 ```
 
-![image-20210713173917053](assets/images/image-20210713173917053.png)
+![image-20210713173917053](../assets/images/image-20210713173917053.png)
 
 修改 controller-manager 静态 pod 的启动参数，增加 --allocate-node-cidrs=true --cluster-cidr=10.244.0.0/16
 
@@ -511,7 +511,7 @@ kubectl edit cm kubeadm-config -n kube-system
 vim /etc/kubernetes/manifests/kube-controller-manager.yaml 
 ```
 
-![image-20210713174338224](assets/images/image-20210713174338224.png)
+![image-20210713174338224](../assets/images/image-20210713174338224.png)
 
 ```bash
 # 检查配置是否生效
@@ -546,7 +546,7 @@ kubectl get pod -n kube-system -o wide
 
 完成图如下
 
-![image-20210713210119576](assets/images/image-20210713210119576.png)
+![image-20210713210119576](../assets/images/image-20210713210119576.png)
 
 
 
@@ -604,7 +604,7 @@ kubectl apply -f deploy.ymal
 
 ### Namespace
 
-## Controller
+### Controller
 
 ### Deployment
 
@@ -617,6 +617,175 @@ kubectl apply -f deploy.ymal
 ### ReplicaSet
 
 ### Job
+
+
+
+# 网络原理
+
+## kubernetes网络模型
+
+Kubernetes网络模型设计的一个基础原则是：每个Pod都拥有一个独立的IP地址，并假定所有Pod都在一个可以直接连通的、扁平的网络空间中。所以不管它们是否运行在同一个Node（宿主机）中，都要求它们可以直接通过对方的IP进行访问。设计这个原则的原因是，用户不需要额外考虑如何建立Pod之间的连接，也不需要考虑如何将容器端口映射到主机端口等问题。
+
+在Kubernetes世界里，IP是以Pod为单位进行分配的。一个Pod内部的所有容器共享一个网络堆栈（相当于一个网络命名空间，它们的IP地址、网络设备、配置等都是共享的）。按照这个网络原则抽象出来的为每个Pod都设置一个IP地址的模型也被称作IPperPod模型。
+
+Kubernetes 对集群网络的基本要求
+
+1. 所有Pod都可以在不用NAT的方式下同别的Pod通信。
+2. 在所有节点上运行的代理程序（例如kubelet或操作系统守护进程）都可以在不用NAT的方式下同所有Pod通信，反之亦然。
+3. 以 hostnetwork 模式运行的Pod都可以在不用NAT的方式下同别的Pod通信。
+
+## Docker网络基础
+
+### 网络命名空间（Network Namespace）
+
+#### 网络命名空间实现
+
+![image-20220923152902785](../assets/images/image-20220923152902785.png)
+
+#### 对网络命名空间的操作
+
+Linux的网络协议栈是十分复杂的，为了支持独立的协议栈，相关的这些全局变量都必须被修改为协议栈私有。最好的办法就是让这些全局变量成为一个NetNamespace变量的成员，然后为协议栈的函数调用加入一个Namespace参数。这就是Linux实现网络命名空间的核心。
+
+```bash
+# 创建一个命名空间
+ip netns add <name>
+# 在命名空间中运行命令
+ip netns exec <name> <command>
+# 通过bash命令进入内部的shell界面
+ip netns exec <name> bash
+```
+
+### Veth设备对
+
+引入Veth设备对是为了在不同的网络命名空间之间通信，利用它可以直接将两个网络命名空间连接起来。由于要连接两个网络命名空间，所以Veth设备都是成对出现的，很像一对以太网卡，并且中间有一根直连的网线。既然是一对网卡，那么我们将其中一端称为另一端的peer。在Veth设备的一端发送数据时，它会将数据直接发送到另一端，并触发另一端的接收操作。
+
+![image-20220923152943564](../assets/images/image-20220923152943564.png)
+
+#### 对Veth设备对的操作命令
+
+```bash
+# 创建Veth设备对
+ip link add veth0 type veth peer name veth1
+# 查看所有网络接口
+ip link show 
+# 设置 veth1 到 netns1 的命名空间
+ip link set veth1 netns netns1
+# 在 netns1 网络命名空间中查看veth1设备
+ip netns exec netns1 ip link show
+# 分配IP
+ip netns exec netns1 ip addr add 10.1.1.1/24 dev veth1
+ip addr add 10.1.1.2/24 dev veth0
+# 重新启动
+ip netns exec netns1 ip link set dev veth1 up
+ip link set dev veth0 up
+# 现在两个网络命名空间就可以相互通信了
+```
+
+#### Veth设备如何查看对端
+
+```bash
+# 在命名空间netns1中查看veth设备对端在设备列表中的序列号
+ip netns exec netns1 ethtool -S veth1
+# 在另一段查看
+ip netns exec netns2 ip link 
+```
+
+### 网桥
+
+网桥是一个二层的虚拟网络设备，把若干个网络接口“连接”起来，以使得网络接口之间的报文能够相互转发。网桥能够解析收发的报文，读取目标MAC地址的信息，将其与自己记录的MAC表结合，来决策报文的转发目标网络接口。
+
+#### linux 网桥的实现
+
+![image-20220923160427323](../assets/images/image-20220923160427323.png)
+
+#### Bridge常用操作
+Docker自动完成了对网桥的创建和维护。如果想要进一步理解网桥，可以看下如下举的一些常用操作命令。
+
+新增一个网桥：
+
+```bash
+brctl addbr xxxxx
+```
+
+在新增网桥的基础上增加网口，在linux中，一个网口其实就是一个物理网卡。将物理网卡和网桥连接起来：
+
+```bash
+brctl addif xxxx ethx
+```
+
+网桥的物理网卡作为一个网口，由于在链路层工作，就不再需要IP地址了，这样上面的IP地址自然失效：
+
+```bash
+ipconfig ethx 0.0.0.0
+```
+
+
+给网桥配置一个IP地址：
+
+```bash
+ipconfig brxxx xxx.xxx.xxx.xxx
+```
+
+
+这样网桥就是一个有了IP地址，而连接在这之上的网卡就是一个纯链路层设备了。
+
+
+
+### iptables 和 Netfilter
+
+在Linux网络协议栈中有一组回调函数挂接点，通过这些挂接点挂接的钩子函数可以在Linux网络栈处理数据包的过程中对数据包进行一些操作，例如过滤、修改、丢弃等。该挂接点技术就叫作Netfilter和iptables。
+
+Netfilter负责在内核中执行各种挂接的规则，运行在内核模式中；而iptables是在用户模式下运行的进程，负责协助和维护内核中Netfilter的各种规则表。二者相互配合来实现整个Linux网络协议栈中灵活的数据包处理机制。
+
+![image-20220923160632521](../assets/images/image-20220923160632521.png)
+
+#### 规则表Table
+
+这些挂载点能挂接的规则也分不同的类型，目前主要支持的Table类型如下：
+
+* RAW
+* MANGLE
+* NAT
+* FILTER
+
+上述4个规则链的优先级是RAW最高，FILTER最低。
+
+在实际应用中，不同挂接点需要的规则类型通常不同。例如，在Input的挂接点上明显不需要FILTER的过滤规则，因为根据目标地址，已经在本机的上层协议栈了，所以无需再挂载FILTER过滤规则。
+
+![image-20220923160906937](../assets/images/image-20220923160906937.png)
+
+#### iptable命令
+
+```bash
+# 按照命令的方式打印iptables的内容
+iptables-save
+```
+
+
+
+### 路由
+
+Linux系统包含一个完整的路由功能。当IP层在处理数据发送或者转发时，会使用路由表来决定发往哪里。
+
+路由表中的数据一般是以条目形式存在的。一个典型的路由表条目通常包含以下主要的条目项。
+
+* 目的IP地址：此字段表示目标的IP地址。这个IP地址可以是某主机的地址，也可以是一个网络地址。如果这个条目包含的是一个主机地址，那么它的主机ID将被标记为非零；如果这个条目包含的是一个网络地址，那么它的主机ID将被标记为零。
+
+* 下一个路由器的IP地址：这里采用“下一个”的说法，是因为下一个路由器并不总是最终的目的路由器，它很可能是一个中间路由器。条目给出的下一个路由器的地址用来转发在相应接口接收到的IP数据报文。
+
+* 标志：这个字段提供了另一组重要信息，例如，目的IP地址是一个主机地址还是一个网络地址。此外，从标志中可以得知下一个路由器是一个真实路由器还是一个直接相连的接口。
+
+* 网络接口规范：为一些数据报文的网络接口规范，该规范将与报文一起被转发。
+
+  
+
+## Docker 网络实现
+
+
+
+
+
+
 
 
 
@@ -666,8 +835,6 @@ kubectl delete -f nginx-deployment.yaml   # 删除容器
 
 
 
-
-### 
 
 ## kubectl 命令
 
@@ -910,4 +1077,30 @@ kubectl scale --replicas=5 rc/foo rc/bar rc/baz # 伸缩多个副本控制器
 ```
 
  
+
+# trouble shooting
+
+## 查看系统Event
+
+```bash
+kubectl describe pod redis-master-bobr0
+```
+
+通过kubectldescribepod命令，可以显示Pod创建时的配置定义、状态等信息，还可以显示与该Pod相关的最近的Event（事件），事件信息对于查错非常有用。如果某个Pod一直处于Pending状态，我们就可以通过kubectl describe命令了解具体原因。例如，从Event事件中获知Pod失败的原因可能有以下几种。
+
+* 没有可用的Node以供调度。
+* 开启了资源配额管理，但在当前调度的目标节点上资源不足。
+* 镜像下载失败。
+
+通过kubectl describe命令，我们还可以查看其他Kubernetes对象，包括Node、RC、Service、Namespace、Secrets等，对每种对象都会显示相关的其他信息。
+
+## 查看容器日志
+
+```bash
+kubectl logs <pod-name>
+```
+
+## 查看 Kubernetes 服务日志
+
+
 

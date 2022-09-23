@@ -7,12 +7,8 @@
         "id": "a49b96210a818a01",
         "type": "leaf",
         "state": {
-          "type": "markdown",
-          "state": {
-            "file": "doc/web.md",
-            "mode": "source",
-            "source": false
-          }
+          "type": "graph",
+          "state": {}
         }
       }
     ],
@@ -48,9 +44,16 @@
                 "sortOrder": "alphabetical"
               }
             }
+          },
+          {
+            "id": "c8a6d3b381e64e5e",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -70,7 +73,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/web.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -87,7 +89,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/web.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -109,9 +110,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "doc/web.md"
-              }
+              "state": {}
             }
           },
           {
@@ -131,15 +130,15 @@
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
-    "doc/DSA.md",
-    "doc/store/sqlite.md",
-    "doc/store/etcd.md",
-    "doc/ca.md",
-    "doc/RaspBerryPi.md",
-    "algorithms/leetcode/2. Add Two Numbers/readme.md",
-    "algorithms/algorithms/src/datastructures/sort/readme.md",
-    "post/2021/整洁架构.md",
-    "doc/monitor/loki.md",
-    "doc/make.md"
+    "2022-09-21.md",
+    "post/2022/分布式锁.md",
+    "README.md",
+    "snippet/sql/替换OR, 使用exists.md",
+    "snippet/sql/分组后取出最新的记录.md",
+    "snippet/sql/mysql锁表查询.md",
+    "snippet/go/README.md",
+    "mind/云原生.mm.md",
+    "doc/electron.md",
+    "doc/elasticsearch.md"
   ]
 }
