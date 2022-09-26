@@ -201,7 +201,7 @@ $ docker commit <container> <some_name>
 
 * 新卷的内容可以由容器预先填充。
 
-![types-of-mounts-volume.png](./assets/images/types-of-mounts-volume.png)
+![types-of-mounts-volume.png](../assets/images/types-of-mounts-volume.png)
 
 ```bash
 # create volume
