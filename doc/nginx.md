@@ -2147,6 +2147,399 @@ Context:	stream, server
 
 
 
+##### TCP缓冲区
+
+* `net.ipv4.tcp_rmem = 4096        131072  6291456`
+
+  * 读缓冲最小值、默认值、最大值，单位字节，覆盖 `net.core.rmem_max`
+* `net.ipv4.tcp_wmem = 4096        16384   4194304`
+
+  * 写缓存最小值、默认值、最大值，单位字节，覆盖`net.core.wmem_max`
+* `net.ipv4.tcp_mem = 141147       188198  282294`
+
+  * 系统无内存压力、启动压力模式阈值、最大值，单位为页的数量
+* `net.ipv4.tcp_moderate_rcvbuf = 1`
+
+  * 开启自动调整缓存模式
+* `net.ipv4.tcp_adv_win_scale = 1`
+
+  * 调整接收窗口与应用缓存
+  * 应用缓存 = buffer / （2 ^ tcp_adv_win_scale)
+  
+
+> sysctl -a | grep net.ipv4.tcp_rmem
+
+```bash
+Syntax:	listen address[:port] [rcvbuf=size] [sndbuf=size];
+Default:	listen *:80 | *:8000;
+Context:	server
+```
+
+##### BDP=带宽 * 时延，吞吐量=窗口/时延
+
+![image-20220910212347140](./assets/images/nginx/image-20220910212347140.png)
+
+##### 禁用Nagle算法
+
+![image-20220910212733719](assets/images/nginx/image-20220910212733719.png)
+
+##### nginx 避免发送小报文
+
+```bash
+Syntax:		postpone_output size;
+Default:	postpone_output 1460;
+Context:	http, server, location
+```
+
+##### 启用CORK算法
+
+仅针对`sendfile on`开启时有效，完全禁止小报文的发送，提升网络效率
+
+```bash
+Syntax:		tcp_nopush on | off;
+Default:	tcp_nopush off;
+Context:	http, server, location
+```
+
+#### 慢启动与拥塞窗口
+
+##### 流量控制
+
+* 拥塞窗口
+  * 发送方主动限制流量
+* 通告窗口（对端接收窗口）
+  * 接收放限制流量
+* 实际流量
+  * 拥塞窗口与通告窗口的最小值
+
+##### 拥塞处理
+
+* 慢启动
+  * 指数扩展拥塞窗口（cwnd为拥塞窗口大小）
+    * 每收到1个ACK，cwnd = cwnd +1
+    * 每过一个RTT，cwnd = cwnd * 2
+* 拥塞避免：窗口大于threshold
+  * 线性扩展拥塞窗口
+    * 每收到1个ACK，cwnd = cwnd + 1/cwnd
+    * 每过一个RTT，窗口加1
+* 拥塞发生
+  * 急速降低拥塞窗口
+    * RTO超时，threshold = cwnd/2,cwnd=1
+    * Fast Retransmit, 收到3个duplicate ACK, cwnd=cwnd/2,threshold=cwnd
+* 快速恢复
+  * 当Fast Retransmit出现时，cwnd调整为threshold + 3*MSS
+
+##### TCP slow start
+
+##### RTT与RTO
+
+![image-20220911205020785](assets/images/nginx/image-20220911205020785.png)
+
+
+
+#### TCP 协议的keepalive功能
+
+##### 应用场景
+
+* 检测实际断掉的连接
+* 用于维持与客户端间的防火墙有活跃网络包
+
+##### 功能
+
+* nginx的 TCP keepalive
+  * so_keepalive=30m::10
+  * keepidle,keepintvl,keepcnt
+* Linux的tcp keepalive
+  * net.ipv4.tcp_keepalive_intvl = 75
+    * 探测包发送间隔
+  * net.ipv4.tcp_keepalive_probes = 9
+    * 探测包重试次数
+  * net.ipv4.tcp_keepalive_time = 7200
+    * 发送心跳周期，单位秒
+
+#### 减少关闭连接的time_wait端口数量
+
+##### TCP连接
+
+![image-20220912183925617](assets/images/nginx/image-20220912183925617.png)
+
+##### 被动关闭连接端的状态
+
+* CLOSE_WAIT状态
+  * 应用进程没有及时响应对端关闭连接
+* LAST_ACK状态
+  * 等待接收主动关闭端操作系统发来的针对FIN的ACK报文
+
+##### 主动关闭连接端的状态
+
+* fin_wait1状态
+
+  * `net.ipv4.tcp_orphan_retries = 0`
+
+    * 发送FIN报文的重试次数，0相当于8
+
+* fin_wait2状态
+
+  * `net.ipv4.tcp_fin_timeout = 60`
+    * 保持在FIN_WAIT_2状态的时间
+
+* time_wait状态有什么作用？
+
+##### TIME_WAIT状态过短或者不存在会怎么样
+
+![image-20220912184757640](./assets/images/nginx/image-20220912184757640.png)
+
+##### TIME_WAIT优化：tcp_tw_reuse
+
+![image-20220912185007934](./assets/images/nginx/image-20220912185007934.png)
+
+##### TIME_WAIT优化
+
+* `net.ipv4.tcp_tw_recycle=0`
+  * 开启后，同时作为客户端和服务器都可以使用TIME-WAIT状态的端口
+  * 不安全，无法避免报文延迟、重复等给新连接造成混乱
+* `net.ipv4.tcp_max_tw_buckets=262144`
+  * time_wait状态连接的最大数量
+  * 超出后直接关闭连接
+
+
+
+#### lingering_close延迟关闭TCP连接
+
+##### lingering_close延迟关闭的意义
+
+当nginx处理完成调用close关闭连接后，若接收缓冲区仍然收到客户端发来的内容，则服务器会向客户端发送RST包关闭连接，导致客户端由于收到RST而忽略了http response。
+
+##### lingering_close配置指令
+
+![image-20220925104131908](./assets/images/nginx/image-20220925104131908.png)
+
+##### 以RST代替正常的四次握手关闭连接
+
+当其他读、写超时指令生效引发连接关闭时，通过发送RST立刻释放端口、内存等资源来关闭连接
+
+```bash
+Syntax:		reset_timedout_connection on | off;
+Default:	reset_timedout_connection off;
+Context:	http, server, location
+```
+
+#### 应用层协议的优化
+
+##### TLS/SSL 优化握手性能
+
+```bash
+Syntax:	ssl_session_cache off | none | [builtin[:size]] [shared:name:size];
+Default:	ssl_session_cache none;
+Context:	http, server
+```
+
+* **off** 不使用Session缓存，且Nginx在协议中明确告诉客户端Session缓存不被使用
+* **none** 不适用Session缓存
+* **builtin** 使用Openssl的Session缓存，由于在内存中使用，所以仅当同一客户端的两次连接都命中到同一个worker进程时，Session缓存才会生效
+* **shared::name::size** 定义共享内存，为所有worker进程提供Session缓存服务。1MB大约可用与4000个Session
+
+
+
+##### TLS/SSL中的会话票证tickets
+
+Nginx将会话Session中的信息作为tickets加密发给客户端，当客户端下次发起TLS连接时带上tickets，由nginx解密验证后复用会话Session。
+
+会话票证虽然更易在Nginx集群中使用，但破坏了TLS/SSL的安全机制，由安全风险，必须频繁更换tickets密钥
+
+是否开启会话票证服务：
+
+```bash
+Syntax:	ssl_session_tickets on | off;
+Default:	ssl_session_tickets on;
+Context:	http, server
+```
+
+使用会话票证时加密tickets的密钥文件
+
+```bash
+Syntax:	ssl_session_ticket_key file;
+Default:	—
+Context:	http, server
+```
+
+##### HTTP 长连接
+
+* 减少握手次数
+* 通过减少并发连接数减少了服务器资源的消耗
+* 降低TCP拥塞控制的影响
+
+```bash
+Syntax:		keepalive_requests number;
+Default:	keepalive_requests 1000;
+Context:	http, server, location
+```
+
+```bash
+Syntax:		keepalive_requests number;
+Default:	keepalive_requests 1000;
+Context:	upstream     # 在上游服务中使用
+```
+
+##### gzip压缩
+
+通过实施压缩http包体，提升网络传输效率
+
+```bash
+Syntax:	gzip on | off;
+Default:	gzip off;
+Context:	http, server, location, if in location
+```
+
+###### 压缩那些请求的响应
+
+```bash
+Syntax:	gzip_types mime-type ...;
+Default:	gzip_types text/html;
+Context:	http, server, location
+```
+
+```bash
+Syntax:	gzip_min_length length;
+Default:	gzip_min_length 20;
+Context:	http, server, location
+```
+
+```bash
+Syntax:	gzip_disable regex ...;
+Default:	—
+Context:	http, server, location
+```
+
+```bash
+Syntax:	gzip_http_version 1.0 | 1.1;
+Default:	gzip_http_version 1.1;
+Context:	http, server, location
+```
+
+###### 是否压缩上游的响应
+
+```bash
+Syntax:	gzip_proxied off | expired | no-cache | no-store | private | no_last_modified | no_etag | auth | any ...;
+Default:	gzip_proxied off;
+Context:	http, server, location
+```
+
+* **off** 不压缩来自上游的响应
+* **expired** 如果上游响应中含有Expires头部，且其值中的时间与系统时间比较后确定不会缓存，则压缩响应
+* **no-cache** 如果上游响应中含有`Cache-Control`头部，且其值含有`no-cache`值，则压缩响应
+* **no-store** 如果上游响应中含有`Cache-Control`头部，且其值含有`no-store`值，则压缩响应
+* **private** 如果上游响应中含有`Cache-Control`头部，且其值含有`private`值，则压缩响应
+* **no_last_modified** 如果上游响应中没有`Last-Modified`头部，则压缩响应
+* **no_etag** 如果上游响应中没有`ETag`头部，则压缩响应
+* **auth** 如果客户端请求中含有`Authorization`头部，则压缩响应
+* **any** 压缩所有来自上游的响应
+
+###### 其他参数
+
+```bash
+Syntax:	gzip_comp_level level;
+Default:	gzip_comp_level 1;
+Context:	http, server, location
+```
+
+```bash
+Syntax:	gzip_buffers number size;
+Default:	gzip_buffers 32 4k|16 8k;
+Context:	http, server, location
+```
+
+```bash
+Syntax:	gzip_vary on | off;
+Default:	gzip_vary off;
+Context:	http, server, location
+```
+
+##### 升级更高效的http2协议
+
+* 向前兼容http/1.x协议
+* 传输效率大幅度提升
+
+### 磁盘IO
+
+#### 减少磁盘IO
+
+##### 优化读取
+
+* Sendfile 零拷贝
+* 内存盘、SSD盘
+
+##### 减少写入
+
+* AIO
+* 增大error_log级别
+* 关闭access_log
+* 压缩access_log
+* 是否启用proxy buffering
+* syslog 替代本地IO
+
+##### 线程池 thread pool
+
+![image-20220925194827899](./assets/images/nginx/image-20220925194827899.png)
+
+##### 直接IO绕开磁盘告诉缓存
+
+![image-20220925195011185](./assets/images/nginx/image-20220925195011185.png)
+
+##### 适用于大文件：直接IO
+
+当磁盘上的文件大小超过size后，启用directIO功能，避免Buffered IO模式下磁盘也缓存中的拷贝消耗
+
+```bash
+Syntax:	directio size | off;
+Default:	directio off;
+Context:	http, server, location
+```
+
+```bash
+Syntax:	directio_alignment size;
+Default:	directio_alignment 512;
+Context:	http, server, location
+```
+
+##### 异步IO
+
+![image-20220925200032059](assets/images/nginx/image-20220925200032059.png)
+
+```bash
+Syntax:	aio on | off | threads[=pool];
+Default:	aio off;
+Context:	http, server, location
+```
+
+```bash
+Syntax:	aio_write on | off;
+Default:	aio_write off;
+Context:	http, server, location
+```
+
+##### 异步读IO线程池
+
+![image-20220925200256666](assets/images/nginx/image-20220925200256666.png)
+
+##### 定义线程池
+
+```bash
+Syntax:	thread_pool name threads=number [max_queue=number];
+Default:	thread_pool default threads=32 max_queue=65536;
+Context:	main
+```
+
+##### 异步IO中的缓存
+
+将磁盘文件读入缓冲中待处理，例如gzip模块会使用
+
+```bash
+Syntax:	output_buffers number size;
+Default:	output_buffers 2 32k;
+Context:	http, server, location
+```
+
 
 
 ##  Nginx 与 OpenResty
