@@ -9,13 +9,11 @@
 ### docker
 
 #### Install
-
 ```bash
 docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
 ```
 
 #### update
-
 ```bash
 docker plugin disable loki --force
 docker plugin upgrade loki grafana/loki-docker-driver:latest --grant-all-permissions
@@ -24,14 +22,12 @@ systemctl restart docker
 ```
 
 #### uninstall
-
 ```bash
 docker plugin disable loki --force
 docker plugin rm loki
 ```
 
 ####  Configuring
-
 ```bash
 docker run --log-driver=loki \
     --log-opt loki-url="http://loki:3100/loki/api/v1/push" \
@@ -41,7 +37,6 @@ docker run --log-driver=loki \
 ```
 
 ##### docker-compose
-
 ```yaml
 version: "3"
 

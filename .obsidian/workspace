@@ -7,12 +7,8 @@
         "id": "a49b96210a818a01",
         "type": "leaf",
         "state": {
-          "type": "markdown",
-          "state": {
-            "file": "doc/make.md",
-            "mode": "source",
-            "source": false
-          }
+          "type": "graph",
+          "state": {}
         }
       }
     ],
@@ -40,13 +36,21 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#news",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
               }
+            }
+          },
+          {
+            "id": "c8a6d3b381e64e5e",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
             }
           }
         ]
@@ -69,7 +73,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/make.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -86,7 +89,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/make.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -108,13 +110,19 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "doc/make.md"
-              }
+              "state": {}
+            }
+          },
+          {
+            "id": "c54193f6fb8ffd71",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {}
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -122,15 +130,15 @@
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
-    "doc/RaspBerryPi.md",
-    "doc/react.md",
-    "doc/ReadingNotes.md",
-    "doc/Sentinel.md",
-    "doc/store/redis.md",
-    "doc/linux/shell.md",
-    "doc/linux/ssh.md",
-    "doc/linux/Linux.md",
-    "doc/linux/curl.md",
-    "doc/linux/catalog.md"
+    "2022-09-21.md",
+    "post/2022/分布式锁.md",
+    "README.md",
+    "snippet/sql/替换OR, 使用exists.md",
+    "snippet/sql/分组后取出最新的记录.md",
+    "snippet/sql/mysql锁表查询.md",
+    "snippet/go/README.md",
+    "mind/云原生.mm.md",
+    "doc/electron.md",
+    "doc/elasticsearch.md"
   ]
 }

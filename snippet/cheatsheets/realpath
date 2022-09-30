@@ -1,0 +1,5 @@
+# The realpath command is used for resolving the absolute file names. 
+realpath filename
+
+# don't expand symlinks
+realpath -s filename

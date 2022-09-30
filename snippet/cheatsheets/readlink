@@ -1,0 +1,2 @@
+# The purpose of the readlink command is to resolve symbolic links.
+readlink -f filename
