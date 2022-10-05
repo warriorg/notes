@@ -2540,7 +2540,133 @@ Default:	output_buffers 2 32k;
 Context:	http, server, location
 ```
 
+#### 减少磁盘读写次数
+
+##### empty_gif 模块
+
+* ngx_http_empty_gif_module 模块，通过 --without-http_empth_gif_module 禁用模块
+
+###### 功能
+
+* 从前端页面做用户行为分析时，由于跨域等要求，前端打点的上报数据一般时GET请求，且考虑到浏览器解析DOM树的性能消耗，所以请求透明图片最小，而1*1的GIF图片体积最小（仅43字节），故通常请求gif图片，请在请求中把用户行为信息上报服务器。
+* Nginx可以在access日志中获取到请求参数，进而统计用户行为。但若在磁盘中读取1x1的文件则有磁盘IO消耗，empty_gif模块将图片放在内存中，加快了处理速度
+
+```bash
+Syntax:	empty_gif;
+Default:	—
+Context:	location
+```
+
+##### access 日志的压缩
+
+```bash
+Syntax:	access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];
+access_log off;
+Default:	access_log logs/access.log combined;
+Context:	http, server, location, if in location, limit_except
+```
+
+* buffer 默认64KB
+* gzip 默认级别为1
+* 通过zcat解压查看
+
+##### error.log 日志输出内存
+
+* 场景
+
+  * 在卡法环境下定位问题时，若需要打开debug级别日志，但对debug级别大量日志引发的细嫩那个问题不能容忍，可以将日志输出到内存中
+
+* 配置语法
+
+  * error_log memory:32m debug;
+
+* 查看内存中日志的方法
+
+  * gdb -p [worker进程id] -ex "source nginx.gdb" --batch
+
+  * nginx.gdb脚本内容
+
+    ```bash
+    set $log = ngx_cycle->log
+    while $log->writer != ngx_log_memory_writer
+    	set $log = $log->next
+    end
+    set $buf = (ngx_log_memory_fuf_t*)$log->wdata
+    dump binary memory debug_log.txt $buf->start $buf->end
+    ```
+
+##### syslog 协议
+
+![image-20221004161552160](./assets/images/nginx/image-20221004161552160.png)
+
+###### Logging to syslog
+
+```bash
+access_log syslog:server=[2001:db8::1]:12345,facility=local7,tag=nginx,severity=info combined;
+```
+
+* **server** 定义syslog服务器地址
+*  **facility** 参见RFC3164，取值 “`kern`”, “`user`”, “`mail`”, “`daemon`”, “`auth`”, “`intern`”, “`lpr`”, “`news`”, “`uucp`”, “`clock`”, “`authpriv`”, “`ftp`”, “`ntp`”, “`audit`”, “`alert`”, “`cron`”, “`local0`”..“`local7`”. Default is “`local7`”.
+* **serverity** 定义日志级别，默认info级别
+* **tag** 定义日志的tag，默认为 "nginx"
+* **nohostname** 不向syslog中写入主机名 hostname
 
 
-##  Nginx 与 OpenResty
+
+#### 零拷贝与gzip_static模块
+
+##### sendfile 零拷贝提升性能
+
+* 减少进程间切换
+* 减少内存拷贝次数
+
+![image-20221004163004588](./assets/images/nginx/image-20221004163004588.png)
+
+##### 直接IO自动禁用sendfile
+
+```bash
+location /video/ {
+	sendfile on;
+	aio on;
+	directio 8m;
+}
+```
+
+当文件大小超过8M时，启用AIO与directio
+
+##### gzip_static 模块
+
+将测到同名.gz文件时，response中以gzip相关header返回.gz文件的内容
+
+##### gunzip模块
+
+当客户端不支持gzip时，且磁盘上仅有压缩文件，则实时解压缩并将其发送给客户端
+
+#### tcmalloc
+
+* 更快的内存分配器
+  * 并发能力强于glibc
+    * 并发线程数越多，性能越好
+  * 减少内存碎片
+  * 擅长管理小块内存
+
+![image-20221004170134957](assets/images/nginx/image-20221004170134957.png)
+
+#### 使用Google PerfTools分析nginx
+
+![image-20221004170505597](assets/images/nginx/image-20221004170505597.png)
+
+#### stub_status
+
+通过http，实时监控nginx的连接状态
+
+统计数据存放于共享内存中，所以统计值包含所有worker进程，且执行reload不会导致数据清零，但热升级会导致数据清零
+
+##### 监控项
+
+![image-20221004170858317](assets/images/nginx/image-20221004170858317.png)
+
+
+
+##  OpenResty
 
