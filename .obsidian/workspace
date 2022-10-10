@@ -121,14 +121,13 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
     "width": 300
   },
-  "active": "a49b96210a818a01",
+  "active": "0d3e6f3780b4e992",
   "lastOpenFiles": [
     "2022-09-21.md",
     "post/2022/分布式锁.md",
