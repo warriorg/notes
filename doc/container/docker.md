@@ -12,14 +12,14 @@ Docker 和虚拟机技术一样，从操作系统级上实现了资源的隔离�
 
 为了支持这些特性，Linux namespace 实现了 6 项资源隔离，基本上涵盖了一个小型操作系统的运行要素，包括主机名、用户权限、文件系统、网络、进程号、进程间通信。
 
-| 名称    | 宏定义        | 隔离内容                                                     | 发布版本                                           |
-| ------- | ------------- | ------------------------------------------------------------ | -------------------------------------------------- |
-| IPC     | CLONE_NEWIPC  | System V IPC, POSIX message queues                           | since Linux 2.6.19                                 |
+| 名称    | 宏定义        | 隔离内容                                                                                                                                                    | 发布版本                                           |
+| ------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| IPC     | CLONE_NEWIPC  | System V IPC, POSIX message queues                                                                                                                          | since Linux 2.6.19                                 |
 | Network | CLONE_NEWNET  | network device interfaces, IPv4 and IPv6 protocol stacks, IP routing tables, firewall rules, the /proc/net and /sys/class/net directory trees, sockets, etc | since Linux 2.6.24                                 |
-| Mount   | CLONE_NEWNS   | Mount points                                                 | since Linux 2.4.19                                 |
-| PID     | CLONE_NEWPID  | Process IDs                                                  | since Linux 2.6.24                                 |
-| User    | CLONE_NEWUSER | User and group IDs                                           | started in Linux 2.6.23 and completed in Linux 3.8 |
-| UTS     | CLONE_NEWUTS  | Hostname and NIS domain name                                 | since Linux 2.6.19                                 |
+| Mount   | CLONE_NEWNS   | Mount points                                                                                                                                                | since Linux 2.4.19                                 |
+| PID     | CLONE_NEWPID  | Process IDs                                                                                                                                                 | since Linux 2.6.24                                 |
+| User    | CLONE_NEWUSER | User and group IDs                                                                                                                                          | started in Linux 2.6.23 and completed in Linux 3.8 |
+| UTS     | CLONE_NEWUTS  | Hostname and NIS domain name                                                                                                                                | since Linux 2.6.19                                 |
 
 这 6 项资源隔离分别对应 6 种系统调用，通过传入上表中的参数，调用 clone() 函数来完成。
 
@@ -35,10 +35,7 @@ clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实�
 
 ## rootfs
 
-
 # INSTALL
-
-
 
 ## Debian
 
@@ -59,8 +56,6 @@ apt-get install -y docker-ce docker-ce-cli containerd.io
 
 https://docs.docker.com/engine/install/debian/
 
-
-
 ## [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
 
 修改 `/etc/docker/daemon.json` 文件并添加上 registry-mirrors 键值。
@@ -78,12 +73,9 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl restart docker
 ```
 
-然后使用`docker info`检查是否生效
-
-
+然后使用 `docker info`检查是否生效
 
 # CLI
-
 
 ```bash
 #运行一个容器
@@ -141,23 +133,24 @@ docker images --format "{{.ID}} {{.Tag}}" | grep v1.10.10 | awk '{print $1}' | x
 # 根据 docker name 清理 images
 docker images | grep none | awk '{print $3}' | xargs docker rmi -f
 ```
+
 ## run
 
 ### Mount volumes from container (--volumes-from)
+
 ```bash
 docker run --volumes-from 777f7dc92da7 --volumes-from ba8c0c54f0f2:ro -i -t ubuntu pwd
 ```
-`--volumes-from`标志从引用的容器中装入所有定义的卷。容器可以通过重复`--volumes-from`参数来指定。容器ID可以添加`:ro`或`:rw`后缀，分别用于以只读或读写方式挂载卷。默认情况下，卷以与引用容器相同的模式(读、写或只读)挂载。
+
+`--volumes-from`标志从引用的容器中装入所有定义的卷。容器可以通过重复 `--volumes-from`参数来指定。容器ID可以添加 `:ro`或 `:rw`后缀，分别用于以只读或读写方式挂载卷。默认情况下，卷以与引用容器相同的模式(读、写或只读)挂载。
 
 像SELinux这样的标签系统要求在装入容器的卷内容上放置适当的标签。如果没有标签，安全系统可能会阻止容器内运行的进程使用内容。默认情况下，Docker不会改变操作系统设置的标签。
 
-要在容器上下文中更改标签，可以添加两个后缀中的任何一个`:z`或`:Z`到卷安装。这些后缀会告诉Docker以重新标记共享卷上的文件对象。`z`选项告诉`Docker`，两个容器共享卷内容。因此，Docker将内容标记为共享内容标签。共享卷标签允许所有容器读/写内容。`Z`选项告诉Docker用私有未共享标签标记内容。只有当前容器可以使用私人卷。
+要在容器上下文中更改标签，可以添加两个后缀中的任何一个 `:z`或 `:Z`到卷安装。这些后缀会告诉Docker以重新标记共享卷上的文件对象。`z`选项告诉 `Docker`，两个容器共享卷内容。因此，Docker将内容标记为共享内容标签。共享卷标签允许所有容器读/写内容。`Z`选项告诉Docker用私有未共享标签标记内容。只有当前容器可以使用私人卷。
 
 ## save
 
-
 ## load
-
 
 ## ps
 
@@ -174,6 +167,7 @@ $ docker ps --size  # 大小
 ```bash
 docker network ls    # 列出当前的网络
 ```
+
 ## Committing (saving) a container state
 
 ```base
@@ -190,15 +184,10 @@ $ docker commit <container> <some_name>
 卷是用于持久化由Docker容器生成和使用的数据的首选机制。 尽管绑定挂载取决于主机的目录结构，但是卷完全由Docker管理。 与绑定安装相比，卷具有几个优点：
 
 * 与绑定安装相比，卷更易于备份或迁移。
-
 * 您可以使用Docker CLI命令或Docker API管理卷。
-
 * 卷在Linux和Windows容器上均可工作。
-
 * 可以在多个容器之间更安全地共享卷。
-
 * 卷驱动程序使您可以将卷存储在远程主机或云提供商上，以加密卷内容或添加其他功能。
-
 * 新卷的内容可以由容器预先填充。
 
 ![types-of-mounts-volume.png](../assets/images/types-of-mounts-volume.png)
@@ -235,7 +224,6 @@ volumes:
   nexus-data:
 ```
 
-
 #### Backup
 
 ```bash
@@ -264,7 +252,6 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 
 `screen -dr` to re-attach the screen again
 
-
 # Dockerfile
 
 1. Docker从基础镜像运行一个容器
@@ -273,7 +260,7 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 4. Docker再基于刚提交的镜像运行一个新容器
 5. 执行Dockerfile中的下一条指令，知道所有指令都执行完成
 
->docker build 执行时, Dockerfile 中的所有指令都被执行并且提交，并且在该命令成功结束后返回一个新镜像。
+> docker build 执行时, Dockerfile 中的所有指令都被执行并且提交，并且在该命令成功结束后返回一个新镜像。
 
 ## Dockerfile指令
 
@@ -322,6 +309,7 @@ docker-compose -p zk_test up
 # 实战
 
 ## 在一台主机上测试Consul集群
+
 ```bash
 $ docker run -d --name node1 -h node1 progrium/consul -server -bootstrap-expect 3
 $ JOIN_IP="$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' node1)"
@@ -335,6 +323,7 @@ $ docker run -d -p 8400:8400 -p 8500:8500 -p 8600:53/udp -h node4 progrium/consu
 ```
 
 ## ubuntu 上安装 Java8
+
 ```base
 # Pull base image. if you use "latest" instead of "trusty",
 # you will use latest ubuntu images as base image
@@ -353,7 +342,9 @@ RUN apt-get update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 RUN apt-get install -y oracle-java8-installer
 ```
+
 ## ubuntu安装tomcat8
+
 ```bash
 FROM ubuntu:14.04
 
@@ -424,8 +415,6 @@ docker run -d -v /Users/warriorg/Downloads:/home/vsftpd -p 20:20 -p 21:21 \
 --name ftp bogem/ftp
 ```
 
-
-
 # 常见问题
 
 ## Layer already being pulled by another client. Waiting.
@@ -437,16 +426,18 @@ $ docker-machine start default
 ```
 
 ## Cannot connect to the Docker daemon. Is the docker daemon running on this host?
->*重启*
+
+> *重启*
 
 在命令行直接启动
->` /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh`
+
+> ` /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh`
 
 ## 改变docker存储位置
+
 You can change Docker's storage base directory (where container and images go) using the -g option when starting the Docker daemon.
 
 * Ubuntu/Debian: edit your /etc/default/docker file with the -g option: DOCKER_OPTS="-dns 8.8.8.8 -dns 8.8.4.4 -g /mnt"
-
 * Fedora/Centos: edit /etc/sysconfig/docker, and add the -g option in the other_args variable: ex. other_args="-g /var/lib/testdir". If there's more than one option, make sure you enclose them in " ". After a restart, (service docker restart) Docker should use the new directory.
 
 Using a symlink is another method to change image storage.
@@ -461,8 +452,6 @@ Using a symlink is another method to change image storage.
 6. Take a peek at the directory structure to make sure it looks like it did before the mv: `ls /var/lib/docker/` (note the trailing slash to resolve the symlink)
 7. Start docker back up `systemctl start docker`
 8. restart your container
-
-
 
 # 参考
 
