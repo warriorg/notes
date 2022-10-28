@@ -1,3 +1,7 @@
+
+
+Harbor 是用于存储和分发 Docker 镜像的镜像仓库服务，相比 Docker Registry，Harbor 在安全、标识、管理等方面做了增强，更适合企业使用；
+
 # Install
 
 ## 准备安装文件
@@ -113,7 +117,7 @@ harbor_admin_password: Harbor12345
 # 设置
 
 ## 新建项目
-![](./assets/images/245bcacfaa518a101692d6dbebd57e17.png)
+![](../assets/images/245bcacfaa518a101692d6dbebd57e17.png)
 
 
 # 镜像发布

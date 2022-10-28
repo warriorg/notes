@@ -1,8 +1,52 @@
+# INSTALL
+
+## Debian
+
+```bash
+apt-get update
+apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+apt-get update
+apt-get install -y docker-ce docker-ce-cli containerd.io
+
+sudo usermod -aG docker ${USER} # 当前用户加入docker组 这样操作的时候就不需要root
+```
+
+### 参考
+
+https://docs.docker.com/engine/install/debian/
+
+## [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
+
+修改 `/etc/docker/daemon.json` 文件并添加上 registry-mirrors 键值。
+
+```
+{
+  "registry-mirrors": ["https://registry.docker-cn.com"]
+}
+```
+
+修改保存后重启 Docker 以使配置生效。
+
+```bash
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+```
+
+然后使用 `docker info`检查是否生效
+
+
+
+
+
 # 基础知识
 
 **容器** 一种沙盒技术
-
-![docker architecture](../assets/images/docker architecture.svg)
 
 ## Namespace
 
@@ -35,45 +79,31 @@ clone() 函数相信大家都不陌生了，它是 fork() 函数更通用的实�
 
 ## rootfs
 
-# INSTALL
 
-## Debian
 
-```bash
-apt-get update
-apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+## docker  architecture
 
-# Add Docker’s official GPG key
-curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+Docker 使用client-server 架构。Docker客户段与Docker守护进程通信，后者负责构建、运行和分发Docker容器的工作。
 
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+![docker architecture](../assets/images/docker architecture.svg)
 
-apt-get update
-apt-get install -y docker-ce docker-ce-cli containerd.io
-```
 
-### 参考
 
-https://docs.docker.com/engine/install/debian/
+### Docker daemon
 
-## [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
 
-修改 `/etc/docker/daemon.json` 文件并添加上 registry-mirrors 键值。
 
-```
-{
-  "registry-mirrors": ["https://registry.docker-cn.com"]
-}
-```
+### Docker client
 
-修改保存后重启 Docker 以使配置生效。
 
-```bash
-$ sudo systemctl daemon-reload
-$ sudo systemctl restart docker
-```
 
-然后使用 `docker info`检查是否生效
+### Docker registries
+
+
+
+
+
+
 
 # CLI
 

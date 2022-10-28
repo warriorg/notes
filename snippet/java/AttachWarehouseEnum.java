@@ -19,7 +19,7 @@ public enum AttachWarehouseEnum {
         return this.label;
     }
 
-    public static Optional<AttachWarehouseEnum> parse(String name) {
+    public static Optional<AttachWarehouseEnum> of(String name) {
         if (Strings.isNullOrEmpty(name)) {
             return null;
         }

@@ -71,7 +71,7 @@ sh startup.sh -m standalone
 
 ```bash
 sh startup.sh
-``` 
+```
 
 ## 服务注册&发现和配置管理
 
@@ -174,9 +174,8 @@ namespace 的设计是 nacos 基于此做多环境以及多租户数据(配置�
 * 若使用 Pull 模型，其无需维护长连接，但其实时性不好。
 
 Nacos 采用的是长轮询机制的 Pull 模型，但不单纯是Pull模型。是一个HttpPost的长轮询，过期时间默认是30S。
- 
+
 Nacos 长轮询 Pull 模型融合了 Push 与 Pull 模型的优势。Client 仍定时发起 Pull 请求，查看 Server 微服务框架 端数据是否更新。若发生了更新，则 Server 立即将更新数据以响应的形式发送给 Client 端；若没有发生更新，Server 端并不立即向 Client 返回响应，而是临时性的保持住这个连接一段时间【29.5s】。若在此时间段内，Server 端数据发生了变更，则立即将变更数据返回给 Client【这里是动态感知的】。若仍未发生变更，则放弃这个连接。等待着下一次 Client 的 Pull 请求。
 
 长轮询 Pull 模型，是 Push 与 Pull 模型的整合，既降低了 Push 模型中长连接的维护问题，又降低了Push 模型实时性较低的问题。
-
 
