@@ -67,8 +67,21 @@ kubectl version
 
 ### Minikube
 
+#### macos
+
 ```bash
 brew cask install minikube
+```
+
+#### linux
+
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# startup
+minikube start
+
 ```
 
 

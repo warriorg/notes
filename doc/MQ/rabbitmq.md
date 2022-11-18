@@ -1,7 +1,5 @@
 # Install
 
-
-
 # 工作原理
 
 ## 核心概念
@@ -10,7 +8,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 ### Virtual Host
 
-虚拟地址，用于进行逻辑隔离，最上层的消息路由，一个 Virtual Host 里面可以有若干个 Exchange 和Q ueue 。同一个 Virtual Host 里面不能有相同名称的Exchange 或 Queue
+虚拟地址，用于进行逻辑隔离，最上层的消息路由，一个 Virtual Host 里面可以有若干个 Exchange 和Queue 。同一个 Virtual Host 里面不能有相同名称的Exchange 或 Queue
 
 ### Exchange
 
@@ -39,7 +37,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 * `#` 匹配一个或多个词    `hello.# -> hello.mq.rabbit`
 * `*`  匹配一个词 `hello.* -> hello.rabbit`
 
-![03-Topic Exchange](../assets/images/03-Topic Exchange.png)
+![03-Topic Exchange](../../assets/images/03-Topic Exchange.png)
 
 #### Fanout Exchange 广播交换机
 
@@ -47,33 +45,23 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 ![04-Fanout Exchange](../assets/images/04-Fanout Exchange.png)
 
-#### Headers Exchange  
+#### Headers Exchange
 
 性能差
-
-
 
 ### Message Queue
 
  消息队列，存储消息数据。
 
+### Binding
 
-
-### Binding 
-
-主要将`exchang`中的信息与`Message Queue`中的队列进行绑定。
-
-
+主要将 `exchang`中的信息与 `Message Queue`中的队列进行绑定。
 
 ### Message
 
 服务器和应用程序之间，进行传输的数据。由 Properties 和 Payload（Body）组成
 
-
-
 ### Routing Key
-
-
 
 ## 工作过程
 
@@ -102,12 +90,8 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 ![06-消息延迟投递](../assets/images/06-消息延迟投递.png)
 
-
-
 * 蓝色  生产者
 * 红色  消费者
-
-
 
 1. 把消息落库完了之后，才能 step 1 进行发送消息，这一次，在生产端它会一次生成两条消息
 2. 执行完了 step 1 发送消息后， 还会执行 step 2 做消息延迟检查，可以 2~5 分钟之后
@@ -123,4 +107,3 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 对一条数据进行的操作，这个操作你可能执行非常多次，操作的结果也是相同的，这个就是幂等性保障。
 
 #### 消费端幂等性保障
-

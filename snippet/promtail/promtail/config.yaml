@@ -1,0 +1,63 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+  sync_period: 30s
+
+clients:
+  - url: http://192.168.1.94:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: docker
+    static_configs:
+      - targets:
+          - dev04
+        labels:
+          host: dev04
+          __path__: /host/containers/*/*log
+    pipeline_stages:
+      - json:
+          expressions:
+            output: log
+            stream: stream
+            attrs:
+      - json:
+          expressions:
+            tag:
+          source: attrs
+      - multiline:
+          firstline: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3}'
+          max_wait_time: 10s
+      - regex:
+          expression: '(level)=(?P<level>\w+)'
+      - labels:
+          level:
+      - regex:
+          expression: '(app)=(?P<app>[\w-]+)'
+      - labels:
+          app:
+      - regex:
+          expression: '(userId)=(?P<userId>[\w-]+)'
+      - labels:
+          userId:
+      - regex:
+          expression: '(rid)=(?P<rid>[\w-]+)'
+      - labels:
+          traceId:
+      - regex:
+          expression: (?P<image_name>(?:[^|]*[^|])).(?P<container_name>(?:[^|]*[^|])).(?P<image_id>(?:[^|]*[^|])).(?P<container_id>(?:[^|]*[^|]))
+          source: tag
+      - timestamp:
+          format: RFC3339Nano
+          source: time
+      - labels:
+          tag:
+          stream:
+          image_name:
+          container_name:
+          image_id:
+          container_id:
+      - output:
+          source: output

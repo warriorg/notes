@@ -107,37 +107,25 @@ Docker 使用client-server 架构。Docker客户段与Docker守护进程通信�
 
 # CLI
 
+## Romote
+
+### ssh
+
 ```bash
-#运行一个容器
-docker run -i -t tomcat /bin/bash   
-#docker run -d  -p 7001:6379 redis  
+# 创建一个使用ssh连接远程服务器的配置
+docker context create \                                                                                                                                                                                                                                                    ─╯
+    --docker host=ssh://root@192.168.1.94 \
+    --description="Work engine" \
+    work
+    
+# 切换cli使用work
+docker context use work 
 
-#容器命名
-docker run --name bob_the_container -i -t ubuntu /bin/bash
-
-#重启已经停止的容器
-docker start bob_the_container
-
-#附着到已启动的容器上
-docker attach bob_the_container
-
-#进入容器
-docker exec -it redmine bash
-
-#删除Images
-docker rmi imageid
-#删除提示 must be force时
-docker rmi -f imageid
-
-#列出最新的1000条日志
-docker logs --tail 1000 ihome-tomcat
-
-# remove all containers
-docker rm $(docker ps -all -q)
-# remove all image
-docker rmi $(docker image ls -q)
-
+# 切换会本地的配置
+docker context use default
 ```
+
+
 
 ## 参数
 
@@ -180,7 +168,11 @@ docker run --volumes-from 777f7dc92da7 --volumes-from ba8c0c54f0f2:ro -i -t ubun
 
 ## save
 
+
+
 ## load
+
+
 
 ## ps
 
@@ -205,9 +197,48 @@ docker network ls    # 列出当前的网络
 $ docker commit <container> <some_name>
 ```
 
+
+
+## tip
+
+```bash
+#运行一个容器
+docker run -i -t tomcat /bin/bash   
+#docker run -d  -p 7001:6379 redis  
+
+#容器命名
+docker run --name bob_the_container -i -t ubuntu /bin/bash
+
+#重启已经停止的容器
+docker start bob_the_container
+
+#附着到已启动的容器上
+docker attach bob_the_container
+
+#进入容器
+docker exec -it redmine bash
+
+#删除Images
+docker rmi imageid
+#删除提示 must be force时
+docker rmi -f imageid
+
+#列出最新的1000条日志
+docker logs --tail 1000 ihome-tomcat
+
+# remove all containers
+docker rm $(docker ps -all -q)
+# remove all image
+docker rmi $(docker image ls -q)
+```
+
+
+
+
+
 # 生产环境
 
-## volums
+## Volums
 
 [Use volumes](https://docs.docker.com/storage/volumes/)
 
@@ -292,7 +323,47 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 
 > docker build 执行时, Dockerfile 中的所有指令都被执行并且提交，并且在该命令成功结束后返回一个新镜像。
 
+
+
+## Docker Build 工作流程
+
+因为命令行“docker”是一个简单的客户端，真正的镜像构建工作是由服务器端的“Docker daemon”来完成的，所以“docker”客户端就只能把“构建上下文”目录打包上传（显示信息 Sending build context to Docker daemon ），这样服务器才能够获取本地的这些文件。但这个机制也会导致一些麻烦，如果目录里有的文件（例如 readme/.git/.svn 等）不需要拷贝进镜像，docker 也会打包上传，效率很低。为了避免这种问题，你可以在“构建上下文”目录里再建立一个 .dockerignore 文件，语法与 .gitignore 类似，排除那些不需要的文件。
+
+`-f` 指定用来构建的`Dockerfile`文件名称，如果省略，docker build 就会在当前目录下找名字是 Dockerfile 的文件
+
+
+
 ## Dockerfile指令
+
+### FROM
+
+```bash
+FROM [--platform=<platform>] <image>[@<digest>] [AS <name>]
+```
+
+### ARG
+
+ARG指令定义了一个变量，用户可以使用`-build-arg <varname> = <value>` flag在`docker build`命令中将用户定义的值传递给构建器。如果用户指定dockerfile中未定义的构建参数，则会输出警告。
+
+```bash
+ARG <name>[=<default value>]
+```
+
+ARG 和 ENV 的区别在于 **ARG** 创建的变量只在镜像构建过程中可见，容器运行时不可见，而 **ENV** 创建的变量不仅能够在构建镜像的过程中使用，在容器运行时也能够以环境变量的形式被应用程序使用。
+
+和 `ENV` 的效果一样，都是设置环境变量。所不同的是，`ARG` 所设置的构建环境的环境变量，在将来容器运行时是不会存在这些环境变量的。但是不要因此就使用 `ARG` 保存密码之类的信息，因为 `docker history` 还是可以看到所有值的。
+
+
+
+### EXPOSE
+
+`EXPOSE` 指令是声明容器运行时提供服务的端口，这只是一个声明，在容器运行时并不会因为这个声明应用就会开启这个端口的服务。在 Dockerfile 中写入这样的声明有两个好处，一个是帮助镜像使用者理解这个镜像服务的守护端口，以方便配置映射；另一个用处则是在运行时使用随机端口映射时，也就是 `docker run -P` 时，会自动随机映射 `EXPOSE` 的端口。
+
+要将 `EXPOSE` 和在运行时使用 `-p <宿主端口>:<容器端口>` 区分开来。`-p`，是映射宿主端口和容器端口，换句话说，就是将容器的对应端口服务公开给外界访问，而 `EXPOSE` 仅仅是声明容器打算使用什么端口而已，并不会自动在宿主进行端口映射。
+
+
+
+
 
 # Docker-Compose
 

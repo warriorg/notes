@@ -4,16 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "a49b96210a818a01",
-        "type": "leaf",
-        "state": {
-          "type": "markdown",
-          "state": {
-            "file": "doc/store/mysql.md",
-            "mode": "source",
-            "source": false
+        "id": "65c187b4ad44d322",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a49b96210a818a01",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "snippet/java/java bean.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        }
+        ]
       }
     ],
     "direction": "vertical"
@@ -31,7 +37,9 @@
             "type": "leaf",
             "state": {
               "type": "file-explorer",
-              "state": {}
+              "state": {
+                "sortOrder": "alphabetical"
+              }
             }
           },
           {
@@ -77,8 +85,8 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/store/mysql.md",
-                "collapseAll": false,
+                "file": "snippet/java/java bean.md",
+                "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
@@ -94,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/store/mysql.md",
+                "file": "snippet/java/java bean.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -117,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/store/mysql.md"
+                "file": "snippet/java/java bean.md"
               }
             }
           },
@@ -129,7 +137,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -137,15 +146,15 @@
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
+    "snippet/go/README.md",
+    "doc/store/mysql.md",
     "2022-09-21.md",
     "post/2022/分布式锁.md",
     "README.md",
     "snippet/sql/替换OR, 使用exists.md",
     "snippet/sql/分组后取出最新的记录.md",
     "snippet/sql/mysql锁表查询.md",
-    "snippet/go/README.md",
     "mind/云原生.mm.md",
-    "doc/electron.md",
-    "doc/elasticsearch.md"
+    "doc/electron.md"
   ]
 }

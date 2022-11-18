@@ -1,0 +1,42 @@
+version: '3.8'
+
+x-loggin: &default-logging
+  driver: loki
+  options:
+    max-size: "100M"
+    max-file: "10"
+    loki-url: "${LOKI_URL}"
+    loki-pipeline-stages: |
+      - regex:
+          expression: '(level)=(?P<level>\w+)'
+      - labels:
+          level:
+      - regex:
+          expression: '(app)=(?P<app>[\w-]+)'
+      - labels:
+          app:
+      - regex:
+          expression: '(userId)=(?P<userId>[\w-]+)'
+      - labels:
+          userId:
+      - regex:
+          expression: '(rid)=(?P<rid>[\w-]+)'
+      - labels:
+          traceId:
+
+services:
+  postboy:
+    image: "hub.longnows.cn/${ENV}/postboy:1.1"
+    container_name: "postboy"
+    restart: always
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          cpus: 2
+          memory: 100M
+    volumes:
+      - "./postboy/config:/data/config"
+      - "/data/www:/data/www"
+    ports:
+      - "21500:21500"

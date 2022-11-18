@@ -1,7 +1,8 @@
 {
-  "vimMode": true,
+  "vimMode": false,
   "showLineNumber": false,
   "legacyEditor": false,
   "livePreview": true,
-  "promptDelete": false
+  "promptDelete": false,
+  "spellcheck": true
 }
