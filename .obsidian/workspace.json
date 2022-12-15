@@ -11,12 +11,8 @@
             "id": "a49b96210a818a01",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "snippet/java/java bean.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -85,7 +81,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "snippet/java/java bean.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +97,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "snippet/java/java bean.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -124,9 +118,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "snippet/java/java bean.md"
-              }
+              "state": {}
             }
           },
           {
@@ -137,8 +129,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "horizontal",
@@ -146,15 +137,15 @@
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
+    "Untitled.md",
+    "doc/dsa/raft.md",
+    "doc/store/assets/images/mongodb/image-20221005213746595.png",
+    "doc/store/redis.md",
+    "snippet/java/java bean.md",
     "snippet/go/README.md",
     "doc/store/mysql.md",
     "2022-09-21.md",
     "post/2022/分布式锁.md",
-    "README.md",
-    "snippet/sql/替换OR, 使用exists.md",
-    "snippet/sql/分组后取出最新的记录.md",
-    "snippet/sql/mysql锁表查询.md",
-    "mind/云原生.mm.md",
-    "doc/electron.md"
+    "README.md"
   ]
 }

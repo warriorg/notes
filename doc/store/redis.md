@@ -1,4 +1,4 @@
-
+ 
 
 # INSTALL
 
@@ -856,6 +856,9 @@ CLUSTER SLOTS   # 查询集群的插槽
 CLUSTER KEYSLOT LOCK::1111 # 查询key所在的服务器
 TYPE LOCK::1111 # 查询key的类型
 GET LOCK::1111  # 查看KEY
+
+# 删除 match 到的所有key
+redis-cli -h 192.168.0.203 keys "task:*" | xargs redis-cli -h 192.168.0.203 del
 ```
 
 
