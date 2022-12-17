@@ -108,6 +108,62 @@ Mongodb 是一个分布式文件存储的NoSQL数据库，使用C++编写。Mong
 
 
 
+## 事务
+
+### 写操作事务
+
+#### 什么是 writeConcern
+
+writeConcern 决定一个写操作落到多少个节点上才算成功。writeConcern的取值包括：
+
+* 0 发起写操作，不关心是否成功；
+* 1~ 集群最大数据节点数：写操作需要被复制到指定节点数才算成功
+* majority 写操作需要被复制到大多数节点上才算成功
+
+发起写操作的程序将阻塞到写操作到达指定的节点数为止
+
+> * 虽然多于半数的 writeConcern 都是安全的，但通常只会设置 majority，因为这时等待写入延迟时间最短的选择；
+> * 不要设置 writeConcern 等于总节点数，因为一旦有一个节点故障，所有写操作都将失败
+> * writeConcern 虽然会增加写操作延迟时间，但并不会显著增加集群压力，因此无论是否等待，写操作最终都会复制到所有节点上。设置 writeConcern 只是让写操作等待复制到所有节点上。设置 writeConcern 只是让写操作等待复制后在返回而已；
+> * 应对重要数据应用 {w: "majority"}, 普通数据可以应用  {w: 1} 以确保最佳性能
+
+### 读事务操作
+
+在读取数据的过程中我们需要关注一下两个问题：
+
+* 从哪里读？关注数据节点位置
+  * 由 readPreference 来解决
+* 什么样的数据可以读？关注数据的隔离性
+  * 由 readConcern 来解决
+
+#### readPreference
+
+readPreference 决定使用哪一个节点来满足正在发起的读请求。可选值包括：
+
+* primary：只选择主节点；
+* primaryPreferred：优先选择主节点，如果不可用则选择从节点；
+* secondary：只选择从节点；
+* secondaryPreferred：优先选择从节点，如果从节点不可用则选择主节点；
+* nearest：选择最近的节点；
+
+![image-20221119193053468](assets/images/mongodb/image-20221119193053468.png)
+
+![image-20221119193115992](assets/images/mongodb/image-20221119193115992.png)
+
+
+
+#### ReadConcern
+
+![image-20221119193900826](assets/images/mongodb/image-20221119193900826.png)
+
+![image-20221119193918320](assets/images/mongodb/image-20221119193918320.png)
+
+![image-20221119193933671](assets/images/mongodb/image-20221119193933671.png)
+
+![image-20221119194014870](assets/images/mongodb/image-20221119194014870.png)
+
+
+
 
 
 # 运维
