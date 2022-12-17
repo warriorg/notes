@@ -143,7 +143,7 @@ sudo apt-get install mysql-server
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 467B942D3A79BD29apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 467B942D3A79BD29
 
 systemctl status mysql
-	
+
 # Improve MySQL Installation Security
 sudo mysql_secure_installation
 
@@ -159,8 +159,6 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';
 update user set host ='%' where user='root';
 FLUSH PRIVILEGES;
 ```
-
-
 
 ### Centos 7 安装
 
@@ -188,7 +186,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 
 > GPG key retrieval failed: [Errno 14] curl#37 - "Couldn't open file /etc/pki/rpm-gpg/RPM-GPG-KEY-mysql"
 >
-> gpgcheck=0  
+> gpgcheck=0
 
 ```bash
 yum repolist enabled | grep mysql    # 
@@ -223,8 +221,6 @@ set global validate_password_policy=0;
 > GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'pass' WITH GRANT OPTION;
 > flush privileges;
 ```
-
-
 
 ### my.cnf
 
@@ -271,16 +267,16 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPa$$w0rd';
 SHOW VARIABLES LIKE 'lower_case_%';
 ```
 
-
 ## 索引
 
 ### 索引类型
 
-#### B-Tree 
+#### B-Tree
 
 适用于全键值、键值范围或键前缀查询。按照顺序存储数据。
 
 ##### 有效条件
+
 * 全值匹配
 * 匹配最左前缀
 * 匹配列前缀
@@ -289,6 +285,7 @@ SHOW VARIABLES LIKE 'lower_case_%';
 * 只访问索引的查询
 
 ##### 限制
+
 * 如果不是按照索引的最左列开始查找，则无法使用索引
 * 不能跳过索引中的列
 * 如果查询中有某个列的范围查询，则其右边所有列都无法使用索引优化查找
@@ -296,9 +293,11 @@ SHOW VARIABLES LIKE 'lower_case_%';
 #### 哈希索引
 
 #### R-Tree (空间数据索引)
+
 MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不同，这类索引无须前缀查询。空间索引会从所有维度来索引数据。
 
 #### 全文索引
+
 #### 其它索引
 
 ### 索引的优点
@@ -328,23 +327,13 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 ## 查询
 
-
-
-##  架构
+## 架构
 
 ![mysql-architecture](../assets/images/mysql-architecture.png)
 
-
-
 ## Server层对象
 
-
-
-
-
 ## MyIsam
-
-
 
 ## InnoDB
 
@@ -356,19 +345,11 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 ### 内存结构
 
-
-
 ## 事务
-
-
 
 ## 读写分离
 
-
-
 ## 分库分表
-
-
 
 # 类型
 
@@ -379,10 +360,6 @@ ALTER TABLE nems_inventory_head ADD COLUMN aa VARCHAR(30) GENERATED ALWAYS AS (j
 alter table nems_inventory_head drop column aa;
 CREATE UNIQUE INDEX nems_inventory_head_aaa ON nems_inventory_head (aa);
 ```
-
-
-
-
 
 # 运维
 
@@ -407,6 +384,13 @@ mysqldump -uroot -p123456 mydb -t > /data/mysqlDump/mydb.sql
 mysqldump -uroot -p123456 mydb t1 t2 > /data/mysqlDump/mydb.sql
 # 连接数据库并备份数据库表
 mysqldump -u root -h 192.168.1.23 -P 2306 -p --databases pub_param --tables tt  > tt.sql
+
+# docker
+# Backup
+docker exec CONTAINER /usr/bin/mysqldump -u root --password=root DATABASE > backup.sql
+
+# Restore
+cat backup.sql | docker exec -i CONTAINER /usr/bin/mysql -u root --password=root DATABASE
 ```
 
 ## 还原数据库
@@ -422,8 +406,6 @@ mysql -uroot -p123456 < /data/mysqlDump/mydb.sql
 ```sql
 mysql> source /data/mysqlDump/mydb.sql
 ```
-
-
 
 ## 恢复删除的数据
 
@@ -454,13 +436,11 @@ mysql -u cisco -p < /home/mysql_backup/test_binlog_step1.sql
 mysql -u cisco -p < /home/mysql_backup/test_binlog_step2.sql
 ```
 
-
-
 ## 主从同步
 
 ### 查看存库状态
 
-`show slave status\G` 
+`show slave status\G`
 
 ```sql
 ***************************[ 1. row ]***************************
@@ -529,7 +509,7 @@ Network_Namespace             |
 * **Slave_IO_Running** 该参数可作为io_thread的监控项，Yes表示io_thread的和主库连接正常并能实施复制工作，No则说明与主库通讯异常，多数情况是由主从间网络引起的问题
 * **Slave_SQL_Running** 该参数代表sql_thread是否正常，YES表示正常，NO表示执行失败，具体就是语句是否执行通过，常会遇到主键重复或是某个表不存在。
 * **Seconds_Behind_Master** 是通过比较sql_thread执行的event的timestamp和io_thread复制好的event的timestamp(简写为ts)进行比较，而得到的这么一个差值
-  *  **NULL** 表示io_thread或是sql_thread有任何一个发生故障，也就是该线程的Running状态是No，而非Yes。
+  * **NULL** 表示io_thread或是sql_thread有任何一个发生故障，也就是该线程的Running状态是No，而非Yes。
   * **0** 该值为零，是我们极为渴望看到的情况，表示主从复制良好，可以认为lag不存在。
   * **正值** 表示主从已经出现延时，数字越大表示从库落后主库越多。
   * **负值** 几乎很少见，这是一个BUG值，该参数是不支持负值的，也就是不应该出现。
@@ -537,8 +517,7 @@ Network_Namespace             |
 > 1. Slave_IO_Running、Slave_SQL_Running状态值，如果都为YES，则表示主从同步；反之，主从不同步
 > 2. Seconds_Behind_Master的值，如果为0，则表示主从同步不延时，反之同步延时。
 
-
-
 ## 注意
+
 * mysql 在Linux下默认不区分大小写
 * mysql 字符集 ci 的在比较字符串是默认忽略大小写

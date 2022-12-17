@@ -6,6 +6,11 @@ rsync -avz /source host:/dest
 # 通过ssh copy 并且显示进度
 rsync -avz --progress -e ssh ocr:/home/datagrand/ocr.tar .
 
+# rsync 默认使用 SSH 进行远程登录和数据传输
+# 由于早期 rsync 不使用 SSH 协议，需要用-e参数指定协议，后来才改的。所以，下面-e ssh可以省略。
+# 但是，如果 ssh 命令有附加的参数，则必须使用-e参数指定所要执行的 SSH 命令。
+rsync -avz --progress -e "ssh -p 222" longnows@192.168.2.45:/app/mysqlbackup/pub_param_20221128_2030.sql ~/
+
 # To copy files using checksum (-c) rather than time to detect if the file has
 # changed. (Useful for validating backups):
 rsync -avc <src> <dest>
@@ -32,3 +37,5 @@ rsync -avz --rsync-path="sudo rsync" user@<src> <dest>
 
 # Rsync only symlinks and preserve them as symlinks (dont follow them):
 find /path/to/files -type l -print | rsync -av --files-from=- /path/to/files user@targethost:/dest_path
+
+

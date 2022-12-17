@@ -1,0 +1,2 @@
+# 删除匹配的 key
+redis-cli -h 192.168.0.203 keys "task:*" | xargs redis-cli -h 192.168.0.203 del
