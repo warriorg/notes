@@ -11,11 +11,26 @@
             "id": "a49b96210a818a01",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "pattern/behavioral/observer/README.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "ceeea7f272248b76",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.1.8"
+              }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -135,8 +150,21 @@
     "direction": "horizontal",
     "width": 300
   },
-  "active": "a49b96210a818a01",
+  "left-ribbon": {
+    "hiddenItems": {
+      "obsidian-spaced-repetition:Review flashcards": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "random-note:Open random note": false
+    }
+  },
+  "active": "ceeea7f272248b76",
   "lastOpenFiles": [
+    "pattern/behavioral/observer/README.md",
+    "mind/云原生.mm.md",
     "Untitled.md",
     "doc/dsa/raft.md",
     "doc/store/assets/images/mongodb/image-20221005213746595.png",
@@ -144,8 +172,6 @@
     "snippet/java/java bean.md",
     "snippet/go/README.md",
     "doc/store/mysql.md",
-    "2022-09-21.md",
-    "post/2022/分布式锁.md",
-    "README.md"
+    "2022-09-21.md"
   ]
 }

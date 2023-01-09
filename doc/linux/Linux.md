@@ -1429,7 +1429,9 @@ hostname [new-host-name]     				# 设置主机名称
 hostnamectl set-hostname hostname 			# centos 7
 ```
 
-### <span id="crontab">crontab 定时</span>
+### <span id="crontab">crontab</span>
+
+![cron-cheat](../assets/images/cron-cheat.jpeg)
 
 ```bash
 crontab -e 						# 编辑
@@ -1490,6 +1492,10 @@ crontab -l 						# 查看
 ```bash
 0 2 * * * root ~/crontab/mongodb_backup.sh   # 每天凌晨02:00以 root 身份运行备份数据库的
 ```
+
+
+
+
 
 ## uname 
 

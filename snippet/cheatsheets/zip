@@ -1,0 +1,2 @@
+# To create zip file from directory:
+zip -r archive.zip directory/

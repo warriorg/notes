@@ -1,2 +1,8 @@
 # 删除匹配的 key
 redis-cli -h 192.168.0.203 keys "task:*" | xargs redis-cli -h 192.168.0.203 del
+
+# Delete matching keys, handle special scenarios containing spaces
+redis-cli -h 192.168.0.203 keys "PUBPARAM*" | xargs -I {} redis-cli -h 192.168.0.203 del "{}"
+
+# 删除匹配的 key， 开启认证的场景
+redis-cli -h 192.168.0.173 -a "123456" keys "task:*" | xargs redis-cli -h 192.168.0.173 -a "123456" del

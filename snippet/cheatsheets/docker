@@ -60,3 +60,6 @@ docker login
 
 # To push a docker image into dockerhub repository:
 docker push <image-name>:<image-tag-name>
+
+# Update all images that are the latest version
+docker images --format "{{.Repository}}:{{.Tag}}" | grep ':latest' | xargs -L1 docker pull
