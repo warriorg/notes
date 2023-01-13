@@ -107,3 +107,34 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 对一条数据进行的操作，这个操作你可能执行非常多次，操作的结果也是相同的，这个就是幂等性保障。
 
 #### 消费端幂等性保障
+
+
+
+# 实战
+
+## Spring Boot 
+
+### 监听手工确认消息
+
+```java
+@RabbitListener(queues = QUEUE, concurrency = "4", ackMode = "MANUAL")
+public void listener(Message message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) {
+	if (logger.isDebugEnabled()) {
+		logger.debug("开始处理消息 {}", deliveryTag);
+	}
+
+	String json = new String(message.getBody());
+	BifrostDataDTO dto = JsonObjectMapper.getInstance().fromJson(json, BifrostDataDTO.class);
+	handleMessage(dto);
+	try {
+		channel.basicAck(deliveryTag, false);
+	} catch (IOException e) {
+		logger.error("确认队列数据失败数据失败", e);
+	}
+}
+```
+
+1. 注解 `RabbitListener` 的 `ackMode` 设置为MANUAL
+2. 增加参数 `@Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel`
+3. 使用 `channel.basicAck(deliveryTag, false);` 确认消息
+

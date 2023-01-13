@@ -13,24 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "pattern/behavioral/observer/README.md",
+                "file": "doc/activiti.md",
                 "mode": "source",
                 "source": false
               }
             }
-          },
-          {
-            "id": "ceeea7f272248b76",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.1.8"
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -59,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#news",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -96,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "doc/activiti.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "doc/activiti.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -133,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "doc/activiti.md"
+              }
             }
           },
           {
@@ -144,11 +137,13 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -161,17 +156,17 @@
       "random-note:Open random note": false
     }
   },
-  "active": "ceeea7f272248b76",
+  "active": "75b8798fb408eae3",
   "lastOpenFiles": [
+    "README.md",
+    "Untitled.canvas",
+    "pattern/behavioral/observer/weather class.png",
+    "pattern/behavioral/strategy/README.md",
     "pattern/behavioral/observer/README.md",
     "mind/云原生.mm.md",
     "Untitled.md",
     "doc/dsa/raft.md",
     "doc/store/assets/images/mongodb/image-20221005213746595.png",
-    "doc/store/redis.md",
-    "snippet/java/java bean.md",
-    "snippet/go/README.md",
-    "doc/store/mysql.md",
-    "2022-09-21.md"
+    "doc/store/redis.md"
   ]
 }
