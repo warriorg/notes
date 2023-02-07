@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "d1150368630068ab",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "doc/minio.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/activiti.md",
+                "file": "doc/minio.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/activiti.md",
+                "file": "doc/minio.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/activiti.md"
+                "file": "doc/minio.md"
               }
             }
           },
@@ -156,8 +169,9 @@
       "random-note:Open random note": false
     }
   },
-  "active": "75b8798fb408eae3",
+  "active": "d1150368630068ab",
   "lastOpenFiles": [
+    "doc/activiti.md",
     "README.md",
     "Untitled.canvas",
     "pattern/behavioral/observer/weather class.png",
@@ -166,7 +180,6 @@
     "mind/云原生.mm.md",
     "Untitled.md",
     "doc/dsa/raft.md",
-    "doc/store/assets/images/mongodb/image-20221005213746595.png",
-    "doc/store/redis.md"
+    "doc/store/assets/images/mongodb/image-20221005213746595.png"
   ]
 }

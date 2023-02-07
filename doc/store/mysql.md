@@ -23,7 +23,7 @@ sudo rm -rf /var/lib/mysql
 # recreate the mysql data directory
 sudo mkdir /var/lib/mysql
 sudo chown mysql:mysql /var/lib/mysql
-sudo chmod 700 /var/lib/mys
+sudo chmod 700 /var/lib/mysql
 # re-initialize 
 sudo mysqld --defaults-file=/etc/mysql/my.cnf --initialize --lower_case_table_names=1 --user=mysql --console
 ```

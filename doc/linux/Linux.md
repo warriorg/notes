@@ -1945,6 +1945,8 @@ ln abc cde 		# 建立abc的硬连接，
 
 chmod命令用于更改文件或目录的权限
 
+![image-20230128182355881](../assets/images/image-20230128182355881.png)
+
 The available classes are:
 
 - `u` : permissions for owner/user
