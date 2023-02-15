@@ -13,26 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "doc/activiti.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "d1150368630068ab",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "doc/minio.md",
+                "file": "doc/web.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/minio.md",
+                "file": "doc/web.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/minio.md",
+                "file": "doc/web.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/minio.md"
+                "file": "doc/web.md"
               }
             }
           },
@@ -169,17 +156,17 @@
       "random-note:Open random note": false
     }
   },
-  "active": "d1150368630068ab",
+  "active": "a49b96210a818a01",
   "lastOpenFiles": [
+    "doc/windows.md",
+    "doc/关务.md",
+    "doc/minio.md",
+    "doc/maven.md",
     "doc/activiti.md",
+    "doc/awesome.md",
     "README.md",
     "Untitled.canvas",
     "pattern/behavioral/observer/weather class.png",
-    "pattern/behavioral/strategy/README.md",
-    "pattern/behavioral/observer/README.md",
-    "mind/云原生.mm.md",
-    "Untitled.md",
-    "doc/dsa/raft.md",
-    "doc/store/assets/images/mongodb/image-20221005213746595.png"
+    "pattern/behavioral/strategy/README.md"
   ]
 }

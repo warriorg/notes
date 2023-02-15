@@ -1,6 +1,4 @@
-# MySQL
-
-## Install
+# Install
 
 ### 主从
 
@@ -521,3 +519,5 @@ Network_Namespace             |
 
 * mysql 在Linux下默认不区分大小写
 * mysql 字符集 ci 的在比较字符串是默认忽略大小写
+
+

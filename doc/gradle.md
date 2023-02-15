@@ -4,6 +4,26 @@
 
 
 
+## 通用设置
+
+### 基础设置
+
+修改当前用户目录下的 ~/.gradle/gradle.properties（windows 为 %homepath%/.gradle/gradle.properties ）文件，如果没有则新建
+
+```
+org.gradle.daemon=true``org.gradle.parallel=true``org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-``8
+```
+
+可以有效加快构建速度
+
+- org.gradle.daemon 设置守护进程
+  - 不需要冷启动gradle
+  - 缓存构建信息
+- org.gradle.parallel 开启并行编译
+- org.gradle.jvmargs 这个可选，推荐配置
+
+
+
 ## 包依赖
 
 ```groovy

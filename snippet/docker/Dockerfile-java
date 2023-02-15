@@ -1,0 +1,18 @@
+FROM gradle:jdk11-alpine AS build
+LABEL maintainer="warriorg"
+WORKDIR /workspace
+ADD . /workspace
+RUN gradle bootJar -p bootstrap --no-daemon --parallel
+
+FROM openjdk:11-jre
+
+LABEL maintainer="warriorg"
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' > /etc/timezone
+RUN mkdir -p /data/logs
+
+ENV JAVA_OPTS="-XX:MaxHeapFreeRatio=50 -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/logs/heapdump.hprof -Xlog:gc*:file=/data/logs/gc.log:time,tags:filecount=10,filesize=102400"
+
+COPY --from=build /workspace/bootstrap/build/libs/*.jar /data/demo-service.jar
+WORKDIR /data
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /data/demo-service.jar"]
