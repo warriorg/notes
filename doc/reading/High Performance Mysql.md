@@ -100,3 +100,33 @@ WHERE CREATED_TMP_TABLES > 0 OR CREATED_TMP_DISK_TABLES > 0;
 
 ## Operating System and Hardware Optimization
 
+
+
+## Optimizing Server Settings
+
+### 配置文件
+
+* 在mysql配置文件中 dash `-` 和 underscore `_` 是可以互相替换的
+
+  > Within option names, dash (`-`) and underscore (`_`) may be used interchangeably in most cases, although the leading dashes *cannot* be given as underscores. For example, [`--skip-grant-tables`](https://dev.mysql.com/doc/refman/8.0/en/server-options.html#option_mysqld_skip-grant-tables) and [`--skip_grant_tables`](https://dev.mysql.com/doc/refman/8.0/en/server-options.html#option_mysqld_skip-grant-tables) are equivalent.
+
+```bash
+# 找到默认配置文件的地址
+mysqld --verbose --help | grep -A 1 'Default options'
+
+# 查看服务器仅基于其内编译默认值使用的值，忽略任何选项文件中的设置
+mysqld --no-defaults --verbose --help
+```
+
+* 在配置文件中指定 mysql.sock `socket=/var/lib/mysql/mysql.sock`
+  * 有些版本中有bug
+* 在配置文件中指定 mysql.pid `socket=/var/lib/mysql/mysql.pid`
+  * 有些版本中有bug
+* 使用 mysql 用户运行 `mysqld` `user=mysql`
+* `innodb_dedicated_server` mysql8 新增特效，开启后，innodb可以自动配置调整下面这四个参数的值
+  * innodb_buffer_pool_size 总内存大小
+  * innodb_log_file_size redo文件大小
+  * innodb_log_files_in_group redo文件数量
+  * innodb_flush_method 数据刷新方法
+
+

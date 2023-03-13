@@ -52,7 +52,7 @@ skip-name-resolve    #  解决连接慢
 
 ```bash
 # 设置服务器编码
-character-set-server=utf8
+character-set-server=utf8mb4
 # 忽略表名大小写
 lower_case_table_names = 1
 # 从服务器唯一ID
@@ -519,5 +519,20 @@ Network_Namespace             |
 
 * mysql 在Linux下默认不区分大小写
 * mysql 字符集 ci 的在比较字符串是默认忽略大小写
-
+		* `_ci` : 不区分大小写,Case-insensitive的缩写；
+		* `_cs` : 区分大小写，Case-sensitive的缩写；
+		* `_ai` : 不区分重音，Accent-insensitive的缩写；
+		* `_as` : 区分重音，Accent-sensitive的缩写；
+		* `_bin` : 二进制；
+	
+	* 生成更新 COLLATE 的语句
+	
+	  ```sql
+	  SELECT CONCAT("ALTER TABLE ", TABLE_SCHEMA, '.', TABLE_NAME," COLLATE utf8mb4_0900_bin;") as ExecuteTheString
+	  FROM INFORMATION_SCHEMA.TABLES
+	  WHERE TABLE_SCHEMA="database schema"
+	  AND TABLE_TYPE="BASE TABLE";
+	  ```
+	
+	  
 

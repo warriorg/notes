@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "doc/web.md",
+                "file": "doc/store/mysql.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,7 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 253.5
   },
   "right": {
     "id": "f3f4abcb5279d3a9",
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/web.md",
+                "file": "doc/store/mysql.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/web.md",
+                "file": "doc/store/mysql.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/web.md"
+                "file": "doc/store/mysql.md"
               }
             }
           },
@@ -138,12 +138,11 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -158,14 +157,25 @@
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
-    "doc/windows.md",
+    "doc/store/oracle.md",
+    "Untitled 1.canvas",
+    "Untitled.canvas",
+    "doc/store/mysql.md",
+    "doc/vim.md",
     "doc/关务.md",
+    "doc/命令行安装ipa.md",
+    "doc/微信支付.md",
+    "doc/游戏日志数据仓库之数据采集.md",
+    "doc/理财.md",
+    "doc/计算机系统.md",
+    "doc/理论.md",
+    "doc/随手记.md",
+    "doc/windows.md",
     "doc/minio.md",
     "doc/maven.md",
     "doc/activiti.md",
     "doc/awesome.md",
     "README.md",
-    "Untitled.canvas",
     "pattern/behavioral/observer/weather class.png",
     "pattern/behavioral/strategy/README.md"
   ]
