@@ -101,6 +101,71 @@ Docker 使用client-server 架构。Docker客户段与Docker守护进程通信�
 
 
 
+# Configure
+
+## Daemon
+
+### data directory
+
+By default this directory is:
+
+- `/var/lib/docker` on Linux.
+- `C:\ProgramData\docker` on Windows.
+
+```bash
+{
+  "data-root": "/mnt/docker-data"
+}
+```
+
+### HTTP/HTTPS proxy
+
+1. 创建目录 `mkdir -p /etc/systemd/system/docker.service.d`
+
+2. 创建配置文件 `/etc/systemd/system/docker.service.d/http-proxy.conf`
+
+   ```bash
+   [Service]
+   Environment="HTTP_PROXY=http://proxy.example.com:80"
+   Environment="HTTPS_PROXY=https://proxy.example.com:443"
+   Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+   ```
+
+3. Flush changes and restart Docker
+
+   ```bash
+   systemctl daemon-reload
+   systemctl restart docker
+   ```
+
+4. Verify that the configuration has been loaded and matches the changes you made, for example:
+
+   ```bash
+   systemctl show --property=Environment docker
+   ```
+
+
+
+## Client
+
+### Proxy
+
+配置 `~/.docker/config.json` 文件
+
+```json
+{
+ "proxies":
+ {
+   "default":
+   {
+     "httpProxy": "http://192.168.1.12:3128",
+     "httpsProxy": "http://192.168.1.12:3128",
+     "noProxy": "*.test.example.com,.example2.com,127.0.0.0/8"
+   }
+ }
+}
+```
+
 
 
 
@@ -236,9 +301,10 @@ docker rmi $(docker image ls -q)
 
 
 
+
 # 生产环境
 
-## Volums
+## Volume
 
 [Use volumes](https://docs.docker.com/storage/volumes/)
 

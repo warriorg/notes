@@ -2668,5 +2668,17 @@ location /video/ {
 
 
 
-##  OpenResty
+##  运维
+
+### 常见错误
+
+#### `nginx: [emerg] getpwnam("nginx") failed`
+
+```bash
+useradd -s /bin/false nginx
+```
+
+
+
+
 
