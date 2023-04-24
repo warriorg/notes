@@ -146,17 +146,19 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-spaced-repetition:Review flashcards": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "command-palette:Open command palette": false,
       "markdown-importer:Open format converter": false,
-      "random-note:Open random note": false
+      "random-note:Open random note": false,
+      "obsidian-spaced-repetition:Review flashcards": false
     }
   },
   "active": "a49b96210a818a01",
   "lastOpenFiles": [
+    "doc/container/harbor.md",
+    "doc/container/docker.md",
     "doc/store/mysql.md",
     "doc/store/oracle.md",
     "Untitled 1.canvas",

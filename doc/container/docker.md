@@ -178,7 +178,7 @@ By default this directory is:
 
 ```bash
 # 创建一个使用ssh连接远程服务器的配置
-docker context create \                                                                                                                                                                                                                                                    ─╯
+docker context create \                                                                                                                                                                                                                                                   
     --docker host=ssh://root@192.168.1.94 \
     --description="Work engine" \
     work
