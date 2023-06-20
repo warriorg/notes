@@ -1338,11 +1338,24 @@ df -h
 
 ### 开机自动挂在
 
+#### 方法1
+
 `edit /etc/fstab`
 
 ```bash
 /dev/sda3      /mnt/disk1         ext4    defaults        1 1 
 # 测试文件修改正确
+mount -a
+```
+
+#### 方法2 
+
+```bash
+$ su 
+cp /etc/fstab /etc/fstab.bak
+blkid
+# /dev/sda1: UUID="ab40a4c6-c21b-4495-9a6b-afb2fe55428b" UUID_SUB="83373df2-d87b-4669-880e-050b0d377b1a" BLOCK_SIZE="4096" TYPE="btrfs" PARTUUID="5b158377-83d8-6a40-8cd5-60086e269969"
+sudo echo UUID=ab40a4c6-c21b-4495-9a6b-afb2fe55428b /home/warriorg/data btrfs defaults 0 0 >> /etc/fstab
 mount -a
 ```
 

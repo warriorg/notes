@@ -37,7 +37,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 * `#` 匹配一个或多个词    `hello.# -> hello.mq.rabbit`
 * `*`  匹配一个词 `hello.* -> hello.rabbit`
 
-![03-Topic Exchange](../../assets/images/03-Topic Exchange.png)
+![03-Topic Exchange](../assets/images/03-Topic Exchange.png)
 
 #### Fanout Exchange 广播交换机
 
@@ -67,14 +67,14 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 ### 如何保障消息的成功投递
 
-#### ‎什么是生产端的可靠性投递
+#### 什么是生产端的可靠性投递
 
 * 保证消息的成功发出
 * 保障 MQ 节点的成功接收
 * 发送端收到 MQ 节点确认应答
 * 完善的消息进行补偿机制
 
-### ‎生产端-可靠性投递
+### 生产端-可靠性投递
 
 #### 方案一
 
@@ -86,7 +86,7 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 #### 方案二
 
-‎消息的延迟投递，做二次确认，回调检查
+消息的延迟投递，做二次确认，回调检查
 
 ![06-消息延迟投递](../assets/images/06-消息延迟投递.png)
 
@@ -95,10 +95,10 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 1. 把消息落库完了之后，才能 step 1 进行发送消息，这一次，在生产端它会一次生成两条消息
 2. 执行完了 step 1 发送消息后， 还会执行 step 2 做消息延迟检查，可以 2~5 分钟之后
-3. ‎监听&接收消息之后，就进行处理
+3. 监听&接收消息之后，就进行处理
 4. 当消费端中消息处理成功之后，还需生成一个 确认 消息
-5. ‎Callback 服务，通过监听器，监听 确认 消息，当确认了之后，就对消息做最终的存储
-6. ‎假设 5 分钟后，延迟投递检查消息，发送过来了， allback 服务，监听这个 检查细节，然后就去检查 MSG DB 数据库，‎如果下游已经把数据处理好了，那么就OK，‎如果没有返回，或者返回失败，出现异常了，这时 callback 需要做补偿。‎因为 callback 在监听延迟消息。‎当 callback 发现 message 并不存在，则会主动发起 RPC 通信，给上游反馈延迟检查的内容，并没有找到。‎然后，再次发送一次数据。
+5. Callback 服务，通过监听器，监听 确认 消息，当确认了之后，就对消息做最终的存储
+6. 假设 5 分钟后，延迟投递检查消息，发送过来了， allback 服务，监听这个 检查细节，然后就去检查 MSG DB 数据库，如果下游已经把数据处理好了，那么就OK，如果没有返回，或者返回失败，出现异常了，这时 callback 需要做补偿。因为 callback 在监听延迟消息。当 callback 发现 message 并不存在，则会主动发起 RPC 通信，给上游反馈延迟检查的内容，并没有找到。然后，再次发送一次数据。
 
 ### 幂等性
 

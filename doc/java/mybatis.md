@@ -288,3 +288,69 @@ mvn mybatis-generator:generate
 
 
 
+
+
+## mapper.xml下引用静态方法、静态常量或者枚举类型
+
+### 引用静态方法
+
+#### 在ONGL中引用
+
+```
+<select id="selectTest">
+<if test="@com.test.DateUtils@isLeapYear(year)==true">
+  select * from tableA
+</if>
+<if test="@com.test.DateUtils@isLeapYear(year)==false">
+  select * from tableB
+</if>
+</select>
+```
+
+#### 在SQL中引用
+
+```
+<select id="selectTest">
+  select * from tableA where year=${@com.test.DateUtils@getYear()}
+</select>
+```
+
+###  引用静态常量
+
+#### 在ONGL中引用
+
+```
+<select id='selectTest'>
+<if test="year==@com.test.Consants@CURRENT_YEAR">
+  select * from tableA
+</if>
+</select>
+```
+
+#### 在SQL中引用
+
+```
+<select id="selectTest">
+  select * from tableA where year=${@com.test.Constants@CURRENT_YEAR}
+</select>
+```
+
+### 引用枚举类型
+
+#### 在ONGL中引用
+
+```
+<select id='selectTest'>
+<if test="year==@com.test.Enums@YEAR.getValue()">
+  select * from tableA
+</if>
+</select>
+```
+
+#### 在SQL中引用
+
+```
+<select id="selectTest">
+  select * from tableA where year=${@com.test.Enums@YEAR.getValue()}
+</select>
+```
