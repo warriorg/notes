@@ -426,9 +426,16 @@ swapoff -a && sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 kubeadm init --image-repository='registry.aliyuncs.com/google_containers'
 ```
 
-如果出事化的时候出错,可以使用下面的手工方式
+如果出事化的时候出错,可以使用下面的方式
 
-> 手工拉去image
+**代理方式**
+```bash
+sudo systemctl set-environment HTTP_PROXY=127.0.0.1:7890
+sudo systemctl set-environment HTTPS_PROXY=127.0.0.1:7890
+sudo systemctl restart containerd.service
+```
+
+**手工拉去image**
 >
 > ```bash
 > # 查看kubeadm需要镜像
