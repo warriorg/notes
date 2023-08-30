@@ -328,6 +328,8 @@ docker volume ls
 docker volume inspect my-vol
 # 删除一个volume
 docker volume rm my-vol
+# list volumes in docker containers
+docker ps -a --format '{{ .ID }}' | xargs -I {} docker inspect -f '{{ .Name }}{{ printf "\n" }}{{ range .Mounts }}{{ printf "\n\t" }}{{ .Type }} {{ if eq .Type "bind" }}{{ .Source }}{{ end }}{{ .Name }} => {{ .Destination }}{{ end }}{{ printf "\n" }}' {}
 ```
 
 ### 备份、恢复、迁移数据卷
