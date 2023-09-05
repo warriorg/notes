@@ -1,0 +1,39 @@
+apply plugin: EnterpriseRepositoryPlugin
+
+class EnterpriseRepositoryPlugin implements Plugin<Gradle> {
+    void apply(Gradle gradle) {
+        gradle.settingEvaluated { settings -> 
+            settings.pluginManagement {
+                repositories {
+                        mavenLocal()
+                        maven {
+                            name: "xhangsdfsd"
+                            url "http://mvn.warriorg.me"
+                            allowInsecureProtocol = true
+                            credentials {
+                                username 'zhangsan'
+                                password '12121212121'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+allprojects {
+     repositories {
+            mavenLocal()
+            maven {
+                name: "xhangsdfsd"
+                url "http://mvn.warriorg.me"
+                allowInsecureProtocol = true
+                credentials {
+                    username 'zhangsan'
+                    password '12121212121'
+                }
+            }
+        }
+    }
+}
