@@ -2,7 +2,7 @@ apply plugin: EnterpriseRepositoryPlugin
 
 class EnterpriseRepositoryPlugin implements Plugin<Gradle> {
     void apply(Gradle gradle) {
-        gradle.settingEvaluated { settings -> 
+        gradle.settingsEvaluated { settings -> 
             settings.pluginManagement {
                 repositories {
                         mavenLocal()
