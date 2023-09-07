@@ -24,15 +24,14 @@ class EnterpriseRepositoryPlugin implements Plugin<Gradle> {
 
 allprojects {
      repositories {
-            mavenLocal()
-            maven {
-                name: "xhangsdfsd"
-                url "http://mvn.warriorg.me"
-                allowInsecureProtocol = true
-                credentials {
-                    username 'zhangsan'
-                    password '12121212121'
-                }
+        mavenLocal()
+        maven {
+            name: "xhangsdfsd"
+            url "http://mvn.warriorg.me"
+            allowInsecureProtocol = true
+            credentials {
+                username 'zhangsan'
+                password '12121212121'
             }
         }
     }
