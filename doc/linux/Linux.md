@@ -2096,6 +2096,7 @@ lsattr [ -RVadv ] [ files...  ]
 
 ```bash
 find Folder -type d -exec chmod 0777 {} +			# 更改目录权限(不包含文件)
+find /data -mtime +7 -iwholename */logs/* -print -exec rm -rf {} \;
 find /data -mtime +30 -name "*.log" -print -exec rm -rf {} \;    # 将/data 目录下所有30天前带".log"的文件删除
 find app/ -iname logs* -exec bash -c 'path="{}"; d=./dest/$(dirname "$path"); mkdir -p "$d"; cp -r "$path" "$d"' \;  # 查找指定的文件，并按照原始的目录copy 
 ```
