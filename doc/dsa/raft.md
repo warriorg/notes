@@ -16,7 +16,7 @@ Raft将系统中的角色分为领导者（Leader）、跟从者（Follower）�
 
 Raft算法角色状态转换如下：
 
-![raft-role-stat](./assets/images/raft-role-state.jpg)
+![raft-role-stat](../assets/images/raft-role-state.jpg)
 
 ## Leader 选举
 
@@ -57,7 +57,7 @@ flollower 在接受到投票请求后，其会根据一下情况来判断是否�
 
 Raft 算法一致性的实现，是基于日志复制状态机的。状态机的最大特征是，不同的状态机当前状态相同，然后接受了相同的输入，则一定会得到相同的输出。
 
-![raft-replicated-state-machine.svg](./assets/images/raft-replicated-state-machine.svg)
+![raft-replicated-state-machine.svg](../assets/images/raft-replicated-state-machine.svg)
 
 ## 处理流程
 
@@ -71,7 +71,7 @@ Raft 算法一致性的实现，是基于日志复制状态机的。状态机的
 
 ## AP支持
 
-![raft-log-struct.jpg](./assets/images/raft-log-struct.jpg)
+![raft-log-struct.jpg](../assets/images/raft-log-struct.jpg)
 Log 由 term index、log index 及 command 构成。为了保证可用性，各个节点中的日志可以不完全相同，但 leader 会不断给 follower 发送 log，以使各个节点的log最终达到相同。
 
 ## 脑裂

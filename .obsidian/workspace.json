@@ -4,19 +4,15 @@
     "type": "split",
     "children": [
       {
-        "id": "65c187b4ad44d322",
+        "id": "02b38106919fd388",
         "type": "tabs",
         "children": [
           {
-            "id": "a49b96210a818a01",
+            "id": "0349b0557ae3eeca",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "doc/container/docker.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -77,7 +73,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 253.5
+    "width": 374.5
   },
   "right": {
     "id": "f3f4abcb5279d3a9",
@@ -93,7 +89,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/container/docker.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -110,7 +105,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/container/docker.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -132,9 +126,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "doc/container/docker.md"
-              }
+              "state": {}
             }
           },
           {
@@ -163,10 +155,14 @@
       "obsidian-spaced-repetition:Review flashcards": false
     }
   },
-  "active": "a49b96210a818a01",
+  "active": "0349b0557ae3eeca",
   "lastOpenFiles": [
-    "doc/container/harbor.md",
+    "doc/assets/images/02-Direct Exchange.png",
+    "doc/MQ/rabbitmq.md",
     "doc/container/docker.md",
+    "doc/MQ/kafka.md",
+    "doc/MQ/ActiveMQ.md",
+    "doc/container/harbor.md",
     "doc/store/mysql.md",
     "doc/store/oracle.md",
     "Untitled 1.canvas",
