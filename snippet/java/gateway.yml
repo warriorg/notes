@@ -11,7 +11,7 @@ spring:
         predicates:
         - Path=/TaskCenter/api/**
         filters:
-        # url 重写
+        # url 重写 请求 /TaskCenter/api/bbb/ccc => /cms/api/TaskCenter/api/bbb/ccc
         - RewritePath=/TaskCenter/api/(?<segment>.*),/cms/api/TaskCenter/api/$\{segment}
     discovery:
       locator:
