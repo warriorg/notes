@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: pms-service
+        uri: lb://pms-service
+        predicates:
+        - Path=/pms/api/**
+      - id: task-center
+        uri: lb://cms-service
+        predicates:
+        - Path=/TaskCenter/api/**
+        filters:
+        # url 重写
+        - RewritePath=/TaskCenter/api/(?<segment>.*),/cms/api/TaskCenter/api/$\{segment}
+    discovery:
+      locator:
+        enable: true
+        lower-case-service-id: true
+
+server:
+  port: 8899
+management:
+  server:
+    port: 8898
