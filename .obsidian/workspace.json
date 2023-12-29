@@ -11,8 +11,12 @@
             "id": "0349b0557ae3eeca",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "doc/web/vue.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -89,6 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "doc/web/vue.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,6 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "doc/web/vue.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,15 +132,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
-            }
-          },
-          {
-            "id": "c54193f6fb8ffd71",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {}
+              "state": {
+                "file": "doc/web/vue.md"
+              }
             }
           }
         ],
@@ -151,38 +151,42 @@
       "canvas:Create new canvas": false,
       "command-palette:Open command palette": false,
       "markdown-importer:Open format converter": false,
-      "random-note:Open random note": false,
-      "obsidian-spaced-repetition:Review flashcards": false
+      "random-note:Open random note": false
     }
   },
   "active": "0349b0557ae3eeca",
   "lastOpenFiles": [
+    "doc/web/react.md",
+    "doc/web/javascript.md",
+    "doc/monitor/grafana.md",
+    "doc/monitor/loki.md",
+    "doc/monitor/prometheus.md",
+    "doc/container/docker.md",
+    "doc/bigdata/spark.md",
+    "doc/bigdata/hive.md",
+    "doc/bigdata/hbase.md",
+    "doc/bigdata/Hadoop.md",
+    "doc/bigdata/flink.md",
+    "doc/assets/image-20220724082728051.png",
+    "doc/assets/image-20220724082532898.png",
+    "snippet/go/README.md",
+    "post/2022/5.vue微前端项目实践.md",
+    "post/2022/6.分布式锁.md",
+    "post/2022/7.Spring Cloud 脱离Nacos本地部署.md",
+    "mind/云原生.mm.md",
+    "pattern/structural/adapter/README.md",
+    "pattern/creational/abstract_factory/抽象工厂.md",
+    "doc/blockchain.md",
+    "doc/azkaban.md",
+    "doc/awesome.md",
+    "doc/android.md",
+    "doc/activiti.md",
     "doc/assets/images/02-Direct Exchange.png",
     "doc/MQ/rabbitmq.md",
-    "doc/container/docker.md",
     "doc/MQ/kafka.md",
     "doc/MQ/ActiveMQ.md",
-    "doc/container/harbor.md",
-    "doc/store/mysql.md",
-    "doc/store/oracle.md",
     "Untitled 1.canvas",
     "Untitled.canvas",
-    "doc/vim.md",
-    "doc/关务.md",
-    "doc/命令行安装ipa.md",
-    "doc/微信支付.md",
-    "doc/游戏日志数据仓库之数据采集.md",
-    "doc/理财.md",
-    "doc/计算机系统.md",
-    "doc/理论.md",
-    "doc/随手记.md",
-    "doc/windows.md",
-    "doc/minio.md",
-    "doc/maven.md",
-    "doc/activiti.md",
-    "doc/awesome.md",
-    "README.md",
-    "pattern/behavioral/observer/weather class.png",
-    "pattern/behavioral/strategy/README.md"
+    "pattern/behavioral/observer/weather class.png"
   ]
 }
