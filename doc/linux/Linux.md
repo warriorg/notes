@@ -663,9 +663,20 @@ iptables -A OUTPUT -d 10.0.0.2  -j REJECT   # 禁止访问目标IP 10.0.0.2
 ### nat表
 
 ```bash
-iptables -t nat -A PREROUTING -i eth0 -d 114.115.116.117 -p tcp --dport 80 -j DNAT --to-destination  10.0.0.1     # 把通过eth0访问114.115.116.117 的数据转发到10.0.0.1
-iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -o eth1 -j SNAT --to-source 111.112.113.114 
+# 把通过eth0访问114.115.116.117 的数据转发到10.0.0.1
+iptables -t nat -A PREROUTING -i eth0 -d 114.115.116.117 -p tcp --dport 80 -j DNAT --to-destination  10.0.0.1     
 # 内网通过eth1，ip 111.112.113.114的地址上网
+iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -o eth1 -j SNAT --to-source 111.112.113.114 
+
+# 将本机的 5672 映射到 192.168.100.110 的 5672 上
+iptables -t nat -A PREROUTING -d 10.10.10.170 -p tcp --dport 5672 -j DNAT --to 192.168.100.110:5672
+
+# 查看 nat 转发表
+iptables -t nat -nvL
+iptables --table nat --list
+
+# 清空nat表
+iptables -t nat -F PREROUTING
 ```
 
 

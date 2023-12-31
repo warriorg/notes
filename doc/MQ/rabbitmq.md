@@ -1,5 +1,103 @@
 # Install
 
+## Debain
+
+OS release and distribution names Mapping
+
+|Release|Distribution|
+|---|---|
+|Ubuntu 23.04|jammy|
+|Ubuntu 22.04|jammy|
+|Ubuntu 20.04|focal|
+|Ubuntu 18.04|bionic|
+|Debian Bookworm|bullseye|
+|Debian Bullseye|bullseye|
+|Debian Sid|bullseye|
+
+```bash
+# set host name
+hostnamectl set-hostname node01
+
+# Install Essential Dependencies
+sudo apt-get update -y
+sudo apt-get install curl gnupg -y
+
+# Enable apt HTTPS Transport
+sudo apt-get install apt-transport-https
+
+# Add Repository Signing Keys
+## Team RabbitMQ's main signing key
+curl -1sLf "https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA" | sudo gpg --dearmor | sudo tee /usr/share/keyrings/com.rabbitmq.team.gpg > /dev/null
+## Community mirror of Cloudsmith: modern Erlang repository
+curl -1sLf https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-erlang.E495BB49CC4BBE5B.key | sudo gpg --dearmor | sudo tee /usr/share/keyrings/rabbitmq.E495BB49CC4BBE5B.gpg > /dev/null
+## Community mirror of Cloudsmith: RabbitMQ repository
+curl -1sLf https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-server.9F4587F226208342.key | sudo gpg --dearmor | sudo tee /usr/share/keyrings/rabbitmq.9F4587F226208342.gpg > /dev/null
+
+# Replace $distribution with your operating system distribution
+export distribution=bullseye
+sudo tee /etc/apt/sources.list.d/rabbitmq.list <<EOF
+## Provides modern Erlang/OTP releases from a Cloudsmith mirror
+deb [signed-by=/usr/share/keyrings/rabbitmq.E495BB49CC4BBE5B.gpg] https://ppa1.novemberain.com/rabbitmq/rabbitmq-erlang/deb/debian $distribution main
+deb-src [signed-by=/usr/share/keyrings/rabbitmq.E495BB49CC4BBE5B.gpg] https://ppa1.novemberain.com/rabbitmq/rabbitmq-erlang/deb/debian $distribution main
+
+# another mirror for redundancy
+deb [signed-by=/usr/share/keyrings/rabbitmq.E495BB49CC4BBE5B.gpg] https://ppa2.novemberain.com/rabbitmq/rabbitmq-erlang/deb/debian $distribution main
+deb-src [signed-by=/usr/share/keyrings/rabbitmq.E495BB49CC4BBE5B.gpg] https://ppa2.novemberain.com/rabbitmq/rabbitmq-erlang/deb/debian $distribution main
+
+## Provides RabbitMQ from a Cloudsmith mirror
+deb [signed-by=/usr/share/keyrings/rabbitmq.9F4587F226208342.gpg] https://ppa1.novemberain.com/rabbitmq/rabbitmq-server/deb/debian $distribution main
+deb-src [signed-by=/usr/share/keyrings/rabbitmq.9F4587F226208342.gpg] https://ppa1.novemberain.com/rabbitmq/rabbitmq-server/deb/debian $distribution main
+
+# another mirror for redundancy
+deb [signed-by=/usr/share/keyrings/rabbitmq.9F4587F226208342.gpg] https://ppa2.novemberain.com/rabbitmq/rabbitmq-server/deb/debian $distribution main
+deb-src [signed-by=/usr/share/keyrings/rabbitmq.9F4587F226208342.gpg] https://ppa2.novemberain.com/rabbitmq/rabbitmq-server/deb/debian $distribution main
+EOF
+
+## Update package indices
+sudo apt-get update -y
+
+## Install Erlang packages
+sudo apt-get install -y erlang-base \
+						erlang-asn1 erlang-crypto \
+						erlang-eldap erlang-ftp erlang-inets \
+                        erlang-mnesia erlang-os-mon erlang-parsetools \
+                        erlang-public-key \
+                        erlang-runtime-tools erlang-snmp erlang-ssl \
+                        erlang-syntax-tools erlang-tftp erlang-tools \
+                        erlang-xmerl
+# install error 
+# erlang-crypto : Depends: libssl1.1 (>= 1.1.1) but it is not installable
+wget http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb10u6_amd64.deb
+dpkg -i libssl1.1_1.1.1n-0+deb10u6_amd64.deb
+rm libssl1.1_1.1.1n-0+deb10u6_amd64.deb\
+
+# ping hostname 如果不通, 则报如下的错误
+# 使用 journalctl -xeu rabbitmq-server.service 查看错误
+# ERROR: epmd error for host debian: address
+# cat /etc/hosts, 检查hostname的ip映射
+
+## Install rabbitmq-server and its dependencies
+sudo apt-get install rabbitmq-server -y --fix-missing
+# Start the Server
+systemctl start rabbitmq-server
+
+# Create Admin User in RabbitMQ
+sudo rabbitmqctl add_user admin password 
+sudo rabbitmqctl set_user_tags admin administrator
+sudo rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+
+# Setup RabbitMQ Web Management Console
+sudo rabbitmq-plugins enable rabbitmq_management
+
+# 家里使用的PVE服务器,需要在宿主机上做下net转发
+iptables -t nat -A PREROUTING -d 10.10.10.170 -p tcp --dport 5672 -j DNAT --to 192.168.100.110:5672
+```
+
+
+
+### 参考
+[Installing on Debian and Ubuntu — RabbitMQ](https://www.rabbitmq.com/install-debian.html)
+
 # 工作原理
 
 ## 核心概念
