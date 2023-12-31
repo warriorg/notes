@@ -102,6 +102,13 @@ WHERE CREATED_TMP_TABLES > 0 OR CREATED_TMP_DISK_TABLES > 0;
 
 
 
+### Network Configuration
+
+* 关闭DNS解析
+  * `skip_name_resolve`
+
+
+
 ## Optimizing Server Settings
 
 ### 配置文件
@@ -119,9 +126,9 @@ mysqld --no-defaults --verbose --help
 ```
 
 * 在配置文件中指定 mysql.sock `socket=/var/lib/mysql/mysql.sock`
-  * 有些版本中有bug
+  * 有些版本中不指定有bug
 * 在配置文件中指定 mysql.pid `socket=/var/lib/mysql/mysql.pid`
-  * 有些版本中有bug
+  * 有些版本中不指定有bug
 * 使用 mysql 用户运行 `mysqld` `user=mysql`
 * `innodb_dedicated_server` mysql8 新增特效，开启后，innodb可以自动配置调整下面这四个参数的值
   * innodb_buffer_pool_size 总内存大小
@@ -129,4 +136,7 @@ mysqld --no-defaults --verbose --help
   * innodb_log_files_in_group redo文件数量
   * innodb_flush_method 数据刷新方法
 
+
+
+## Schema Design and Management
 

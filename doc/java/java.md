@@ -34,7 +34,7 @@
 
 # 类加载
 
-![java class loader](./assets/images/java class loader.png)
+![java class loader](../assets/images/java class loader.png)
 
 1. 加载 查找和导入Class文件；
 2. 连接 把类的二进制数据合并到JRE中；

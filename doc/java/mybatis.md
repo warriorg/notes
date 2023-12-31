@@ -89,7 +89,7 @@ mybatis是用OGNL表达式来解析的，在OGNL的表达式中，’1’会被�
 
 ## 架构原理
 
-![mybatis-arch](./assets/images/mybatis-arch.jpeg)
+![mybatis-arch](../assets/images/mybatis-arch.jpeg)
 
 
 

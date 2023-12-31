@@ -17,18 +17,44 @@ apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo usermod -aG docker ${USER} # 当前用户加入docker组 这样操作的时候就不需要root
 ```
 
-### 参考
+### 以非root用户管理Docker
 
-https://docs.docker.com/engine/install/debian/
+```bash
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
 
-## [Docker 中国官方镜像加速](https://www.docker-cn.com/registry-mirror)
+If you initially ran Docker CLI commands using `sudo` before adding your user to the `docker` group, you may see the following erro
 
-修改 `/etc/docker/daemon.json` 文件并添加上 registry-mirrors 键值。
+```bash
+WARNING: Error loading config file: /home/user/.docker/config.json -
+stat /home/user/.docker/config.json: permission denied
+```
+
+To fix this problem
+
+```bash
+ sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
+ sudo chmod g+rwx "$HOME/.docker" -R
+```
+
+## 配置加速地址
+
+创建或修改 `/etc/docker/daemon.json`：
 
 ```
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
 {
-  "registry-mirrors": ["https://registry.docker-cn.com"]
+    "registry-mirrors": [
+        "https://docker.m.daocloud.io",
+        "https://dockerproxy.com",
+        "https://docker.mirrors.ustc.edu.cn",
+        "https://docker.nju.edu.cn"
+    ]
 }
+EOF
 ```
 
 修改保存后重启 Docker 以使配置生效。
@@ -40,7 +66,9 @@ $ sudo systemctl restart docker
 
 然后使用 `docker info`检查是否生效
 
+### 参考
 
+https://docs.docker.com/engine/install/debian/
 
 
 
