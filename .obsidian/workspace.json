@@ -175,14 +175,7 @@
     "关务.md",
     "doc/customs",
     "doc/container/docker.md",
-<<<<<<< HEAD
-    "doc/MQ/kafka.md",
-    "doc/MQ/ActiveMQ.md",
     "doc/container/harbor.md",
-||||||| parent of 05ffa07 (learning)
-=======
-    "doc/container/harbor.md",
->>>>>>> 05ffa07 (learning)
     "doc/store/mysql.md",
     "doc/store/oracle.md",
     "Untitled 1.canvas",
