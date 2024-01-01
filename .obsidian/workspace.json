@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "doc/linux/Linux.md",
+                "file": "doc/elastic/Kibana.md",
                 "mode": "source",
                 "source": false
               }
@@ -77,8 +77,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 374.5,
-    "collapsed": true
+    "width": 374.5
   },
   "right": {
     "id": "f3f4abcb5279d3a9",
@@ -94,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/linux/Linux.md",
+                "file": "doc/elastic/Kibana.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/linux/Linux.md",
+                "file": "doc/elastic/Kibana.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +133,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/linux/Linux.md"
+                "file": "doc/elastic/Kibana.md"
               }
             }
           },
@@ -164,8 +163,14 @@
       "obsidian-spaced-repetition:Review flashcards": false
     }
   },
-  "active": "0349b0557ae3eeca",
+  "active": "75b8798fb408eae3",
   "lastOpenFiles": [
+    "doc/elastic/elasticsearch.md",
+    "doc/elastic/Kibana.md",
+    "doc/elastic",
+    "doc/elastic/ELK.md",
+    "Untitled.canvas",
+    "doc/linux/Linux.md",
     "doc/MQ/rabbitmq.md",
     "doc/关务.md",
     "snippet/java/gateway.yml",
@@ -177,7 +182,6 @@
     "doc/store/mysql.md",
     "doc/store/oracle.md",
     "Untitled 1.canvas",
-    "Untitled.canvas",
     "doc/vim.md",
     "doc/命令行安装ipa.md",
     "doc/微信支付.md",
@@ -192,7 +196,6 @@
     "doc/activiti.md",
     "doc/awesome.md",
     "README.md",
-    "pattern/behavioral/observer/weather class.png",
-    "pattern/behavioral/strategy/README.md"
+    "pattern/behavioral/observer/weather class.png"
   ]
 }

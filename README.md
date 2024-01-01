@@ -28,11 +28,11 @@
 
 [EffectiveJava](./doc/EffectiveJava.md)
 
-[elasticsearch](./doc/elasticsearch.md)
+[elasticsearch](elasticsearch.md)
 
 [electron](./doc/electron.md)
 
-[ELK](./doc/ELK.md)
+[ELK](ELK.md)
 
 [FastDFS](./doc/FastDFS.md)
 

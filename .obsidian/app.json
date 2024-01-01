@@ -4,5 +4,6 @@
   "legacyEditor": false,
   "livePreview": true,
   "promptDelete": false,
-  "spellcheck": true
+  "spellcheck": true,
+  "alwaysUpdateLinks": true
 }

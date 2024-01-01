@@ -4,10 +4,10 @@
 
 ### 生态圈
 
-![Elasticsearch生态圈](./assets/images/elasticsearch生态圈.png)
+![Elasticsearch生态圈](elasticsearch生态圈.png)
 
 ### 与数据库集成
-![ElasticSearch与DB的集成](./assets/images/ElasticSearch与DB的集成.png)
+![ElasticSearch与DB的集成](ElasticSearch与DB的集成.png)
 
 [官网](https://www.elastic.co/)
 
@@ -49,7 +49,38 @@ vm.max_map_count=655360
 
  执行命令 `sysctl -p`
 
-开始安装
+#### V8.X
+```bash
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+# install apt httsp
+sudo apt-get install apt-transport-https
+# add apt sourrce list
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+
+# install
+sudo apt-get update && sudo apt-get install elasticsearch
+
+# Running Elasticsearch with `systemd`
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+sudo systemctl start elasticsearch.service
+
+# configuration
+vim /etc/elasticsearch/elasticsearch.yml
+network.host: 192.168.100.110
+sudo systemctl restart elasticsearch.service
+
+# reset elastic password
+/usr/share/elasticsearch/bin/elasticsearch-reset-password elastic
+
+curl https://127.0.0.1:9200
+# disabled xpack.security.transport.ssl.enabled: false
+# curl http://127.0.0.1:9200
+
+```
+
+#### V6.x
+
 
 ```bash
 yum -y install java-1.8.0-openjdk
@@ -134,7 +165,7 @@ http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
 
-### 集群健康
+##### 集群健康
 
 `status` 字段指示着当前集群在总体上是否工作正常。它的三种颜色含义如下：
 
@@ -142,7 +173,7 @@ http.cors.allow-origin: "*"
 - **yellow **所有的主分片都正常运行，但不是所有的副本分片都正常运行。
 - **red** 有主分片没能正常运行。
 
-#### 集群信息查看
+##### 集群信息查看
 
 | uri                               | method | 描述                       |
 | --------------------------------- | ------ | -------------------------- |
@@ -161,7 +192,7 @@ http.cors.allow-origin: "*"
 | /_cat/master?v                    | GET    | 主节点信息                 |
 | /_cat/recovery?v                  | GET    | 分片的恢复                 |
 
-### elasticsearch.yml
+##### elasticsearch.yml
 
 ```bash
 # 默认启动的集群名字叫 elasticsearch 。 你最好给你的生产环境的集群改个名字，改名字的目的很简单， 就是防止某人的笔记本电脑加入了集群这种意外
@@ -191,7 +222,7 @@ http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
 
-
+### [Kibana](./Kibana.md#Install)
 
 ## 基本原理与架构
 
@@ -337,6 +368,10 @@ POST users/_update/1
 
 # delete
 DELETE /users/_doc/1
+
+# 分页查询数据             
+GET /users/_search
+{"from":0, "size": 2}
 ```
 
 
@@ -559,7 +594,7 @@ GET _cluster/health?level=shards
 * Tokenizer 按照规则切分为单词
 * Token Filter 将切分的单词进行加工，小写，删除stopwords，增加同义词
 
-![Analyzer的组成](./assets/images/es-Analyzer的组成.png)
+![Analyzer的组成](es-Analyzer的组成.png)
 
  #### 内置的分词器
 
@@ -1349,7 +1384,7 @@ Match Query / Match Phrase Query / Query String Query
 * 索引和搜索是都会进行分词，查询字符串先传递到一个合适的分词器，然后生成一个供查询的词项列表
 * 查询时候，先会对输入的查询进行分词，然后每个词项逐个进行底层的查询，最终将结果进行合并。并为每个文档生成一个算分。例如查 “Matrix reloaded”，会查到包括Matrix或者reload的所有结果
 
-![match_query_查询过程](./assets/images/match_query_查询过程.png)
+![match_query_查询过程](match_query_查询过程.png)
 
 ### 结构化搜索
 
@@ -1702,12 +1737,6 @@ Beats 平台集合了多种单一用途数据采集器。它们从成百上千�
 ### FileBeat
 
 ### Metricbeat
-
-
-
-## Kibana
-
-
 
 
 
