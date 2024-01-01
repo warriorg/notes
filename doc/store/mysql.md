@@ -351,13 +351,22 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 # 类型
 
+
+
 ## JSON
 
+### 创建索引
+
 ```sql
+
 ALTER TABLE nems_inventory_head ADD COLUMN aa VARCHAR(30) GENERATED ALWAYS AS (json_text->>"$.aa");
 alter table nems_inventory_head drop column aa;
 CREATE UNIQUE INDEX nems_inventory_head_aaa ON nems_inventory_head (aa);
 ```
+
+
+
+
 
 # 运维
 
@@ -536,3 +545,4 @@ Network_Namespace             |
 	
 	  
 
+## [性能优化](../reading/High Performance Mysql.md)

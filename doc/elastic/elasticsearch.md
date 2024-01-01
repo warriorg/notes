@@ -1720,7 +1720,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.
 #### Logstash Queue
 
 * In Memory Queu e
-  * ​	一进程Crash，机器宕机，都会引起数据的丢失
+  * 一进程Crash，机器宕机，都会引起数据的丢失
 * Persistent Queue
   * Queue.type.persisted (默认是memory)
     * Queue.max_bytes: 4gb

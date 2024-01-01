@@ -161,6 +161,8 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 
 ### Routing Key
 
+
+
 ## 工作过程
 
 ### 如何保障消息的成功投递
@@ -205,6 +207,52 @@ https://www.rabbitmq.com/tutorials/amqp-concepts.html
 对一条数据进行的操作，这个操作你可能执行非常多次，操作的结果也是相同的，这个就是幂等性保障。
 
 #### 消费端幂等性保障
+
+
+
+# 运维
+
+## CLI
+
+### Controlling Docker RabbitMQ via rabbitmqctl
+
+```bash
+docker run -t -i --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+docker exec rabbitmq rabbitmqctl status
+```
+
+## Backup
+
+### 模式定义导出和导入
+
+https://www.rabbitmq.com/definitions.html
+
+
+
+## 联邦 (Federation) 
+
+RabbitMQ Federation 插件可以将消息从一个 Exchange 复制到另一个 Exchange，或从一个 Queue 分发到另一个 Queue。
+
+复制的源端被称为 upstream，复制的目的端被称为 downstream。要使用 Federation 插件，需要在两个集群都开启 Federation 插件，并且在 downstream 集群创建 Federation，配置 upstream。
+
+### 场景
+
+- 将多个集群的消息收集到一个集群
+- 将一个队列的压力分散到多个集群
+- 在不下线的情况下将数据从一个集群同步到另一个集群
+- 减少消息消费的时延
+
+
+
+###  开启
+
+```bash
+# 在 docker 中开启
+docker compose exec rabbit rabbitmq-plugins enable rabbitmq_federation
+docker compose exec rabbit rabbitmq-plugins enable rabbitmq_federation_management
+```
+
+
 
 
 

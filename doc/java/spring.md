@@ -1,8 +1,221 @@
-# 配置属性
+# Spring
 
-## 细粒度的自动配置
 
-### 理解Spring的环境抽象
+
+## 核心特性
+
+### IoC 容器（Ioc Container）
+
+#### 控制反转（Inversion of Control，IoC）
+
+* 常见另一种叫法**依赖注入（Dependency Injection，DI）**, 还有一种叫法**依赖查找(Dependency Lookup)** 对象在被创建的时候，由IoC容器注入，对象的创建的控制权由IoC容器负责
+
+* Class A中用到了Class B的对象b，一般情况下，需要在A的代码中显式的new一个B的对象。		
+  采用依赖注入技术之后，A的代码只需要定义一个私有的B对象，不需要直接new来获得这个对象，而是通过相关的容器控制程序来将B对象在外部new出来并注入到A类里的引用中。而具体获取的方法、对象被获取时的状态由配置文件（如XML）来指定。
+
+#### 职责
+
+* 依赖处理
+  * 依赖查找
+  * 依赖注入
+* 生命周期管理
+  * 容器
+  * 托管资源（Java Beans 或其他资源）
+* 配置
+  * 容器
+  * 外部化配置
+  * 托管的资源
+
+#### 依赖查找
+
+* 根据Bean名称查找
+  * 实时查找
+  * 延迟查找
+* 根据Bean类型查找
+  * 单个Bean对象
+  * 集合Bean对象
+* 根据Bean名称+类型查找
+* 根据Java注解查找
+  * 单个Bean对象
+  * 集合Bean对象
+
+
+
+##### 演示代码
+
+`spring-sample>thinking-in-spring>ioc-container-overview>DependencyLookupDemo`
+
+#### 依赖注入
+
+* 根据 Bean 名称注入
+* 根据 Bean 类型注入
+  * 单个 Bean 对象
+  * 集合 Bean 对象
+* 注入容器内建 Bean 对象
+* 注入非 Bean 对象
+* 注入类型
+  * 实时注入
+  * 延迟注入
+
+
+
+##### 演示代码
+
+`spring-sample>thinking-in-spring>ioc-container-overview>DependencyInjectionDemo`
+
+
+
+#### 依赖来源
+
+* 自定义 Bean
+* 容器内建 Bean 对象
+* 容器内建依赖
+
+
+
+#### 配置元信息
+
+* Bean 定义配置
+  * 基于 XML 文件
+  * 基于 Properties 文件
+  * 基于 Java 注解
+  * 基于 Java API
+* IoC 容器配置
+  * 基于 XML 配置
+  * 基于 Java 注解
+  * 基于 Java API
+* 外部化属性配置
+  * 基于 Java 注解
+
+#### 容器
+
+* BeanFactory 是Spring 底层 IoC 容器
+* ApplicationContext 是具备应用特性的 BeanFactory 超集
+
+
+
+#### 应用上下文
+
+
+
+#### 容器生命周期
+
+
+
+### Spring Bean
+
+#### BeanDefinition 元信息
+
+* **Class** Bean 全类名，必须是具体类，不能用抽象类或接口
+* **Name** Bean 的名称或者ID
+* **Scope** Bean 的作用域
+* **Constructor arguments** Bean 构造器参数（用于依赖注入）
+* **Properties** Bean 属性设置（用于依赖注入）
+* **Autowiring Mode** Bean 自动绑定模式
+* **Lazy initialization mode** Bean 延迟初始化模式
+* **Initialization method** Bean初始化回调方法名称
+* **Destruction method** Bean 销毁回调方法名称 
+
+#### BeanDefinition 注册
+
+* XML 配置元信息
+    * `<bean name="">`
+* Java 注解配置元信息
+	* `@Bean`
+	* `@Compent`
+	* `@Import`
+* Java API 配置元信息
+	* 命名方式 `BeanDefinitionRegistry#registerBeanDefinition`
+	* 非命名方式 `BeanDefinitionReaderUtils#registerWithGeneratedName`
+	* 配置类方式 `AnnotatedBeanDefinitionReader#register`
+
+### Spring 事件 (Events)
+
+
+
+### 资源管理（Resources）
+
+
+
+### 国际化（i18n）
+
+
+
+### 校验（Validation）
+
+
+
+### 数据绑定（Data Binding）
+
+### 类型转换（Type Conversion）
+
+### Spring 表达式（Spring Express Language）
+
+### 面向切面编程（AOP）
+
+
+
+
+
+
+
+## 数据存储
+
+### JDBC
+
+### 事物抽象（Transactions）
+
+### DAO支持（DAO Support）
+
+### O/R映射 
+
+### XML编列（XML Marshalling）
+
+
+
+## Web技术
+
+### Web Servlet
+
+#### Spring MVC
+
+#### WebSocket
+
+#### SockJS
+
+
+
+### Web Reactive
+#### Spring WebFlux
+#### WebClient
+#### WebSocket
+
+
+
+## 框架整合(Integration)
+
+
+
+
+
+
+
+## 测试
+
+
+
+
+
+
+
+
+
+
+## 配置属性
+
+### 细粒度的自动配置
+
+#### 理解Spring的环境抽象
 
 Spring环境从各个属性源中拉取属性，并让Spring应用上下中的bean可以使用他们
 
@@ -18,11 +231,11 @@ java -jar test.jar --server.port=9000       # java
 export SERVER_PORT=9000                     # 环境变量，注意，命名方式的不通
 ```
 
-## 自定义配置属性
+### 自定义配置属性
 
 在bean上添加@ConfigurationProperties注解，就会为bean中的属性根据Spring环境注入值。
 
-### 声明配置属性元数据
+#### 声明配置属性元数据
 
 创建自定义配置属性的元数据，需要在META-INF下创建一个名为`additional-spring-configuration-metadata.json`的文件。默认在项目的`src/main/resources/META-INFO`下。
 
@@ -44,13 +257,13 @@ export SERVER_PORT=9000                     # 环境变量，注意，命名方�
 
 ```
 
-### 使用profile进行配置
+#### 使用profile进行配置
 
-#### 定义特定profile属性
+##### 定义特定profile属性
 
 定义特定profile属性文件，遵守如下约定`application-{profile name}.yaml 或 application-{profile name}.properties`
 
-#### 使用profile条件化地创建bean
+##### 使用profile条件化地创建bean
 
 `@Profile`注解可以把bean设置为仅适用于给定的profile
 
@@ -63,11 +276,11 @@ public CommandLineRunner dataLoader() {
 
 
 
-# 异步消息
+## 异步消息
 
-## JMS
+### JMS
 
-## RabbitMQ和AMQP
+### RabbitMQ和AMQP
 
 AMQP消息使用Exchange和routing key来寻址，这样消息就与接收者要监听的队列解耦了。
 
@@ -88,25 +301,23 @@ Exchange 的类型
 
 
 
-## Kafka
+### Kafka
 
 [kafka](./kafka.md)
 
 
 
-# Integration
 
 
+## Reactor
 
-# Reactor
-
-## 反应式编程概览
+### 反应式编程概览
 
 反应式编程是一种可以替代命令式编程的编程范式。
 
 反应式编程本质上是函数式和声明式的。相对于描述一组将依次执行的步骤，反应式编程描述了数据将会流经的管道或者流。相对于要求将被处理的数据作为一个整体进行处理，反应式流可以在数据可用时立即开始处理。
 
-### 定义反应式流
+#### 定义反应式流
 
 反应式流可以总结为4个接口
 
@@ -153,11 +364,11 @@ Exchange 的类型
 
   作为`Subscriber`时，`Processor`会接受数据并以某种方式对数据进行处理，然后它会将角色转换为`Publisher`,并将处理的结果发布给它的`Subscriber`
 
-## Reactor
+### Reactor
 
 
 
-# WebFlux
+## WebFlux
 
 ![image-20200731103829434](../assets/images/image-20200731103829434.png)
 
@@ -169,18 +380,11 @@ Exchange 的类型
 
 
 
-# spring
+## spring
 
 
 
 
-
-### 控制反转（Inversion of Control，IoC）
-
-* 常见另一种叫法**依赖注入（Dependency Injection，DI）**, 还有一种叫法**依赖查找(Dependency Lookup)** 对象在被创建的时候，由IoC容器注入，对象的创建的控制权由IoC容器负责
-
-* Class A中用到了Class B的对象b，一般情况下，需要在A的代码中显式的new一个B的对象。		
-采用依赖注入技术之后，A的代码只需要定义一个私有的B对象，不需要直接new来获得这个对象，而是通过相关的容器控制程序来将B对象在外部new出来并注入到A类里的引用中。而具体获取的方法、对象被获取时的状态由配置文件（如XML）来指定。
 
 ### spring 应用上下文
 * AnnotationConfigApplicationContext：从一个或多个基于Java的配置类中加载Spring应用上下文。 

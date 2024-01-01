@@ -165,6 +165,13 @@
   },
   "active": "75b8798fb408eae3",
   "lastOpenFiles": [
+    "jupyter/rabbitmq/rabbitmq.ipynb",
+    "jupyter/rabbitmq",
+    "jupyter",
+    "doc/java/Spring.xmind",
+    "doc/customs/危险品包装.md",
+    "doc/customs/关务.md",
+    "doc/customs",
     "doc/elastic/elasticsearch.md",
     "doc/elastic/Kibana.md",
     "doc/elastic",
@@ -193,9 +200,6 @@
     "doc/windows.md",
     "doc/minio.md",
     "doc/maven.md",
-    "doc/activiti.md",
-    "doc/awesome.md",
-    "README.md",
     "pattern/behavioral/observer/weather class.png"
   ]
 }
