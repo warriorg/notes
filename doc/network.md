@@ -9,4 +9,3 @@ curl -so /dev/null -w "\ndnslookup: %{time_namelookup} | connect: %{time_connect
 ```
 
 
-
