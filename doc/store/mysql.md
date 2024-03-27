@@ -364,10 +364,6 @@ alter table nems_inventory_head drop column aa;
 CREATE UNIQUE INDEX nems_inventory_head_aaa ON nems_inventory_head (aa);
 ```
 
-
-
-
-
 # 运维
 
 ## 备份数据库
