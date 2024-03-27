@@ -422,8 +422,9 @@ swapoff -a && sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 初始化集群,如果要再次运行 `kubeadm init`，你必须首先卸载集群
 ```bash
-# 拉取的时候指定image的仓库
-kubeadm init --image-repository='registry.aliyuncs.com/google_containers'
+crictl config runtime-endpoint unix:///var/run/containerd/containerd.sock
+# 拉取的时候指定image的仓库, 可以多执行几次
+kubeadm init --image-repository=registry.aliyuncs.com/google_containers
 ```
 
 如果出事化的时候出错,可以使用下面的方式
@@ -437,7 +438,7 @@ sudo systemctl restart containerd.service
 
 **手工拉去image**
 >
-> ```bash
+> bash
 > # 查看kubeadm需要镜像
 > kubeadm config images list
 > # 查看镜像

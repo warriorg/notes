@@ -1,8 +1,8 @@
-# 简介
+
 
 ## 大数据发展历史
 
-![image-20201112221659501](assets/images/image-20201112221659501.png)
+![image-20201112221659501](../assets/images/image-20201112221659501.png)
 
 ## 大数据处理计算模式
 
@@ -47,51 +47,51 @@
 
 ## Flink发展历史与应用场景
 
-![image-20201112223638928](assets/images/image-20201112223638928.png)
+![image-20201112223638928](../assets/images/image-20201112223638928.png)
 
 ## 核心概念
 
 
 
-# 部署与应用
+## 部署与应用
 
-## 集群架构
+### 集群架构
 
-![ ](./assets/images/flink-runtime.png)
+![ ](../assets/images/flink-runtime.png)
 
-### JobManager 
+#### JobManager 
 
 管理节点，每个集群至少一个，管理真个集群计算资源，Job管理与调度执行，以及Checkpoint协调
 
  
 
-### TaskManager
+#### TaskManager
 
 每个集群有多个TM，负责计算资源提供。
 
-### Client 
+#### Client 
 
 本地执行应用`mian()`方法解析额`JobGraph`对象，并最终将`JobGraph`提交到`JobManager`运行，同时监控`Job`执行状态
 
-## 集群部署
+### 集群部署
 
-### Session集群运行模式
+#### Session集群运行模式
 
-#### 优点
+##### 优点
 
 * 资源充分共享，提升资源利用率
 * Job在Flink Session集群中管理，运维简单
 
-#### 缺点
+##### 缺点
 
 * 资源隔离相对较差
 * 非Native类型部署，TM不易拓展，Slot计算资源伸缩性较差
 
-### Per-Job运行模式
+#### Per-Job运行模式
 
 
 
-### Application Mode类型集群
+#### Application Mode类型集群
 
 | Cluster Manager | Sesssion | Per-Job | Application | Native | 生产 | 高可用 | 国内接受度 |
 | --------------- | -------- | ------- | ----------- | ------ | ---- | ------ | ---------- |
@@ -104,19 +104,35 @@
 
 
 
-## Standalone部署
+### Standalone部署
 
 
 
-## Flink On Yarn部署
+### Flink On Yarn部署
 
 
 
-## Flink on Kubernetes部署
+### Flink on Kubernetes部署
 
 
 
-# DataStream API实践原理
+## DataStream API实践原理
+
+### 分布式流处理模型
+
+![image-20240323103959801](../assets/flink/stream_model.png)
+
+
+
+### 时间概念
+
+### Watermark实践原理
+
+### Watermark与Window的关系
+
+### Watermark Generator
+
+
 
 
 

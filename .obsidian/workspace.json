@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "doc/elastic/Kibana.md",
+                "file": "doc/bigdata/flink.md",
                 "mode": "source",
                 "source": false
               }
@@ -77,7 +77,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 374.5
+    "width": 374.5,
+    "collapsed": true
   },
   "right": {
     "id": "f3f4abcb5279d3a9",
@@ -93,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/elastic/Kibana.md",
+                "file": "doc/bigdata/flink.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -110,7 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/elastic/Kibana.md",
+                "file": "doc/bigdata/flink.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -133,7 +134,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/elastic/Kibana.md"
+                "file": "doc/bigdata/flink.md"
               }
             }
           },
@@ -163,43 +164,49 @@
       "obsidian-spaced-repetition:Review flashcards": false
     }
   },
-  "active": "75b8798fb408eae3",
+  "active": "0349b0557ae3eeca",
   "lastOpenFiles": [
+    "doc/assets/flink/stream_model.png",
+    "doc/assets/flink/steam_model.png",
+    "doc/assets/flink",
+    "doc/assets/新建文件夹",
+    "doc/bigdata/assets/images/flink/image-20240323103959801.png",
+    "doc/bigdata/assets/images/flink",
+    "doc/bigdata/assets/images",
+    "doc/bigdata/assets",
+    "doc/dubbo.md",
+    "doc/android.md",
+    "doc/customs/关务.md",
+    "post/2020/Gin Swagger.md",
+    "doc/reading/机器学习实战.md",
+    "post/2022/3.Linux网络.md",
+    "doc/IntelliJ IDEA.md",
+    "doc/reading/High Performance Mysql.md",
+    "doc/store/oracle.md",
+    "doc/ios_development.md",
+    "doc/network.md",
+    "doc/图形思考.md",
+    "doc/微信支付.md",
+    "Untitled.canvas",
+    "doc/container/kubernetes.md",
+    "doc/elastic/Kibana.md",
     "jupyter/rabbitmq/rabbitmq.ipynb",
     "jupyter/rabbitmq",
     "jupyter",
     "doc/java/Spring.xmind",
     "doc/customs/危险品包装.md",
-    "doc/customs/关务.md",
     "doc/customs",
     "doc/elastic/elasticsearch.md",
-    "doc/elastic/Kibana.md",
-    "doc/elastic",
     "doc/elastic/ELK.md",
-    "Untitled.canvas",
     "doc/linux/Linux.md",
     "doc/MQ/rabbitmq.md",
     "doc/关务.md",
-    "snippet/java/gateway.yml",
     "doc/assets/images/02-Direct Exchange.png",
     "doc/container/docker.md",
     "doc/MQ/kafka.md",
     "doc/MQ/ActiveMQ.md",
     "doc/container/harbor.md",
-    "doc/store/mysql.md",
-    "doc/store/oracle.md",
     "Untitled 1.canvas",
-    "doc/vim.md",
-    "doc/命令行安装ipa.md",
-    "doc/微信支付.md",
-    "doc/游戏日志数据仓库之数据采集.md",
-    "doc/理财.md",
-    "doc/计算机系统.md",
-    "doc/理论.md",
-    "doc/随手记.md",
-    "doc/windows.md",
-    "doc/minio.md",
-    "doc/maven.md",
     "pattern/behavioral/observer/weather class.png"
   ]
 }
