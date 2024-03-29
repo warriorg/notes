@@ -9,7 +9,7 @@ WR21的配置
 **默认用户名密码** username/password
 
 Interfaces -> Ethernet  设置网口
-![wr21-1](./assets/wr21-1.png)
+![wr21-1](../assets/wr21-1.png)
 通过ftp/ssh上传python脚本，然后配置WR21
 
 ```python
@@ -23,10 +23,10 @@ config 0 save
 ```
 
 通过web修改python脚本
-![wr21-1](./assets/wr21-3.png)
+![wr21-1](../assets/wr21-3.png)
 
 通过web设置自启动脚本
-![wr21-1](./assets/wr21-3.png)
+![wr21-1](../assets/wr21-3.png)
 
 
 

@@ -1,7 +1,7 @@
 # 猴油脚本开发
 
 有一些重复性质的体力劳动，本来想用填表工具来解决，结果找了一圈，也没有找到一个好的工具，最后决定写个油猴脚本来实现。
-![Kapture-tampermonkey](./assets/Kapture-tampermonkey.gif)
+![Kapture-tampermonkey](../assets/Kapture-tampermonkey.gif)
 
 [文档](https://www.tampermonkey.net/documentation.php#_namespace)
 

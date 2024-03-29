@@ -6,19 +6,19 @@
 
 1. 打开Network，创建一个VPN连接
 
-   ![](./assets/cisco-vpn-1.png)
+   ![](../assets/cisco-vpn-1.png)
 
    点击create创建
 
 2. 点击Authentication Settings 设置组别信息
 
-   ![](./assets/cisco-vpn-2.png)
+   ![](../assets/cisco-vpn-2.png)
 
    点击OK完成
 
 3. 点击connect，建立连接
 
-   ![](./assets/cisco-vpn-3.png)
+   ![](../assets/cisco-vpn-3.png)
 
 
 

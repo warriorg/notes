@@ -438,7 +438,8 @@ git config --global credential.helper store
 ### 忽略对已入库文件的修改
 
 ```bash
-git update-index --assume-unchanged FILENAME			# 停止查看工作区文件可能发生的改变
+git update-index --assume-unchanged FILENAME			# 停止查看工作区文件可能发生的改变, 提交后会还原
+ git update-index --skip-worktree FILENAME				# 停止查看工作区文件可能发生的改变
 git update-index --no-assume-unchanged FILENAME		# 继续查看工作区文件可能发生的改变
 ```
 

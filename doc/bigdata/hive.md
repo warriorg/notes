@@ -143,7 +143,7 @@ show databases; # 显示数据库
 
 - 数据仓库是面向主题的（Subject-Oriented）、集成的（Integrated）、非易失的（Non-Volatile）和时变的（Time-Variant ）数据集合，用以支持管理决策。
 
-<img src="./assets/images/image-20210415155508571.png" alt="image-20210415155508571" style="zoom:50%;" />
+<img src="../assets/images/image-20210415155508571.png" alt="image-20210415155508571" style="zoom:50%;" />
 
 ## 数据仓库与数据库区别
 
@@ -184,7 +184,7 @@ show databases; # 显示数据库
   - 不分层的话，如果源业务系统的业务规则发生变化将会影响整个数据清洗过程，工作量巨大。
   - 通过数据分层管理可以简化数据清洗的过程，因为把原来一步的工作分到了多个步骤去完成，相当于把一个复杂的工作拆成了多个简单的工作，把一个大的黑盒变成了一个白盒，每一层的处理逻辑都相对简单和容易理解，这样我们比较容易保证每一个步骤的正确性，当数据发生错误的时候，往往我们只需要局部调整某个步骤即可。
 
-  ![image-20201012101134818](./assets/images/image-20201012101134818.png)
+  ![image-20201012101134818](../assets/images/image-20201012101134818.png)
 
 # 简介
 
@@ -196,7 +196,7 @@ show databases; # 显示数据库
 
   - 其本质是将SQL转换为MapReduce的任务进行运算，底层由HDFS来提供数据的存储支持，说白了hive可以理解为一个将SQL转换为MapReduce任务的工具，甚至更进一步可以说hive就是一个MapReduce的客户端
 
-![](./assets/images/Snipaste_2019-07-10_23-23-31.png)
+![](../assets/images/Snipaste_2019-07-10_23-23-31.png)
 
 ## Hive与数据库的区别
 
@@ -229,7 +229,7 @@ show databases; # 显示数据库
 
 ## Hive架构原理
 
-![](./assets/images/2019-07-11_11-08-35.png)
+![](../assets/images/2019-07-11_11-08-35.png)
 
 - 1、用户接口：Client
 
