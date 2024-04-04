@@ -4,15 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "bc4ecc47e107ea96",
+        "id": "3f4d7baa81f377b5",
         "type": "tabs",
         "children": [
           {
-            "id": "0e87abb9db759682",
+            "id": "dcf207d00c87c88e",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "doc/elastic/Kibana.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "doc/elastic/Kibana.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,6 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "doc/elastic/Kibana.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -127,7 +133,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "doc/elastic/Kibana.md"
+              }
             }
           },
           {
@@ -156,9 +164,8 @@
       "obsidian-spaced-repetition:Review flashcards": false
     }
   },
-  "active": "0e87abb9db759682",
+  "active": "75b8798fb408eae3",
   "lastOpenFiles": [
-    "doc/elastic/Kibana.md",
     "jupyter/rabbitmq/rabbitmq.ipynb",
     "jupyter/rabbitmq",
     "jupyter",
@@ -167,6 +174,7 @@
     "doc/customs/关务.md",
     "doc/customs",
     "doc/elastic/elasticsearch.md",
+    "doc/elastic/Kibana.md",
     "doc/elastic",
     "doc/elastic/ELK.md",
     "Untitled.canvas",
