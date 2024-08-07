@@ -366,6 +366,25 @@ CREATE UNIQUE INDEX nems_inventory_head_aaa ON nems_inventory_head (aa);
 
 # 运维
 
+## 用户管理
+
+```sql
+# 新建用户
+CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
+# 授权用户可以访问 test 的权限
+GRANT SELECT,INSERT,UPDATE,DELETE ON  test.* to 'finley'@'%';、
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON test.* TO 'finley'@'%';
+flush privileges;
+
+# 删除用户
+drop user ops_abc;
+
+# 用户的授权
+SHOW GRANTS FOR 'ops_dispatcher';
+```
+
+
+
 ## 备份数据库
 
 ```sql

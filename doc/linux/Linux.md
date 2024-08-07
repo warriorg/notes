@@ -337,6 +337,8 @@ sudo apt remove nmap
 sudo apt update
 # upgrade package
 sudo apt upgrade
+# 用于将软件包标记/取消标记为自动安装。 hold 选项**用于将软件包标记为保留，以防止软件包被自动安装、升级或删除**。 unhold 选项用于取消先前面的设置，以允许重复执行所有操作
+sudo sudo apt-mark hold nmap
 ```
 
 ### 常见问题
@@ -2682,6 +2684,7 @@ $ apt install sysstat
 ```
 ### mpstat
 多核 CPU 性能分析工具，用来实时查看每个 CPU 的性能指标，以及所有 CPU 的平均指标。
+
 ### sar
 
 ```bash
@@ -2689,7 +2692,9 @@ $ apt install sysstat
 apt install sysstat   
 vim /etc/default/sysstat    	# 打开性能收集工具的开关
 # 设置 ENABLED=”true”
-etc/init.d/sysstat start    # 启动Sar来收集系统性能数据
+/etc/init.d/sysstat start    # 启动Sar来收集系统性能数据
+sudo service sysstat restart
+
 # centos
 yum install sysstat 
 yum install sysstat -y
@@ -2703,7 +2708,7 @@ systemctl enable sysstat.service
 - 怀疑内存存在瓶颈，可用sar -B、sar -r 和 sar -W 等来查看
 - 怀疑I/O存在瓶颈，可用 sar -b、sar -u 和 sar -d 等来查看
 
-### 参数
+#### 参数
 
 - -A 汇总所有的报告
 - -a 报告文件读写使用情况
@@ -2725,7 +2730,7 @@ systemctl enable sysstat.service
 - -w 报告系统交换活动状况
 - -y 报告TTY设备活动状况
 
-### 查看CPU使用率
+#### 查看CPU使用率
 
 ```bash
 sar -u 1 3
@@ -2745,7 +2750,7 @@ Average:        all      0.25      0.00      0.50      0.00      0.00     99.25
 - %steal 利用Xen等操作系统虚拟化技术，等待其它虚拟CPU计算占用的时间比例；
 - %idle CPU空闲时间比例；
 
-### 查看平均负载
+#### 查看平均负载
 
 ```bash
 sar -q 1 3
@@ -2763,7 +2768,7 @@ Average:            0       204      0.07      0.05      0.04         0
 - ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载
 - ldavg-15：过去15分钟的系统平均负载
 
-### 查看内存使用状况
+#### 查看内存使用状况
 
 ```bash
 sar -r 1 3
@@ -2783,7 +2788,7 @@ Average:      4932260   7430684   3071392     38.37    159248   2346044    76257
 - kbcommit：保证当前系统所需要的内存,即为了确保不溢出而需要的内存(RAM+swap).
 - %commit：这个值是kbcommit与内存总量(包括swap)的一个百分比.
 
-### 查看页面交换发生状况
+#### 查看页面交换发生状况
 
 ```bash
 sar -W 1 3
@@ -2799,7 +2804,7 @@ Average:         0.00      0.00
 - pswpin/s：每秒系统换入的交换页面（swap page）数量
 - pswpout/s：每秒系统换出的交换页面（swap page）数量
 
-### 查看网络收发报告
+#### 查看网络收发报告
 
 ```bash
 sar -n DEV 1 1

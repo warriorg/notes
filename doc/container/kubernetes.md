@@ -1,4 +1,4 @@
-# 介绍
+P∏P# 介绍
 
 ## 集群架构
 
@@ -408,6 +408,7 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 
 apt-get update
 apt-get install -y kubelet kubeadm kubectl
+# 设置当前包不会自动更新
 apt-mark hold kubelet kubeadm kubectl
 ```
 
@@ -424,7 +425,7 @@ swapoff -a && sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 ```bash
 crictl config runtime-endpoint unix:///var/run/containerd/containerd.sock
 # 拉取的时候指定image的仓库, 可以多执行几次
-kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+kubeadm init --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
 ```
 
 如果出事化的时候出错,可以使用下面的方式

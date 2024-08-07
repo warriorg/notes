@@ -1,6 +1,6 @@
 {
   "theme": "system",
   "baseFontSize": 18,
-  "cssTheme": "",
+  "cssTheme": "Solarized",
   "accentColor": ""
 }

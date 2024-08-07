@@ -6,7 +6,7 @@
 
 ## 笔记
 
-[ActiveMQ](./doc/ActiveMQ.md)    
+[ActiveMQ](./doc/mq/ActiveMQ.md)    
 
 [activiti](./doc/activiti.md)     
 
@@ -14,13 +14,13 @@
 
 [awesome](./doc/awesome.md)
 
-[c](./doc/c.md)
+[c](./doc/language/c.md)
 
 [cd](./doc/cd.md)
 
 [consul](./doc/consul.md)
 
-[docker](./doc/docker.md)
+[docker](./doc/container/docker.md)
 
 [dubbo](./doc/dubbo.md)
 
@@ -36,13 +36,13 @@
 
 [git](./doc/git.md)
 
-[go](./doc/go.md)
+[go](./doc/language/go.md)
 
 [gradle](./doc/gradle.md)
 
 [gRpc](./doc/gRpc.md)
 
-[Hadoop](./doc/Hadoop.md)
+[Hadoop](./doc/bigtdata/Hadoop.md)
 
 [IDE](./doc/IDE.md)
 
@@ -52,9 +52,9 @@
 
 [ios_development](./doc/ios_development.md)
 
-[java](./doc/java.md)
+[java](./doc/language/java.md)
 
-[javascript](./doc/javascript.md)
+[javascript](./doc/language/javascript.md)
 
 [JMeter](./doc/JMeter.md)
 
@@ -110,7 +110,7 @@
 
  [Tomcat.md](./doc/Tomcat.md) 
 
- [TypeScript.md](./doc/TypeScript.md) 
+ [TypeScript.md](./doc/language/TypeScript.md) 
 
  [vim.md](./doc/vim.md) 
 

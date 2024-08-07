@@ -1,4 +1,4 @@
-
+# Flink
 
 ## 大数据发展历史
 
@@ -67,11 +67,19 @@
 
 #### TaskManager
 
-每个集群有多个TM，负责计算资源提供。
+工作进程，每个集群有多个TM，负责计算资源提供。通常在 Flink 搭建过程中要启动多个 TaskManager。每个 TaskManager 提供一定数 量的处理槽。处理槽的数目限制了 TaskManager 可执行的任务数。
 
 #### Client 
 
-本地执行应用`mian()`方法解析额`JobGraph`对象，并最终将`JobGraph`提交到`JobManager`运行，同时监控`Job`执行状态
+本地执行应用`mia n()`方法解析`JobGraph`对象，并最终将`JobGraph`提交到`JobManager`运行，同时监控`Job`执行状态
+
+### 应用部署
+
+* Flink 应用可以通过两种模式进行部署。
+  * 框架模式
+    * 应用打包成 JAR 文件，通过客户端提交到运行的服务上。
+  * 库模式
+    * 在该模式下，flink 应用会绑定到一个特定 用的容器镜像 （如 Docker镜像）中。镜像中还包含着运行 JobManager 以及 ResourceManager 的代码。当容器从镜像启动后会自动加载 ResourceManager 和 Job Manager ，并将绑定的作业提交执行。另 个和作业无关的镜像负责部署 TaskManager容器。
 
 ### 集群部署
 
@@ -134,5 +142,6 @@
 
 
 
-
+## 参考
+* **ETL** 提取－转换－加载（Extract-Transform-Load, ETL ）。 基本流程是事务型数据库中提取数据，将其转换为通用表示形式（可能包含数据验证、数据归 、编码、去重、表模式转换等工作），最终加载到分析型数据库中。该流程可能会非常麻烦，通常需要复杂的技术方案来满足性能要求。为了保持数据仓库中的数据同步， ETL 过程需要周期性地执行
 

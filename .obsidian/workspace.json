@@ -4,18 +4,18 @@
     "type": "split",
     "children": [
       {
-        "id": "3f4d7baa81f377b5",
+        "id": "96ee88b266832927",
         "type": "tabs",
         "children": [
           {
-            "id": "dcf207d00c87c88e",
+            "id": "27212124f0b7d586",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "doc/elastic/Kibana.md",
-                "mode": "source",
-                "source": false
+                "file": "doc/linux/Linux.md",
+                "mode": "preview",
+                "source": true
               }
             }
           }
@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "wifi",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -73,12 +73,12 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 374.5,
-    "collapsed": true
+    "width": 279.5
   },
   "right": {
     "id": "f3f4abcb5279d3a9",
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/elastic/Kibana.md",
+                "file": "doc/linux/Linux.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/elastic/Kibana.md",
+                "file": "doc/linux/Linux.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +134,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/elastic/Kibana.md"
+                "file": "doc/linux/Linux.md"
               }
             }
           },
@@ -147,7 +147,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -164,43 +164,47 @@
       "obsidian-spaced-repetition:Review flashcards": false
     }
   },
-  "active": "75b8798fb408eae3",
+  "active": "27212124f0b7d586",
   "lastOpenFiles": [
-    "jupyter/rabbitmq/rabbitmq.ipynb",
-    "jupyter/rabbitmq",
-    "jupyter",
-    "doc/java/Spring.xmind",
-    "doc/customs/危险品包装.md",
-    "doc/customs/关务.md",
-    "doc/customs",
-    "doc/elastic/elasticsearch.md",
-    "doc/elastic/Kibana.md",
-    "doc/elastic",
-    "doc/elastic/ELK.md",
-    "Untitled.canvas",
+    "doc/linux/catalog.md",
     "doc/linux/Linux.md",
-    "doc/MQ/rabbitmq.md",
-    "doc/关务.md",
-    "snippet/java/gateway.yml",
-    "doc/assets/images/02-Direct Exchange.png",
-    "doc/container/docker.md",
-    "doc/MQ/kafka.md",
-    "doc/MQ/ActiveMQ.md",
+    "doc/linux/linux_server.md",
+    "doc/linux/shell.md",
+    "doc/linux/ssh.md",
+    "doc/container/kubernetes.md",
     "doc/container/harbor.md",
-    "doc/store/mysql.md",
-    "doc/store/oracle.md",
-    "Untitled 1.canvas",
-    "doc/vim.md",
-    "doc/命令行安装ipa.md",
-    "doc/微信支付.md",
-    "doc/游戏日志数据仓库之数据采集.md",
-    "doc/理财.md",
+    "doc/container/docker-compose.md",
     "doc/计算机系统.md",
-    "doc/理论.md",
-    "doc/随手记.md",
-    "doc/windows.md",
-    "doc/minio.md",
-    "doc/maven.md",
+    "doc/Vagrant.md",
+    "doc/mq/rabbitmq.md",
+    "post/2022/7.Spring Cloud 脱离Nacos本地部署.md",
+    "mind/Spring.xmind",
+    "Spring.xmind",
+    "doc/container/docker.md",
+    "snippet/shell/etcd.tar",
+    "snippet/shell/pause.tar",
+    "snippet/shell/kube-proxy.tar",
+    "snippet/shell/kube-scheduler.tar",
+    "snippet/shell/kube-controller-manager.tar",
+    "snippet/shell/kube-apiserver.tar",
+    "snippet/shell/k8s.sh",
+    "post/2022/3.Linux网络.md",
+    "Untitled.canvas",
+    "doc/Tomcat.md",
+    "README.md",
+    "doc/IntelliJ IDEA.md",
+    "doc/bigtdata/Hadoop.md",
+    "doc/bigtdata",
+    "doc/git.md",
+    "Untitled 1.canvas",
+    "doc/store/redis.md",
+    "post/2022/6.分布式锁.md",
+    "doc/elastic/elasticsearch.md",
+    "doc/awesome.md",
+    "doc/elastic/ELK.md",
+    "doc/monitor/prometheus.md",
+    "doc/monitor/loki.md",
+    "doc/assets/images/02-Direct Exchange.png",
     "pattern/behavioral/observer/weather class.png"
   ]
 }

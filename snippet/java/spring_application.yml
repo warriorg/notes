@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: pubparam-service
+  cloud:
+    nacos:
+      username: ${NACOS_USERNAME:}
+      password: ${NACOS_PASSWORD:}
+      config:
+        server-addr: ${NACOS_HOST:}
+        file-extension: yaml
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:dev}
+        timeout: 5000
+        config-long-poll-timeout: 3000
+        config-retry-time: 100000
+        max-retry: 3
+      discovery:
+        namespace: 
+        server-addr: 
+        group: dev
+  liquibase:
+    enabled: false
+    change-log: db/changelog.mysql.xml
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 500
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: false
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
+  mvc:
+    servlet:
+      path: /api
+  servlet:
+    multipart:
+      max-file-size: 400MB 
+      max-request-size: 400MB
+
+  redis:
+    host: 
+    port: 
+  rabbitmq:
+    host: 
+    port: 5673
+    username: dev
+    password: dev
+    virtual_host: dev
+# actuator    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# open feign
+feign:
+  sentinel:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 3000
+        readTimeout: 60000
+        loggerLevel: full      
+  

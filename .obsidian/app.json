@@ -1,9 +1,11 @@
 {
-  "vimMode": false,
-  "showLineNumber": false,
+  "vimMode": true,
+  "showLineNumber": true,
   "legacyEditor": false,
-  "livePreview": true,
+  "livePreview": false,
   "promptDelete": false,
   "spellcheck": true,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "defaultViewMode": "preview",
+  "tabSize": 2
 }

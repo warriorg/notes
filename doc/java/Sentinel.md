@@ -14,7 +14,7 @@ Sentinel 的技术亮点：
 - 覆盖 API Gateway 场景，为 Spring Cloud Gateway、Zuul 提供网关流量控制的能力
 - 实时监控和规则动态配置管理能力
 
-![sentinel-arch.png](./assets/images/sentinel-arch.png)
+![sentinel-arch.png](../assets/images/sentinel-arch.png)
 
 
 

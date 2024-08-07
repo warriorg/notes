@@ -117,8 +117,30 @@ EXPLAIN实际执行查询，然后显示每个计划节点中积累的真实行�
 
 # Server Administration
 
-
 # 数据库管理
+
+## 授权
+
+```bash
+# 列出所有用户
+\du
+# 修改用户密码
+\password dbuser
+# 删除用户
+drop user dbuser;
+# 查询当前登陆用户
+select user;
+# 创建用户并设置密码
+create user flink with encrypted password 'flink';
+# 创建一个超级用户并设置密码
+create user flink_super with superuser encrypted password 'flink_super'
+# 查询用户授权
+select * from information_schema.table_privileges where grantee='flink';
+
+
+```
+
+
 
 ## 查看
 
