@@ -1,4 +1,4 @@
-# Install
+## Install
 
 ### 主从
 
@@ -344,6 +344,59 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 ### 内存结构
 
 ## 事务
+
+### 事务测试
+**脏读** 一个事务读取了另一个未提交事务写入的数据。
+**不可重复读** 一个事务重新读取前面读取过的数据，发现该数据已经被另一个已经提交的事务修改。
+**幻读** 一个事务重新执行一个查询，返回符合查询条件的行的集合，发现满足查询条件的行的集合因为其它最近提交的事务而发生了改变。
+
+| 隔离级别 | 脏读   | 不可重复读 | 幻读   |
+| -------- | ------ | ---------- | ------ |
+| 读未提交 | 可能   | 可能       | 可能   |
+| 读已提交 | 不可能 | 可能       | 可能   |
+| 可重复读 | 不可能 | 不可能     | 可能   |
+| 可串行化 | 不可能 | 不可能     | 不可能 |
+
+#### MySql测试
+
+##### 调整事务隔离级别语法
+
+```sql
+SET [GLOBAL | SESSION] TRANSACTION
+    transaction_characteristic [, transaction_characteristic] ...
+
+transaction_characteristic: {
+    ISOLATION LEVEL level
+  | access_mode
+}
+
+level: {
+     REPEATABLE READ
+   | READ COMMITTED
+   | READ UNCOMMITTED
+   | SERIALIZABLE
+}
+
+access_mode: {
+     READ WRITE
+   | READ ONLY
+}
+```
+
+```sql
+set session transaction isolation level SERIALIZABLE;
+select @@transaction_isolation;
+commit;
+
+INSERT INTO test (uid,site) VALUES ('01GJPJYKZGEWE61HM4QSMTXGPG','3205263314');
+select * from test csh where uid = '01GJPJYKZGEWE61HM4QSMTXGPG';
+```
+
+
+
+
+
+
 
 ## 读写分离
 

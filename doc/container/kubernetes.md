@@ -1,4 +1,4 @@
-P∏P# 介绍
+# Kubernates
 
 ## 集群架构
 
@@ -28,52 +28,52 @@ P∏P# 介绍
 * Kubernetes Service Proxy（kubeproxy），它负责组件之间的负载均衡网络流量
 
 
-# 基本理论
+## 基本理论
 
-## 虚拟化
+### 虚拟化
 
-## OpenStack & KVM
+### OpenStack & KVM
 
-### OpenStack
+#### OpenStack
 
 OpenStack是一个云操作系统，通过数据中心可控制大型的计算、存储、网络等资源池。所有的管理通过前端界面管理员就可以完成，同样也可以通过web接口让最终用户部署资源。
 
-### KVM
+#### KVM
 
 基于内核的虚拟机 Kernel-based Virtual Machine（KVM）是一种内建于 Linux® 中的开源虚拟化技术。具体而言，KVM 可帮助您将 Linux 转变为虚拟机监控程序，使主机计算机能够运行多个隔离的虚拟环境，即虚拟客户机或虚拟机（VM）。
 
 
 
-## docker
+### docker
 
 [docker](./deocker.md)
 
 
 
-## 容器编排
+### 容器编排
 
-# INSTALL
+## INSTALL
 
-## 学习环境
+### 学习环境
 
 
 
-### Install with Homebrew on macOS
+#### Install with Homebrew on macOS
 
 ```bash
 brew install kubernetes-cli
 kubectl version
 ```
 
-### Minikube
+#### Minikube
 
-#### macos
+##### macos
 
 ```bash
 brew cask install minikube
 ```
 
-#### linux
+##### linux
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -86,13 +86,13 @@ minikube start
 
 
 
-### kubeadm
+#### kubeadm
 
 
 
-### docker desktop 
+#### docker desktop
 
-#### 启用k8s 
+##### 启用k8s
 
 ![macos_docker_k8s_install](../assets/images/macos_docker_k8s_install.png)
 
@@ -109,11 +109,11 @@ kubectl get namespaces
 # kubectl get posts --namespace kube-system
 ```
 
-#### Install Kubernetes Dashboard
+##### Install Kubernetes Dashboard
 
 [github](https://github.com/kubernetes/dashboard)
 
-```bash 
+```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc2/aio/deploy/recommended.yaml
 
 # 查看部署的容器和服务
@@ -126,7 +126,7 @@ kubectl proxy
 # http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 ```
 
-#### [Creating sample user](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
+##### [Creating sampleuser](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
 
 使用token的方式访问
 
@@ -134,9 +134,9 @@ kubectl proxy
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
 ```
 
-### [将 Docker Compose 文件转换为 Kubernetes 资源](https://v1-12.docs.kubernetes.io/zh/docs/tasks/configure-pod-container/translate-compose-kubernetes/)
+#### [将 Docker Compose 文件转换为 Kubernetes 资源](https://v1-12.docs.kubernetes.io/zh/docs/tasks/configure-pod-container/translate-compose-kubernetes/)
 
-#### macos
+##### macos
 
 ```bash
 brew install kompose
@@ -148,7 +148,7 @@ kompose up
 # 从 Kubernetes 删除部署的实例
 kompose down
 # 要将 docker-compose.yml 转换为 kubectl 可用的文件
-kompose convert 
+kompose convert
 # kubectl 进行创建
 kubectl create -f frontend-service.yaml
 # 查看部署的服务的详情
@@ -159,7 +159,7 @@ kubectl get deployment,svc,pods,pvc
 
 
 
-### Install Kubeadm 
+### Install Kubeadm
 
 #### Ubuntu
 
@@ -206,7 +206,7 @@ $ kubeadm init --config kubeadm.yaml
 
 部署rook, [github](https://github.com/rook/rook)地址。
 
-```bash 
+```bash
 cd cluster/examples/kubernetes/ceph
 kubectl create -f common.yaml
 kubectl create -f operator.yaml
@@ -314,28 +314,28 @@ ENTRYPOINT ["node", "app.js"] # 运行node命令
 
 ![image-20200512190920937](../assets/images/image-20200512190920937.png)
 
-## 集群
+### 集群
 
-### 安装容器运行时
+#### 安装容器运行时
 
-1. 安装和配置的先决条件	
+1. 安装和配置的先决条件
 
    ```bash
    cat <<EOF | tee /etc/modules-load.d/containerd.conf
    overlay
    br_netfilter
    EOF
-   
+
    modprobe overlay
    modprobe br_netfilter
-   
+
    # 设置必需的 sysctl 参数，这些参数在重新启动后仍然存在。
    cat <<EOF | tee /etc/sysctl.d/99-kubernetes-cri.conf
    net.bridge.bridge-nf-call-iptables  = 1
    net.ipv4.ip_forward                 = 1
    net.bridge.bridge-nf-call-ip6tables = 1
    EOF
-   
+
    # 应用 sysctl 参数而无需重新启动
    sudo sysctl --system
    ```
@@ -356,11 +356,11 @@ ENTRYPOINT ["node", "app.js"] # 运行node命令
    ```
 
 
-### kubeadm
+#### kubeadm
 
-#### 确保每个节点上 MAC 地址和 product_uuid 的唯一性 
+##### 确保每个节点上 MAC 地址和 product_uuid 的唯一性
 
-#### 允许 iptables 检查桥接流量
+##### 允许 iptables 检查桥接流量
 
 ```bash
 cat <<EOF | tee /etc/modules-load.d/k8s.conf
@@ -374,9 +374,9 @@ EOF
 sysctl --system
 ```
 
-#### 检查所需端口
+##### 检查所需端口
 
-##### 控制平面节点
+###### 控制平面节点
 
 | 协议 | 方向 | 端口范围  | 作用                    | 使用者                       |
 | ---- | ---- | --------- | ----------------------- | ---------------------------- |
@@ -438,8 +438,8 @@ sudo systemctl restart containerd.service
 ```
 
 **手工拉去image**
->
-> bash
+
+> ```bash
 > # 查看kubeadm需要镜像
 > kubeadm config images list
 > # 查看镜像
@@ -453,16 +453,16 @@ sudo systemctl restart containerd.service
 > # 重复处理所有的images
 > # 初始化
 > kubeadm init
-> 
+>
 > # 例如
 > docker pull registry.aliyuncs.com/google_containers/kube-proxy:v1.21.2
 > docker tag registry.aliyuncs.com/google_containers/kube-proxy:v1.21.2  k8s.gcr.io/kube-proxy:v1.21.2
 > docker rmi registry.aliyuncs.com/google_containers/kube-proxy:v1.21.2
-> 
-> 
+>
+>
 > docker pull registry.aliyuncs.com/google_containers/pause:3.4.1
 > docker tag registry.aliyuncs.com/google_containers/pause:3.4.1  k8s.gcr.io/pause:3.4.1
-> docker rmi registry.aliyuncs.com/google_containers/pause:3.4.1 
+> docker rmi registry.aliyuncs.com/google_containers/pause:3.4.1
 > ```
 
 要使非 root 用户可以运行 kubectl，请运行以下命令， 它们也是 `kubeadm init` 输出的一部分：
@@ -494,10 +494,10 @@ kubeadm join 10.10.10.21:6443 --token j5sl2p.xpewlidks1bd6g1g \
 
 # 如果遗忘这个值
 # 查看有效的token, 默认24小时有效
-kubeadm token list 
+kubeadm token list
 # 获取ca证书sha256编码hash值
 openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
-        
+
 # 如果这个值失效
 kubeadm token create --print-join-command
 ```
@@ -530,7 +530,7 @@ kubectl edit cm kubeadm-config -n kube-system
 修改 controller-manager 静态 pod 的启动参数，增加 --allocate-node-cidrs=true --cluster-cidr=10.244.0.0/16
 
 ```bash
-vim /etc/kubernetes/manifests/kube-controller-manager.yaml 
+vim /etc/kubernetes/manifests/kube-controller-manager.yaml
 ```
 
 ![image-20210713174338224](../assets/images/image-20210713174338224.png)
@@ -555,7 +555,7 @@ kubectl get nodes
 kubectl describe nodes k8s01
 
 # 检查所有pods部署情况
-kubectl get pods -n kube-system 
+kubectl get pods -n kube-system
 # 查看某个pod具体的原因
 kubectl describe pod kube-flannel-ds-qx282 -n kube-system
 
@@ -587,11 +587,11 @@ kubectl apply -f deploy.ymal
 
 
 
-# 概念
+## 概念
 
-## Kubernetes 对象
+### Kubernetes 对象
 
-### 简介
+#### 简介
 
 在 Kubernetes 系统中，*Kubernetes 对象* 是持久化的实体。Kubernetes 使用这些实体去表示整个集群的状态。特别地，它们描述了如下信息：
 
@@ -599,11 +599,11 @@ kubectl apply -f deploy.ymal
 - 可以被应用使用的资源
 - 关于应用运行时表现的策略，比如重启策略、升级策略，以及容错策略
 
-#### 对象规约（Spec）与状态（Status）
+##### 对象规约（Spec）与状态（Status）
 
 每个 Kubernetes 对象包含两个嵌套的对象字段，它们负责管理对象的配置：对象 *spec* 和 对象 *status* 。 *spec* 是必需的，它描述了对象的 *期望状态（Desired State）* —— 希望对象所具有的特征。 *status* 描述了对象的 *实际状态（Actual State）* ，它是由 Kubernetes 系统提供和更新的。
 
-#### 必需字段
+##### 必需字段
 
 在想要创建的 Kubernetes 对象对应的 `.yaml` 文件中，需要配置如下的字段：
 
@@ -613,13 +613,13 @@ kubectl apply -f deploy.ymal
 
 
 
-## Pod
+### Pod
 
 *Pod* 是 Kubernetes 应用程序的基本执行单元，即它是 Kubernetes 对象模型中创建或部署的最小和最简单的单元。Pod 表示在集群上运行的进程。
 
 
 
-## Service
+### Service
 
 ### Headless Service
 
@@ -632,23 +632,23 @@ Headless Service也是一种Service，但不同的是会定义spec:clusterIP: No
 
 
 
-## Volume
+### Volume
 
-## Namespace
+### Namespace
 
 **Namespace** 提供一种机制，将同一集群中的资源划分为相互隔离的组。 同一**Namespace**内的资源名称要唯一，但跨名字空间时没有这个要求。 **Namespace**作用域仅针对带有名字空间的对象，例如 Deployment、Service 等， 这种作用域对集群访问的对象不适用，例如 StorageClass、Node、PersistentVolume 等。
 
-## Controller
+### Controller
 
 在 Kubernetes 中，控制器通过监控[集群](https://kubernetes.io/zh-cn/docs/reference/glossary/?all=true#term-cluster) 的公共状态，并致力于将当前状态转变为期望的状态。
 
-## Deployment
+### Deployment
 
 一个 Deployment 为 [Pod](https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/) 和 [ReplicaSet](https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/replicaset/) 提供声明式的更新能力。
 
 你负责描述 Deployment 中的 **目标状态**，而 Deployment [控制器（Controller）](https://kubernetes.io/zh-cn/docs/concepts/architecture/controller/) 以受控速率更改实际状态， 使其变为期望状态。你可以定义 Deployment 以创建新的 ReplicaSet，或删除现有 Deployment， 并通过新的 Deployment 收养其资源。
 
-## DaemonSet
+### DaemonSet
 
 **DaemonSet** 确保全部（或者某些）节点上运行一个 Pod 的副本。 当有节点加入集群时， 也会为他们新增一个 Pod 。 当有节点从集群移除时，这些 Pod 也会被回收。删除 DaemonSet 将会删除它创建的所有 Pod。
 
@@ -660,7 +660,7 @@ DaemonSet 的一些典型用法：
 
 一种简单的用法是为每种类型的守护进程在所有的节点上都启动一个 DaemonSet。 一个稍微复杂的用法是为同一种守护进程部署多个 DaemonSet；每个具有不同的标志， 并且对不同硬件类型具有不同的内存、CPU 要求。
 
-## StatefulSet
+### StatefulSet
 
 StatefulSet 是用来管理有状态应用的工作负载 API 对象。
 
@@ -670,11 +670,11 @@ StatefulSet 用来管理某 [Pod](https://kubernetes.io/zh-cn/docs/concepts/work
 
 如果希望使用存储卷为工作负载提供持久存储，可以使用 StatefulSet 作为解决方案的一部分。 尽管 StatefulSet 中的单个 Pod 仍可能出现故障， 但持久的 Pod 标识符使得将现有卷与替换已失败 Pod 的新 Pod 相匹配变得更加容易。
 
-## ReplicaSet
+### ReplicaSet
 
 ReplicaSet 的目的是维护一组在任何时候都处于运行状态的 Pod 副本的稳定集合。 因此，它通常用来保证给定数量的、完全相同的 Pod 的可用性。
 
-## Job
+### Job
 
 Job 会创建一个或者多个 Pod，并将继续重试 Pod 的执行，直到指定数量的 Pod 成功终止。 随着 Pod 成功结束，Job 跟踪记录成功完成的 Pod 个数。 当数量达到指定的成功个数阈值时，任务（即 Job）结束。 删除 Job 的操作会清除所创建的全部 Pod。 挂起 Job 的操作会删除 Job 的所有活跃 Pod，直到 Job 被再次恢复执行。
 
@@ -686,9 +686,9 @@ Job 会创建一个或者多个 Pod，并将继续重试 Pod 的执行，直到�
 
 
 
-# 网络原理
+## 网络原理
 
-## kubernetes网络模型
+### kubernetes网络模型
 
 Kubernetes网络模型设计的一个基础原则是：每个Pod都拥有一个独立的IP地址，并假定所有Pod都在一个可以直接连通的、扁平的网络空间中。所以不管它们是否运行在同一个Node（宿主机）中，都要求它们可以直接通过对方的IP进行访问。设计这个原则的原因是，用户不需要额外考虑如何建立Pod之间的连接，也不需要考虑如何将容器端口映射到主机端口等问题。
 
@@ -700,15 +700,15 @@ Kubernetes 对集群网络的基本要求
 2. 在所有节点上运行的代理程序（例如kubelet或操作系统守护进程）都可以在不用NAT的方式下同所有Pod通信，反之亦然。
 3. 以 hostnetwork 模式运行的Pod都可以在不用NAT的方式下同别的Pod通信。
 
-## Docker网络基础
+### Docker网络基础
 
-### 网络命名空间（Network Namespace）
+#### 网络命名空间（Network Namespace）
 
-#### 网络命名空间实现
+##### 网络命名空间实现
 
 ![image-20220923152902785](../assets/images/image-20220923152902785.png)
 
-#### 对网络命名空间的操作
+##### 对网络命名空间的操作
 
 Linux的网络协议栈是十分复杂的，为了支持独立的协议栈，相关的这些全局变量都必须被修改为协议栈私有。最好的办法就是让这些全局变量成为一个NetNamespace变量的成员，然后为协议栈的函数调用加入一个Namespace参数。这就是Linux实现网络命名空间的核心。
 
@@ -721,19 +721,19 @@ ip netns exec <name> <command>
 ip netns exec <name> bash
 ```
 
-### Veth设备对
+#### Veth设备对
 
 引入Veth设备对是为了在不同的网络命名空间之间通信，利用它可以直接将两个网络命名空间连接起来。由于要连接两个网络命名空间，所以Veth设备都是成对出现的，很像一对以太网卡，并且中间有一根直连的网线。既然是一对网卡，那么我们将其中一端称为另一端的peer。在Veth设备的一端发送数据时，它会将数据直接发送到另一端，并触发另一端的接收操作。
 
 ![image-20220923152943564](../assets/images/image-20220923152943564.png)
 
-#### 对Veth设备对的操作命令
+##### 对Veth设备对的操作命令
 
 ```bash
 # 创建Veth设备对
 ip link add veth0 type veth peer name veth1
 # 查看所有网络接口
-ip link show 
+ip link show
 # 设置 veth1 到 netns1 的命名空间
 ip link set veth1 netns netns1
 # 在 netns1 网络命名空间中查看veth1设备
@@ -753,7 +753,7 @@ ip link set dev veth0 up
 # 在命名空间netns1中查看veth设备对端在设备列表中的序列号
 ip netns exec netns1 ethtool -S veth1
 # 在另一段查看
-ip netns exec netns2 ip link 
+ip netns exec netns2 ip link
 ```
 
 ### 网桥
@@ -843,19 +843,26 @@ Linux系统包含一个完整的路由功能。当IP层在处理数据发送或�
 
 * 网络接口规范：为一些数据报文的网络接口规范，该规范将与报文一起被转发。
 
-  
-
-## Docker 网络实现
 
 
 
 
+## Pod
+
+### 定义详解
+
+```bash
+# 查看定义
+kubectl explain pod
+kubectl explain pod.kind
+```
 
 
 
 
 
-# 实战
+
+## 实战
 
 ### 部署第一个容器应用
 
@@ -875,6 +882,7 @@ spec:
     metadata:
       labels:
         app: nginx
+        env: test
     spec:
       containers:
       - name: nginx
@@ -885,8 +893,8 @@ spec:
         - mountPath: "/usr/share/nginx/html"
           name: nginx-vol
       volumes:
-      - name: nginx-vol 
-        hostPath: 
+      - name: nginx-vol
+        hostPath:
           path: /Users/warrior/www/bom
 ```
 
@@ -970,7 +978,7 @@ cat pod.json | kubectl apply -f -
 
 ### get
 
-查看和查找资源 
+查看和查找资源
 
 ```bash
 # get 命令的基本输出
@@ -1047,7 +1055,7 @@ kubectl get nodes -o json | jq -c 'path(..)|[.[]|tostring]|join(".")'
 kubectl get pods -o json | jq -c 'path(..)|[.[]|tostring]|join(".")'
 
 # 假设你的 Pods 有默认的容器和默认的名字空间，并且支持 'env' 命令，可以使用以下脚本为所有 Pods 生成 ENV 变量。
-# 该脚本也可用于在所有的 Pods 里运行任何受支持的命令，而不仅仅是 'env'。 
+# 该脚本也可用于在所有的 Pods 里运行任何受支持的命令，而不仅仅是 'env'。
 for pod in $(kubectl get po --output=jsonpath={.items..metadata.name}); do echo $pod && kubectl exec -it $pod env; done
 ```
 
@@ -1131,7 +1139,7 @@ kubectl run pi --image=perl --restart=OnFailure -- perl -Mbignum=bpi -wle 'print
   -t, --tty[=false]: Allocated a TTY for each container in the pod.
 ```
 
-### scale 
+### scale
 
 对资源进行伸缩
 
@@ -1142,11 +1150,11 @@ kubectl scale --current-replicas=2 --replicas=3 deployment/mysql  # 如果名为
 kubectl scale --replicas=5 rc/foo rc/bar rc/baz # 伸缩多个副本控制器
 ```
 
- 
 
-# trouble shooting
 
-## 查看系统Event
+## trouble shooting
+
+### 查看系统Event
 
 ```bash
 kubectl describe pod redis-master-bobr0
@@ -1160,13 +1168,10 @@ kubectl describe pod redis-master-bobr0
 
 通过kubectl describe命令，我们还可以查看其他Kubernetes对象，包括Node、RC、Service、Namespace、Secrets等，对每种对象都会显示相关的其他信息。
 
-## 查看容器日志
+### 查看容器日志
 
 ```bash
 kubectl logs <pod-name>
 ```
 
-## 查看 Kubernetes 服务日志
-
-
-
+### 查看 Kubernetes 服务日志

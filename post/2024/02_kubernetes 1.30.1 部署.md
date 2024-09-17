@@ -2,8 +2,9 @@
 
 | 系统名        | IP              | 备注 |
 | ------------- | --------------- | ---- |
-| k8s-master-01 | 192.168.100.201 |      |
-| k8s-node-01   | 192.168.100.202 |      |
+| k8s-master    | 192.168.100.201 |      |
+| k8s-node-02   | 192.168.100.202 |      |
+| k8s-node-03   | 192.168.100.203 |      |
 
 前置检查
 
@@ -37,7 +38,6 @@ sudo sysctl -p
 ```
 
 
-
 安装docker
 
 ```bash
@@ -52,13 +52,11 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 apt-get update
-apt-get install docker-ce docker-ce-cli containerd.io 
+apt-get install docker-ce docker-ce-cli containerd.io
 
 cat > /etc/docker/daemon.json <<EOF
 {
 "registry-mirrors": [
-"https://docker.mirrors.ustc.edu.cn",
-"https://hub-mirror.c.163.com"
 ],
  "exec-opts": ["native.cgroupdriver=systemd"],
  "data-root": "/var/lib/docker",
@@ -92,6 +90,26 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable --now kubelet
 ```
+
+容器设置
+```bash
+containerd config default > /etc/containerd/config.toml
+```
+
+设置容器
+```bash
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  ...
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+    SystemdCgroup = true
+```
+
+```bash
+# 重启
+sudo systemctl restart containerd
+```
+
+> SystemdCgroup 设置非常重要，否则容器会不停重启
 
 初始化集群
 
@@ -174,9 +192,11 @@ tar -C /opt/cni/bin -xzf cni-plugins-linux-amd64-v1.2.0.tgz
 ```
 
 ```bash
+kubeadm init --config kubeadm.yaml
+
 export KUBECONFIG=/etc/kubernetes/admin.conf
 # 安装插件
-kubectl apply -f kube-flannel.yml 
+kubectl apply -f kube-flannel.yml
 
 # 加入集群
 kubeadm join 192.168.100.201:6443 --token abcdef.0123456789abcdef \
@@ -189,11 +209,12 @@ kubectl get po -A -owide
 node 清理重新加入
 ```bash
 kubeadm reset      #初始化
+rm -rf /etc/cni/net.d
 systemctl daemon-reload      #重新加载
 ip link set cni0 down && sudo ip link delete cni0
 systemctl restart kubelet    #重启kubelet服务
 systemctl restart containerd
-iptables -F  
+iptables -F
 ```
 
 
@@ -221,11 +242,29 @@ rm /etc/containerd/config.toml
 systemctl restart containerd
 ```
 
-* Failed to create pod sandbox: rpc error: code = Unknown desc = failed to get sandbox image "k8s.gcr.io/pause:3.8": failed to pull image "k8s.gcr.io/pause:3.2": failed to pull and unpack image "k8s.gcr.io/pause:3.8": failed to resolve reference "k8s.gcr.io/pause:3.8": failed to do request: Head 
+* Failed to create pod sandbox: rpc error: code = Unknown desc = failed to get sandbox image "k8s.gcr.io/pause:3.8": failed to pull image "k8s.gcr.io/pause:3.2": failed to pull and unpack image "k8s.gcr.io/pause:3.8": failed to resolve reference "k8s.gcr.io/pause:3.8": failed to do request: Head
 
 ```bash
 ctr -n k8s.io i tag registry.aliyuncs.com/google_containers/pause:3.8 registry.k8s.io/pause:3.8
 ```
 
+* failed to verify certificate: x509: certificate is valid for 10.96.0.1, 192.168.100.201, not 10.10.10.199
 
+`/etc/kubernetes/pki`
 
+```bash
+# 查看证书内容
+openssl x509 -noout -text -in apiserver.crt
+# 生成密钥对
+openssl genrsa -out apiserver.key 2048	
+openssl req -new -key apiserver.key -subj "/CN=kube-apiserver," -out apiserver.csr
+
+#  新增 apiserver.ext文件，包含所有的地址列表，ip:xxxx即为要包含的新节点的ip， 内容如下：
+subjectAltName = DNS:wudang,DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc, DNS:kubernetes.default.svc.cluster.local, IP:10.96.0.1, IP:192.168.100.201, IP:192.168.8.1, IP:10.10.10.199
+
+# 使用ca根证书生成新crt
+openssl x509 -req -in apiserver.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out apiserver.crt -days 3650 -extfile apiserver.ext
+
+# 重启 k8s apiserver
+kubectl delete pod kube-apiserver-k8s-master -n kube-system
+```

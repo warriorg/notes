@@ -39,4 +39,12 @@ iface vmbr0 inet static
 ``` bash
 iptables -t nat -A PREROUTING -p tcp --dport 8030 -j DNAT --to-destination 192.168.100.254:8030
 iptables -t nat -A POSTROUTING -p tcp --sport 8030 -s 192.168.100.254 -j SNAT --to-source 192.168.8.199:8030
+
+
+iptables -t nat -nvL
+
+# 保存nat的规则到指定文件
+iptables-save -t nat -f  /etc/iptables/rules.nat
+# 恢复配置
+iptables-restore /etc/iptables/rules.nat
 ```

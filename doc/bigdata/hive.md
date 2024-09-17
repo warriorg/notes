@@ -200,7 +200,7 @@ show databases; # 显示数据库
 
 ## Hive与数据库的区别
 
-![](assets/images/2018040319335283.png)
+![](../assets/images/2018040319335283.png)
 
 - Hive 具有 SQL 数据库的外表，但应用场景完全不同。
 - Hive 只适合用来做海量离线数据统计分析，也就是数据仓库。
@@ -263,7 +263,7 @@ show databases; # 显示数据库
 
   - 执行器（Execution）：把逻辑执行计划转换成可以运行的**物理计划**。对于Hive来说默认就是mapreduce任务
 
-![hive1](assets/images/hive1.png)
+![hive1](../assets/images/hive1.png)
 
 
 
@@ -435,7 +435,7 @@ select * from stu2;
 hive > desc formatted db_hive.stu;
 ```
 
-![image-20210415163909482](assets/images/image-20210415163909482.png)
+![image-20210415163909482](../assets/images/image-20210415163909482.png)
 
 
 
@@ -521,7 +521,7 @@ alter table teacher set tblproperties('EXTERNAL'='FALSE');
 - 这样就可以使用hive当中的分区表，通过分文件夹的形式，将每一天的数据都分成为一个文件夹，然后我们计算数据的时候，通过指定前一天的文件夹即可只计算前一天的数据。
 - 在大数据中，最常用的一种思想就是分治，我们可以把大的文件切割划分成一个个的小的文件，这样每次操作一个小的文件就会很容易了，同样的道理，在hive当中也是支持这种思想的，就是我们可以把大的数据，按照每天，或者每小时进行切分成一个个的小的文件，这样去操作小的文件就会容易得多了
 
-![2019-07-15_11-35-37](assets/images/2019-07-15_11-35-37.png)
+![2019-07-15_11-35-37](../assets/images/2019-07-15_11-35-37.png)
 
 
 
