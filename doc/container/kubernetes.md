@@ -858,10 +858,6 @@ kubectl explain pod.kind
 ```
 
 
-
-
-
-
 ## 实战
 
 ### 部署第一个容器应用
@@ -899,14 +895,19 @@ spec:
 ```
 
 ```bash
-kubectl apply -f nginx-deployment.yaml  	# 部署容器，或者修改yaml文件后更新容器
-kubectl get pods -l app=nginx			# 检查容器运行的状态
-kubectl describe pod nginx-deployment-74dc4b47f6-7886h  # 查看容器的细节
-kubectl exec -it nginx-deployment-74dc4b47f6-7886h -- /bin/bash  # 进入容器
-kubectl delete -f nginx-deployment.yaml   # 删除容器
+# 部署容器，或者修改yaml文件后更新容器
+kubectl apply -f nginx-deployment.yaml
+# 检查容器运行的状态
+kubectl get pods -l app=nginx
+# 查看容器的细节
+kubectl describe pod nginx-deployment-74dc4b47f6-7886h
+# Enter container
+kubectl exec -it nginx-deployment-74dc4b47f6-7886h -- /bin/bash
+# Delete deploy container 
+kubectl delete -f nginx-deployment.yaml
+# Run Busybox Image as a test container
+kubectl run -i --tty --rm debug --image=busybox --restart=Never -- sh
 ```
-
-
 
 
 

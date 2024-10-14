@@ -3,22 +3,21 @@ package main
 import "fmt"
 
 func main() {
-
 	l1 := &ListNode{
-		Val:2,
+		Val: 2,
 		Next: &ListNode{
 			Val: 4,
-			Next: &ListNode {
+			Next: &ListNode{
 				Val: 3,
 			},
 		},
 	}
 
 	l2 := &ListNode{
-		Val:5,
+		Val: 5,
 		Next: &ListNode{
 			Val: 6,
-			Next: &ListNode {
+			Next: &ListNode{
 				Val: 4,
 			},
 		},
@@ -26,12 +25,11 @@ func main() {
 	fmt.Println(addTwoNumbers(l1, l2))
 }
 
-
 // ListNode Definition for singly-linked list.
- type ListNode struct {
-	 Val int
-	 Next *ListNode
- }
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
 
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	l1Cur := l1
@@ -48,7 +46,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 			val = val + l1Cur.Val
 			l1Cur = l1Cur.Next
 		}
-		
+
 		if l2Cur != nil {
 			val = val + l2Cur.Val
 			l2Cur = l2Cur.Next
@@ -71,8 +69,6 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		}
 		current = node
 
-
-
 		if l1Cur == nil && l2Cur == nil {
 			if carry > 0 {
 				node = &ListNode{Val: carry}
@@ -80,10 +76,8 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 			}
 			break
 		}
-		
+
 	}
 
-
 	return head
-
 }

@@ -140,6 +140,30 @@
 
 ### Watermark Generator
 
+## 状态管理和容错
+
+### KeyedState 
+
+
+
+### OperatorState
+
+### BroadcastState
+
+### Checkpoint
+
+### Savepoint and Checkpoint
+
+### StateBackends
+
+### State Schema Evolution
+
+### State 序列化与反序列化
+
+### Queryable State
+
+
+
 
 
 ## 参考

@@ -9,12 +9,11 @@
 前置检查
 
 ```bash
-# 关闭 swap
+# off swap
 sed -ri 's/^([^#].*swap.*)$/#\1/' /etc/fstab && grep swap /etc/fstab && swapoff -a && free -h
 
 cat /sys/class/dmi/id/product_uuid
 ```
-
 
 
 安装容器
@@ -23,17 +22,19 @@ cat /sys/class/dmi/id/product_uuid
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 vm.swappiness = 0
 net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
 EOF
 
 cat >> /etc/modules-load.d/neutron.conf <<EOF
+overlay
 br_netfilter
 EOF
 
-#加载模块
+# 加载模块
+sudo modprobe overlay
 sudo modprobe br_netfilter
-#让配置生效
+# 让配置生效
 sudo sysctl -p
 ```
 
@@ -224,6 +225,13 @@ iptables -F
 # 检查配置
 kubectl -n kube-system get cm kubeadm-config -o yaml
 ```
+
+使用测试容器帮助排查问题
+
+```bash
+ kubectl run -i --tty --rm debug --image=busybox --restart=Never -- sh
+```
+
 
 * 问题排查
 

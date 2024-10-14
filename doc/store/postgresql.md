@@ -1,6 +1,6 @@
-# Install
+## Install
 
-## ubuntu
+### ubuntu
 ```bash
 # Create the file repository configuration:
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -17,7 +17,7 @@ sudo apt-get -y install postgresql
 ```
 
 
-## Centos8
+### Centos8
 
 ```bash
 # 设置安装源
@@ -71,9 +71,9 @@ dropdb mydb
 
 
 
-# SQL Language
+## SQL Language
 
-## Populating a Table With Rows
+### Populating a Table With Rows
 
 ```sql
 COPY weather FROM '/home/user/weather.txt';
@@ -81,45 +81,45 @@ COPY weather FROM '/home/user/weather.txt';
 
 
 
-## Indexes
+### Indexes
 
 ```sql
 CREATE INDEX name ON table USING HASH (column);		
 -- 默认创建B-tree, 可以使用USING制定索引的类型
 ```
 
-### Index Type
+#### Index Type
 
-#### B-Tree
+##### B-Tree
 
-#### Hash
+##### Hash
 
-#### GiST
+##### GiST
 
-#### SP-GiST
+##### SP-GiST
 
-#### GIN
+##### GIN
 
-#### BRIN
-
-
-
-## 性能
-
-### EXPLAIN
+##### BRIN
 
 
 
-### EXPLAIN ANALYZE 
+### 性能
+
+#### EXPLAIN
+
+
+
+#### EXPLAIN ANALYZE 
 
 EXPLAIN实际执行查询，然后显示每个计划节点中积累的真实行数和真实运行时间，以及普通EXPLAIN所显示的相同估算值
 
 
-# Server Administration
+## Server Administration
 
-# 数据库管理
+## 数据库管理
 
-## 授权
+### 授权
 
 ```bash
 # 列出所有用户
@@ -142,7 +142,7 @@ select * from information_schema.table_privileges where grantee='flink';
 
 
 
-## 查看
+### 查看
 
 ```sql
 sudo su postgres
@@ -163,3 +163,13 @@ SELECT datname FROM pg_database;
 \d tablename
 ```
 
+### 死锁问题排查
+
+```sql
+-- wait-event-type 
+select * from pg_stat_activity where state <> 'idle' and datname = 'cn_common_service_test'
+
+-- kill lock pid
+select pg_terminate_backend(25328)
+
+```
