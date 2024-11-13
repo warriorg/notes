@@ -7,10 +7,10 @@
 create liquibase.properties file
 
 ```properties
-changeLogFile:dbchangelog.xml  
+changeLogFile:dbchangelog.xml
 url:  jdbc:postgresql://localhost:5432/mydatabase
-username:  postgres  
-password:  password 
+username:  postgres
+password:  password
 # classpath:  postgresql-42.2.8.jar
 # liquibaseProLicenseKey:  licensekey
 # liquibase.hub.ApiKey:  APIkey
@@ -21,7 +21,14 @@ password:  password
 ## 生成现有数据库快照
 
 ```bash
+# 生成 ddl 语句
 liquibase --changeLogFile=mydatabase_changelog.xml generateChangeLog
+
+# 生成dml语句 --changelog-file
+liquibase generateChangelog --changelog-file=common.postgresql.sql --diffTypes="data"
+
+# docker 方式
+docker run --rm -v $(pwd)/db:/liquibase/changelog liquibase:v4.8 generateChangelog --changelog-file=xxx.xml
 ```
 
 ## 更新数据库
@@ -43,6 +50,7 @@ liquibase rollbackCount 2
 ```
 
 # Changelogs
+
 ## SQL Format
 
 ### SQL
@@ -62,7 +70,6 @@ liquibase rollbackCount 2
 ```
 
 ##### changeset attributes
-
 
 #### Preconditions
 
