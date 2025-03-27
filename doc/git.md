@@ -1,5 +1,3 @@
-
-
 ## 配置
 
 ```bash
@@ -9,23 +7,19 @@ git config --global user.email 'your email'
 
 ### config 作用域
 
-* `--local`  项目级
-* `--global` 用户级
-* `--system` 系统级
+- `--local` 项目级
+- `--global` 用户级
+- `--system` 系统级
 
 ```bash
-git config --list 				# 查看配置
+git config --list     # 查看配置
 ```
 
 ## 基础功能
 
 ### .gitigonre
 
-
-
 ### .gitattributes
-
-
 
 ## 常用命令
 
@@ -36,7 +30,7 @@ git config --list 				# 查看配置
 git clone http[s]://example.com/path/to/repo.git/
 git clone ssh://example.com/path/to/repo.git/
 git clone git://example.com/path/to/repo.git/
-git clone /opt/git/project.git 
+git clone /opt/git/project.git
 git clone file:///opt/git/project.git
 git clone ftp[s]://example.com/path/to/repo.git/
 git clone rsync://example.com/path/to/repo.git/
@@ -104,7 +98,9 @@ git remote rename <原主机名> <新主机名> #修改远程主机名
 ```
 
 ### fetch
+
 通常用来查看其他人的进程，因为它取回的代码对你本地的开发代码没有影响。默认情况下，取回所有分支（branch）的更新。
+
 ```bash
 git fetch <远程主机名> # 将远程主机的更新，全部取回本地
 git fetch <远程主机名> <分支名> # 取回特定分支的更新
@@ -113,22 +109,26 @@ git fetch origin master #取回origin主机的master分支
 ```
 
 ### pull
+
 取回远程主机某个分支的更新，再与本地的指定分支合并
+
 ```bash
 # 如果远程分支是与当前分支合并，则冒号后面的部分可以省略
 git pull <远程主机名> <远程分支名>:<本地分支名>
 ```
 
 ### push
+
 ```bash
 git push <远程主机名> <本地分支名>:<远程分支名>
 git push --force origin # 用本地版本覆盖远程主机的更新
 git push origin --tags  # 推送标签
-git push --tags 	# 推送标签
+git push --tags  # 推送标签
 git push origin <tag_name>  # 推送一个tag
 ```
 
 ### checkout
+
 ```bash
 # 查看指定文件的历史版本
 git log <filename>
@@ -137,43 +137,47 @@ git checkout <commitID> <filename>
 ```
 
 ### branch
-* **-r** 查看远程分支
 
-* **-a** 查看所有分支
+- **-r** 查看远程分支
 
-  
+- **-a** 查看所有分支
+
 ```bash
 # 删除远程分支
-git branch --delete --remotes <remote>/<branch>	
+git branch --delete --remotes <remote>/<branch>
 git branch -dr <remote>/<branch> # Shorter
 
 git push origin test:test  #提交本地test分支作为远程的test分支
 ```
 
-
-
-
-
-### Submodule		
+### Submodule
 
 ```bash
-git submodule add 
-git submodule foreach git pull  			# 更新所有submodule
+git submodule add
+git submodule foreach git pull     # 更新所有submodule
 
-git submodule update --init --recursive	 	# 下载子模块
+git submodule update --init --recursive   # 下载子模块
+
+# 更新所有子模块
+git submodule foreach -q --recursive 'git pull'
+
+
+# 循环更新 master 分支
+git submodule foreach -q --recursive 'branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch)"; [ "$branch" = "" ] && git checkout master || git switch $branch' –
+
 ```
+
 ### revert
+
 撤销某次操作，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容。
 
 ```bash
 # 删除最后一次提交
-git revert HEAD			
+git revert HEAD
 git push origin master
 
 git revert commitID  # 回滚到commitID
 ```
-
-
 
 ### reset
 
@@ -185,8 +189,6 @@ git reset --hard HEAD^
 git push origin master -f
 ```
 
-
-
 ### Stash
 
 **Stash**可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中，随时可以重新应
@@ -196,8 +198,6 @@ git push origin master -f
 git stash branch testchanges
 ```
 
-
-
 ### log
 
 ```bash
@@ -205,15 +205,16 @@ git log -L start,end:file   # 使用 log 来查看某一行的所有操作
 ```
 
 ### whatchange
+
 ```
 git whatchange
 ```
 
 ### cherry-pick
+
 ```
 git cherry-pick <commit sha> --no-commit
 ```
-
 
 ### blame
 
@@ -224,9 +225,7 @@ git cherry-pick <commit sha> --no-commit
 git blame <filename>
 ```
 
-
-
-### archive 
+### archive
 
 ```bash
 # 导出不带版本的代码
@@ -238,21 +237,16 @@ git archive v1.0 gzip > source-tree.tgz
 # -------------------
 ```
 
-
-
-
-
-
-
-
 git 切换远程代码库
+
 ```bash
 git remote rm origin #方法1
 git remote set-url origin URL  #方法2
-.git/config	#方法3
+.git/config #方法3
 ```
 
 创建库
+
 ```bash
 touch README.md
 git init
@@ -263,11 +257,13 @@ git push -u origin master
 ```
 
 修改git仓库地址
+
 ```bash
 git remote set-url origin http://ip:port/jinyi/bole-parking.git
 ```
 
 git 分支
+
 ```bash
 git checkout -b iss53
 
@@ -278,19 +274,20 @@ git branch -d <branch-name>
 ```
 
 删除不在git管理下的文件
+
 ```bash
 git clean -nd #测试删除
-git clean -fd #真实删除 
+git clean -fd #真实删除
 ```
 
-
-
 git如何删除本地所有未提交的更改（都可以使用
+
 ```bash
 git reset
 git checkout .
 git clean -fdx
 ```
+
 ```bash
 git checkout -- . #这条命令不会删除新增的文件
 git checkout -f #这条命令不会删除新增的文件
@@ -299,11 +296,13 @@ git add . && git stash && git stash drop #至少不会影响 .gitignore 里面�
 ```
 
 修改最后一次提交的注释
+
 ```bas
 git commit --amend
 ```
 
 取消对文件的修改。还原到最近的版本，废弃本地做的修改
+
 ```bash
 git checkout -- <file>
 ```
@@ -314,9 +313,7 @@ git checkout -- <file>
 git mergetool -t diffmerge .
 ```
 
-
-
->安装diffmerge `osx`==brew cask install diffmerge==
+> 安装diffmerge `osx`==brew cask install diffmerge==
 
 取消已经暂存的文件。即，撤销先前"git add"的操作
 `git reset HEAD <file>...`
@@ -325,25 +322,25 @@ git mergetool -t diffmerge .
 `git reset H
 
 回退a.py这个文件的版本到上一个版本  
-`git reset HEAD^ a.py  `
+`git reset HEAD^ a.py`
 
 向前回退到第3个版本  
-`git reset –soft HEAD~3  `
+`git reset –soft HEAD~3`
 
 将本地的状态回退到和远程的一样  
-`git reset –hard origin/master `
+`git reset –hard origin/master`
 
 回退到某个版本  
-`git reset 057d `
-
-
+`git reset 057d`
 
 回退到上一次提交的状态，按照某一次的commit完全反向的进行一次commit.(代码回滚到上个版本，并提交git)
+
 ```bash
 git revert HEAD
 ```
 
 #### 查看信息
+
 ```bash
 git status  # 查看当前工作区状态(与暂存区对比，增加删除或修改)
 git log  # 显示当前分支的版本历史
@@ -366,6 +363,7 @@ git reflog  # 显示当前分支的最近几次提交
 ```
 
 #### 撤销
+
 ```bash
 git reset --hrad HEAD  # 撤销工作目录中所有未提交文件的修改内容
 git checkout HEAD <file>  # 撤销指定的未提交文件的修改内容
@@ -385,11 +383,11 @@ git reset --keep [commit]  # 重置当前HEAD未指定commit，但保持暂存�
 
 ```base
 git gc --prune=now  #运行 gc ，生成 pack 文件 --prune=now 表示对之前的所有提交做修剪，有的时候仅仅 gc 一下.git 文件就会小很多
-git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -3    #找出最大的三个文件 
-git rev-list --objects --all | grep c43a8da		#查看那些大文件究竟是谁（c43a8da 是上面大文件的hash码）
+git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -3    #找出最大的三个文件
+git rev-list --objects --all | grep c43a8da  #查看那些大文件究竟是谁（c43a8da 是上面大文件的hash码）
 git filter-branch --force --index-filter "git rm --cached --ignore-unmatch 'data/bigfile'"  --prune-empty --tag-name-filter cat -- --all  #移除对该文件的引用（也就是 data/bigfile）
 
-#进行 repack 
+#进行 repack
 git for-each-ref --format='delete %(refname)' refs/original | git update-ref --stdin
 git reflog expire --expire=now --all
 git gc --prune=now
@@ -406,13 +404,12 @@ git filter-branch -f --prune-empty --index-filter "git rm -rf --cached --ignore-
 git push origin --force --all
 ```
 
-
-
 ## 问题
 
 ### fatal: refusing to merge unrelated histories
+
 ```bash
-git pull origin master --allow-unrelated-histories 
+git pull origin master --allow-unrelated-histories
 ```
 
 ### git remote: HTTP Basic: Access denied
@@ -420,6 +417,7 @@ git pull origin master --allow-unrelated-histories
 ```bash
 git config --system --unset credential.helper
 ```
+
 ### error: You have not concluded your merge (MERGE_HEAD exists)
 
 ```bash
@@ -427,7 +425,6 @@ git merge --abort
 git reset --merge
 git pull
 ```
-
 
 ### 解决每次都要输入密码
 
@@ -438,9 +435,9 @@ git config --global credential.helper store
 ### 忽略对已入库文件的修改
 
 ```bash
-git update-index --assume-unchanged FILENAME			# 停止查看工作区文件可能发生的改变, 提交后会还原
- git update-index --skip-worktree FILENAME				# 停止查看工作区文件可能发生的改变
-git update-index --no-assume-unchanged FILENAME		# 继续查看工作区文件可能发生的改变
+git update-index --assume-unchanged FILENAME   # 停止查看工作区文件可能发生的改变, 提交后会还原
+ git update-index --skip-worktree FILENAME    # 停止查看工作区文件可能发生的改变
+git update-index --no-assume-unchanged FILENAME  # 继续查看工作区文件可能发生的改变
 ```
 
 ### 删除 .DS_Store
@@ -449,17 +446,12 @@ git update-index --no-assume-unchanged FILENAME		# 继续查看工作区文件�
 find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatc
 ```
 
-
-
 ## GitHub
 
 ### [帮助](https://help.github.com/)
-
-
 
 ### 搜索技巧
 
 [search syntax](https://help.github.com/en/articles/understanding-the-search-syntax#query-for-values-greater-or-less-than-another-value)
 
 ## GitLabel
-

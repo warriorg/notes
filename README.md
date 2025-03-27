@@ -142,3 +142,4 @@
 ### 2024
 
 [Flink cdc 连接Postgresql打印数据变更](./post/2024/01_Flink%20cdc%20连接Postgresql打印数据变更.md)
+

@@ -339,13 +339,14 @@ MyISAM表支持空间索引，可以用作地理数据存储。和BTree索引不
 
 ![innodb-architecture](../assets/images/innodb-architecture.png)
 
-### 磁盘文件
+#### 磁盘文件
 
-### 内存结构
+#### 内存结构
 
 ## 事务
 
 ### 事务测试
+
 **脏读** 一个事务读取了另一个未提交事务写入的数据。
 **不可重复读** 一个事务重新读取前面读取过的数据，发现该数据已经被另一个已经提交的事务修改。
 **幻读** 一个事务重新执行一个查询，返回符合查询条件的行的集合，发现满足查询条件的行的集合因为其它最近提交的事务而发生了改变。
@@ -402,13 +403,13 @@ select * from test csh where uid = '01GJPJYKZGEWE61HM4QSMTXGPG';
 
 ## 分库分表
 
-# 类型
+## 类型
 
 
 
-## JSON
+### JSON
 
-### 创建索引
+#### 创建索引
 
 ```sql
 
@@ -417,9 +418,9 @@ alter table nems_inventory_head drop column aa;
 CREATE UNIQUE INDEX nems_inventory_head_aaa ON nems_inventory_head (aa);
 ```
 
-# 运维
+## 运维
 
-## 用户管理
+### 用户管理
 
 ```sql
 # 新建用户
@@ -438,7 +439,7 @@ SHOW GRANTS FOR 'ops_dispatcher';
 
 
 
-## 备份数据库
+### 备份数据库
 
 ```sql
 mysqldump -u root -p --databases 数据库1 数据库2 > xxx.sql
@@ -468,7 +469,7 @@ docker exec CONTAINER /usr/bin/mysqldump -u root --password=root DATABASE > back
 cat backup.sql | docker exec -i CONTAINER /usr/bin/mysql -u root --password=root DATABASE
 ```
 
-## 还原数据库
+### 还原数据库
 
 #### 方式一
 
@@ -482,7 +483,7 @@ mysql -uroot -p123456 < /data/mysqlDump/mydb.sql
 mysql> source /data/mysqlDump/mydb.sql
 ```
 
-## 恢复删除的数据
+### 恢复删除的数据
 
 ```mysql
 # 查看正在使用的 Binlog 文件
@@ -511,9 +512,9 @@ mysql -u cisco -p < /home/mysql_backup/test_binlog_step1.sql
 mysql -u cisco -p < /home/mysql_backup/test_binlog_step2.sql
 ```
 
-## 主从同步
+### 主从同步
 
-### 查看存库状态
+#### 查看存库状态
 
 `show slave status\G`
 
@@ -592,7 +593,7 @@ Network_Namespace             |
 > 1. Slave_IO_Running、Slave_SQL_Running状态值，如果都为YES，则表示主从同步；反之，主从不同步
 > 2. Seconds_Behind_Master的值，如果为0，则表示主从同步不延时，反之同步延时。
 
-## 注意
+### 注意
 
 * mysql 在Linux下默认不区分大小写
 * mysql 字符集 ci 的在比较字符串是默认忽略大小写
@@ -613,4 +614,15 @@ Network_Namespace             |
 	
 	  
 
-## [性能优化](../reading/High Performance Mysql.md)
+## 性能优化
+
+
+
+### 参考
+
+[High Performance Mysql](../reading/High Performance Mysql.md)
+
+[性能实战脚本](../../snippet/sql/performance.sql)
+
+
+

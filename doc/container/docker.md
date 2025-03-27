@@ -428,6 +428,43 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 `-f` 指定用来构建的`Dockerfile`文件名称，如果省略，docker build 就会在当前目录下找名字是 Dockerfile 的文件
 
 
+### BuildKit
+在构建镜像时，通过设置 DOCKER_BUILDKIT=1，可以启用 **BuildKit**
+
+1. 并行构建：
+  * BuildKit 可以并行处理多个构建步骤，而传统的 Docker 构建是线性的。这提高了构建速度，特别是在多阶段构建中。
+2. 缓存优化：
+  * BuildKit 使用更高效的缓存机制，减少重复工作。例如，即使 Dockerfile 中的某些步骤发生了变化，它仍然可以重用未改变步骤的缓存。
+3. 安全性增强：
+	* 支持构建时使用密钥（Secrets），例如用来访问私有仓库的密钥：
+      ```bash
+      # syntax=docker/dockerfile:1.4
+      RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret
+      ```
+4. 更好的调试和日志：
+  * 构建日志更加清晰，支持按步骤查看构建输出。
+5. 支持更多语法扩展：
+  * 启用 BuildKit 后，可以使用 # syntax 指令选择特定的 Dockerfile 前缀语法扩展。
+    ```bash
+      # syntax=docker/dockerfile:1.4
+    ```
+
+
+
+| DOCKER_BUILDKIT=0                                            | DOCKER_BUILDKIT=1                                            |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **关闭 BuildKit**，使用传统的 Docker 构建方式。              | **启用 BuildKit**，使用新的构建引擎。                        |
+| 构建是 **线性顺序执行**，每个步骤依次运行。                  | 支持 **并行构建**：非依赖关系的步骤可以同时运行。            |
+| 性能较低，特别是在多阶段构建或重复构建中。                   | 更高效的缓存机制，减少重复工作，加快构建速度。               |
+| 不支持 BuildKit 提供的高级功能，例如 Secrets、SSH 转发和新的语法扩展。 | 高级功能支持：<br/>	• Secrets：用于安全地传递构建时需要的敏感信息（例如 API 密钥）。<br/>	• SSH 转发：用于拉取私有 Git 仓库。<br/>	• 更丰富的语法扩展：通过 # syntax 指令支持最新的 Dockerfile 功能。 |
+| 构建功能相对简单，适合基本需求。                             | 提供更好的日志和调试信息。                                   |
+| 输出较为简单，每个步骤的日志直接打印到终端。                 | 日志更有层次感，按构建步骤分组。                             |
+| 当日志量较大时，可能显得杂乱。                               | 默认只显示关键输出，可通过 --progress=plain 显示详细日志。   |
+| 不支持安全地处理敏感信息，构建时传递的环境变量可能会暴露。   | 支持 **Secrets 和挂载**，可安全传递敏感信息而不将其写入镜像中。 |
+
+> 在构建过程中，如果需要输出详细构建日志可以使用 `DOCKER_BUILDKIT=0 docker build -t bone`
+
+
 
 ## Dockerfile指令
 
