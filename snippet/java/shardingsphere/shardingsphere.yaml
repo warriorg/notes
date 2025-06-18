@@ -1,0 +1,57 @@
+seata:
+  use-jdk-proxy: true
+spring:
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  shardingsphere:
+    props:
+      sql-show: true
+    mode:
+      type: Standalone
+      repository:
+        type: File
+      overwrite: true
+    datasource:
+      names: ds0
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.106.169:3306/cms_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true&autoReconnectForPools=true&connectTimeout=30000&socketTimeout=60000&rewriteBatchedStatements=true&useKeepAlive=true&keepAliveConnectionIdleTimeout=60
+        username: cms_sa
+        password: RTE0ircBOIv0joiQ
+    rules:
+      sharding:
+        defaultTableStrategy:
+          none:
+        tables:
+          blade_log_api:
+            actualDataNodes: ds0.blade_log_api_${2024..2030}0$->{1..9},ds0.blade_log_api_$->{2024..2030}1$->{0..2}
+            tableStrategy:
+              standard:
+                shardingColumn: create_time
+                shardingAlgorithmName: time-sharding-algorithm
+          blade_log_error:
+            actualDataNodes: ds0.blade_log_error_${2024..2030}0$->{1..9},ds0.blade_log_error_$->{2024..2030}1$->{0..2}
+            tableStrategy:
+              standard:
+                shardingColumn: create_time
+                shardingAlgorithmName: time-sharding-algorithm
+          blade_log_sap:
+            actualDataNodes: ds0.blade_log_sap_${2024..2030}0$->{1..9},ds0.blade_log_sap_$->{2024..2030}1$->{0..2}
+            tableStrategy:
+              standard:
+                shardingColumn: create_time
+                shardingAlgorithmName: time-sharding-algorithm
+          blade_log_usual:
+            actualDataNodes: ds0.blade_log_usual_${2024..2030}0$->{1..9},ds0.blade_log_usual_$->{2024..2030}1$->{0..2}
+            tableStrategy:
+              standard:
+                shardingColumn: create_time
+                shardingAlgorithmName: time-sharding-algorithm
+
+        shardingAlgorithms:
+          time-sharding-algorithm:
+            type: CLASS_BASED
+            props:
+              strategy: standard
+              algorithmClassName: org.springblade.core.log.sharding.TimeShardingAlgorithm

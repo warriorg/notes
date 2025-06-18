@@ -1,0 +1,31 @@
+@startuml
+package me.warriorg.design.structural.filter {
+    interface Filter {
+        void doFilter(Request request, FilterChain filterChain);
+    }
+
+    class FilterA implements Filter {
+        void doFilter(Request request, FilterChain filterChain)
+    }
+
+    class FilterB implements Filter {
+        void doFilter(Request request, FilterChain filterChain)
+    }
+
+    interface FilterChain {
+        void doFilter(Request request);
+    }
+
+    class FilterChainImpl implements FilterChain {
+        void doFilter(Request request);
+    }
+
+    class Request {
+        String sampleData;
+    }
+
+    class FilterChainExample {
+        main(String[] args)
+    }
+}
+@enduml

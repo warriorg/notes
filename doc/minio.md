@@ -11,4 +11,6 @@ manage server credentials in configuration file
 mc alias set dev http://192.168.0.203:9000 minioadmin minioadmin
 # 查看服务器文件
 mc ls dev
+
+
 ```

@@ -1,0 +1,1 @@
+SELECT * FROM ai_chat_message

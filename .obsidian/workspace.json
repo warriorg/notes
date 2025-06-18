@@ -4,19 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "96ee88b266832927",
+        "id": "913fd006a35594e8",
         "type": "tabs",
         "children": [
           {
-            "id": "27212124f0b7d586",
+            "id": "89443966e8207561",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "doc/linux/Linux.md",
-                "mode": "preview",
-                "source": true
-              }
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -38,8 +36,11 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
-              }
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -48,13 +49,15 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "wifi",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -62,7 +65,9 @@
             "type": "leaf",
             "state": {
               "type": "starred",
-              "state": {}
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Plugin no longer active"
             }
           },
           {
@@ -70,11 +75,12 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -94,7 +100,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/linux/Linux.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +107,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": false
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
             }
           },
           {
@@ -111,10 +118,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/linux/Linux.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
             }
           },
           {
@@ -124,8 +132,12 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true
-              }
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -134,8 +146,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/linux/Linux.md"
-              }
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
             }
           },
           {
@@ -143,11 +159,83 @@
             "type": "leaf",
             "state": {
               "type": "review-queue-list-view",
-              "state": {}
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Plugin no longer active"
+            }
+          },
+          {
+            "id": "25d9f663df263518",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Plugin no longer active"
+            }
+          },
+          {
+            "id": "d85001319b910b75",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Plugin no longer active"
+            }
+          },
+          {
+            "id": "5180be50d150dad6",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Plugin no longer active"
+            }
+          },
+          {
+            "id": "c0f155b0635329ad",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Plugin no longer active"
+            }
+          },
+          {
+            "id": "0e5d1ed4d8e8017b",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Plugin no longer active"
+            }
+          },
+          {
+            "id": "5cab948536065e08",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "SpacedRepIcon",
+              "title": "Notes Review Queue"
+            }
+          },
+          {
+            "id": "fa64e4effde90367",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "SpacedRepIcon",
+              "title": "Notes Review Queue"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 11
       }
     ],
     "direction": "horizontal",
@@ -161,49 +249,50 @@
       "command-palette:Open command palette": false,
       "markdown-importer:Open format converter": false,
       "random-note:Open random note": false,
-      "obsidian-spaced-repetition:Review flashcards": false
+      "obsidian-spaced-repetition:Review flashcards": false,
+      "daily-notes:Open today's daily note": false
     }
   },
-  "active": "27212124f0b7d586",
+  "active": "fa64e4effde90367",
   "lastOpenFiles": [
-    "doc/linux/catalog.md",
-    "doc/linux/Linux.md",
-    "doc/linux/linux_server.md",
-    "doc/linux/shell.md",
-    "doc/linux/ssh.md",
-    "doc/container/kubernetes.md",
-    "doc/container/harbor.md",
-    "doc/container/docker-compose.md",
-    "doc/计算机系统.md",
-    "doc/Vagrant.md",
-    "doc/mq/rabbitmq.md",
-    "post/2022/7.Spring Cloud 脱离Nacos本地部署.md",
-    "mind/Spring.xmind",
-    "Spring.xmind",
-    "doc/container/docker.md",
-    "snippet/shell/etcd.tar",
-    "snippet/shell/pause.tar",
-    "snippet/shell/kube-proxy.tar",
-    "snippet/shell/kube-scheduler.tar",
-    "snippet/shell/kube-controller-manager.tar",
-    "snippet/shell/kube-apiserver.tar",
-    "snippet/shell/k8s.sh",
-    "post/2022/3.Linux网络.md",
     "Untitled.canvas",
-    "doc/Tomcat.md",
-    "README.md",
-    "doc/IntelliJ IDEA.md",
-    "doc/bigtdata/Hadoop.md",
-    "doc/bigtdata",
-    "doc/git.md",
+    "2025-05-04.md",
     "Untitled 1.canvas",
-    "doc/store/redis.md",
-    "post/2022/6.分布式锁.md",
-    "doc/elastic/elasticsearch.md",
-    "doc/awesome.md",
-    "doc/elastic/ELK.md",
-    "doc/monitor/prometheus.md",
-    "doc/monitor/loki.md",
+    "doc/assets/images/image-20250420205036648.png",
+    "doc/ai/f5-tts.md",
+    "doc/ai/n8n.md",
+    "snippet/python/f5_tts.py",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/Test.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/StateMachine.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/State.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/RecheckRefusedAction.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/RecheckPassAction.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/Event.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/Context.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/ApproveRefusedAction.class",
+    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/ApprovePassAction.class",
+    "doc/mycat.md",
+    "doc/minio.md",
+    "doc/n8n.md",
+    "doc/network.md",
+    "doc/n8n~.md",
+    "post/2024/02_kubernetes 1.30.1 部署.md",
+    "README.md",
+    "doc/linux/Linux.md",
+    "doc/reading/High Performance Mysql.md",
+    "post/2024/03_Migrating from MySQL to PostgreSQL.md",
+    "post/2024/00_catalogue.md",
+    "post/2022/1.Certbot.md",
+    "snippet/sql/生成序列.md",
+    "snippet/sql/替换OR, 使用exists.md",
+    "snippet/sql/日期.md",
+    "snippet/sql/备份指定的表.md",
+    "snippet/sql/分组后取出最新的记录.md",
+    "snippet/sql/分区表.md",
+    "snippet/sql/mysql锁表查询.md",
+    "snippet/sql/mysql不同字符集.md",
+    "doc/store/mysql.md",
+    "doc/linux/catalog.md",
     "doc/assets/images/02-Direct Exchange.png",
     "pattern/behavioral/observer/weather class.png"
   ]

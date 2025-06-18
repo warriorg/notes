@@ -1,3 +1,5 @@
+# MySql
+
 ## Install
 
 ### 主从
@@ -189,11 +191,11 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 ```bash
 yum repolist enabled | grep mysql    # 
 yum module disable mysql # Disabling the Default MySQL Module
-yum install mysql-community-server	# 安装数据库
-systemctl start mysqld.service	# 启动数据库服务
-grep 'temporary password' /var/log/mysqld.log	# 查看数据库默认密码
+yum install mysql-community-server # 安装数据库
+systemctl start mysqld.service # 启动数据库服务
+grep 'temporary password' /var/log/mysqld.log # 查看数据库默认密码
 mysql -uroot -p # 登录数据库
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!';	# 修改密码
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!'; # 修改密码
 
 # 查看密码规则
 select @@validate_password_policy;
@@ -263,6 +265,15 @@ sudo mysql -u root -p
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPa$$w0rd';
 # 检查设置
 SHOW VARIABLES LIKE 'lower_case_%';
+```
+
+## DML
+
+### Methods
+
+```sql
+-- timestamp to datetime
+FROM_UNIXTIME(create_time / 1000)
 ```
 
 ## 索引
@@ -393,19 +404,11 @@ INSERT INTO test (uid,site) VALUES ('01GJPJYKZGEWE61HM4QSMTXGPG','3205263314');
 select * from test csh where uid = '01GJPJYKZGEWE61HM4QSMTXGPG';
 ```
 
-
-
-
-
-
-
 ## 读写分离
 
 ## 分库分表
 
 ## 类型
-
-
 
 ### JSON
 
@@ -437,7 +440,14 @@ drop user ops_abc;
 SHOW GRANTS FOR 'ops_dispatcher';
 ```
 
+#### 新建一个所有数据库的只读用户
 
+```sql
+CREATE USER 'baijing'@'%' IDENTIFIED BY 'Longnow888';
+GRANT SELECT ON *.* TO 'baijing'@'%';
+FLUSH PRIVILEGES;
+SHOW GRANTS FOR 'baijing'@'%'
+```
 
 ### 备份数据库
 
@@ -597,32 +607,25 @@ Network_Namespace             |
 
 * mysql 在Linux下默认不区分大小写
 * mysql 字符集 ci 的在比较字符串是默认忽略大小写
-		* `_ci` : 不区分大小写,Case-insensitive的缩写；
-		* `_cs` : 区分大小写，Case-sensitive的缩写；
-		* `_ai` : 不区分重音，Accent-insensitive的缩写；
-		* `_as` : 区分重音，Accent-sensitive的缩写；
-		* `_bin` : 二进制；
-	
-	* 生成更新 COLLATE 的语句
-	
-	  ```sql
-	  SELECT CONCAT("ALTER TABLE ", TABLE_SCHEMA, '.', TABLE_NAME," COLLATE utf8mb4_0900_bin;") as ExecuteTheString
-	  FROM INFORMATION_SCHEMA.TABLES
-	  WHERE TABLE_SCHEMA="database schema"
-	  AND TABLE_TYPE="BASE TABLE";
-	  ```
-	
-	  
+  *`_ci` : 不区分大小写,Case-insensitive的缩写；
+  * `_cs` : 区分大小写，Case-sensitive的缩写；
+  *`_ai` : 不区分重音，Accent-insensitive的缩写；
+  * `_as` : 区分重音，Accent-sensitive的缩写；
+  * `_bin` : 二进制；
+
+    * 生成更新 COLLATE 的语句
+
+   ```sql
+   SELECT CONCAT("ALTER TABLE ", TABLE_SCHEMA, '.', TABLE_NAME," COLLATE utf8mb4_0900_bin;") as ExecuteTheString
+   FROM INFORMATION_SCHEMA.TABLES
+   WHERE TABLE_SCHEMA="database schema"
+   AND TABLE_TYPE="BASE TABLE";
+   ```
 
 ## 性能优化
-
-
 
 ### 参考
 
 [High Performance Mysql](../reading/High Performance Mysql.md)
 
 [性能实战脚本](../../snippet/sql/performance.sql)
-
-
-
