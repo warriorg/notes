@@ -1,6 +1,19 @@
 # Proxmox VE
 
-network interface 
+连接有限，进行安装系统，最好悠闲，否则，需要手动去下载文件，挂载磁盘，离线安装
+`wpasupplicant` 和 `wireless-tools`
+
+
+
+
+
+/etc/network/interface
+
+密码获取 https://www.wireshark.org/tools/wpa-psk.html
+或者
+```bash
+wpa_passphrase "wifi名称" "wifi密码
+```
 
 ```bash
 auto lo
@@ -29,7 +42,7 @@ iface vmbr0 inet static
  	post-up echo 1 > /proc/sys/net/ipv4/conf/eno1/proxy_arp
 
 	# 转发IPv4流量到虚拟机，使虚拟机与外网联通。
-    x# SNAT 内网转外网，当内部虚拟器需要访问外网时走这条规则
+    # SNAT 内网转外网，当内部虚拟器需要访问外网时走这条规则
 	post-up iptables -t nat -A POSTROUTING -s '192.168.100.0/24' -o wlp0s20f3 -j MASQUERADE
 	post-down iptables -t nat -D POSTROUTING -s '192.168.100.0/24' -o wlp0s20f3 -j MASQUERADE
 ```
@@ -48,3 +61,8 @@ iptables-save -t nat -f  /etc/iptables/rules.nat
 # 恢复配置
 iptables-restore /etc/iptables/rules.nat
 ```
+
+
+## clash
+
+安装 clash， 开启 tun 代理模式内部虚拟机为透明代理上网

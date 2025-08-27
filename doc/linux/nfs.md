@@ -1,6 +1,6 @@
 # NFS
 
-## 安装
+## Insert
 
 ```bash
 # 安装NFS服务
@@ -10,7 +10,7 @@ sudo mkdir -p /nfsdata/
 # 设置权限
 sudo chmod -R 777 /nfsdata
 # ubuntu为当前用户
-sudo chown ubuntu:ubuntu /nfsdata/ -R
+sudo chown root:root /nfsdata/ -R
 # 编译NFS配置we你按
 sudo vim /etc/exports
 ```
@@ -49,6 +49,44 @@ sudo exportfs -v
 
 ## k8s 部署
 
+### 新版
+
+```bash
+# 在线安装驱动
+curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/install-driver.sh | bash -s master
+
+# 获取
+kubectl get pod -A
+# 会看到类似 csi-nfs-controller 和 csi-nfs-node 的 Pod 处于 Running 状态
+```
+
+#### 创建 StorageClass (SC)
+
+创建文件 sc-nfs.yaml
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-csi-sc
+provisioner: nfs.csi.k8s.io
+parameters:
+  # 替换成你的 NFS 服务器 IP 地址
+  server: 192.168.100.1
+  # 替换成你的 NFS 共享目录
+  share: /nfsdata
+# Delete 会自动删除 PV 和 NFS 服务器上对应的数据，Retain 则会保留
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+mountOptions:
+  - hard
+  - nfsvers=4.1
+```
+
+kubectl apply -f sc-nfs.yaml
+
+### 旧版
+
 在 k8s master上，所有节点安装client
 
 ```bash
@@ -62,9 +100,6 @@ wget https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-external-provi
 kubectl apply -f rbac.yaml
 kubectl apply -f deployment.yaml
 kubectl apply -f class.yaml
-
-
-
 
 ```
 

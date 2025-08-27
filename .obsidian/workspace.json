@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "913fd006a35594e8",
+        "id": "437d905235aad043",
         "type": "tabs",
         "children": [
           {
-            "id": "89443966e8207561",
+            "id": "f59086e4b82d9780",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "doc/微信支付.md",
+                "mode": "preview",
+                "source": true
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "微信支付"
             }
           }
         ]
@@ -61,16 +65,6 @@
             }
           },
           {
-            "id": "c8a6d3b381e64e5e",
-            "type": "leaf",
-            "state": {
-              "type": "starred",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Plugin no longer active"
-            }
-          },
-          {
             "id": "9cc107c8a688a3b9",
             "type": "leaf",
             "state": {
@@ -100,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "post/2025/00_Kubernetes 1.33 部署.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -109,7 +104,7 @@
                 "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for 00_Kubernetes 1.33 部署"
             }
           },
           {
@@ -118,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "doc/微信支付.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from 微信支付"
             }
           },
           {
@@ -146,116 +142,50 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "doc/微信支付.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
-            }
-          },
-          {
-            "id": "8a07803fe7fcc3f3",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Plugin no longer active"
-            }
-          },
-          {
-            "id": "25d9f663df263518",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Plugin no longer active"
-            }
-          },
-          {
-            "id": "d85001319b910b75",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Plugin no longer active"
-            }
-          },
-          {
-            "id": "5180be50d150dad6",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Plugin no longer active"
-            }
-          },
-          {
-            "id": "c0f155b0635329ad",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Plugin no longer active"
-            }
-          },
-          {
-            "id": "0e5d1ed4d8e8017b",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Plugin no longer active"
-            }
-          },
-          {
-            "id": "5cab948536065e08",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "SpacedRepIcon",
-              "title": "Notes Review Queue"
-            }
-          },
-          {
-            "id": "fa64e4effde90367",
-            "type": "leaf",
-            "state": {
-              "type": "review-queue-list-view",
-              "state": {},
-              "icon": "SpacedRepIcon",
-              "title": "Notes Review Queue"
+              "title": "Outline of 微信支付"
             }
           }
         ],
-        "currentTab": 11
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 338.5
+    "width": 652.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "command-palette:Open command palette": false,
       "markdown-importer:Open format converter": false,
       "random-note:Open random note": false,
-      "obsidian-spaced-repetition:Review flashcards": false,
       "daily-notes:Open today's daily note": false
     }
   },
-  "active": "fa64e4effde90367",
+  "active": "f59086e4b82d9780",
   "lastOpenFiles": [
+    "Untitled.base",
+    "doc/微信支付.md",
+    "doc/vim.md",
+    "post/2025/00_Kubernetes 1.33 部署.md",
+    "Untitled.md",
+    "2025-08-22.md",
+    "post/2024/2022/4.OpenFeign混合调用方式.md",
+    "post/2024/03_Migrating from MySQL to PostgreSQL.md",
     "Untitled.canvas",
+    "Untitled 1.base",
+    "post/2024/02_kubernetes 1.30.1 部署.md",
+    "doc/linux/nfs.md",
+    "inbox/tmp/Belt change.md",
     "2025-05-04.md",
     "Untitled 1.canvas",
     "doc/assets/images/image-20250420205036648.png",
@@ -269,30 +199,18 @@
     "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/RecheckPassAction.class",
     "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/Event.class",
     "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/Context.class",
-    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/ApproveRefusedAction.class",
-    "pattern/other/statemachine/FSM/bin/main/dev/warriorg/fsm/ApprovePassAction.class",
     "doc/mycat.md",
     "doc/minio.md",
     "doc/n8n.md",
     "doc/network.md",
     "doc/n8n~.md",
-    "post/2024/02_kubernetes 1.30.1 部署.md",
     "README.md",
     "doc/linux/Linux.md",
     "doc/reading/High Performance Mysql.md",
-    "post/2024/03_Migrating from MySQL to PostgreSQL.md",
     "post/2024/00_catalogue.md",
     "post/2022/1.Certbot.md",
     "snippet/sql/生成序列.md",
     "snippet/sql/替换OR, 使用exists.md",
-    "snippet/sql/日期.md",
-    "snippet/sql/备份指定的表.md",
-    "snippet/sql/分组后取出最新的记录.md",
-    "snippet/sql/分区表.md",
-    "snippet/sql/mysql锁表查询.md",
-    "snippet/sql/mysql不同字符集.md",
-    "doc/store/mysql.md",
-    "doc/linux/catalog.md",
     "doc/assets/images/02-Direct Exchange.png",
     "pattern/behavioral/observer/weather class.png"
   ]

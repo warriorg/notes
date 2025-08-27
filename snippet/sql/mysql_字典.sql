@@ -1,0 +1,4 @@
+select distinct COLUMN_NAME, COLUMN_COMMENT, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, CHARACTER_OCTET_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE, COLUMN_KEY, IS_NULLABLE
+from information_schema.columns b
+where b.table_schema like 'test%'
+order by COLUMN_KEY desc

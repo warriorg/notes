@@ -1,6 +1,6 @@
 # Kubernetes 1.30.1 部署
 
-| 系统名        | IP              | 备注 |
+| 系统名         | IP              | 备注 |
 | ------------- | --------------- | ---- |
 | k8s-master    | 192.168.100.201 |      |
 | k8s-node-02   | 192.168.100.202 |      |
@@ -9,6 +9,14 @@
 前置检查
 
 ```bash
+hostnamectl set-hostname k8s-master
+
+# 设置 hosts
+# /etc/hosts
+192.168.100.200 k8s-master
+192.168.100.201 k8s-node-01
+192.168.100.202 k8s-node-02
+
 # off swap
 sed -ri 's/^([^#].*swap.*)$/#\1/' /etc/fstab && grep swap /etc/fstab && swapoff -a && free -h
 
@@ -19,12 +27,14 @@ cat /sys/class/dmi/id/product_uuid
 安装容器
 
 ```bash
-cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+cat <<EOF | tee /etc/sysctl.d/k8s.conf
 vm.swappiness = 0
 net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward = 1
 EOF
+
+echo 1 | tee /proc/sys/net/ipv4/ip_forward
 
 cat >> /etc/modules-load.d/neutron.conf <<EOF
 overlay
@@ -218,6 +228,9 @@ systemctl restart containerd
 iptables -F
 ```
 
+部署 NFS
+
+[NFS](../../doc/linux/nfs.md)
 
 问题解决
 
